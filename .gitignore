@@ -5,6 +5,8 @@ dist
 tmp
 /out-tsc
 
+*.iml
+
 # dependencies
 node_modules
 
