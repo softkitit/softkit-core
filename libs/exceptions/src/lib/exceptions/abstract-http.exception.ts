@@ -1,7 +1,7 @@
 import { I18nContext, I18nService } from 'nestjs-i18n';
 import { ErrorResponse } from "@saas-buildkit/common-types";
 
-export default class AbstractHttpException {
+export class AbstractHttpException {
   constructor(
     public title: string,
     public detail: string,

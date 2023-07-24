@@ -1,7 +1,7 @@
 import { HttpStatus } from '@nestjs/common';
-import AbstractHttpException from "./abstract-http.exception";
+import { AbstractHttpException } from "./abstract-http.exception";
 
-export default class GeneralInternalServerException extends AbstractHttpException {
+export class GeneralInternalServerException extends AbstractHttpException {
   constructor(rootCause?: unknown) {
     super(
       'common.exception.INTERNAL_ERROR.TITLE',

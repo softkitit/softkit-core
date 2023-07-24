@@ -1,7 +1,7 @@
 import { HttpStatus } from '@nestjs/common';
-import AbstractHttpException from "./abstract-http.exception";
+import { AbstractHttpException } from "./abstract-http.exception";
 
-export default class FailedToCreateEntityException extends AbstractHttpException {
+export class FailedToCreateEntityException extends AbstractHttpException {
   constructor(
     public readonly entityName: string,
     public readonly fieldName: string,

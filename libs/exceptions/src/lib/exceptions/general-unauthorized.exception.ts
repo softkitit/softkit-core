@@ -1,7 +1,7 @@
 import { HttpStatus } from '@nestjs/common';
-import AbstractHttpException from "./abstract-http.exception";
+import { AbstractHttpException } from "./abstract-http.exception";
 
-export default class GeneralUnauthorizedException extends AbstractHttpException {
+export class GeneralUnauthorizedException extends AbstractHttpException {
   constructor(rootCause?: unknown) {
     super(
       'common.exception.UNAUTHORIZED.TITLE',

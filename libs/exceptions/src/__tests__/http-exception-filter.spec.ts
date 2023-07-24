@@ -5,21 +5,17 @@ import {
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import { Test } from '@nestjs/testing';
-import GeneralNotFoundException from "../lib/exceptions/general-not-found.exception";
-import OptimisticLockException from "../lib/exceptions/optimistic-lock.exception";
 import {
   AnyExceptionFilter,
-  HttpExceptionFilter,
+  FailedToCreateEntityException,
+  GeneralForbiddenException, GeneralInternalServerException,
+  GeneralNotFoundException,
+  GeneralUnauthorizedException,
+  HttpExceptionFilter, MissingConfigurationForFeatureException, ObjectNotFoundException, OptimisticLockException,
   OverrideDefaultForbiddenExceptionFilter,
   OverrideDefaultNotFoundFilter
-} from "@saas-buildkit/exceptions";
-import FailedToCreateEntityException from "../lib/exceptions/failed-to-create-entity.exception";
-import ObjectNotFoundException from "../lib/exceptions/object-not-found.exception";
-import MissingConfigurationForFeatureException from "../lib/exceptions/missing-configuration-for-feature.exception";
-import GeneralUnauthorizedException from "../lib/exceptions/general-unauthorized.exception";
-import GeneralForbiddenException from "../lib/exceptions/general-forbidden.exception";
+} from "../";
 import { ErrorResponse } from "@saas-buildkit/common-types";
-import GeneralInternalServerException from "../lib/exceptions/general-internal-server.exception";
 
 describe('http exception filter e2e test', () => {
   let app: NestFastifyApplication;

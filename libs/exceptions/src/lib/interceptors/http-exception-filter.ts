@@ -2,7 +2,7 @@ import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
 import { HttpArgumentsHost } from '@nestjs/common/interfaces';
 import { HttpAdapterHost } from '@nestjs/core';
 import { I18nContext } from 'nestjs-i18n';
-import AbstractHttpException from "../exceptions/abstract-http.exception";
+import { AbstractHttpException } from "../exceptions/abstract-http.exception";
 
 @Catch(AbstractHttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
