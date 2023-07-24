@@ -27,6 +27,9 @@
       "@saas-buildkit/common-types": [
         "libs/common-types/src/index.ts"
       ],
+      "@saas-buildkit/config": [
+        "libs/config/src/index.ts"
+      ],
       "@saas-buildkit/crypto": [
         "libs/crypto/src/index.ts"
       ],
