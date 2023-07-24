@@ -27,6 +27,9 @@
       "@saas-buildkit/crypto": [
         "libs/crypto/src/index.ts"
       ],
+      "@saas-buildkit/i18n": [
+        "libs/i18n/src/index.ts"
+      ],
       "@saas-buildkit/string-utils": [
         "libs/string-utils/src/index.ts"
       ],
