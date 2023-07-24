@@ -1,0 +1,11 @@
+{
+  "name": "@saas-buildkit/validation",
+  "version": "1.0.0",
+  "type": "commonjs",
+  "keywords": [
+    "validation",
+    "rest",
+    "class-validator",
+    "rest-api-validation"
+  ]
+}
