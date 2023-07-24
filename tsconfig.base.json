@@ -26,6 +26,9 @@
       ],
       "@saas-buildkit/validation": [
         "libs/validation/src/index.ts"
+      ],
+      "@test-nx-workspace/crypto": [
+        "libs/crypto/src/index.ts"
       ]
     }
   },
