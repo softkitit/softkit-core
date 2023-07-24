@@ -1,0 +1,11 @@
+{
+  "name": "@saas-buildkit/test-utils",
+  "version": "1.0.0",
+  "type": "commonjs",
+  "keywords": [
+    "test"
+  ],
+  "dependencies": {
+    "testcontainers": "^9.12.0"
+  }
+}
