@@ -18,6 +18,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@core-saas-boilerplate/logger": [
+        "libs/logger/src/index.ts"
+      ],
       "@saas-buildkit/common-types": [
         "libs/common-types/src/index.ts"
       ],
