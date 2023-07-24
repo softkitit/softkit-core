@@ -21,14 +21,14 @@
       "@saas-buildkit/common-types": [
         "libs/common-types/src/index.ts"
       ],
+      "@saas-buildkit/crypto": [
+        "libs/crypto/src/index.ts"
+      ],
       "@saas-buildkit/test-utils": [
         "libs/test-utils/src/index.ts"
       ],
       "@saas-buildkit/validation": [
         "libs/validation/src/index.ts"
-      ],
-      "@test-nx-workspace/crypto": [
-        "libs/crypto/src/index.ts"
       ]
     }
   },
