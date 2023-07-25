@@ -18,9 +18,8 @@ import {
   addTransactionalDataSource, getDataSourceByName,
   initializeTransactionalContext
 } from "typeorm-transactional";
-import { BaseEntityHelper, OptimisticLockingSubscriber } from "@saas-buildkit/typeorm";
+import { BaseEntityHelper, BaseRepository, OptimisticLockingSubscriber } from "@saas-buildkit/typeorm";
 import { startDb } from "@saas-buildkit/test-utils";
-import BaseRepository from "../lib/repositories/base.repository";
 import { OptimisticLockException } from "@saas-buildkit/exceptions";
 import { getTransactionalContext } from "typeorm-transactional/dist/common";
 

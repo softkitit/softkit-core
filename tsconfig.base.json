@@ -51,6 +51,9 @@
       "@saas-buildkit/typeorm": [
         "libs/typeorm/src/index.ts"
       ],
+      "@saas-buildkit/typeorm-service": [
+        "libs/typeorm-service/src/index.ts"
+      ],
       "@saas-buildkit/validation": [
         "libs/validation/src/index.ts"
       ]

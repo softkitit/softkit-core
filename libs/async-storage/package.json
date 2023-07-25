@@ -1,5 +1,9 @@
 {
   "name": "@saas-buildkit/async-storage",
   "version": "0.0.1",
-  "type": "commonjs"
+  "type": "commonjs",
+  "keywords": [
+    "async-storage",
+    "cls"
+  ]
 }

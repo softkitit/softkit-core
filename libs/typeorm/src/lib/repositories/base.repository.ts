@@ -20,7 +20,7 @@ import { IsolationLevel } from 'typeorm/driver/types/IsolationLevel';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { BaseEntityHelper } from '../entities/entity-helper';
 
-export default abstract class BaseRepository<
+export abstract class BaseRepository<
   ENTITY extends BaseEntityHelper,
 > extends Repository<ENTITY> {
   private readonly logger: Logger = new Logger(BaseRepository.name);

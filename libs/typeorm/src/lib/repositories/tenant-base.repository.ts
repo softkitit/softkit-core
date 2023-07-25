@@ -1,9 +1,9 @@
-import BaseRepository from './base.repository';
+import { BaseRepository } from './base.repository';
 import { ClsService } from 'nestjs-cls';
 import { DataSource, EntityTarget, FindOptionsWhere } from 'typeorm';
 import { BaseTenantEntityHelper } from '../entities/tenant-entity-helper';
 
-export default abstract class BaseTenantRepository<
+export abstract class BaseTenantRepository<
   ENTITY extends BaseTenantEntityHelper,
 > extends BaseRepository<ENTITY> {
   protected constructor(

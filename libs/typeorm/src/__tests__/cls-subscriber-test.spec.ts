@@ -29,8 +29,7 @@ import {
 import { getTransactionalContext } from 'typeorm-transactional/dist/common';
 import { TenantClsStore } from "@saas-buildkit/typeorm";
 import { expectNotNullAndGet, startDb } from "@saas-buildkit/test-utils";
-import BaseTenantRepository from "../lib/repositories/tenant-base.repository";
-import BaseRepository from "../lib/repositories/base.repository";
+import { BaseTenantRepository, BaseRepository } from "@saas-buildkit/typeorm";
 
 describe('tenant base service test', () => {
   const userId = 'doesnt matter';

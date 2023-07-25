@@ -23,10 +23,14 @@ import {
   addTransactionalDataSource,
   initializeTransactionalContext,
 } from 'typeorm-transactional';
-import { BaseEntityHelper, BaseTenantEntityHelper, ClsPresetSubscriber, TenantClsStore } from "@saas-buildkit/typeorm";
+import {
+  BaseEntityHelper, BaseRepository,
+  BaseTenantEntityHelper,
+  BaseTenantRepository,
+  ClsPresetSubscriber,
+  TenantClsStore
+} from "@saas-buildkit/typeorm";
 import { expectNotNullAndGet, startDb } from "@saas-buildkit/test-utils";
-import BaseRepository from "../lib/repositories/base.repository";
-import BaseTenantRepository from "../lib/repositories/tenant-base.repository";
 
 describe('tenant base entity test', () => {
   let testBaseRepository: TestBaseRepository;

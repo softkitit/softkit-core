@@ -20,9 +20,8 @@ import {
   addTransactionalDataSource,
   initializeTransactionalContext,
 } from 'typeorm-transactional';
-import { BaseEntityHelper } from "@saas-buildkit/typeorm";
+import { BaseEntityHelper, BaseRepository } from "@saas-buildkit/typeorm";
 import { expectNotNullAndGet, startDb } from "@saas-buildkit/test-utils";
-import BaseRepository from "../lib/repositories/base.repository";
 
 describe('start db and populate the entity', () => {
   let testBaseRepository: TestBaseRepository;
