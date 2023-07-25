@@ -1,5 +1,11 @@
 {
   "name": "@saas-buildkit/exceptions",
-  "version": "0.0.1",
-  "type": "commonjs"
+  "version": "1.0.0",
+  "type": "commonjs",
+  "keywords": [
+    "exceptions",
+    "http",
+    "error handling",
+    "rfc7807"
+  ]
 }

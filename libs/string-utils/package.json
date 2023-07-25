@@ -1,5 +1,9 @@
 {
   "name": "@saas-buildkit/string-utils",
-  "version": "0.0.1",
-  "type": "commonjs"
+  "version": "1.0.0",
+  "type": "commonjs",
+  "keywords": [
+    "string",
+    "utils"
+  ]
 }

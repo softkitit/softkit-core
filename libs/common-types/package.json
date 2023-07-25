@@ -4,6 +4,7 @@
   "type": "commonjs",
   "keywords": [
     "typescript",
-    "types"
+    "types",
+    "common types"
   ]
 }

@@ -1,5 +1,9 @@
 {
   "name": "@saas-buildkit/i18n",
-  "version": "0.0.1",
-  "type": "commonjs"
+  "version": "1.0.0",
+  "type": "commonjs",
+  "keywords": [
+    "i18n",
+    "localization"
+  ]
 }

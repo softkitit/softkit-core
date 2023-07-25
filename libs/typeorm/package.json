@@ -1,5 +1,11 @@
 {
   "name": "@saas-buildkit/typeorm",
-  "version": "0.0.1",
-  "type": "commonjs"
+  "version": "1.0.0",
+  "type": "commonjs",
+  "keywords": [
+    "typeorm",
+    "sql",
+    "repository layer",
+    "subscribers"
+  ]
 }

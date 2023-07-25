@@ -1,5 +1,10 @@
 {
   "name": "@saas-buildkit/crypto",
   "version": "1.0.0",
-  "type": "commonjs"
+  "type": "commonjs",
+  "keywords": [
+    "crypto",
+    "random number",
+    "random string"
+  ]
 }

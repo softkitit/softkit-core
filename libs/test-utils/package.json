@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "type": "commonjs",
   "keywords": [
-    "test"
+    "test",
+    "utils"
   ],
   "dependencies": {
     "testcontainers": "^9.12.0"
