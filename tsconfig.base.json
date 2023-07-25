@@ -24,6 +24,9 @@
       "@saas-buildkit/async-storage": [
         "libs/async-storage/src/index.ts"
       ],
+      "@saas-buildkit/auth": [
+        "libs/auth/src/index.ts"
+      ],
       "@saas-buildkit/common-types": [
         "libs/common-types/src/index.ts"
       ],
