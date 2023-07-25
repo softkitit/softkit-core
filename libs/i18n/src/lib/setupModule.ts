@@ -1,5 +1,5 @@
 import { HeaderResolver, I18nModule } from 'nestjs-i18n';
-import I18Config from './config/i18';
+import { I18Config } from './config/i18';
 
 /**
  * @link https://github.com/Nikaple/nest-typed-config

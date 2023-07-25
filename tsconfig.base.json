@@ -48,6 +48,9 @@
       "@saas-buildkit/test-utils": [
         "libs/test-utils/src/index.ts"
       ],
+      "@saas-buildkit/typeorm": [
+        "libs/typeorm/src/index.ts"
+      ],
       "@saas-buildkit/validation": [
         "libs/validation/src/index.ts"
       ]

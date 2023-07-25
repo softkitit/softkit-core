@@ -1,7 +1,7 @@
 import { ClsModule } from "nestjs-cls";
 import { FastifyRequest } from 'fastify';
 
-export default () =>
+export function setupClsModule() {
   ClsModule.forRoot({
     global: true,
     middleware: {
@@ -10,3 +10,4 @@ export default () =>
       idGenerator: (req: FastifyRequest) => req.id.toString(),
     },
   });
+}

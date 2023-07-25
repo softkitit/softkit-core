@@ -1,7 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
-import SwaggerConfig from './config/swagger';
+import { SwaggerConfig } from './config/swagger';
 
 /**
  * we can have a multiple swagger setups also, one public and private for example

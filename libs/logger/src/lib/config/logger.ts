@@ -1,6 +1,6 @@
 import { Allow, IsString, IsBoolean } from 'class-validator';
 
-export default class LoggerConfig {
+export class LoggerConfig {
 
   @IsBoolean()
   @Allow()

@@ -1,7 +1,7 @@
 import { HttpStatus } from '@nestjs/common';
-import AbstractHttpException from "./abstract-http.exception";
+import { AbstractHttpException } from "./abstract-http.exception";
 
-export default class OptimisticLockException extends AbstractHttpException {
+export class OptimisticLockException extends AbstractHttpException {
   constructor(
     public readonly currentVersion: number,
     public readonly providedVersion: number,

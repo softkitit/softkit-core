@@ -1,7 +1,7 @@
 import { HttpStatus } from '@nestjs/common';
-import AbstractHttpException from "./abstract-http.exception";
+import { AbstractHttpException } from "./abstract-http.exception";
 
-export default class MissingConfigurationForFeatureException extends AbstractHttpException {
+export class MissingConfigurationForFeatureException extends AbstractHttpException {
   constructor(featureName: string, rootCause?: unknown) {
     super(
       'common.exception.NOT_FOUND.TITLE',

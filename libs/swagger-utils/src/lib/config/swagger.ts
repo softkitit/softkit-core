@@ -1,6 +1,6 @@
 import { Allow, IsEmail, IsOptional, IsString, IsUrl } from 'class-validator';
 
-export default class SwaggerConfig {
+export class SwaggerConfig {
   @IsString()
   title!: string;
 

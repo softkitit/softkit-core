@@ -2,7 +2,7 @@ import { ClsModule, ClsService, ClsStore } from "nestjs-cls";
 import { LoggerModule } from 'nestjs-pino';
 import { IncomingMessage, ServerResponse } from 'node:http';
 
-import LoggerConfig from './config/logger';
+import { LoggerConfig } from './config/logger';
 
 export function setupLoggerModule<ClsType extends ClsStore>(
   customProps: (req: IncomingMessage, res: ServerResponse<IncomingMessage>, clsService: ClsService<ClsType>) => Record<string, string>

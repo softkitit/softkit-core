@@ -1,7 +1,7 @@
 import { HttpStatus } from '@nestjs/common';
-import AbstractHttpException from "./abstract-http.exception";
+import { AbstractHttpException } from "./abstract-http.exception";
 
-export default class ObjectNotFoundException extends AbstractHttpException {
+export class ObjectNotFoundException extends AbstractHttpException {
   constructor(objectName: string, rootCause?: unknown) {
     super(
       'common.exception.NOT_FOUND.TITLE',
