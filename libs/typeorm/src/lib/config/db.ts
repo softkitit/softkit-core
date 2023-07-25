@@ -71,11 +71,12 @@ export class DbConfig {
   @IsString({ each: true })
   migrations!: string[];
 
-  @Type(() => DbCliConfig)
+  @Type(/* istanbul ignore next */ () => DbCliConfig)
   @ValidateNested()
   cli: DbCliConfig = new DbCliConfig();
 
-  @Type(() => DbExtraSettings)
+
+  @Type(/* istanbul ignore next */ () => DbExtraSettings)
   @ValidateNested()
   extra: DbExtraSettings = new DbExtraSettings();
 
