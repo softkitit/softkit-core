@@ -1,12 +1,15 @@
-import { ClsModule, ClsService, ClsStore } from "nestjs-cls";
+import { ClsModule, ClsService, ClsStore } from 'nestjs-cls';
 import { LoggerModule } from 'nestjs-pino';
 import { IncomingMessage, ServerResponse } from 'node:http';
 
 import { LoggerConfig } from './config/logger';
 
 export function setupLoggerModule<ClsType extends ClsStore>(
-  customProps: (req: IncomingMessage, res: ServerResponse<IncomingMessage>, clsService: ClsService<ClsType>) => Record<string, string>
-    = () => ({})
+  customProps: (
+    req: IncomingMessage,
+    res: ServerResponse<IncomingMessage>,
+    clsService: ClsService<ClsType>,
+  ) => Record<string, string> = () => ({}),
 ) {
   return LoggerModule.forRootAsync({
     useFactory: async (
@@ -64,7 +67,7 @@ export function setupLoggerModule<ClsType extends ClsStore>(
             return `Failed Endpoint: ${req.method} ${req.url} Error - ${error.message}.`;
           },
           // eslint-disable-next-line complexity
-          customLogLevel: function(req, res, err) {
+          customLogLevel: function (req, res, err) {
             if (res.statusCode >= 400 && res.statusCode < 500) {
               return 'info';
             } else if (res.statusCode >= 500 || err) {
@@ -80,14 +83,13 @@ export function setupLoggerModule<ClsType extends ClsStore>(
           // Define additional custom request properties
           level: loggerConfig.defaultLevel,
           // install 'pino-pretty' package in order to use the following option
-          transport:
-            loggerConfig.prettyLogs
-              ? { target: 'pino-pretty' }
-              : undefined,
+          transport: loggerConfig.prettyLogs
+            ? { target: 'pino-pretty' }
+            : undefined,
         },
       };
     },
     imports: [ClsModule],
-    inject: [LoggerConfig, ClsService]
+    inject: [LoggerConfig, ClsService],
   });
 }

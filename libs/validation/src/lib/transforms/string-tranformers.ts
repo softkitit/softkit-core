@@ -1,5 +1,5 @@
 import { TransformFnParams } from 'class-transformer';
-import { Maybe } from "@saas-buildkit/common-types";
+import { Maybe } from '@saas-buildkit/common-types';
 
 export const lowerCaseTransformer = (
   params: TransformFnParams,

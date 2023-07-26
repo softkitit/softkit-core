@@ -1,6 +1,6 @@
 import { FindOneOptions, FindOptionsOrder, FindOptionsWhere } from 'typeorm';
-import { BaseEntityHelper } from "@saas-buildkit/typeorm";
-import { InfinityPaginationResultType } from "@saas-buildkit/common-types";
+import { BaseEntityHelper } from '@saas-buildkit/typeorm';
+import { InfinityPaginationResultType } from '@saas-buildkit/common-types';
 
 export abstract class AbstractBaseService<
   ENTITY extends BaseEntityHelper,

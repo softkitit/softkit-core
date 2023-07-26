@@ -9,6 +9,7 @@ import { Observable } from 'rxjs';
 export class LoggingInterceptor implements NestInterceptor {
   private readonly logger: Logger = new Logger(LoggingInterceptor.name);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const request = context.switchToHttp().getRequest();
     const params = request.params;

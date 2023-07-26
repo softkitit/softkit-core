@@ -1,5 +1,8 @@
-import { BaseTenantEntityHelper, BaseTenantRepository } from "@saas-buildkit/typeorm";
-import { BaseEntityService } from "./base.service";
+import {
+  BaseTenantEntityHelper,
+  BaseTenantRepository,
+} from '@saas-buildkit/typeorm';
+import { BaseEntityService } from './base.service';
 
 export class BaseTenantEntityService<
   ENTITY extends BaseTenantEntityHelper,

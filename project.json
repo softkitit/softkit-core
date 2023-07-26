@@ -9,18 +9,6 @@
         "config": ".verdaccio/config.yml",
         "storage": "tmp/local-registry/storage"
       }
-    },
-    "lint": {
-      "executor": "@nx/linter:eslint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
-      "options": {
-        "lintFilePatterns": [
-          "libs/**/*.{ts,tsx,js,jsx}",
-          "libs/**/package.json"
-        ]
-      }
     }
   }
 }

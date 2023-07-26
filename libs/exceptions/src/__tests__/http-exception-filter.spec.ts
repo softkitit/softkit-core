@@ -1,4 +1,9 @@
-import { Controller, ForbiddenException, HttpStatus, Post } from "@nestjs/common";
+import {
+  Controller,
+  ForbiddenException,
+  HttpStatus,
+  Post,
+} from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 import {
   FastifyAdapter,
@@ -8,22 +13,25 @@ import { Test } from '@nestjs/testing';
 import {
   AnyExceptionFilter,
   FailedToCreateEntityException,
-  GeneralForbiddenException, GeneralInternalServerException,
+  GeneralForbiddenException,
+  GeneralInternalServerException,
   GeneralNotFoundException,
   GeneralUnauthorizedException,
-  HttpExceptionFilter, MissingConfigurationForFeatureException, ObjectNotFoundException, OptimisticLockException,
+  HttpExceptionFilter,
+  MissingConfigurationForFeatureException,
+  ObjectNotFoundException,
+  OptimisticLockException,
   OverrideDefaultForbiddenExceptionFilter,
-  OverrideDefaultNotFoundFilter
-} from "../";
-import { ErrorResponse } from "@saas-buildkit/common-types";
+  OverrideDefaultNotFoundFilter,
+} from '../';
+import { ErrorResponse } from '@saas-buildkit/common-types';
 
 describe('http exception filter e2e test', () => {
   let app: NestFastifyApplication;
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
-      imports: [
-      ],
+      imports: [],
       controllers: [SimpleHttpExceptionController],
       providers: [],
     }).compile();
@@ -52,7 +60,9 @@ describe('http exception filter e2e test', () => {
     expect(errorBody.status).toBe(404);
     expect(errorBody.type).toBeDefined();
     expect(errorBody.title).toBe('common.exception.NOT_FOUND.TITLE');
-    expect(errorBody.detail).toContain('common.exception.NOT_FOUND.GENERAL_DETAIL');
+    expect(errorBody.detail).toContain(
+      'common.exception.NOT_FOUND.GENERAL_DETAIL',
+    );
     expect(errorBody.instance).toContain('req-');
   });
 
@@ -85,10 +95,11 @@ describe('http exception filter e2e test', () => {
     expect(errorBody.status).toBe(403);
     expect(errorBody.type).toBeDefined();
     expect(errorBody.title).toBe('Forbidden');
-    expect(errorBody.detail).toContain('Forbidden access to the resource. Check permissions.');
+    expect(errorBody.detail).toContain(
+      'Forbidden access to the resource. Check permissions.',
+    );
     expect(errorBody.instance).toContain('req-');
   });
-
 
   it('general forbidden exception filter test', async () => {
     const response = await app.inject({
@@ -102,9 +113,7 @@ describe('http exception filter e2e test', () => {
     expect(errorBody.status).toBe(403);
     expect(errorBody.type).toBeDefined();
     expect(errorBody.title).toBe('common.exception.FORBIDDEN.TITLE');
-    expect(errorBody.detail).toBe(
-      `common.exception.FORBIDDEN.GENERAL_DETAIL`,
-    );
+    expect(errorBody.detail).toBe(`common.exception.FORBIDDEN.GENERAL_DETAIL`);
     expect(errorBody.instance).toContain('req-');
   });
 
@@ -120,7 +129,9 @@ describe('http exception filter e2e test', () => {
     expect(errorBody.status).toBe(401);
     expect(errorBody.type).toBeDefined();
     expect(errorBody.title).toBe('common.exception.UNAUTHORIZED.TITLE');
-    expect(errorBody.detail).toBe('common.exception.UNAUTHORIZED.GENERAL_DETAIL');
+    expect(errorBody.detail).toBe(
+      'common.exception.UNAUTHORIZED.GENERAL_DETAIL',
+    );
     expect(errorBody.instance).toContain('req-');
   });
 
@@ -136,7 +147,9 @@ describe('http exception filter e2e test', () => {
     expect(errorBody.status).toBe(500);
     expect(errorBody.type).toBeDefined();
     expect(errorBody.title).toBe('common.exception.INTERNAL_ERROR.TITLE');
-    expect(errorBody.detail).toBe('common.exception.INTERNAL_ERROR.GENERAL_DETAIL');
+    expect(errorBody.detail).toBe(
+      'common.exception.INTERNAL_ERROR.GENERAL_DETAIL',
+    );
     expect(errorBody.instance).toContain('req-');
   });
 
@@ -170,7 +183,9 @@ describe('http exception filter e2e test', () => {
     expect(errorBody.status).toBe(404);
     expect(errorBody.type).toBeDefined();
     expect(errorBody.title).toBe('common.exception.NOT_FOUND.TITLE');
-    expect(errorBody.detail).toBe('common.exception.NOT_FOUND.OBJECT_NOT_FOUND_DETAIL');
+    expect(errorBody.detail).toBe(
+      'common.exception.NOT_FOUND.OBJECT_NOT_FOUND_DETAIL',
+    );
     expect(errorBody.instance).toContain('req-');
   });
 
@@ -186,9 +201,7 @@ describe('http exception filter e2e test', () => {
     expect(errorBody.status).toBe(409);
     expect(errorBody.type).toBeDefined();
     expect(errorBody.title).toBe('common.exception.CONFLICT.TITLE');
-    expect(errorBody.detail).toBe(
-      'common.exception.CONFLICT.OPTIMISTIC_LOCK',
-    );
+    expect(errorBody.detail).toBe('common.exception.CONFLICT.OPTIMISTIC_LOCK');
     expect(errorBody.instance).toContain('req-');
   });
 
@@ -204,9 +217,7 @@ describe('http exception filter e2e test', () => {
     expect(errorBody.status).toBe(500);
     expect(errorBody.type).toBeDefined();
     expect(errorBody.title).toBe('Internal Error');
-    expect(errorBody.detail).toBe(
-      'Internal Server Error',
-    );
+    expect(errorBody.detail).toBe('Internal Server Error');
     expect(errorBody.instance).toContain('req-');
   });
 
@@ -222,7 +233,9 @@ describe('http exception filter e2e test', () => {
     expect(errorBody.status).toBe(HttpStatus.CONFLICT);
     expect(errorBody.type).toBeDefined();
     expect(errorBody.title).toBe('common.exception.CONFLICT.TITLE');
-    expect(errorBody.detail).toBe('common.exception.CONFLICT.CAN_NOT_CREATE_ENTITY');
+    expect(errorBody.detail).toBe(
+      'common.exception.CONFLICT.CAN_NOT_CREATE_ENTITY',
+    );
     expect(errorBody.instance).toContain('req-');
   });
 });

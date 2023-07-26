@@ -3,7 +3,7 @@ import { fileLoader } from 'nest-typed-config';
 import * as path from 'node:path';
 import 'reflect-metadata';
 import { DataSource, DataSourceOptions } from 'typeorm';
-import { DbConfig } from "../config/db";
+import { DbConfig } from '../config/db';
 
 const sourceDir = path.join(
   process.cwd(),
@@ -11,7 +11,7 @@ const sourceDir = path.join(
   `apps/${process.env['MIGRATION_APP_NAME']}/src`,
 );
 
-const appDir = path.join(sourceDir, 'app')
+const appDir = path.join(sourceDir, 'app');
 
 const { db } = fileLoader({
   absolutePath: path.join(appDir, 'assets/.env.yaml'),

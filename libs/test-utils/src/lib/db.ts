@@ -4,7 +4,7 @@ export async function startDb(
   migrationsRun = false,
   dbName = 'nest',
   password = 'secret-test',
-  username = 'test-user'
+  username = 'test-user',
 ) {
   // eslint-disable-next-line no-console
   console.time(`start db`);

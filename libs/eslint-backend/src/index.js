@@ -58,6 +58,7 @@ module.exports = {
       rules: {
         'simple-import-sort/imports': 'off',
         'unicorn/prevent-abbreviations': 'off',
+        'unicorn/no-abusive-eslint-disable': 'off',
         'unicorn/no-array-callback-reference': 'off',
         'unicorn/prefer-module': 'off',
         'jest/expect-expect': 'off',

@@ -10,7 +10,7 @@ import {
   MinLength,
 } from 'class-validator';
 import ValidatorJS from 'validator';
-import { lowerCaseTransformer } from "../transforms";
+import { lowerCaseTransformer } from '../transforms';
 
 export const IsRequiredStringLocalized = ({
   minLength,

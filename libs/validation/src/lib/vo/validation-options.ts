@@ -1,4 +1,4 @@
-import { HttpStatus, ValidationPipeOptions } from "@nestjs/common";
+import { HttpStatus, ValidationPipeOptions } from '@nestjs/common';
 
 const DEFAULT_VALIDATION_OPTIONS: ValidationPipeOptions = {
   transform: true,
@@ -6,6 +6,4 @@ const DEFAULT_VALIDATION_OPTIONS: ValidationPipeOptions = {
   errorHttpStatusCode: HttpStatus.BAD_REQUEST,
 };
 
-export {
-  DEFAULT_VALIDATION_OPTIONS
-}
+export { DEFAULT_VALIDATION_OPTIONS };

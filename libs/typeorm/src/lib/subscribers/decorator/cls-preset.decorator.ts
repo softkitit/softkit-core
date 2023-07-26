@@ -1,8 +1,7 @@
 import defaultClsMetadataStore from '../cls-preset.metadata.storage';
 import { PresetType } from './vo/preset-type';
 import { getMetadataArgsStorage } from 'typeorm';
-import { ClsStore } from "nestjs-cls";
-import { TenantClsStore } from "../../vo/tenant-base-cls-store";
+import { TenantClsStore } from '../../vo/tenant-base-cls-store';
 
 interface ClsPresetDecoratorOptions<CLS_STORE extends TenantClsStore> {
   clsPropertyFieldName: keyof CLS_STORE;

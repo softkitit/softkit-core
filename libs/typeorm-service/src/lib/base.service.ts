@@ -5,12 +5,12 @@ import {
   FindOptionsWhere,
 } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
-import { BaseEntityHelper } from "@saas-buildkit/typeorm";
-import { AbstractBaseService } from "./abstract-base.service";
-import { BaseRepository } from "@saas-buildkit/typeorm";
-import { toCapitalizedWords } from "@saas-buildkit/string-utils";
-import { ObjectNotFoundException } from "@saas-buildkit/exceptions";
-import { InfinityPaginationResultType } from "@saas-buildkit/common-types";
+import { BaseEntityHelper } from '@saas-buildkit/typeorm';
+import { AbstractBaseService } from './abstract-base.service';
+import { BaseRepository } from '@saas-buildkit/typeorm';
+import { toCapitalizedWords } from '@saas-buildkit/string-utils';
+import { ObjectNotFoundException } from '@saas-buildkit/exceptions';
+import { InfinityPaginationResultType } from '@saas-buildkit/common-types';
 
 export class BaseEntityService<
   ENTITY extends BaseEntityHelper,
@@ -92,8 +92,8 @@ export class BaseEntityService<
     return {
       count,
       data,
-      hasNextPage: count > ((page + 1) * limit),
-    }
+      hasNextPage: count > (page + 1) * limit,
+    };
   }
 
   @Transactional()

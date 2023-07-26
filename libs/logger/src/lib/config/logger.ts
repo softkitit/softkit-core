@@ -1,7 +1,6 @@
 import { Allow, IsString, IsBoolean } from 'class-validator';
 
 export class LoggerConfig {
-
   @IsBoolean()
   @Allow()
   colorize = true;
@@ -13,5 +12,4 @@ export class LoggerConfig {
   @IsString()
   @Allow()
   defaultLevel = 'info';
-
 }

@@ -1,6 +1,5 @@
 import { PresetType } from './decorator/vo/preset-type';
-import { ClsStore } from "nestjs-cls";
-import { TenantClsStore } from "../vo/tenant-base-cls-store";
+import { TenantClsStore } from '../vo/tenant-base-cls-store';
 
 interface ClsPresetMetadataField<CLS_STORAGE_TYPE extends TenantClsStore> {
   entityName: string;
@@ -49,8 +48,6 @@ class ClsPresetMetadataStorage<CLS_STORAGE_TYPE extends TenantClsStore> {
     return result;
   }
 }
-
-
 
 const defaultClsMetadataStore = new ClsPresetMetadataStorage();
 

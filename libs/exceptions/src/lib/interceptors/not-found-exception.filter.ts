@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 import { I18nContext } from 'nestjs-i18n';
-import { ErrorResponse } from "@saas-buildkit/common-types";
+import { ErrorResponse } from '@saas-buildkit/common-types';
 
 @Catch(NotFoundException)
 export class OverrideDefaultNotFoundFilter implements ExceptionFilter {

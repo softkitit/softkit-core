@@ -7,8 +7,8 @@ import {
 import { HttpAdapterHost } from '@nestjs/core';
 import { I18nContext } from 'nestjs-i18n';
 import { QueryFailedError } from 'typeorm';
-import { toCapitalizedWords } from "@saas-buildkit/string-utils";
-import { ErrorResponse } from "@saas-buildkit/common-types";
+import { toCapitalizedWords } from '@saas-buildkit/string-utils';
+import { ErrorResponse } from '@saas-buildkit/common-types';
 
 @Catch(QueryFailedError)
 export class PostgresDbFailedErrorFilter implements ExceptionFilter {

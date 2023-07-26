@@ -19,10 +19,10 @@ import {
   addTransactionalDataSource,
   initializeTransactionalContext,
 } from 'typeorm-transactional';
-import { expectNotNullAndGet, startDb } from "@saas-buildkit/test-utils";
-import { BaseEntityService } from "@saas-buildkit/typeorm-service";
-import { BaseEntityHelper, BaseRepository } from "@saas-buildkit/typeorm";
-import { ObjectNotFoundException } from "@saas-buildkit/exceptions";
+import { expectNotNullAndGet, startDb } from '@saas-buildkit/test-utils';
+import { BaseEntityService } from '../lib/base.service';
+import { BaseEntityHelper, BaseRepository } from '@saas-buildkit/typeorm';
+import { ObjectNotFoundException } from '@saas-buildkit/exceptions';
 
 describe('base service tests', () => {
   let testBaseService: TestBaseService;

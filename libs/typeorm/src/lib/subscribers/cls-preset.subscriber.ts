@@ -1,17 +1,19 @@
 import defaultClsMetadataStore from './cls-preset.metadata.storage';
 import { PresetType } from './decorator/vo/preset-type';
 import { Injectable } from '@nestjs/common';
-import { ClsService, ClsStore } from "nestjs-cls";
+import { ClsService } from 'nestjs-cls';
 import {
   DataSource,
   EntitySubscriberInterface,
   InsertEvent,
   UpdateEvent,
 } from 'typeorm';
-import { TenantClsStore } from "../vo/tenant-base-cls-store";
+import { TenantClsStore } from '../vo/tenant-base-cls-store';
 
 @Injectable()
-export class ClsPresetSubscriber<ClsStoreType extends TenantClsStore> implements EntitySubscriberInterface {
+export class ClsPresetSubscriber<ClsStoreType extends TenantClsStore>
+  implements EntitySubscriberInterface
+{
   constructor(
     private readonly dataSource: DataSource,
     private readonly clsService: ClsService<ClsStoreType>,

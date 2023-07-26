@@ -1,5 +1,12 @@
 import { faker } from '@faker-js/faker';
-import { Body, Controller, Module, Optional, Post, ValidationPipe } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Module,
+  Optional,
+  Post,
+  ValidationPipe,
+} from '@nestjs/common';
 import {
   FastifyAdapter,
   NestFastifyApplication,

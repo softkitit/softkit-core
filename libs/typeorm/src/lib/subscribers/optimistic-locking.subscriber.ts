@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { OptimisticLockException } from '@saas-buildkit/exceptions';
 import { DataSource, EntitySubscriberInterface, UpdateEvent } from 'typeorm';
-import { toCapitalizedWords } from "@saas-buildkit/string-utils";
+import { toCapitalizedWords } from '@saas-buildkit/string-utils';
 
 @Injectable()
 /**

@@ -1,6 +1,5 @@
 import { StartedPostgreSqlContainer } from 'testcontainers';
-import { startDb } from "@saas-buildkit/test-utils";
-
+import { startDb } from '../lib/db';
 
 describe('start db and populate the entity', () => {
   let connection: { container: StartedPostgreSqlContainer };

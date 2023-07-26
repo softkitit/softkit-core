@@ -9,7 +9,7 @@ export abstract class BaseTenantRepository<
   protected constructor(
     et: EntityTarget<ENTITY>,
     dataSource: DataSource,
-    private clsService: ClsService<{tenantId: string}>,
+    private clsService: ClsService<{ tenantId: string }>,
   ) {
     super(et, dataSource);
   }

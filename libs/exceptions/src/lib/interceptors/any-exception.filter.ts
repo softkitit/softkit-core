@@ -1,7 +1,7 @@
 import { ArgumentsHost, Catch, ExceptionFilter, Logger } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 import { I18nContext } from 'nestjs-i18n';
-import { ErrorResponse } from "@saas-buildkit/common-types";
+import { ErrorResponse } from '@saas-buildkit/common-types';
 
 @Catch()
 export class AnyExceptionFilter implements ExceptionFilter {

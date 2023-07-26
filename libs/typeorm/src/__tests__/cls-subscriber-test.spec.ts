@@ -1,6 +1,8 @@
 import { faker } from '@faker-js/faker';
-import { BaseEntityHelper, BaseTenantEntityHelper, ClsPresetSubscriber } from "@saas-buildkit/typeorm";
-import { ClsPresetDecorator } from "@saas-buildkit/typeorm";
+import { BaseEntityHelper } from '../lib/entities/entity-helper';
+import { BaseTenantEntityHelper } from '../lib/entities/tenant-entity-helper';
+import { ClsPresetSubscriber } from '../lib/subscribers/cls-preset.subscriber';
+import { ClsPresetDecorator } from '../lib/subscribers/decorator/cls-preset.decorator';
 import { PresetType } from '../lib/subscribers/decorator/vo/preset-type';
 import { Injectable } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
@@ -23,13 +25,15 @@ import {
 } from 'typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import {
-  addTransactionalDataSource, getDataSourceByName,
-  initializeTransactionalContext
-} from "typeorm-transactional";
+  addTransactionalDataSource,
+  getDataSourceByName,
+  initializeTransactionalContext,
+} from 'typeorm-transactional';
 import { getTransactionalContext } from 'typeorm-transactional/dist/common';
-import { TenantClsStore } from "@saas-buildkit/typeorm";
-import { expectNotNullAndGet, startDb } from "@saas-buildkit/test-utils";
-import { BaseTenantRepository, BaseRepository } from "@saas-buildkit/typeorm";
+import { TenantClsStore } from '../lib/vo/tenant-base-cls-store';
+import { expectNotNullAndGet, startDb } from '@saas-buildkit/test-utils';
+import { BaseTenantRepository } from '../lib/repositories/tenant-base.repository';
+import { BaseRepository } from '../lib/repositories/base.repository';
 
 describe('tenant base service test', () => {
   const userId = 'doesnt matter';
@@ -54,10 +58,9 @@ describe('tenant base service test', () => {
       }
     }
 
-    if(!getTransactionalContext()) {
+    if (!getTransactionalContext()) {
       initializeTransactionalContext();
     }
-
 
     const module = await Test.createTestingModule({
       imports: [
@@ -75,11 +78,11 @@ describe('tenant base service test', () => {
 
             const dsInitialized = getDataSourceByName('default');
 
-            if (!dsInitialized) {
+            if (dsInitialized) {
+              return dsInitialized;
+            } else {
               addTransactionalDataSource(dataSource);
               return await dataSource.initialize();
-            } else {
-              return dsInitialized;
             }
           },
         }),
@@ -88,11 +91,7 @@ describe('tenant base service test', () => {
         }),
       ],
 
-      providers: [
-        TestBaseRepository,
-        ClsPresetSubscriber,
-        TenantRepository,
-      ],
+      providers: [TestBaseRepository, ClsPresetSubscriber, TenantRepository],
     }).compile();
 
     clsService = module.get(ClsService);
@@ -130,9 +129,8 @@ describe('tenant base service test', () => {
         const beforeInsertSpy = jest.spyOn(clsPresetSubscriber, 'beforeInsert');
         const beforeUpdateSpy = jest.spyOn(clsPresetSubscriber, 'beforeUpdate');
 
-        const testBaseEntity = await testBaseRepository.createOrUpdateWithReload(
-          objectToSave,
-        );
+        const testBaseEntity =
+          await testBaseRepository.createOrUpdateWithReload(objectToSave);
         expect(beforeInsertSpy).toHaveBeenCalledTimes(1);
 
         expect(testBaseEntity.tenantId).toBe(tenant.id);
@@ -140,9 +138,9 @@ describe('tenant base service test', () => {
         expect(testBaseEntity.createdBy).toBe(userId);
         expect(testBaseEntity.updatedBy).toBeNull();
 
-        const testBaseEntityFound = expectNotNullAndGet(await testBaseRepository.findOneBy(
-          { id: testBaseEntity.id },
-        ));
+        const testBaseEntityFound = expectNotNullAndGet(
+          await testBaseRepository.findOneBy({ id: testBaseEntity.id }),
+        );
         expect(testBaseEntity.tenantId).toBe(tenant.id);
         checkAllTestFieldsPresent(objectToSave, testBaseEntityFound);
 
@@ -158,9 +156,9 @@ describe('tenant base service test', () => {
 
         expect(beforeUpdateSpy).toHaveBeenCalledTimes(1);
 
-        const updatedEntityFound = expectNotNullAndGet(await testBaseRepository.findOneBy(
-          { id: testBaseEntity.id }
-        ));
+        const updatedEntityFound = expectNotNullAndGet(
+          await testBaseRepository.findOneBy({ id: testBaseEntity.id }),
+        );
 
         expect(updatedEntity.tenantId).toBe(tenant.id);
         checkAllTestFieldsPresent(objectToUpdate, updatedEntityFound);
@@ -194,9 +192,7 @@ describe('tenant base service test', () => {
         userId: firstUserId,
       },
       async () => {
-        const testBaseEntity = await testBaseRepository.save(
-          objectToSave,
-        );
+        const testBaseEntity = await testBaseRepository.save(objectToSave);
         entityId = testBaseEntity.id;
 
         expect(testBaseEntity.tenantId).toBe(tenant.id);
@@ -219,9 +215,9 @@ describe('tenant base service test', () => {
             id: entityId,
           } as TestBaseEntity);
 
-          const updatedEntityFound = await testBaseRepository.findOneBy(
-            { id: testBaseEntity.id },
-          );
+          const updatedEntityFound = await testBaseRepository.findOneBy({
+            id: testBaseEntity.id,
+          });
 
           expect(updatedEntityFound?.id).toBe(entityId);
           expect(updatedEntityFound?.tenantId).toBe(tenant.id);
@@ -255,9 +251,7 @@ describe('tenant base service test', () => {
         beforeInsertSpy.mockReset();
         beforeUpdateSpy.mockReset();
 
-        const testBaseEntity = await testBaseRepository.save(
-          objectToSave,
-        );
+        const testBaseEntity = await testBaseRepository.save(objectToSave);
         expect(beforeInsertSpy).toHaveBeenCalledTimes(1);
         expect(beforeUpdateSpy).toHaveBeenCalledTimes(0);
         expect(testBaseEntity.tenantId).toBe(tenant.id);
@@ -265,7 +259,7 @@ describe('tenant base service test', () => {
 
         const testBaseEntityFound = expectNotNullAndGet(
           await testBaseRepository.findOneBy({
-            id: testBaseEntity.id
+            id: testBaseEntity.id,
           }),
         );
 
@@ -305,13 +299,11 @@ describe('tenant base service test', () => {
         userId,
       },
       async () => {
-        const testBaseEntity = await testBaseRepository.save(
-          objectToSave,
-        );
+        const testBaseEntity = await testBaseRepository.save(objectToSave);
 
         expectNotNullAndGet(
           await testBaseRepository.findOneBy({
-            id: testBaseEntity.id
+            id: testBaseEntity.id,
           }),
         );
 
@@ -327,7 +319,7 @@ describe('tenant base service test', () => {
       async () => {
         await expect(
           testBaseRepository.findOneBy({
-            id: savedEntityId
+            id: savedEntityId,
           }),
         ).resolves.toBeNull();
       },
@@ -417,8 +409,6 @@ class TestBaseRepository extends BaseTenantRepository<TestBaseEntity> {
   }
 }
 
-
-
 @Injectable()
 class TenantRepository extends BaseRepository<TenantEntity> {
   constructor(
@@ -428,7 +418,6 @@ class TenantRepository extends BaseRepository<TenantEntity> {
     super(TenantEntity, ds);
   }
 }
-
 
 interface UserAndTenantClsStore extends TenantClsStore {
   userId: string;

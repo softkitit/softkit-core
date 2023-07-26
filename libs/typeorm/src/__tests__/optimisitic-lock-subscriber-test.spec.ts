@@ -15,13 +15,16 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import {
-  addTransactionalDataSource, getDataSourceByName,
-  initializeTransactionalContext
-} from "typeorm-transactional";
-import { BaseEntityHelper, BaseRepository, OptimisticLockingSubscriber } from "@saas-buildkit/typeorm";
-import { startDb } from "@saas-buildkit/test-utils";
-import { OptimisticLockException } from "@saas-buildkit/exceptions";
-import { getTransactionalContext } from "typeorm-transactional/dist/common";
+  addTransactionalDataSource,
+  getDataSourceByName,
+  initializeTransactionalContext,
+} from 'typeorm-transactional';
+import { BaseEntityHelper } from '../lib/entities/entity-helper';
+import { BaseRepository } from '../lib/repositories/base.repository';
+import { OptimisticLockingSubscriber } from '../lib/subscribers/optimistic-locking.subscriber';
+import { startDb } from '@saas-buildkit/test-utils';
+import { OptimisticLockException } from '@saas-buildkit/exceptions';
+import { getTransactionalContext } from 'typeorm-transactional/dist/common';
 
 describe('optimistic lost subscriber test', () => {
   let optimisticLockSubscriber: OptimisticLockingSubscriber;
@@ -30,7 +33,7 @@ describe('optimistic lost subscriber test', () => {
   beforeAll(async () => {
     const { typeormOptions } = await startDb();
 
-    if(!getTransactionalContext()) {
+    if (!getTransactionalContext()) {
       initializeTransactionalContext();
     }
 
@@ -61,11 +64,11 @@ describe('optimistic lost subscriber test', () => {
 
             const dsInitialized = getDataSourceByName('default');
 
-            if (!dsInitialized) {
+            if (dsInitialized) {
+              return dsInitialized;
+            } else {
               addTransactionalDataSource(dataSource);
               return await dataSource.initialize();
-            } else {
-              return dsInitialized;
             }
           },
         }),
@@ -81,7 +84,6 @@ describe('optimistic lost subscriber test', () => {
   afterEach(() => {
     jest.resetAllMocks();
   });
-
 
   it.each([
     // negative version

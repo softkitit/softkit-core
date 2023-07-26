@@ -1,7 +1,4 @@
-import {
-  capitalize,
-  toCapitalizedWords,
-} from '../';
+import { capitalize, toCapitalizedWords } from '../';
 
 describe('string manipulation test', () => {
   it.concurrent.each([
