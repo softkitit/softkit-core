@@ -1,0 +1,29 @@
+{
+  "name": "eslint",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/eslint/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/libs/eslint",
+        "main": "libs/eslint/src/index.js",
+        "tsConfig": "libs/eslint/tsconfig.lib.json",
+        "assets": [
+          "libs/eslint/*.md"
+        ]
+      }
+    },
+    "publish": {
+      "command": "node tools/scripts/publish.mjs eslint {args.ver} {args.tag}",
+      "dependsOn": [
+        "build"
+      ]
+    }
+  },
+  "tags": []
+}

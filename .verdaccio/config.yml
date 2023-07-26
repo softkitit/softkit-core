@@ -15,11 +15,8 @@ packages:
     publish: $all
     unpublish: $all
 
-    # if package is not available locally, proxy requests to npm registry
-    proxy: npmjs
-
 # log settings
-logs:
+log:
   type: stdout
   format: pretty
   level: warn

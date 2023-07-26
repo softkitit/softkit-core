@@ -1,0 +1,26 @@
+{
+  "name": "@saas-buildkit/eslint",
+  "version": "1.0.0",
+  "type": "commonjs",
+  "keywords": [
+    "eslint",
+    "default rules",
+    "eslint rules",
+    "eslint config",
+    "eslint backend rules"
+  ],
+  "dependencies": {
+    "@nx/eslint-plugin": "16.5.5",
+    "@typescript-eslint/eslint-plugin": "^5.60.1",
+    "@typescript-eslint/parser": "^5.60.1",
+    "eslint": "^8.45.0",
+    "eslint-config-prettier": "8.8.0",
+    "eslint-plugin-jest": "^27.2.3",
+    "eslint-plugin-prettier": "^5.0.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-security": "^1.7.1",
+    "eslint-plugin-simple-import-sort": "^10.0.0",
+    "eslint-plugin-sonarjs": "^0.19.0",
+    "eslint-plugin-unicorn": "^48.0.0"
+  }
+}

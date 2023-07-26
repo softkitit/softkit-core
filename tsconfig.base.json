@@ -18,17 +18,14 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@saas-buildkit/bootstrap": [
-        "libs/bootstrap/src/index.ts"
-      ],
-      "@saas-buildkit/logger": [
-        "libs/logger/src/index.ts"
-      ],
       "@saas-buildkit/async-storage": [
         "libs/async-storage/src/index.ts"
       ],
       "@saas-buildkit/auth": [
         "libs/auth/src/index.ts"
+      ],
+      "@saas-buildkit/bootstrap": [
+        "libs/bootstrap/src/index.ts"
       ],
       "@saas-buildkit/common-types": [
         "libs/common-types/src/index.ts"
@@ -39,11 +36,17 @@
       "@saas-buildkit/crypto": [
         "libs/crypto/src/index.ts"
       ],
+      "@saas-buildkit/eslint": [
+        "libs/eslint/src/index.js"
+      ],
       "@saas-buildkit/exceptions": [
         "libs/exceptions/src/index.ts"
       ],
       "@saas-buildkit/i18n": [
         "libs/i18n/src/index.ts"
+      ],
+      "@saas-buildkit/logger": [
+        "libs/logger/src/index.ts"
       ],
       "@saas-buildkit/string-utils": [
         "libs/string-utils/src/index.ts"

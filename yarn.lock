@@ -3581,6 +3581,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@saas-buildkit/eslint@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "@saas-buildkit/eslint@npm:1.0.1"
+  peerDependencies:
+    tslib: 2.4.1
+  checksum: 86cc234a9fff2a50ef1ddc2ab734244ed0af534a31f11bef8ed9d3f06b29a24bedae211f1117caf0b2754c5a96b9be55783ce4d6211f4bc388d1c88bc80443d5
+  languageName: node
+  linkType: hard
+
 "@saas-buildkit/source@workspace:.":
   version: 0.0.0-use.local
   resolution: "@saas-buildkit/source@workspace:."
@@ -3606,6 +3615,7 @@ __metadata:
     "@nx/node": 16.5.5
     "@nx/webpack": 16.5.5
     "@nx/workspace": 16.5.5
+    "@saas-buildkit/eslint": ^1.0.1
     "@types/jest": ^29.5.3
     "@types/newrelic": ^9.14.0
     "@types/node": ^20.4.4
@@ -3621,7 +3631,9 @@ __metadata:
     eslint: ^8.45.0
     eslint-config-prettier: 8.8.0
     eslint-plugin-jest: ^27.2.3
+    eslint-plugin-no-secrets: ^0.8.9
     eslint-plugin-prettier: ^5.0.0
+    eslint-plugin-promise: ^6.1.1
     eslint-plugin-security: ^1.7.1
     eslint-plugin-simple-import-sort: ^10.0.0
     eslint-plugin-sonarjs: ^0.19.0
@@ -7982,6 +7994,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eslint-plugin-no-secrets@npm:^0.8.9":
+  version: 0.8.9
+  resolution: "eslint-plugin-no-secrets@npm:0.8.9"
+  peerDependencies:
+    eslint: ">=3.0.0"
+  checksum: 28b0ddb37826889a90119e7265468320a18145bd3f357713d74757f5433bc5a4dc48662d8113a30eac5fc05ac3710a65c8280df90dff35ed86313edd07132871
+  languageName: node
+  linkType: hard
+
 "eslint-plugin-prettier@npm:^5.0.0":
   version: 5.0.0
   resolution: "eslint-plugin-prettier@npm:5.0.0"
@@ -7998,6 +8019,15 @@ __metadata:
     eslint-config-prettier:
       optional: true
   checksum: 84e88744b9050f2d5ef31b94e85294dda16f3a53c2449f9d33eac8ae6264889b459bf35a68e438fb6b329c2a1d6491aac4bfa00d86317e7009de3dad0311bec6
+  languageName: node
+  linkType: hard
+
+"eslint-plugin-promise@npm:^6.1.1":
+  version: 6.1.1
+  resolution: "eslint-plugin-promise@npm:6.1.1"
+  peerDependencies:
+    eslint: ^7.0.0 || ^8.0.0
+  checksum: 46b9a4f79dae5539987922afc27cc17cbccdecf4f0ba19c0ccbf911b0e31853e9f39d9959eefb9637461b52772afa1a482f1f87ff16c1ba38bdb6fcf21897e9a
   languageName: node
   linkType: hard
 
