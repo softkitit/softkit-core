@@ -8,16 +8,16 @@ import {
 import { Test } from '@nestjs/testing';
 import { FastifyRequest } from 'fastify';
 import { ClsModule } from 'nestjs-cls';
-import {
-  RefreshJwtAuthGuard,
-  SkipAuth,
-  Permissions,
-  TokenService,
-  JwtPayload,
-  JwtStrategy,
-  AuthConfig, JwtAuthGuard, PermissionsGuard
-} from "@saas-buildkit/auth";
-import { AuthConfigMock } from "./utils/auth-config.mock";
+import { RefreshJwtAuthGuard } from '../lib/guards/refresh-jwt-auth.guard';
+import { SkipAuth } from '../lib/decorators/skip-auth.decorator';
+import { Permissions } from '../lib/decorators/permission.decorator';
+import { TokenService } from '../lib/services/token.service';
+import { JwtPayload } from '../lib/vo/payload';
+import { JwtStrategy } from '../lib/strategies/jwt.strategy';
+import { AuthConfig } from '../lib/config/auth';
+import { JwtAuthGuard } from '../lib/guards/jwt-auth.guard';
+import { PermissionsGuard } from '../lib/guards/permission.guard';
+import { AuthConfigMock } from './utils/auth-config.mock';
 
 describe('test refresh auth', () => {
   let tokenService: TokenService;

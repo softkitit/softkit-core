@@ -1,8 +1,8 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { logger } from 'nestjs-i18n';
-import { JwtPayload } from "@saas-buildkit/auth";
-import { GeneralInternalServerException } from "@saas-buildkit/exceptions";
+import { JwtPayload } from '../vo/payload';
+import { GeneralInternalServerException } from '@saas-buildkit/exceptions';
 
 @Injectable()
 export class PermissionsGuard implements CanActivate {
@@ -50,8 +50,8 @@ export class PermissionsGuard implements CanActivate {
   ): Promise<boolean> {
     const { permissions: allPermissions } = user;
 
-    return permissions.some((permission) =>
-      allPermissions?.includes(permission),
+    return permissions.some(
+      (permission) => allPermissions?.includes(permission),
     );
   }
 }

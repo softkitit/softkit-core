@@ -8,18 +8,18 @@ import {
 import { Test } from '@nestjs/testing';
 import { FastifyRequest } from 'fastify';
 import { ClsModule } from 'nestjs-cls';
-import {
-  AuthConfig, CurrentUser,
-  JwtAuthGuard,
-  JwtPayload,
-  JwtStrategy,
-  PermissionsGuard,
-  Roles,
-  Permissions,
-  SkipAuth,
-  TokenService, RolesGuard
-} from "@saas-buildkit/auth";
-import { AuthConfigMock } from "./utils/auth-config.mock";
+import { AuthConfig } from '../lib/config/auth';
+import { CurrentUser } from '../lib/decorators/current-user.decorator';
+import { JwtAuthGuard } from '../lib/guards/jwt-auth.guard';
+import { JwtPayload } from '../lib/vo/payload';
+import { JwtStrategy } from '../lib/strategies/jwt.strategy';
+import { PermissionsGuard } from '../lib/guards/permission.guard';
+import { Roles } from '../lib/decorators/role.decorator';
+import { Permissions } from '../lib/decorators/permission.decorator';
+import { SkipAuth } from '../lib/decorators/skip-auth.decorator';
+import { TokenService } from '../lib/services/token.service';
+import { RolesGuard } from '../lib/guards/role.guard';
+import { AuthConfigMock } from './utils/auth-config.mock';
 
 describe('test auth', () => {
   let tokenService: TokenService;
@@ -383,7 +383,9 @@ describe('test auth', () => {
     );
   });
 
-  describe('test refresh token auth guard and strategy', () => {});
+  describe('test refresh token auth guard and strategy', () => {
+    it.todo('implement refresh token tests');
+  });
 });
 
 @Controller('skip-auth')

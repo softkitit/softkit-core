@@ -1,5 +1,5 @@
-import { Injectable } from "@nestjs/common";
-import { AuthConfig } from "@saas-buildkit/auth";
+import { Injectable } from '@nestjs/common';
+import { AuthConfig } from '../../lib/config/auth';
 
 @Injectable()
 export class AuthConfigMock extends AuthConfig {

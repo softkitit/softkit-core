@@ -1,8 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { AuthConfig } from "../config/auth";
-import { JwtPayload, JwtRefreshPayload } from "../vo/payload";
-import { GeneralUnauthorizedException } from "@saas-buildkit/exceptions";
+import { AuthConfig } from '../config/auth';
+import { JwtPayload, JwtRefreshPayload } from '../vo/payload';
+import { GeneralUnauthorizedException } from '@saas-buildkit/exceptions';
 
 @Injectable()
 export class TokenService {
