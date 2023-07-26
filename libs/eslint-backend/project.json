@@ -1,7 +1,7 @@
 {
-  "name": "eslint",
+  "name": "eslint-backend",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/eslint/src",
+  "sourceRoot": "/src",
   "projectType": "library",
   "targets": {
     "build": {
@@ -10,11 +10,11 @@
         "{options.outputPath}"
       ],
       "options": {
-        "outputPath": "dist/libs/eslint",
-        "main": "libs/eslint/src/index.js",
-        "tsConfig": "libs/eslint/tsconfig.lib.json",
+        "outputPath": "dist/libs/eslint-backend",
+        "main": "libs/eslint-backend/src/index.js",
+        "tsConfig": "libs/eslint-backend/tsconfig.lib.json",
         "assets": [
-          "libs/eslint/*.md"
+          "libs/eslint-backend/*.md"
         ]
       }
     },

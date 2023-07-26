@@ -36,8 +36,8 @@
       "@saas-buildkit/crypto": [
         "libs/crypto/src/index.ts"
       ],
-      "@saas-buildkit/eslint": [
-        "libs/eslint/src/index.js"
+      "@saas-buildkit/eslint-backend": [
+        "libs/eslint-backend/src/index.js"
       ],
       "@saas-buildkit/exceptions": [
         "libs/exceptions/src/index.ts"

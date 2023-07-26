@@ -1,5 +1,5 @@
 {
-  "extends": ["./libs/eslint/src/index.js"],
+  "extends": ["./libs/eslint-backend/src/index.js"],
   "ignorePatterns": ["!**/*"],
   "overrides": [
     {
