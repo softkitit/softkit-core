@@ -1,6 +1,6 @@
 import { applyDecorators, Type } from '@nestjs/common';
 import { ApiExtraModels, ApiOkResponse, getSchemaPath } from '@nestjs/swagger';
-import { InfinityPaginationResultType } from "../../";
+import { InfinityPaginationResultType } from '../../';
 
 export const ApiOkResponsePaginated = <DTO extends Type<unknown>>(
   dataDto: DTO,
