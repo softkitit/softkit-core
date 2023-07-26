@@ -6,8 +6,6 @@ import { I18Config } from './config/i18';
  * */
 export function setupI18NModule(loadFilesPath: string, typesOutputPath: string) {
 
-  console.log('loadFilesPath', loadFilesPath);
-
   return I18nModule.forRootAsync({
     useFactory: (config: I18Config) => {
       return {

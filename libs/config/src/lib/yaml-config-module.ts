@@ -8,7 +8,6 @@ export function setupYamlBaseConfigModule(
   rootSchemaClass: ClassConstructor<any>,
   fileName = '.env.yaml',
 ) {
-  console.log('setupYamlBaseConfigModule', path.join(absolutePath, fileName));
   return TypedConfigModule.forRoot({
     schema: rootSchemaClass,
     isGlobal: true,
