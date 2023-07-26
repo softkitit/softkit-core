@@ -1,4 +1,4 @@
-import { ClsModule } from "nestjs-cls";
+import { ClsModule } from 'nestjs-cls';
 import { FastifyRequest } from 'fastify';
 
 export function setupClsModule() {
