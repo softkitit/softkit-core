@@ -44,7 +44,6 @@ module.exports = {
         'plugin:@typescript-eslint/recommended',
         'plugin:prettier/recommended',
         'plugin:security/recommended',
-        'plugin:you-dont-need-lodash-underscore/compatible',
         'plugin:sonarjs/recommended',
         'plugin:jest/recommended',
         'plugin:unicorn/recommended',
