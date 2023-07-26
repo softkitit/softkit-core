@@ -11,19 +11,19 @@ import { I18nValidationExceptionFilter, I18nValidationPipe } from 'nestjs-i18n';
 import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
 import { initializeTransactionalContext } from 'typeorm-transactional';
 import { getTransactionalContext } from 'typeorm-transactional/dist/common';
-import { REQUEST_ID_HEADER } from "./vo/constants";
-import { generateRandomId } from "@saas-buildkit/crypto";
+import { REQUEST_ID_HEADER } from './vo/constants';
+import { generateRandomId } from '@saas-buildkit/crypto';
 import {
   AnyExceptionFilter,
   HttpExceptionFilter,
   OverrideDefaultForbiddenExceptionFilter,
-  OverrideDefaultNotFoundFilter
-} from "@saas-buildkit/exceptions";
-import { DEFAULT_VALIDATION_OPTIONS } from "@saas-buildkit/validation";
-import { AppConfig } from "./config/app";
-import { setupSwagger, SwaggerConfig } from "@saas-buildkit/swagger-utils";
-import { PostgresDbFailedErrorFilter } from "@saas-buildkit/typeorm";
-import { LoggingInterceptor } from "@saas-buildkit/logger";
+  OverrideDefaultNotFoundFilter,
+} from '@saas-buildkit/exceptions';
+import { DEFAULT_VALIDATION_OPTIONS } from '@saas-buildkit/validation';
+import { AppConfig } from './config/app';
+import { setupSwagger, SwaggerConfig } from '@saas-buildkit/swagger-utils';
+import { PostgresDbFailedErrorFilter } from '@saas-buildkit/typeorm';
+import { LoggingInterceptor } from '@saas-buildkit/logger';
 
 function buildFastifyAdapter() {
   return new FastifyAdapter({
@@ -36,8 +36,12 @@ function buildFastifyAdapter() {
   });
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function bootstrapBaseWebApp(module: any | TestingModule, originalModule?: any) {
+async function bootstrapBaseWebApp(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  module: any | TestingModule,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  originalModule?: any,
+) {
   const isTestingModule = module instanceof TestingModule;
 
   // todo wait for the pr in this package to be merged
@@ -57,19 +61,19 @@ async function bootstrapBaseWebApp(module: any | TestingModule, originalModule?:
 
   const app = isTestingModule
     ? module.createNestApplication<NestFastifyApplication>(
-      buildFastifyAdapter(),
-    )
+        buildFastifyAdapter(),
+      )
     : await NestFactory.create<NestFastifyApplication>(
-      module,
-      buildFastifyAdapter(),
-      {},
-    );
+        module,
+        buildFastifyAdapter(),
+        {},
+      );
 
   const fastifyInstance: FastifyInstance = app.getHttpAdapter().getInstance();
 
   // this is a recommendation from fastify to improve compatibility with express middlewares
   fastifyInstance
-    .addHook('onRequest', async (req, res) => {
+    .addHook('onRequest', async (req) => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       req.socket['encrypted'] = process.env.NODE_ENV === 'production';
