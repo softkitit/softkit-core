@@ -10,17 +10,6 @@ import {
 } from 'class-validator';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
-class DbCliConfig {
-  @IsString()
-  entitiesDir = 'src';
-
-  @IsString()
-  migrationsDir = 'src/database/migrations';
-
-  @IsString()
-  subscribersDir = 'src/database/subscriber';
-}
-
 class DbExtraSettings {
   @IsInt()
   max = 100;
@@ -65,16 +54,8 @@ export class DbConfig {
   @IsBoolean()
   logging!: boolean;
 
-  @IsString({ each: true })
-  entities!: string[];
-
-  @IsString({ each: true })
-  migrations!: string[];
-
-  @Type(/* istanbul ignore next */ () => DbCliConfig)
-  @ValidateNested()
-  cli: DbCliConfig = new DbCliConfig();
-
+  @IsBoolean()
+  autoLoadEntities = true;
 
   @Type(/* istanbul ignore next */ () => DbExtraSettings)
   @ValidateNested()

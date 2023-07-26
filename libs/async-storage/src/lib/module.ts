@@ -2,7 +2,7 @@ import { ClsModule } from "nestjs-cls";
 import { FastifyRequest } from 'fastify';
 
 export function setupClsModule() {
-  ClsModule.forRoot({
+  return ClsModule.forRoot({
     global: true,
     middleware: {
       mount: true,

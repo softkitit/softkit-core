@@ -15,6 +15,8 @@ export * from './lib/repositories/tenant-base.repository';
 export * from './lib/vo/tenant-base-cls-store';
 export * from './lib/vo/constants';
 
+export * from './lib/interceptors/postgres-db-failed-error.filter';
+
 
 
 

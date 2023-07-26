@@ -8,17 +8,20 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "target": "es2015",
+    "target": "es2021",
     "module": "esnext",
     "lib": [
-      "es2020",
+      "es2021",
       "dom"
     ],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@core-saas-boilerplate/logger": [
+      "@saas-buildkit/bootstrap": [
+        "libs/bootstrap/src/index.ts"
+      ],
+      "@saas-buildkit/logger": [
         "libs/logger/src/index.ts"
       ],
       "@saas-buildkit/async-storage": [

@@ -1,0 +1,4 @@
+{
+  "USER_NOT_ACTIVE": "Sorry, seems like you account is deactivated. Please contact support if you think that something is wrong.",
+  "FINISHED_REGISTRATION": "Thank you for registration. If user with such email doesn't exists in our database. You will receive an email, with a further procedure for sign up."
+}

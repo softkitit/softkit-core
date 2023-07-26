@@ -1,5 +1,5 @@
 {
-  "name": "@core-saas-boilerplate/logger",
+  "name": "@saas-buildkit/logger",
   "version": "1.0.0",
   "type": "commonjs",
   "keywords": [

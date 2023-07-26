@@ -7,11 +7,8 @@
     "node": "20"
   },
   "scripts": {
-    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
-    "migration:generate": "sh -c 'export MIGRATION_APP_NAME=${0}; yarn run typeorm --dataSource=libs/core-modules/database/migration-data-source.ts migration:generate apps/${0}/src/database/migrations/${1}'",
-    "migration:run": "sh -c 'export MIGRATION_APP_NAME=${0}; yarn run typeorm --dataSource=libs/core-modules/database/migration-data-source.ts migration:run'",
-    "migration:revert": "sh -c 'export MIGRATION_APP_NAME=${0}; yarn run typeorm --dataSource=libs/core-modules/database/migration-data-source.ts migration:revert'",
-    "schema:drop": "sh -c 'yarn run typeorm --dataSource=apps/${0}/src/database/migration-data-source.ts schema:drop'",
+    "typeorm": "ts-node --project ./tsconfig.base.json -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
+    "migration:run": "sh -c 'export MIGRATION_APP_NAME=${0}; yarn run typeorm --dataSource=libs/typeorm/src/lib/migration/migration-data-source.ts migration:run'",
     "seed:create": "sh -c 'hygen seeds create --name ${0} --path apps/${1}/src/database/seeds --entityFile $(find ./apps/platform | grep -i ${0}.entity | tail -c +3 | rev | tail -c +4 | rev)'",
     "seed:run": "sh -c 'ts-node -r tsconfig-paths/register ./apps/${0}/src/database/seeds/run-seed.ts'",
     "prebuild": "rimraf dist"
