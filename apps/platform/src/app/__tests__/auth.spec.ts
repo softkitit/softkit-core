@@ -63,7 +63,7 @@ describe('auth e2e test', () => {
         ...fileData.db,
         ...dbOptions,
         migrations: [path.join(__dirname, '../database/migrations/*.ts')],
-        logging: true,
+        logging: false,
       })
       .compile();
     app = await bootstrapBaseWebApp(moduleFixture, PlatformAppModule);
