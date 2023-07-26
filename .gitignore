@@ -9,8 +9,6 @@ tmp
 
 *.iml
 
-.yarn
-
 .yarn/*
 !.yarn/cache
 !.yarn/patches
