@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Transactional } from 'typeorm-transactional';
 import { DefaultRole } from '../../database/entities';
 import { DefaultRoleRepository } from '../../repositories';
-import { BaseEntityService } from "@saas-buildkit/typeorm-service";
+import { BaseEntityService } from '@saas-buildkit/typeorm-service';
 
 @Injectable()
 export class DefaultRoleService extends BaseEntityService<
