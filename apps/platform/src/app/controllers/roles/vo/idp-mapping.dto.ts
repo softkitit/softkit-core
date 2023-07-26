@@ -1,4 +1,4 @@
-import { IsRequiredStringLocalized } from "@saas-buildkit/validation";
+import { IsRequiredStringLocalized } from '@saas-buildkit/validation';
 
 export class IdpMappingDto {
   @IsRequiredStringLocalized({

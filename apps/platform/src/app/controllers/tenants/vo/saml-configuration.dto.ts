@@ -15,8 +15,7 @@ export class SetupSamlConfiguration {
   @IsRequiredStringLocalized()
   certificate!: string;
 
-
-  @Type(/* istanbul ignore next */() => IdpMappingDto)
+  @Type(/* istanbul ignore next */ () => IdpMappingDto)
   @ValidateNested()
   fieldsMapping!: IdpMappingDto;
 

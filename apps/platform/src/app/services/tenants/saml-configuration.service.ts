@@ -4,7 +4,7 @@ import { SAMLConfiguration } from '../../database/entities';
 import { SamlConfigurationRepository } from '../../repositories';
 
 import { TenantService } from './tenant.service';
-import { BaseTenantEntityService } from "@saas-buildkit/typeorm-service";
+import { BaseTenantEntityService } from '@saas-buildkit/typeorm-service';
 
 @Injectable()
 export class SamlConfigurationService extends BaseTenantEntityService<

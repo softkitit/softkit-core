@@ -5,7 +5,7 @@ import { CustomUserRole, Tenant, User } from '../../entities';
 import { RoleType } from '../../entities/role/types/default-role.enum';
 import { AuthType } from '../../entities/user/types/auth-type.enum';
 import { UserStatus } from '../../entities/user/types/user-status.enum';
-import { generateRandomNumber, hashPassword } from "@saas-buildkit/crypto";
+import { generateRandomNumber, hashPassword } from '@saas-buildkit/crypto';
 
 @Injectable()
 export class UserSeedService {

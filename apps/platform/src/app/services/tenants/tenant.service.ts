@@ -4,8 +4,8 @@ import { Tenant } from '../../database/entities';
 import { TenantsRepository } from '../../repositories';
 
 import { CustomUserRoleService } from '../roles/custom-user-role.service';
-import { BaseEntityService } from "@saas-buildkit/typeorm-service";
-import { AppConfig } from "@saas-buildkit/bootstrap";
+import { BaseEntityService } from '@saas-buildkit/typeorm-service';
+import { AppConfig } from '@saas-buildkit/bootstrap';
 
 @Injectable()
 export class TenantService extends BaseEntityService<

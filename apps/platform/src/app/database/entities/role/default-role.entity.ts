@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 import { Permission } from './permission.entity';
 import { RoleType } from './types/default-role.enum';
-import { BaseEntityHelper } from "@saas-buildkit/typeorm";
+import { BaseEntityHelper } from '@saas-buildkit/typeorm';
 
 /**
  * this entity is responsible for keeping default roles for users

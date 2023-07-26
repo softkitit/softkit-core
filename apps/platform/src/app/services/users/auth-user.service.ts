@@ -9,9 +9,9 @@ import AbstractAuthUserService from '../auth/abstract-auth-user-service';
 import { SamlConfigurationService } from '../tenants/saml-configuration.service';
 import { ExternalApprovalService } from './external-approval.service';
 import { UserService } from './user.service';
-import { JwtPayload } from "@saas-buildkit/auth";
-import { generateRandomNumber } from "@saas-buildkit/crypto";
-import { Maybe } from "@saas-buildkit/common-types";
+import { JwtPayload } from '@saas-buildkit/auth';
+import { generateRandomNumber } from '@saas-buildkit/crypto';
+import { Maybe } from '@saas-buildkit/common-types';
 
 @Injectable()
 export default class AuthUserService extends AbstractAuthUserService {

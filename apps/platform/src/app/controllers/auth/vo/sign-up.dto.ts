@@ -2,8 +2,8 @@ import {
   IsEmailLocalized,
   IsRequiredStringLocalized,
   MatchesWithProperty,
-  PasswordLocalized
-} from "@saas-buildkit/validation";
+  PasswordLocalized,
+} from '@saas-buildkit/validation';
 
 export class CreateUserRequest {
   /**

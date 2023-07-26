@@ -15,13 +15,18 @@ import * as Repositories from './repositories';
 import * as Services from './services';
 import AbstractAuthUserService from './services/auth/abstract-auth-user-service';
 import AuthUserService from './services/users/auth-user.service';
-import { setupI18NModule } from "@saas-buildkit/i18n";
-import { setupLoggerModule } from "@saas-buildkit/logger";
-import { setupYamlBaseConfigModule } from "@saas-buildkit/config";
-import { setupClsModule } from "@saas-buildkit/async-storage";
-import { TypeOrmConfigService } from "@saas-buildkit/typeorm";
-import { Logger } from "@nestjs/common";
-import { JwtAuthGuard, JwtStrategy, PermissionsGuard, TokenService } from "@saas-buildkit/auth";
+import { setupI18NModule } from '@saas-buildkit/i18n';
+import { setupLoggerModule } from '@saas-buildkit/logger';
+import { setupYamlBaseConfigModule } from '@saas-buildkit/config';
+import { setupClsModule } from '@saas-buildkit/async-storage';
+import { TypeOrmConfigService } from '@saas-buildkit/typeorm';
+import { Logger } from '@nestjs/common';
+import {
+  JwtAuthGuard,
+  JwtStrategy,
+  PermissionsGuard,
+  TokenService,
+} from '@saas-buildkit/auth';
 
 /* istanbul ignore next */
 @Module({

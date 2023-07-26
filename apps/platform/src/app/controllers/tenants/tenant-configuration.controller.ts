@@ -4,7 +4,7 @@ import { I18nService } from 'nestjs-i18n';
 import { SamlConfigurationService, TenantService } from '../../services';
 
 import { SetupSamlConfiguration } from './vo/saml-configuration.dto';
-import { SimpleResponseForCreatedEntityWithMessage } from "@saas-buildkit/common-types";
+import { SimpleResponseForCreatedEntityWithMessage } from '@saas-buildkit/common-types';
 
 @ApiTags('Tenants')
 @Controller({
@@ -29,7 +29,7 @@ export class TenantsConfigurationController {
 
     return {
       data: {
-        id: result.id
+        id: result.id,
       },
       message: this.i18.t('tenant.SAML_CONFIGURATION_FINISHED'),
     };

@@ -10,14 +10,16 @@ import { CustomUserRoleService } from '../roles/custom-user-role.service';
 
 import { TenantService } from '../tenants/tenant.service';
 import AbstractAuthUserService from './abstract-auth-user-service';
-import { AppConfig } from "@saas-buildkit/bootstrap";
-import { TokenService } from "@saas-buildkit/auth";
-import { hashPassword, verifyPassword } from "@saas-buildkit/crypto";
+import { AppConfig } from '@saas-buildkit/bootstrap';
+import { TokenService } from '@saas-buildkit/auth';
+import { hashPassword, verifyPassword } from '@saas-buildkit/crypto';
 import {
   FailedToCreateEntityException,
-  GeneralForbiddenException, GeneralInternalServerException, GeneralNotFoundException,
-  GeneralUnauthorizedException
-} from "@saas-buildkit/exceptions";
+  GeneralForbiddenException,
+  GeneralInternalServerException,
+  GeneralNotFoundException,
+  GeneralUnauthorizedException,
+} from '@saas-buildkit/exceptions';
 
 @Injectable()
 export class AuthService {

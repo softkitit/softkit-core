@@ -3,7 +3,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { I18nService } from 'nestjs-i18n';
 import { SamlService } from '../../services';
-import { SkipAuth } from "@saas-buildkit/auth";
+import { SkipAuth } from '@saas-buildkit/auth';
 
 @ApiTags('Auth')
 @Controller({

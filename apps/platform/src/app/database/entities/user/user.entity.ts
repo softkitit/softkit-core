@@ -13,7 +13,7 @@ import { CustomUserRole } from '../role/custom-user-role.entity';
 import { Tenant } from '../tenant/tenant.entity';
 import { AuthType } from './types/auth-type.enum';
 import { UserStatus } from './types/user-status.enum';
-import { BaseEntityHelper } from "@saas-buildkit/typeorm";
+import { BaseEntityHelper } from '@saas-buildkit/typeorm';
 
 @Entity('users')
 export class User extends BaseEntityHelper {

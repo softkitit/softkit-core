@@ -11,11 +11,11 @@ import { UserStatus } from '../database/entities/user/types/user-status.enum';
 import { PlatformAppModule } from '../platform-app.module';
 import { UserRepository } from '../repositories';
 import { CustomUserRoleService, TenantService } from '../services';
-import { DbConfig } from "@saas-buildkit/typeorm";
-import { bootstrapBaseWebApp } from "@saas-buildkit/bootstrap";
-import { TokenService } from "@saas-buildkit/auth";
-import { startDb } from "@saas-buildkit/test-utils";
-import { InfinityPaginationResultType } from "@saas-buildkit/common-types";
+import { DbConfig } from '@saas-buildkit/typeorm';
+import { bootstrapBaseWebApp } from '@saas-buildkit/bootstrap';
+import { TokenService } from '@saas-buildkit/auth';
+import { startDb } from '@saas-buildkit/test-utils';
+import { InfinityPaginationResultType } from '@saas-buildkit/common-types';
 
 describe('roles e2e test', () => {
   let app: NestFastifyApplication;
@@ -79,15 +79,15 @@ describe('roles e2e test', () => {
       tenantId: tenant.id,
     });
 
-    accessToken = (
-      await tokenService.signTokens({
-        permissions: ['platform.roles.read'],
-        sub: createdUser.id,
-        tenantId: tenant.id,
-        email: createdUser.email,
-        roles: [],
-      })
-    ).accessToken;
+    const token = await tokenService.signTokens({
+      permissions: ['platform.roles.read'],
+      sub: createdUser.id,
+      tenantId: tenant.id,
+      email: createdUser.email,
+      roles: [],
+    });
+
+    accessToken = token.accessToken;
   });
 
   afterEach(async () => {

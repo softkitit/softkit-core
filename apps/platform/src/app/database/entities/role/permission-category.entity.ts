@@ -1,6 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Permission } from './permission.entity';
-import { BaseEntityHelper } from "@saas-buildkit/typeorm";
+import { BaseEntityHelper } from '@saas-buildkit/typeorm';
 
 @Entity('permission_categories')
 export class PermissionCategory extends BaseEntityHelper {

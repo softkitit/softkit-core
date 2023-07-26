@@ -4,7 +4,7 @@ import { CustomUserRole } from '../../database/entities';
 import { RoleType } from '../../database/entities/role/types/default-role.enum';
 import { CustomUserRoleRepository } from '../../repositories';
 import { DefaultRoleService } from './default-role.service';
-import { BaseTenantEntityService } from "@saas-buildkit/typeorm-service";
+import { BaseTenantEntityService } from '@saas-buildkit/typeorm-service';
 
 @Injectable()
 export class CustomUserRoleService extends BaseTenantEntityService<

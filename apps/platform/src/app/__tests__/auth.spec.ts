@@ -21,16 +21,16 @@ import {
   TenantService,
   UserService,
 } from '../services';
-import { DbConfig } from "@saas-buildkit/typeorm";
-import { startDb } from "@saas-buildkit/test-utils";
-import { bootstrapBaseWebApp } from "@saas-buildkit/bootstrap";
+import { DbConfig } from '@saas-buildkit/typeorm';
+import { startDb } from '@saas-buildkit/test-utils';
+import { bootstrapBaseWebApp } from '@saas-buildkit/bootstrap';
 
 describe('auth e2e test', () => {
   let app: NestFastifyApplication;
   let approvalService: ExternalApprovalService;
   let dbOptions: Partial<DbConfig>;
 
-  let successSignupDto: CreateUserRequest = {
+  const successSignupDto: CreateUserRequest = {
     email: faker.internet.email(),
     password: '12345Aa!',
     repeatedPassword: '12345Aa!',
@@ -96,15 +96,17 @@ describe('auth e2e test', () => {
           throw new Error('unexpected error');
         });
 
-      const tenantsCountBeforeSignUp = (await app.get(TenantService).findAll())
-        .count;
+      const tenantsBeforeSignUp = await app.get(TenantService).findAll();
+      const tenantsCountBeforeSignUp = tenantsBeforeSignUp.count;
 
-      const usersCountBeforeSignUp = (await app.get(UserService).findAll())
-        .count;
+      const usersBeforeSignUp = await app.get(UserService).findAll();
+      const usersCountBeforeSignUp = usersBeforeSignUp.count;
 
-      const approvalsCountBeforeSignUp = (
-        await app.get(ExternalApprovalService).findAll()
-      ).count;
+      const approvalsBeforeSignUp = await app
+        .get(ExternalApprovalService)
+        .findAll();
+
+      const approvalsCountBeforeSignUp = approvalsBeforeSignUp.count;
 
       await wrapInTransaction(async () => {
         const response = await app.inject({
@@ -118,13 +120,11 @@ describe('auth e2e test', () => {
         const users = await app.get(UserService).findAll();
         expect(users.count).toBe(usersCountBeforeSignUp);
 
-        expect((await app.get(TenantService).findAll()).count).toBe(
-          tenantsCountBeforeSignUp,
-        );
+        const allTenants = await app.get(TenantService).findAll();
+        expect(allTenants.count).toBe(tenantsCountBeforeSignUp);
 
-        expect((await app.get(ExternalApprovalService).findAll()).count).toBe(
-          approvalsCountBeforeSignUp,
-        );
+        const allApprovals = await app.get(ExternalApprovalService).findAll();
+        expect(allApprovals.count).toBe(approvalsCountBeforeSignUp);
 
         expect(response.statusCode).toBe(500);
       });
@@ -208,7 +208,7 @@ describe('auth e2e test', () => {
       expect(JSON.parse(response.body).message).toBeDefined();
       expect(JSON.parse(response.body).message).toContain('Bad Request');
 
-      data.invalidFields.forEach((invalidField) => {
+      for (const invalidField of data.invalidFields) {
         const errors = (JSON.parse(response.body) as I18nValidationException)
           .errors;
         expect(
@@ -216,7 +216,7 @@ describe('auth e2e test', () => {
             return err.property === invalidField;
           }),
         ).toBeDefined();
-      });
+      }
     });
 
     it('successful login', async () => {
@@ -350,14 +350,12 @@ describe('auth e2e test', () => {
           await strategy.success(
             {
               email: userEmail,
-              // this is a valid location of attr
               [AuthService.LAST_NAME_SAML_ATTR]: faker.person.lastName(),
               attributes: {
-                // this is invalid location of attr
                 [AuthService.FIRST_NAME_SAML_ATTR]: faker.person.firstName(),
               },
             },
-            undefined,
+            null,
           );
         });
     }
@@ -369,7 +367,9 @@ describe('auth e2e test', () => {
         payload: successSignupDto,
       });
 
-      expect(firstSignUpResponse.statusCode).toBe(201);
+      if (firstSignUpResponse.statusCode !== 201) {
+        throw new Error('Failed to create first user');
+      }
 
       const secondSignUpResponse = await app.inject({
         method: 'POST',
@@ -380,7 +380,9 @@ describe('auth e2e test', () => {
         },
       });
 
-      expect(secondSignUpResponse.statusCode).toBe(201);
+      if (secondSignUpResponse.statusCode !== 201) {
+        throw new Error('Failed to create second user');
+      }
 
       samlConfigurationService = app.get(SamlConfigurationService);
       tenantService = app.get(TenantService);
@@ -390,7 +392,10 @@ describe('auth e2e test', () => {
         createdAt: 'asc',
       });
 
-      expect(tenants.count).toBe(2);
+      if (tenants.count !== 2) {
+        throw new Error('Number of current tenants should be 2');
+      }
+
       tenantWithConfiguration = tenants.data[0];
       tenantWithoutConfiguration = tenants.data[1];
 
@@ -416,7 +421,7 @@ describe('auth e2e test', () => {
       });
 
       expect(samlLoginResponse.statusCode).toBe(302);
-      let redirectUrl = samlLoginResponse.headers.location;
+      const redirectUrl = samlLoginResponse.headers.location;
       expect(redirectUrl).toContain(samlConfiguration.entryPoint);
 
       const url = new URL(redirectUrl?.toString()!);
@@ -477,7 +482,7 @@ describe('auth e2e test', () => {
 
       expect(samlLoginResponse.statusCode).toBe(302);
 
-      let redirectUrl = samlLoginResponse.headers.location;
+      const redirectUrl = samlLoginResponse.headers.location;
       const url = new URL(redirectUrl?.toString()!);
       const relayState = url.searchParams.get('RelayState');
 
@@ -512,7 +517,7 @@ describe('auth e2e test', () => {
       }
     });
 
-    it('saml sign in for main user that created a tenant ', async () => {
+    it('saml sign in for main user that created a tenant', async () => {
       const samlLoginResponse = await app.inject({
         method: 'GET',
         url: `api/platform/v1/auth/sso/saml/login?tenantId=${tenantWithConfiguration.id}&redirectUrl=${tenantWithConfiguration.tenantUrl}`,
@@ -523,7 +528,7 @@ describe('auth e2e test', () => {
 
       expect(samlLoginResponse.statusCode).toBe(302);
 
-      let redirectUrl = samlLoginResponse.headers.location;
+      const redirectUrl = samlLoginResponse.headers.location;
       const url = new URL(redirectUrl?.toString()!);
       const relayState = url.searchParams.get('RelayState');
 
@@ -569,7 +574,7 @@ describe('auth e2e test', () => {
 
       expect(samlLoginResponse.statusCode).toBe(302);
 
-      let redirectUrl = samlLoginResponse.headers.location;
+      const redirectUrl = samlLoginResponse.headers.location;
       const url = new URL(redirectUrl?.toString()!);
       const relayState = url.searchParams.get('RelayState');
 
@@ -621,7 +626,7 @@ describe('auth e2e test', () => {
 
       expect(samlLoginResponse.statusCode).toBe(302);
 
-      let redirectUrl = samlLoginResponse.headers.location;
+      const redirectUrl = samlLoginResponse.headers.location;
       const url = new URL(redirectUrl?.toString()!);
       const relayState = url.searchParams.get('RelayState');
 
@@ -668,7 +673,7 @@ describe('auth e2e test', () => {
 
       expect(samlLoginResponse.statusCode).toBe(302);
 
-      let redirectUrl = samlLoginResponse.headers.location;
+      const redirectUrl = samlLoginResponse.headers.location;
       const url = new URL(redirectUrl?.toString()!);
       const relayState = url.searchParams.get('RelayState');
 

@@ -1,5 +1,5 @@
 import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
-import { BaseEntityHelper } from "@saas-buildkit/typeorm";
+import { BaseEntityHelper } from '@saas-buildkit/typeorm';
 
 @Entity('tenants')
 export class Tenant extends BaseEntityHelper {

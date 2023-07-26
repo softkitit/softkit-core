@@ -3,9 +3,15 @@ import { PassportStrategy } from '@nestjs/passport';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { Profile, Strategy } from 'passport-saml';
 import { AuthService } from '../auth.service';
-import { SamlConfig } from "../../../config/saml";
-import { decodeBase64StringObjectFromUrl, encodeObjectToBase64ForUrl } from "@saas-buildkit/string-utils";
-import { GeneralInternalServerException, GeneralUnauthorizedException } from "@saas-buildkit/exceptions";
+import { SamlConfig } from '../../../config/saml';
+import {
+  decodeBase64StringObjectFromUrl,
+  encodeObjectToBase64ForUrl,
+} from '@saas-buildkit/string-utils';
+import {
+  GeneralInternalServerException,
+  GeneralUnauthorizedException,
+} from '@saas-buildkit/exceptions';
 
 export class SamlStrategy extends PassportStrategy(Strategy, 'saml') {
   private readonly logger = new Logger(SamlStrategy.name);

@@ -3,7 +3,7 @@ import { Transactional } from 'typeorm-transactional';
 import { User } from '../../database/entities';
 import { UserStatus } from '../../database/entities/user/types/user-status.enum';
 import { UserRepository } from '../../repositories';
-import { BaseEntityService } from "@saas-buildkit/typeorm-service";
+import { BaseEntityService } from '@saas-buildkit/typeorm-service';
 
 @Injectable()
 export class UserService extends BaseEntityService<User, UserRepository> {

@@ -10,8 +10,8 @@ import { UserSeedModule } from './user/user-seed.module';
 import { SamlConfigurationSeedModule } from './saml-configuration/saml-configuration-seed.module';
 
 import { RolesSeedModule } from './roles/roles-seed.module';
-import { TypeOrmConfigService } from "@saas-buildkit/typeorm";
-import { setupYamlBaseConfigModule } from "@saas-buildkit/config";
+import { TypeOrmConfigService } from '@saas-buildkit/typeorm';
+import { setupYamlBaseConfigModule } from '@saas-buildkit/config';
 
 @Module({
   imports: [

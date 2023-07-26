@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 
 import { Tenant } from './tenant.entity';
-import { BaseTenantEntityHelper } from "@saas-buildkit/typeorm";
+import { BaseTenantEntityHelper } from '@saas-buildkit/typeorm';
 
 @Entity('saml_configuration')
 export class SAMLConfiguration extends BaseTenantEntityHelper {

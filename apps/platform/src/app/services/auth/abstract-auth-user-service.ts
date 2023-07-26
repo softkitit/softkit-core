@@ -1,7 +1,7 @@
 import { CustomUserRole, User } from '../../database/entities';
 import { AuthType } from '../../database/entities/user/types/auth-type.enum';
-import { Maybe } from "@saas-buildkit/common-types";
-import { JwtPayload } from "@saas-buildkit/auth";
+import { Maybe } from '@saas-buildkit/common-types';
+import { JwtPayload } from '@saas-buildkit/auth';
 
 export default abstract class AbstractAuthUserService {
   public abstract findUserByEmail(email: string): Promise<Maybe<User>>;

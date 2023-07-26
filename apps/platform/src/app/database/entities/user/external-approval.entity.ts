@@ -9,7 +9,7 @@ import {
 import { ApprovalType } from './types/approval-type.enum';
 
 import { User } from './user.entity';
-import { BaseEntityHelper } from "@saas-buildkit/typeorm";
+import { BaseEntityHelper } from '@saas-buildkit/typeorm';
 
 /**
  * External approval entity.

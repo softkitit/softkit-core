@@ -2,12 +2,12 @@ import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
 
 import { SamlConfig } from './saml';
-import { LoggerConfig } from "@saas-buildkit/logger";
-import { AuthConfig } from "@saas-buildkit/auth";
-import { SwaggerConfig } from "@saas-buildkit/swagger-utils";
-import { I18Config } from "@saas-buildkit/i18n";
-import { DbConfig } from "@saas-buildkit/typeorm";
-import { AppConfig } from "@saas-buildkit/bootstrap";
+import { LoggerConfig } from '@saas-buildkit/logger';
+import { AuthConfig } from '@saas-buildkit/auth';
+import { SwaggerConfig } from '@saas-buildkit/swagger-utils';
+import { I18Config } from '@saas-buildkit/i18n';
+import { DbConfig } from '@saas-buildkit/typeorm';
+import { AppConfig } from '@saas-buildkit/bootstrap';
 
 export default class RootConfig {
   @Type(() => LoggerConfig)

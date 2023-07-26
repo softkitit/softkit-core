@@ -3,8 +3,11 @@ import { ApiTags } from '@nestjs/swagger';
 import { plainToClass } from 'class-transformer';
 import { CustomUserRoleService } from '../../services';
 import { CustomUserRoleWithoutPermissionsDto } from './vo/role.dto';
-import { ApiOkResponsePaginated, InfinityPaginationResultType } from "@saas-buildkit/common-types";
-import { Permissions } from "@saas-buildkit/auth";
+import {
+  ApiOkResponsePaginated,
+  InfinityPaginationResultType,
+} from '@saas-buildkit/common-types';
+import { Permissions } from '@saas-buildkit/auth';
 
 @ApiTags('Roles')
 @Controller({
