@@ -11,20 +11,12 @@ const sourceDir = path.join(
   `apps/${process.env['MIGRATION_APP_NAME']}/src`,
 );
 
-const assetsDir = path.join(sourceDir, 'assets')
 const appDir = path.join(sourceDir, 'app')
-console.log('Configuration file source dir - ', sourceDir);
 
 const { db } = fileLoader({
-  absolutePath: path.join(assetsDir, '.env.yaml'),
+  absolutePath: path.join(appDir, 'assets/.env.yaml'),
   ignoreEnvironmentVariableSubstitution: false,
 })() as { db: DbConfig };
-
-
-db.entities = db.entities.map((e) => `${path.join(appDir, e)}`);
-db.migrations = db.migrations.map((e) => `${path.join(appDir, e)}`);
-
-console.log(db.entities)
 
 // populate default values for missing properties from DbConfig file
 const defaultConfig = new DbConfig();
@@ -32,4 +24,5 @@ const defaultConfig = new DbConfig();
 export const AppDataSource = new DataSource({
   ...defaultConfig,
   ...(db as DbConfig),
+  migrations: [path.join(appDir, 'database/migrations/**/*{.ts,.js}')],
 } as DataSourceOptions);
