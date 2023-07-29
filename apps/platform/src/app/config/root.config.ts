@@ -1,7 +1,7 @@
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
 
-import { SamlConfig } from './saml';
+import { SamlConfig } from './saml.config';
 import { LoggerConfig } from '@saas-buildkit/logger';
 import { AuthConfig } from '@saas-buildkit/auth';
 import { SwaggerConfig } from '@saas-buildkit/swagger-utils';

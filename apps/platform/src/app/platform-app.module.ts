@@ -7,7 +7,7 @@ import { DataSource, DataSourceOptions } from 'typeorm';
 import { addTransactionalDataSource } from 'typeorm-transactional';
 import { getDataSourceByName } from 'typeorm-transactional/dist/common';
 
-import RootConfig from './config/root';
+import RootConfig from './config/root.config';
 
 import * as Controllers from './controllers';
 import * as Entities from './database/entities';
