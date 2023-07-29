@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource, DataSourceOptions } from 'typeorm';
-import RootConfig from '../../config/root';
+import RootConfig from '../../config/root.config';
 
 import { TenantSeedModule } from './tenant/tenant-seed.module';
 

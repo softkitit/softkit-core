@@ -6,7 +6,7 @@ import { Transactional } from 'typeorm-transactional';
 import AbstractAuthUserService from './abstract-auth-user-service';
 import { AuthService } from './auth.service';
 import { SamlStrategy } from './strategy/saml-strategy';
-import { SamlConfig } from '../../config/saml';
+import { SamlConfig } from '../../config/saml.config';
 import { MissingConfigurationForFeatureException } from '@saas-buildkit/exceptions';
 
 @Injectable()

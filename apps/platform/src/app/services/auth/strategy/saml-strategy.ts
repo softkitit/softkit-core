@@ -3,7 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { Profile, Strategy } from 'passport-saml';
 import { AuthService } from '../auth.service';
-import { SamlConfig } from '../../../config/saml';
+import { SamlConfig } from '../../../config/saml.config';
 import {
   decodeBase64StringObjectFromUrl,
   encodeObjectToBase64ForUrl,
