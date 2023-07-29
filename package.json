@@ -9,6 +9,7 @@
   "scripts": {
     "typeorm": "ts-node --project ./tsconfig.base.json -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "migration:run": "sh -c 'export MIGRATION_APP_NAME=${0}; yarn run typeorm --dataSource=libs/typeorm/src/lib/migration/migration-data-source.ts migration:run'",
+    "migration:generate": "sh -c 'export MIGRATION_APP_NAME=${0}; yarn run typeorm --dataSource=libs/typeorm/src/lib/migration/migration-data-source.ts migration:generate apps/${0}/src/database/migrations/${1}'",
     "prebuild": "rimraf dist"
   },
   "packageManager": "yarn@3.6.1",
