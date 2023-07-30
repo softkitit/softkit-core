@@ -1,6 +1,6 @@
 module.exports = {
   root: true,
-  ignorePatterns: ['**/*'],
+  ignorePatterns: ['**/*', '*.generated.ts'],
   plugins: [
     '@nx',
     '@typescript-eslint/eslint-plugin',
@@ -94,7 +94,6 @@ module.exports = {
         '*.spec.js',
         '*.spec.jsx',
         '*-seed*.ts',
-        '*/migrations/*',
       ],
       env: {
         jest: true,
