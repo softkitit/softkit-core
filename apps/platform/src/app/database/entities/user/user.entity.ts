@@ -39,7 +39,7 @@ export class User extends BaseEntityHelper {
 
   @ManyToMany(() => CustomUserRole, { cascade: false, eager: false })
   @JoinTable({
-    name: 'user_roles',
+    name: 'users_roles',
     joinColumn: { name: 'user_id', referencedColumnName: 'id' },
     inverseJoinColumn: { name: 'role_id', referencedColumnName: 'id' },
   })

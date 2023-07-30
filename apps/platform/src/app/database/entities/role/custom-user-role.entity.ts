@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  Index,
   JoinColumn,
   JoinTable,
   ManyToMany,
@@ -10,10 +11,10 @@ import {
 import { Tenant } from '../tenant/tenant.entity';
 import { Permission } from './permission.entity';
 import { RoleType } from './types/default-role.enum';
-import { BaseTenantEntityHelper } from '@saas-buildkit/typeorm';
+import { BaseEntityHelper } from '@saas-buildkit/typeorm';
 
-@Entity('custom_roles')
-export class CustomUserRole extends BaseTenantEntityHelper {
+@Entity('roles')
+export class CustomUserRole extends BaseEntityHelper {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
@@ -31,11 +32,19 @@ export class CustomUserRole extends BaseTenantEntityHelper {
 
   @ManyToMany(() => Permission, { cascade: false, eager: false })
   @JoinTable({
-    name: 'custom_roles_permissions',
+    name: 'user_roles_permissions',
     joinColumn: { name: 'role_id', referencedColumnName: 'id' },
     inverseJoinColumn: { name: 'permission_id', referencedColumnName: 'id' },
   })
   permissions?: Permission[];
+
+  /**
+   * @description Tenant Id can be null because we have default permissions for admin and regular user
+   * which are not related to any tenant and are not editable
+   * */
+  @Column({ nullable: true, type: 'uuid' })
+  @Index({ where: '"deleted_at" IS NOT NULL' })
+  tenantId: string;
 
   @ManyToOne(() => Tenant, {
     eager: false,

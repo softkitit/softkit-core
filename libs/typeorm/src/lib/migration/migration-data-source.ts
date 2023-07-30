@@ -24,5 +24,6 @@ const defaultConfig = new DbConfig();
 export const AppDataSource = new DataSource({
   ...defaultConfig,
   ...(db as DbConfig),
+  entities: [path.join(appDir, 'database/entities/**/*{.ts,.js}')],
   migrations: [path.join(appDir, 'database/migrations/**/*{.ts,.js}')],
 } as DataSourceOptions);

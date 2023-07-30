@@ -3,14 +3,11 @@ import { isEmail } from 'class-validator';
 import { Profile } from 'passport-saml';
 import { Transactional } from 'typeorm-transactional';
 import { CreateUserRequest } from '../../controllers/auth/vo/sign-up.dto';
-import { RoleType } from '../../database/entities/role/types/default-role.enum';
 import { AuthType } from '../../database/entities/user/types/auth-type.enum';
 import { UserStatus } from '../../database/entities/user/types/user-status.enum';
 import { CustomUserRoleService } from '../roles/custom-user-role.service';
 
-import { TenantService } from '../tenants/tenant.service';
 import AbstractAuthUserService from './abstract-auth-user-service';
-import { AppConfig } from '@saas-buildkit/bootstrap';
 import { TokenService } from '@saas-buildkit/auth';
 import { hashPassword, verifyPassword } from '@saas-buildkit/crypto';
 import {
@@ -20,6 +17,7 @@ import {
   GeneralNotFoundException,
   GeneralUnauthorizedException,
 } from '@saas-buildkit/exceptions';
+import { TenantService } from '../tenants/tenant.service';
 
 @Injectable()
 export class AuthService {
@@ -29,7 +27,6 @@ export class AuthService {
   public static readonly LAST_NAME_SAML_ATTR: string = 'urn:oid:2.5.4.4';
 
   constructor(
-    private readonly appConfig: AppConfig,
     private readonly tokenService: TokenService,
     private readonly tenantService: TenantService,
     private readonly userAuthService: AbstractAuthUserService,
@@ -66,7 +63,7 @@ export class AuthService {
         this.userAuthService.toJwtPayload(user),
       );
     } else {
-      const defaultRole = await this.roleService.findDefaultRole(tenantId);
+      const defaultRole = await this.roleService.findDefaultRole();
 
       if (!defaultRole) {
         /**
@@ -117,34 +114,17 @@ export class AuthService {
       );
     }
 
-    const { tenant, defaultRoles } = await this.tenantService.setupTenant(
+    const tenant = await this.tenantService.setupTenant(
       createUserDto.companyName,
     );
+
+    const adminRole = await this.roleService.findDefaultAdminRole();
 
     const hashedPassword = await hashPassword(createUserDto.password);
 
     this.logger.log(
       `Creating a new user, with email address: ${createUserDto.email}`,
     );
-
-    const adminRole = defaultRoles.find(
-      (role) => role.roleType === RoleType.ADMIN,
-    );
-
-    if (!adminRole) {
-      /**
-       *  this should never happen, but just in case we need to react and help
-       *  most likely it's some basic configuration issue, or issue after refactoring
-       */
-      /* istanbul ignore next */
-      this.logger.error(`
-      Admin role not found for tenant ${tenant.id}.
-      Usually that means that we have a problem with default roles setup.
-      Check that we have default roles with type admin
-      `);
-      /* istanbul ignore next */
-      throw new GeneralInternalServerException();
-    }
 
     return this.userAuthService.createUserLocal(
       createUserDto.email,

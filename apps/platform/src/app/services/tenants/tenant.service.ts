@@ -40,15 +40,9 @@ export class TenantService extends BaseEntityService<
       tenantUrl,
     });
 
-    const defaultRoles =
-      await this.customUserRoleService.setUpDefaultRolesForTenant(tenant.id);
-
     this.logger.log(`Tenant ${tenantName} created with id ${tenant.id}`);
 
-    return {
-      tenant,
-      defaultRoles,
-    };
+    return tenant;
   }
 
   @Transactional()
