@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Transactional } from 'typeorm-transactional';
 import { User } from '../../database/entities';
-import { UserStatus } from '../../database/entities/user/types/user-status.enum';
+import { UserStatus } from '../../database/entities/users/types/user-status.enum';
 import { UserRepository } from '../../repositories';
 import { BaseEntityService } from '@saas-buildkit/typeorm-service';
 

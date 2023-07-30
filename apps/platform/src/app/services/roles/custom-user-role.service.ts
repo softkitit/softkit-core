@@ -3,7 +3,7 @@ import { Transactional } from 'typeorm-transactional';
 import { CustomUserRole } from '../../database/entities';
 import { CustomUserRoleRepository } from '../../repositories';
 import { BaseEntityService } from '@saas-buildkit/typeorm-service';
-import { RoleType } from '../../database/entities/role/types/default-role.enum';
+import { RoleType } from '../../database/entities/roles/types/default-role.enum';
 import { IsNull } from 'typeorm';
 
 @Injectable()

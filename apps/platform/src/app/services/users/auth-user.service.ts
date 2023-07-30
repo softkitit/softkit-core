@@ -1,9 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Transactional } from 'typeorm-transactional';
 import { CustomUserRole, User } from '../../database/entities';
-import { ApprovalType } from '../../database/entities/user/types/approval-type.enum';
-import { AuthType } from '../../database/entities/user/types/auth-type.enum';
-import { UserStatus } from '../../database/entities/user/types/user-status.enum';
+import { ApprovalType } from '../../database/entities/users/types/approval-type.enum';
+import { AuthType } from '../../database/entities/users/types/auth-type.enum';
+import { UserStatus } from '../../database/entities/users/types/user-status.enum';
 
 import AbstractAuthUserService from '../auth/abstract-auth-user-service';
 import { SamlConfigurationService } from '../tenants/saml-configuration.service';

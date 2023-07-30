@@ -3,8 +3,8 @@ import { isEmail } from 'class-validator';
 import { Profile } from 'passport-saml';
 import { Transactional } from 'typeorm-transactional';
 import { CreateUserRequest } from '../../controllers/auth/vo/sign-up.dto';
-import { AuthType } from '../../database/entities/user/types/auth-type.enum';
-import { UserStatus } from '../../database/entities/user/types/user-status.enum';
+import { AuthType } from '../../database/entities/users/types/auth-type.enum';
+import { UserStatus } from '../../database/entities/users/types/user-status.enum';
 import { CustomUserRoleService } from '../roles/custom-user-role.service';
 
 import AbstractAuthUserService from './abstract-auth-user-service';

@@ -8,7 +8,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Tenant } from '../tenant/tenant.entity';
+import { Tenant } from '../tenants/tenant.entity';
 import { Permission } from './permission.entity';
 import { RoleType } from './types/default-role.enum';
 import { BaseEntityHelper } from '@saas-buildkit/typeorm';

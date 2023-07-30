@@ -8,9 +8,9 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { CustomUserRole } from '../role/custom-user-role.entity';
+import { CustomUserRole } from '../roles/custom-user-role.entity';
 
-import { Tenant } from '../tenant/tenant.entity';
+import { Tenant } from '../tenants/tenant.entity';
 import { AuthType } from './types/auth-type.enum';
 import { UserStatus } from './types/user-status.enum';
 import { BaseEntityHelper } from '@saas-buildkit/typeorm';
