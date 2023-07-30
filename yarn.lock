@@ -3581,15 +3581,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@saas-buildkit/eslint@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "@saas-buildkit/eslint@npm:1.0.1"
-  peerDependencies:
-    tslib: 2.4.1
-  checksum: 86cc234a9fff2a50ef1ddc2ab734244ed0af534a31f11bef8ed9d3f06b29a24bedae211f1117caf0b2754c5a96b9be55783ce4d6211f4bc388d1c88bc80443d5
-  languageName: node
-  linkType: hard
-
 "@saas-buildkit/source@workspace:.":
   version: 0.0.0-use.local
   resolution: "@saas-buildkit/source@workspace:."
@@ -3615,7 +3606,6 @@ __metadata:
     "@nx/node": 16.5.5
     "@nx/webpack": 16.5.5
     "@nx/workspace": 16.5.5
-    "@saas-buildkit/eslint": ^1.0.1
     "@types/jest": ^29.5.3
     "@types/newrelic": ^9.14.0
     "@types/node": ^20.4.4
@@ -3631,15 +3621,13 @@ __metadata:
     eslint: ^8.45.0
     eslint-config-prettier: 8.8.0
     eslint-plugin-jest: ^27.2.3
-    eslint-plugin-no-secrets: ^0.8.9
     eslint-plugin-prettier: ^5.0.0
     eslint-plugin-promise: ^6.1.1
     eslint-plugin-security: ^1.7.1
     eslint-plugin-simple-import-sort: ^10.0.0
     eslint-plugin-sonarjs: ^0.19.0
     eslint-plugin-unicorn: ^48.0.0
-    eslint-plugin-you-dont-need-lodash-underscore: ^6.12.0
-    husky: ^8.0.3
+    husky: ^8.0.0
     hygen: 6.2.11
     ioredis: ^5.3.2
     is-ci: ^3.0.1
@@ -7994,15 +7982,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-no-secrets@npm:^0.8.9":
-  version: 0.8.9
-  resolution: "eslint-plugin-no-secrets@npm:0.8.9"
-  peerDependencies:
-    eslint: ">=3.0.0"
-  checksum: 28b0ddb37826889a90119e7265468320a18145bd3f357713d74757f5433bc5a4dc48662d8113a30eac5fc05ac3710a65c8280df90dff35ed86313edd07132871
-  languageName: node
-  linkType: hard
-
 "eslint-plugin-prettier@npm:^5.0.0":
   version: 5.0.0
   resolution: "eslint-plugin-prettier@npm:5.0.0"
@@ -8080,15 +8059,6 @@ __metadata:
   peerDependencies:
     eslint: ">=8.44.0"
   checksum: e63112cbaa3a1347cbb427160d7b3c6a1f8cc8ef512075a0ab285c64761772356f4eb5f82c9fb1a8cde63d8794f8aa819eda02fa0a7c44bc9955c5113f87be78
-  languageName: node
-  linkType: hard
-
-"eslint-plugin-you-dont-need-lodash-underscore@npm:^6.12.0":
-  version: 6.12.0
-  resolution: "eslint-plugin-you-dont-need-lodash-underscore@npm:6.12.0"
-  dependencies:
-    kebab-case: ^1.0.0
-  checksum: 9371cfa3c524f9b7c27de0ea3f8232ea60812e80a1f9ec99be3e7caaec22db44ce69f26db067e7ea1f2ca60f2b29f371c773e8f9913caae878fa3f45b4ada0e8
   languageName: node
   linkType: hard
 
@@ -9543,7 +9513,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"husky@npm:^8.0.3":
+"husky@npm:^8.0.0":
   version: 8.0.3
   resolution: "husky@npm:8.0.3"
   bin:
@@ -10811,13 +10781,6 @@ __metadata:
     jwa: ^1.4.1
     safe-buffer: ^5.0.1
   checksum: f0213fe5b79344c56cd443428d8f65c16bf842dc8cb8f5aed693e1e91d79c20741663ad6eff07a6d2c433d1831acc9814e8d7bada6a0471fbb91d09ceb2bf5c2
-  languageName: node
-  linkType: hard
-
-"kebab-case@npm:^1.0.0":
-  version: 1.0.2
-  resolution: "kebab-case@npm:1.0.2"
-  checksum: bf01164e11c544ee9b3aa1a91c2e7d6aa6b3356b834a5e885d43f36db14aae5d347cd4a298a566133321b82fde6bac6b597f148ac19bfd3d3fc81e1034a79729
   languageName: node
   linkType: hard
 
