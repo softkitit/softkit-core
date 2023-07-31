@@ -38,7 +38,13 @@
       "default": true,
       "description": "It's indicating that you want to generate repository for entity or not, by default it's true because it's easier to do all in once usually",
       "x-prompt": "Do you want to generate repository for entity? (y/n)"
+    },
+    "generateService": {
+      "type": "boolean",
+      "default": true,
+      "description": "It's indicating that you want to generate service or not, by default it's true because it's easier to do all in once usually",
+      "x-prompt": "Do you want to generate service for entity? (y/n)"
     }
   },
-  "required": ["projectName", "entityName", "tenantBaseEntity", "groupName", "generateRepository"]
+  "required": ["projectName", "entityName", "tenantBaseEntity", "groupName", "generateRepository", "generateService"]
 }

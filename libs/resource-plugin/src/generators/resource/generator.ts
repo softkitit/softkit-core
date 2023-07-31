@@ -10,6 +10,8 @@ import { pascalCase, snakeCase } from 'change-case';
 import {} from 'node:child_process';
 import repositoryGenerator from '../repository/generator';
 import { RepositoryGeneratorSchema } from '../repository/schema';
+import serviceGenerator from '../service/generator';
+import { ServiceGeneratorSchema } from '../service/schema';
 
 export async function resourceGenerator(
   tree: Tree,
@@ -51,6 +53,16 @@ export async function resourceGenerator(
       repositoryName: `${options.entityName}`,
     } satisfies RepositoryGeneratorSchema;
     await repositoryGenerator(tree, repositoryOptions);
+  }
+
+  if (options.generateService) {
+    const repositoryOptions = {
+      ...options,
+      tenantBaseService: options.tenantBaseEntity,
+      repositoryName: `${options.entityName}`,
+      serviceName: options.entityName,
+    } satisfies ServiceGeneratorSchema;
+    await serviceGenerator(tree, repositoryOptions);
   }
 }
 
