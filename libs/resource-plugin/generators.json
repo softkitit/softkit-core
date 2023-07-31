@@ -9,6 +9,11 @@
       "factory": "./src/generators/repository/generator",
       "schema": "./src/generators/repository/schema.json",
       "description": "repository generator"
+    },
+    "service": {
+      "factory": "./src/generators/service/generator",
+      "schema": "./src/generators/service/schema.json",
+      "description": "service generator"
     }
   }
 }
