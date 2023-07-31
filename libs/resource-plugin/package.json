@@ -1,0 +1,17 @@
+{
+  "name": "@saas-buildkit/resource-plugin",
+  "version": "1.0.0",
+  "type": "commonjs",
+  "keywords": [
+    "generator",
+    "utils",
+    "build",
+    "saas-buildkit"
+  ],
+  "generators": "./generators.json",
+  "dependencies": {
+    "@nx/devkit": "16.5.5",
+    "change-case": "^4.1.2",
+    "tslib": "^2.3.0"
+  }
+}

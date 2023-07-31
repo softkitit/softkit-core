@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "Resource",
+  "title": "Resource Generator",
+  "type": "object",
+  "properties": {
+    "projectName": {
+      "type": "string",
+      "description": "Application name in your workspace, e.g. 'platform'",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "What is app name?",
+      "x-dropdown": "projects",
+      "minLength": 1
+    },
+    "entityName": {
+      "type": "string",
+      "description": "Entity that you want to generate e.g. 'saml-tenant-configuration'",
+      "x-prompt": "What is entity name for generation? entity names should be with dashes, e.g. saml-tenant-configuration",
+      "minLength": 1
+    },
+    "groupName": {
+      "type": "string",
+      "description": "Group name is folder name that you want to generate your entity in it e.g. 'users'",
+      "x-prompt": "What is group name for generation? group names should be with dashes, e.g. user-group. Leave empty if you want to use root directory"
+    },
+    "tenantBaseEntity": {
+      "type": "boolean",
+      "default": true,
+      "description": "It's indicating that this entity is tenant base entity or not, so we can choose the appropriate base entity for generation",
+      "x-prompt": "Is this a tenant base entity? (y/n)"
+    }
+  },
+  "required": ["projectName", "entityName", "tenantBaseEntity"]
+}

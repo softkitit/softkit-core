@@ -48,6 +48,9 @@
       "@saas-buildkit/logger": [
         "libs/logger/src/index.ts"
       ],
+      "@saas-buildkit/resource-plugin": [
+        "libs/resource-plugin/src/index.ts"
+      ],
       "@saas-buildkit/string-utils": [
         "libs/string-utils/src/index.ts"
       ],
