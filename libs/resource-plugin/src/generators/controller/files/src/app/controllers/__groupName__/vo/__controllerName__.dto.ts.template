@@ -1,0 +1,28 @@
+import { OmitType } from '@nestjs/swagger';
+import { <%= pascalCase(entityName) -%> } from '../../../database/entities';
+
+export class <%= pascalCase(entityName) -%>Dto extends OmitType(
+<%= pascalCase(entityName) -%>,
+  ['tenant', 'tenantId', '__entity', 'deletedAt'] as const,
+) {}
+
+export class Create<%= pascalCase(entityName) -%> extends OmitType(<%= pascalCase(entityName) -%>, [
+  'id',
+  '__entity',
+  'deletedAt',
+  'createdAt',
+  'updatedAt',
+  'version',
+<% if (tenantBaseEntity) { %>'tenantId',<% } %>
+] as const) {}
+
+export class Update<%= pascalCase(entityName) -%> extends OmitType(<%= pascalCase(entityName) -%>, [
+  '__entity',
+  'deletedAt',
+  'createdAt',
+  'updatedAt',
+<% if (tenantBaseEntity) { %>'tenantId',<% } %>
+] as const) {}
+
+
+

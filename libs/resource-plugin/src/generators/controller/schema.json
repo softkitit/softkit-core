@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "Controller",
+  "title": "",
+  "type": "object",
+  "properties": {
+    "projectName": {
+      "type": "string",
+      "description": "Application name in your workspace, e.g. 'platform'",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "What is app name?",
+      "x-dropdown": "projects",
+      "minLength": 1
+    },
+    "controllerName": {
+      "type": "string",
+      "description": "Controller name, usually match with entity name",
+      "x-prompt": "What is controller name? (lowercase) e.g. user-group",
+      "minLength": 1
+    },
+    "serviceName": {
+      "type": "string",
+      "description": "Service name, usually match with entity name and controller name. It's default service that will be injected to controller.",
+      "x-prompt": "What is service name? e.g user-group",
+      "minLength": 1
+    },
+    "entityName": {
+      "type": "string",
+      "description": "Entity name, usually match with controller and service name. It will be used for base DTO generations",
+      "x-prompt": "What is entity name? e.g user-group",
+      "minLength": 1
+    },
+    "groupName": {
+      "type": "string",
+      "description": "Group name is folder name that you want to generate your entity in it e.g. 'users'",
+      "x-prompt": "What is group name for generation? It's folder name under the base controllers folder",
+      "minLength": 1
+    },
+    "tenantBaseEntity": {
+      "type": "boolean",
+      "default": true,
+      "description": "It's indicating that this controller is tenant base",
+      "x-prompt": "Is this a tenant base controller? (y/n). (Useful for DTO generation, to exclude tenant id from DTOs)"
+    }
+  },
+  "required": ["projectName", "controllerName", "serviceName", "entityName", "groupName", "tenantBaseEntity"]
+}

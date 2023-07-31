@@ -1,0 +1,95 @@
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+import { plainToClass } from 'class-transformer';
+import {
+  <%= pascalCase(serviceName) -%>Service,
+} from '../../services';
+
+import {
+  <%= pascalCase(entityName) -%>Dto,
+  Create<%= pascalCase(entityName) -%>,
+  Update<%= pascalCase(entityName) -%>,
+} from './vo/<%= controllerName -%>.dto';
+
+import {
+  ApiOkResponsePaginated,
+  InfinityPaginationResultType,
+} from '@saas-buildkit/common-types';
+import { Permissions } from '@saas-buildkit/auth';
+
+@ApiTags('<%= capitalCase(controllerName) -%>')
+@Controller({
+  path: '<%= paramCase(controllerName) -%>',
+  version: '1',
+})
+export class <%= pascalCase(controllerName) -%>Controller {
+  constructor(
+    private readonly service: <%= pascalCase(serviceName) -%>Service,
+  ) {}
+
+  @Get()
+  @ApiOkResponsePaginated(<%= pascalCase(entityName) -%>Dto)
+  @Permissions('<%= projectName -%>.<%= controllerName -%>.read')
+  async findAll(): Promise<
+    InfinityPaginationResultType<<%= pascalCase(entityName) -%>Dto>
+  > {
+    return this.service.findAll().then(({ data, ...other }) => {
+      const resultData = data.map((item) => {
+        return plainToClass(<%= pascalCase(entityName) -%>Dto, item);
+      });
+
+      return {
+        ...other,
+        data: resultData,
+      };
+    });
+  }
+
+  @Get()
+  @Permissions('<%= projectName -%>.<%= controllerName -%>.read')
+  async findOne(
+    @Param('id') id: string,
+  ): Promise<<%= pascalCase(entityName) -%>Dto> {
+    return this.service.findOneById(id).then((data) => {
+      return plainToClass(<%= pascalCase(entityName) -%>Dto, data);
+    });
+  }
+
+  @Post()
+  @Permissions('<%= projectName -%>.<%= controllerName -%>.create')
+  async create(@Body() dto: Create<%= pascalCase(entityName) -%>) {
+    return this.service
+      .createOrUpdateEntity(dto)
+      .then((item) => {
+        return plainToClass(<%= pascalCase(entityName) -%>Dto, item);
+      });
+  }
+
+  @Put(':id')
+  @Permissions('<%= projectName -%>.<%= controllerName -%>.update')
+  async updateOne(@Param('id') id: string, @Body() dto: Update<%= pascalCase(entityName) -%>) {
+    return this.service
+      .createOrUpdateEntity({
+        id,
+        ...dto,
+      })
+      .then((item) => {
+        return plainToClass(<%= pascalCase(entityName) -%>Dto, item);
+      });
+  }
+
+  @Delete(':id')
+  @Permissions('<%= projectName -%>.<%= controllerName -%>.delete')
+  async softDelete(@Param('id') id: string, @Query('version') version: number) {
+    return this.service.archive(id, version);
+  }
+}

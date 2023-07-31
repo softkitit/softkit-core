@@ -1,9 +1,7 @@
-import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing';
 import { Tree, readProjectConfiguration } from '@nx/devkit';
 
 import { serviceGenerator } from './generator';
 import { ServiceGeneratorSchema } from './schema';
-import { repositoryGenerator } from '../repository/generator';
 import { pascalCase } from 'change-case';
 import { createTreeWithNestApplication } from '@nx/nest/src/generators/utils/testing';
 
