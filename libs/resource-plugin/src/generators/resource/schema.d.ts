@@ -3,4 +3,5 @@ export interface ResourceGeneratorSchema {
   entityName: string;
   groupName?: string;
   tenantBaseEntity: boolean;
+  generateRepository: boolean;
 }

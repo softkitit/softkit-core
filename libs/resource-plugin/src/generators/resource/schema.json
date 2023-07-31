@@ -31,7 +31,13 @@
       "default": true,
       "description": "It's indicating that this entity is tenant base entity or not, so we can choose the appropriate base entity for generation",
       "x-prompt": "Is this a tenant base entity? (y/n)"
+    },
+    "generateRepository": {
+      "type": "boolean",
+      "default": true,
+      "description": "It's indicating that you want to generate repository for entity or not, by default it's true because it's easier to do all in once usually",
+      "x-prompt": "Do you want to generate repository for entity? (y/n)"
     }
   },
-  "required": ["projectName", "entityName", "tenantBaseEntity"]
+  "required": ["projectName", "entityName", "tenantBaseEntity", "generateRepository"]
 }

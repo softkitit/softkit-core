@@ -8,6 +8,8 @@ import { EOL } from 'node:os';
 import { ResourceGeneratorSchema } from './schema';
 import { pascalCase, snakeCase } from 'change-case';
 import {} from 'node:child_process';
+import repositoryGenerator from '../repository/generator';
+import { RepositoryGeneratorSchema } from '../repository/schema';
 
 export async function resourceGenerator(
   tree: Tree,
@@ -41,6 +43,15 @@ export async function resourceGenerator(
   const newContents = `${contents}${EOL}export * from './${exportPathForIndex}';`;
   tree.write(indexFilePath, newContents);
   //   todo run eslint --fix
+
+  if (options.generateRepository) {
+    const repositoryOptions = {
+      ...options,
+      tenantBaseRepository: options.tenantBaseEntity,
+      repositoryName: `${options.entityName}`,
+    } satisfies RepositoryGeneratorSchema;
+    await repositoryGenerator(tree, repositoryOptions);
+  }
 }
 
 export default resourceGenerator;
