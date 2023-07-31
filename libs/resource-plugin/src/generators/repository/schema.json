@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "Repository",
+  "title": "",
+  "type": "object",
+  "properties": {
+    "projectName": {
+      "type": "string",
+      "description": "Application name in your workspace, e.g. 'platform'",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "What is app name?",
+      "x-dropdown": "projects",
+      "minLength": 1
+    },
+    "repositoryName": {
+      "type": "string",
+      "description": "Repository name, must match with entity name, e.g. 'user'",
+      "x-prompt": "What is repository name?",
+      "minLength": 1
+    },
+    "entityName": {
+      "type": "string",
+      "description": "Entity name, must match the class name, that is exported from entity file, e.g. 'User'",
+      "x-prompt": "What is entity name?",
+      "minLength": 1
+    },
+    "groupName": {
+      "type": "string",
+      "description": "Group name is folder name that you want to generate your entity in it e.g. 'users'",
+      "x-prompt": "What is group name for generation? group names should be with dashes, e.g. user-group. Leave empty if you want to use root repository directory"
+    },
+    "tenantBaseRepository": {
+      "type": "boolean",
+      "default": true,
+      "description": "It's indicating that this entity is tenant base repository or not, so we can choose the appropriate base repository for generation",
+      "x-prompt": "Is this a tenant base repository? (y/n)"
+    }
+  },
+  "required": ["projectName", "repositoryName", "tenantBaseRepository"]
+}

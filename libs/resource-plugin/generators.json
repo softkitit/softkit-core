@@ -4,6 +4,11 @@
       "factory": "./src/generators/resource/generator",
       "schema": "./src/generators/resource/schema.json",
       "description": "resource generator"
+    },
+    "repository": {
+      "factory": "./src/generators/repository/generator",
+      "schema": "./src/generators/repository/schema.json",
+      "description": "repository generator"
     }
   }
 }

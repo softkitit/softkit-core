@@ -1,0 +1,40 @@
+import { Injectable } from '@nestjs/common';
+import { InjectDataSource } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
+import { <%= pascalCase(entityName) -%> } from '../../database/entities';
+import {
+<% if (tenantBaseRepository) { %>
+    BaseTenantRepository as BaseRepository,
+    TenantClsStore
+<% } else { %>
+    BaseRepository as BaseRepository
+<% } %>
+} from '@saas-buildkit/typeorm';
+
+<% if (tenantBaseRepository) { %>
+import { ClsService } from 'nestjs-cls';
+<% } %>
+
+<% if (tenantBaseRepository) { %>
+@Injectable()
+export class <%= pascalCase(repositoryName) -%>Repository extends BaseRepository<<%= pascalCase(entityName) -%>> {
+  constructor(
+  @InjectDataSource()
+  ds: DataSource,
+  clsService: ClsService<TenantClsStore>,
+  ) {
+    super(<%= pascalCase(entityName) -%>, ds, clsService);
+  }
+}
+
+<% } else { %>
+ @Injectable()
+ export class <%= pascalCase(repositoryName) -%>Repository extends BaseRepository<<%= pascalCase(entityName) -%>> {
+   constructor(
+   @InjectDataSource()
+   ds: DataSource,
+   ) {
+     super(<%= pascalCase(entityName) -%>, ds);
+   }
+ }
+<% } %>
