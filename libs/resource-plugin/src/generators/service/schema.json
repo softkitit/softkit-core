@@ -23,20 +23,21 @@
     },
     "repositoryName": {
       "type": "string",
-      "description": "Repository name, must match with entity name, e.g. 'user'",
-      "x-prompt": "What is repository name?",
+      "description": "Repository name, must match with entity name, e.g. 'user'. Usually match with service name",
+      "x-prompt": "What is repository name? Usually match with service name",
       "minLength": 1
     },
     "entityName": {
       "type": "string",
-      "description": "Entity name, must match the class name, that is exported from entity file, e.g. 'User'",
-      "x-prompt": "What is entity name?",
+      "description": "Entity name, must match the class name, that is exported from entity file, e.g. 'user'",
+      "x-prompt": "What is entity name? Usually match with service name",
       "minLength": 1
     },
     "groupName": {
       "type": "string",
       "description": "Group name is folder name that you want to generate your entity in it e.g. 'users'",
-      "x-prompt": "What is group name for generation? group names should be with dashes, e.g. user-group. Leave empty if you want to use root repository directory"
+      "x-prompt": "What is group name for generation? It's folder name under the base folder",
+      "minLength": 1
     },
     "tenantBaseService": {
       "type": "boolean",

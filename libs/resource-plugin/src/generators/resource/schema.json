@@ -24,7 +24,8 @@
     "groupName": {
       "type": "string",
       "description": "Group name is folder name that you want to generate your entity in it e.g. 'users'",
-      "x-prompt": "What is group name for generation? group names should be with dashes, e.g. user-group. Leave empty if you want to use root directory"
+      "x-prompt": "What is group name for generation? It's folder name under the base folder",
+      "minLength": 1
     },
     "tenantBaseEntity": {
       "type": "boolean",
@@ -39,5 +40,5 @@
       "x-prompt": "Do you want to generate repository for entity? (y/n)"
     }
   },
-  "required": ["projectName", "entityName", "tenantBaseEntity", "generateRepository"]
+  "required": ["projectName", "entityName", "tenantBaseEntity", "groupName", "generateRepository"]
 }
