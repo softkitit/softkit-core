@@ -12,6 +12,8 @@ import repositoryGenerator from '../repository/generator';
 import { RepositoryGeneratorSchema } from '../repository/schema';
 import serviceGenerator from '../service/generator';
 import { ServiceGeneratorSchema } from '../service/schema';
+import controllerGenerator from '../controller/generator';
+import { ControllerGeneratorSchema } from '../controller/schema';
 
 export async function resourceGenerator(
   tree: Tree,
@@ -63,6 +65,15 @@ export async function resourceGenerator(
       serviceName: options.entityName,
     } satisfies ServiceGeneratorSchema;
     await serviceGenerator(tree, repositoryOptions);
+  }
+
+  if (options.generateController) {
+    const repositoryOptions = {
+      ...options,
+      serviceName: options.entityName,
+      controllerName: options.entityName,
+    } satisfies ControllerGeneratorSchema;
+    await controllerGenerator(tree, repositoryOptions);
   }
 }
 

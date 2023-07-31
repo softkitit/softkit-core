@@ -3,7 +3,7 @@ import { <%= pascalCase(entityName) -%> } from '../../../database/entities';
 
 export class <%= pascalCase(entityName) -%>Dto extends OmitType(
 <%= pascalCase(entityName) -%>,
-  ['tenant', 'tenantId', '__entity', 'deletedAt'] as const,
+  [<% if (tenantBaseEntity) { %>'tenantId',<% } %> '__entity', 'deletedAt'] as const,
 ) {}
 
 export class Create<%= pascalCase(entityName) -%> extends OmitType(<%= pascalCase(entityName) -%>, [

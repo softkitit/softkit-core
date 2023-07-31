@@ -1,4 +1,3 @@
-import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing';
 import { Tree, readProjectConfiguration } from '@nx/devkit';
 
 import { resourceGenerator } from './generator';
@@ -12,6 +11,9 @@ describe('resource generator', () => {
     entityName: 'test-entity',
     groupName: 'test-group',
     tenantBaseEntity: true,
+    generateRepository: true,
+    generateService: true,
+    generateController: true,
   };
 
   beforeEach(() => {
