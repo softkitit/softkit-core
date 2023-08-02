@@ -10,6 +10,7 @@ module.exports = {
     'jest',
     'unicorn',
     'promise',
+    'unused-imports',
   ],
   overrides: [
     {
@@ -22,6 +23,11 @@ module.exports = {
     {
       files: ['*.ts', '*.tsx', '*.js', '*.jsx'],
       rules: {
+        'unused-imports/no-unused-imports': 'error',
+        'unused-imports/no-unused-vars': [
+          'warn',
+          { 'vars': 'all', 'varsIgnorePattern': '^_', 'args': 'after-used', 'argsIgnorePattern': '^_' }
+        ],
         '@nx/enforce-module-boundaries': [
           'error',
           {
