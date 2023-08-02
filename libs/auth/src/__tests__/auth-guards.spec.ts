@@ -189,7 +189,7 @@ describe('test auth', () => {
       ['plain', 'aaa'],
       ['admin', 'plain'],
       ['admin', 'plain', 'aaa'],
-    ])('multiple-exact-roles test with valid token', async (...roles) => {
+    ])('multiple-exact-roles test with valid token: %s', async (...roles) => {
       const tokens = await tokenService.signTokens({
         ...emptyPermissionsPayload,
         roles,
@@ -363,7 +363,7 @@ describe('test auth', () => {
       ['admin.user.createe', 'admin.user.randome'],
       ['admin.user.randome', 'admin.user.updatee'],
     ])(
-      'multiple-exact-permissions method with invalid permission annotation',
+      'multiple-exact-permissions method with invalid permission annotation: %s',
       async (...permissions) => {
         const tokens = await tokenService.signTokens({
           ...emptyPermissionsPayload,

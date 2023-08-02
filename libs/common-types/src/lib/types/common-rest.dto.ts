@@ -1,18 +1,45 @@
 import { ApiProperty } from '@nestjs/swagger';
+import {
+  IsUUIDLocalized,
+  IsIntegerStringLocalized,
+} from '@saas-buildkit/validation';
 
-export class SimpleResponseWithMessage {
-  constructor(public message: string) {}
-}
-
-export interface SimpleResponseForCreatedEntityWithMessage<ID> {
-  message: string;
-  data: {
+export class SimpleResponseForCreatedEntityWithMessage<ID> {
+  @ApiProperty({
+    description:
+      'General friendly message that can be shown to the user, about entity creation',
+  })
+  message!: string;
+  data!: {
     id: ID;
   };
 }
 
+export class IdParamUUID {
+  @ApiProperty({
+    description: 'Entity id, uuid v4 format',
+    example: '123e4567-e89b-12d3-a456-426614174000',
+    required: true,
+  })
+  @IsUUIDLocalized()
+  id!: string;
+}
+
+export class VersionNumberParam {
+  @ApiProperty({
+    description: 'Version number of entity that you want to delete',
+    example: '1',
+    minimum: 0,
+    required: true,
+  })
+  @IsIntegerStringLocalized({
+    min: 0,
+  })
+  version!: number;
+}
+
 /**
- * following rfc
+ * @description The error response following rfc7807
  * @link https://www.rfc-editor.org/rfc/rfc7807
  * */
 export class ErrorResponse {

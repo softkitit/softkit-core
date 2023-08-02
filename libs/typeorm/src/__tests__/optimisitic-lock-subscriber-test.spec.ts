@@ -96,7 +96,7 @@ describe('optimistic lost subscriber test', () => {
     [null],
     [undefined],
   ])(
-    'optimistic lock exception different versions cases',
+    'optimistic lock exception different versions cases: %s',
     async (versionNumber?: number | null) => {
       const objectToSave = {
         password: faker.hacker.verb(),

@@ -17,11 +17,14 @@ import {
 import {
   CreateUserRole,
   CustomUserRoleWithoutPermissionsDto,
+  RolePaginationQueryParams,
   UpdateUserRole,
 } from './vo/role.dto';
 import {
   ApiOkResponsePaginated,
+  IdParamUUID,
   InfinityPaginationResultType,
+  VersionNumberParam,
 } from '@saas-buildkit/common-types';
 import { Permissions } from '@saas-buildkit/auth';
 
@@ -39,30 +42,41 @@ export class RolesController {
   @Get()
   @ApiOkResponsePaginated(CustomUserRoleWithoutPermissionsDto)
   @Permissions('platform.roles.read')
-  async findAll(): Promise<
+  async findAll(
+    @Query()
+    pagination: RolePaginationQueryParams,
+  ): Promise<
     InfinityPaginationResultType<CustomUserRoleWithoutPermissionsDto>
   > {
-    return this.customUserRoleService.findAll().then(({ data, ...other }) => {
-      const resultData = data.map((item) => {
-        return plainToClass(CustomUserRoleWithoutPermissionsDto, item);
-      });
+    return this.customUserRoleService
+      .findAll(
+        {},
+        pagination.page,
+        pagination.size,
+        pagination.toTypeOrmSortParams(),
+      )
+      .then(({ data, ...other }) => {
+        const resultData = data.map((item) => {
+          return plainToClass(CustomUserRoleWithoutPermissionsDto, item);
+        });
 
-      return {
-        ...other,
-        data: resultData,
-      };
-    });
+        return {
+          ...other,
+          data: resultData,
+        };
+      });
   }
 
-  @Get()
-  @ApiOkResponsePaginated(CustomUserRoleWithoutPermissionsDto)
+  @Get(':id')
   @Permissions('platform.roles.read')
   async findOne(
-    @Param('id') id: string,
+    @Param() findOneOptions: IdParamUUID,
   ): Promise<CustomUserRoleWithoutPermissionsDto> {
-    return this.customUserRoleTenantService.findOneById(id).then((data) => {
-      return plainToClass(CustomUserRoleWithoutPermissionsDto, data);
-    });
+    return this.customUserRoleTenantService
+      .findOneById(findOneOptions.id)
+      .then((data) => {
+        return plainToClass(CustomUserRoleWithoutPermissionsDto, data);
+      });
   }
 
   @Post()
@@ -77,7 +91,7 @@ export class RolesController {
 
   @Put(':id')
   @Permissions('platform.roles.update')
-  async updateOne(@Param('id') id: string, @Body() role: UpdateUserRole) {
+  async updateOne(@Param('id') id: IdParamUUID, @Body() role: UpdateUserRole) {
     return this.customUserRoleTenantService
       .createOrUpdateEntity({
         id,
@@ -90,7 +104,10 @@ export class RolesController {
 
   @Delete(':id')
   @Permissions('platform.roles.delete')
-  async softDelete(@Param('id') id: string, @Query('version') version: number) {
-    return this.customUserRoleTenantService.archive(id, version);
+  async softDelete(
+    @Param() path: IdParamUUID,
+    @Query() query: VersionNumberParam,
+  ) {
+    return this.customUserRoleTenantService.archive(path.id, query.version);
   }
 }

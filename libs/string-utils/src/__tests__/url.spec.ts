@@ -19,7 +19,7 @@ describe('url manipulation test', () => {
     faker.string.alpha({
       length: 100,
     }),
-  ])('url part to base64 and from base64', (strToTransform: string) => {
+  ])('url part to base64 and from base64: %s', (strToTransform: string) => {
     const objectToTransform = {
       str: strToTransform,
     };

@@ -196,7 +196,7 @@ describe('auth e2e test', () => {
         },
         invalidFields: ['firstName'],
       },
-    ])('validation exceptions signup', async (data) => {
+    ])('validation exceptions signup %p', async (data) => {
       const response = await app.inject({
         method: 'POST',
         url: 'api/platform/v1/auth/signup',

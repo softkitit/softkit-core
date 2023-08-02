@@ -6,6 +6,9 @@ export type I18nTranslations = {
         "validation": {
             "NOT_EMPTY": string;
             "STRING": string;
+            "NUMBER": string;
+            "MIN_INTEGER": string;
+            "MAX_INTEGER": string;
             "REQUIRED": string;
             "URL": string;
             "BOOLEAN": string;

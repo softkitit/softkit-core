@@ -9,7 +9,7 @@ import {
 
 describe('crypto tests', () => {
   it.each(['a'.repeat(32), 'a'.repeat(64), 'a'.repeat(128), 'a'.repeat(256)])(
-    'hash and compare',
+    'hash and compare: %s',
     async (password) => {
       const hashedPassword = await hashPassword(password);
       const isPasswordValid = await verifyPassword(password, hashedPassword);

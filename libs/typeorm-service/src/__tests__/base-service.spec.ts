@@ -245,7 +245,7 @@ describe('base service tests', () => {
     [10, 3, 4],
     [10, 1000, 1],
   ])(
-    'find all paginated test',
+    'find all paginated test: %s',
     async (
       numberOfItems: number,
       pageSize: number,

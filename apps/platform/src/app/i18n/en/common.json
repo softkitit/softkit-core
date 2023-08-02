@@ -2,6 +2,11 @@
   "validation": {
     "NOT_EMPTY": "{property} cannot be empty",
     "STRING": "{property} must be a string",
+    "NUMBER": "{property} must be a number",
+    "STRING_ENUM": "{property} must be one of the following values: {constraints.0}, you provided: \"{value}\"",
+    "DOESNT_MATCH_FORMAT": "{property} must follow format \"{format}\". Current value is \"{value}\"",
+    "MIN_INTEGER": "{property} must be a number equal or bigger than {constraints.0}",
+    "MAX_INTEGER": "{property} must be a number equal or less than {constraints.0}",
     "REQUIRED": "{property} is required",
     "URL": "{property} must be a valid URL",
     "BOOLEAN": "{property} must be a checked or unchecked",

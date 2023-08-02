@@ -1,5 +1,10 @@
 import { OmitType } from '@nestjs/swagger';
 import { CustomUserRole } from '../../../database/entities';
+import {
+  DefaultSortTransformAndApi,
+  PaginationQueryParams,
+  Sort,
+} from '@saas-buildkit/common-types';
 
 export class CustomUserRoleWithoutPermissionsDto extends OmitType(
   CustomUserRole,
@@ -26,3 +31,8 @@ export class UpdateUserRole extends OmitType(CustomUserRole, [
   'createdAt',
   'updatedAt',
 ] as const) {}
+
+export class RolePaginationQueryParams extends PaginationQueryParams {
+  @DefaultSortTransformAndApi(['id'])
+  override sort: Sort[] = [];
+}
