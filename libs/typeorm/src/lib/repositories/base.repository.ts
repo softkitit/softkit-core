@@ -62,13 +62,13 @@ export abstract class BaseRepository<
   }
 
   async findAllPaginated(
-    where: FindOptionsWhere<ENTITY> = {},
+    where: FindOptionsWhere<ENTITY> | FindOptionsWhere<ENTITY>[] = {},
     page = 0,
     limit = 100,
     order: FindOptionsOrder<ENTITY> = {},
   ) {
     const options: FindManyOptions<ENTITY> = {
-      where: this.presetDefaultWhereOptions(where),
+      where,
       take: limit,
       skip: page * limit,
       order,

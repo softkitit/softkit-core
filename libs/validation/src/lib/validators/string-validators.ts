@@ -12,6 +12,8 @@ import {
   IsUUID,
   IsEnum,
   IsOptional,
+  Max,
+  Allow,
 } from 'class-validator';
 import ValidatorJS from 'validator';
 import { lowerCaseTransformer, toInteger } from '../transforms';
@@ -40,13 +42,17 @@ export const IsIntegerStringLocalized = ({
   max?: number;
 } = {}) => {
   const decorators = [
-    required ? undefined : IsOptional,
+    required ? Allow : IsOptional,
     Transform(toInteger),
-    min ? Min(min, { message: 'common.validation.MIN_INTEGER' }) : undefined,
-    max ? Min(max, { message: 'common.validation.MAX_INTEGER' }) : undefined,
-  ].filter((v) => v !== undefined) as PropertyDecorator[];
+    min === undefined
+      ? undefined
+      : Min(min, { message: 'common.validation.MIN_INTEGER' }),
+    max === undefined
+      ? undefined
+      : Max(max, { message: 'common.validation.MAX_INTEGER' }),
+  ].filter((v): v is PropertyDecorator => v !== undefined);
 
-  return applyDecorators(applyDecorators(...decorators));
+  return applyDecorators(...decorators);
 };
 
 export const IsNotEmptyLocalized = () =>

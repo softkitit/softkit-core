@@ -28,10 +28,16 @@ export class CustomUserRoleService extends BaseEntityService<
   @Transactional()
   async findDefaultAdminRole() {
     return await this.repository.findOne({
-      where: {
-        roleType: RoleType.ADMIN,
-        tenantId: IsNull(),
-      },
+      where: [
+        {
+          roleType: RoleType.ADMIN,
+          tenantId: IsNull(),
+        },
+        {
+          roleType: RoleType.ADMIN,
+          tenantId: IsNull(),
+        },
+      ],
     });
   }
 }

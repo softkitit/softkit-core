@@ -19,14 +19,17 @@ import {
   CustomUserRoleWithoutPermissionsDto,
   RolePaginationQueryParams,
   UpdateUserRole,
+  WhereConditionsUpdateUserRole,
 } from './vo/role.dto';
 import {
   ApiOkResponsePaginated,
   IdParamUUID,
   InfinityPaginationResultType,
+  transformConditionsToDbQuery,
   VersionNumberParam,
 } from '@saas-buildkit/common-types';
-import { Permissions } from '@saas-buildkit/auth';
+import { Permissions, SkipAuth } from '@saas-buildkit/auth';
+import { TYPE_ORM_TRANSFORMERS } from '@saas-buildkit/typeorm';
 
 @ApiTags('Roles')
 @Controller({
@@ -40,17 +43,24 @@ export class RolesController {
   ) {}
 
   @Get()
+  @SkipAuth()
   @ApiOkResponsePaginated(CustomUserRoleWithoutPermissionsDto)
-  @Permissions('platform.roles.read')
+  // @Permissions('platform.roles.read')
   async findAll(
     @Query()
     pagination: RolePaginationQueryParams,
   ): Promise<
     InfinityPaginationResultType<CustomUserRoleWithoutPermissionsDto>
   > {
+    const conditions =
+      transformConditionsToDbQuery<WhereConditionsUpdateUserRole>(
+        pagination.where,
+        TYPE_ORM_TRANSFORMERS,
+      );
+
     return this.customUserRoleService
       .findAll(
-        {},
+        conditions,
         pagination.page,
         pagination.size,
         pagination.toTypeOrmSortParams(),

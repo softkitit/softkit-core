@@ -3,7 +3,6 @@ import { Tree, readProjectConfiguration } from '@nx/devkit';
 import { controllerGenerator } from './generator';
 import { ControllerGeneratorSchema } from './schema';
 import { createTreeWithNestApplication } from '@nx/nest/src/generators/utils/testing';
-import { repositoryGenerator } from '../repository/generator';
 import { pascalCase } from 'change-case';
 
 describe('controller generator', () => {

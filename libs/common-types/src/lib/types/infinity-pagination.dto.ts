@@ -9,6 +9,7 @@ import { Transform } from 'class-transformer';
 import { TransformFnParams } from 'class-transformer/types/interfaces';
 import { ApiPropertySortFields } from '../swagger-decorators';
 import { applyDecorators } from '@nestjs/common';
+import { ConditionsArray } from './query.type';
 
 export class InfinityPaginationResultType<T> {
   @ApiProperty({ isArray: true, required: true })
@@ -27,10 +28,11 @@ export class InfinityPaginationResultType<T> {
   count!: number;
 }
 
-export class PaginationQueryParams {
+export class PaginationQueryParams<WHERE_CONDITION> {
+  where: ConditionsArray<WHERE_CONDITION> = [];
+
   @ApiProperty({
-    description:
-      'Page number to be returned. Starts from 0. If not provided, default value is 0',
+    description: 'Page number to be returned. Starts from 0.',
     required: false,
     default: 0,
     minimum: 0,
@@ -42,8 +44,7 @@ export class PaginationQueryParams {
   page = 0;
 
   @ApiProperty({
-    description:
-      'Page size to be returned. If not provided, default value is 20',
+    description: 'Page size to be returned.',
     required: false,
     minimum: 1,
     default: 20,
@@ -80,7 +81,9 @@ export class PaginationQueryParams {
   }
 }
 
-export function DefaultSortTransformAndApi(fields?: string[]) {
+export function DefaultSortTransformAndSwaggerApi<T>(
+  fields?: Extract<keyof T, string>[],
+) {
   return applyDecorators(
     Transform((value: TransformFnParams) => {
       return toObjectsArrayFromString<Sort>(

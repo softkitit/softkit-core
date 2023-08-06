@@ -69,7 +69,7 @@ export class BaseEntityService<
 
   @Transactional()
   async findAll(
-    where: FindOptionsWhere<ENTITY> = {},
+    where: FindOptionsWhere<ENTITY> | FindOptionsWhere<ENTITY>[] = {},
     page = 0,
     limit = 20,
     sort?: FindOptionsOrder<ENTITY>,

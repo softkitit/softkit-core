@@ -7,6 +7,8 @@ export type I18nTranslations = {
             "NOT_EMPTY": string;
             "STRING": string;
             "NUMBER": string;
+            "STRING_ENUM": string;
+            "DOESNT_MATCH_FORMAT": string;
             "MIN_INTEGER": string;
             "MAX_INTEGER": string;
             "REQUIRED": string;
