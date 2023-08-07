@@ -2,6 +2,12 @@
   "extends": [
     "../../.eslintrc.base.json"
   ],
+  "parserOptions": {
+    "project": [
+      "./libs/logger/tsconfig.lib.json",
+      "./libs/logger/tsconfig.spec.json"
+    ]
+  },
   "ignorePatterns": [
     "!**/*"
   ],

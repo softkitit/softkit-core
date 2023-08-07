@@ -2,6 +2,12 @@
   "extends": [
     "../../.eslintrc.base.json"
   ],
+  "parserOptions": {
+    "project": [
+      "./libs/crypto/tsconfig.lib.json",
+      "./libs/crypto/tsconfig.spec.json"
+    ]
+  },
   "ignorePatterns": [
     "!**/*"
   ],

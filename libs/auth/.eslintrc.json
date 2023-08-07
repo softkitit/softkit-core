@@ -2,6 +2,12 @@
   "extends": [
     "../../.eslintrc.base.json"
   ],
+  "parserOptions": {
+    "project": [
+      "./libs/auth/tsconfig.lib.json",
+      "./libs/auth/tsconfig.spec.json"
+    ]
+  },
   "ignorePatterns": [
     "!**/*"
   ],

@@ -2,6 +2,12 @@
   "extends": [
     "../../.eslintrc.base.json"
   ],
+  "parserOptions": {
+    "project": [
+      "./libs/exceptions/tsconfig.lib.json",
+      "./libs/exceptions/tsconfig.spec.json"
+    ]
+  },
   "ignorePatterns": [
     "!**/*"
   ],

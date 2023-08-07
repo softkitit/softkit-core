@@ -5,6 +5,12 @@
   "ignorePatterns": [
     "!**/*"
   ],
+  "parserOptions": {
+    "project": [
+      "./libs/i18n/tsconfig.lib.json",
+      "./libs/i18n/tsconfig.spec.json"
+    ]
+  },
   "overrides": [
     {
       "files": [

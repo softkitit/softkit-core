@@ -1,7 +1,7 @@
 module.exports = {
   root: true,
   ignorePatterns: ['**/*', '*.generated.ts'],
-  // parser: '@typescript-eslint/parser',
+  parser: '@typescript-eslint/parser',
   plugins: [
     '@nx',
     '@typescript-eslint/eslint-plugin',
@@ -25,9 +25,6 @@ module.exports = {
       files: ['*.ts', '*.tsx', '*.js', '*.jsx'],
       rules: {
         'unused-imports/no-unused-imports': 'error',
-        // '@typescript-eslint/strict-boolean-expressions': [
-        //   'error'
-        // ],
         'unused-imports/no-unused-vars': [
           'warn',
           {
@@ -108,7 +105,6 @@ module.exports = {
         '*.spec.tsx',
         '*.spec.js',
         '*.spec.jsx',
-        '*-seed*.ts',
       ],
       env: {
         jest: true,
