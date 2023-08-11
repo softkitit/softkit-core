@@ -1,9 +1,10 @@
 import { BaseEntityHelper } from './entity-helper';
 import { Column, Index } from 'typeorm';
 import { ClsPresetDecorator } from '../subscribers/decorator/cls-preset.decorator';
+import { TenantClsStore } from '../vo/tenant-base-cls-store';
 
 export class BaseTenantEntityHelper extends BaseEntityHelper {
-  @ClsPresetDecorator<{ tenantId: string }>({
+  @ClsPresetDecorator<TenantClsStore>({
     clsPropertyFieldName: 'tenantId',
   })
   @Column({ nullable: false })

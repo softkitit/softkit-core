@@ -6,10 +6,8 @@ import {
   WhereOperation,
   OneValueCondition,
   ManyValuesCondition,
-  TwoValueCondition,
 } from '@saas-buildkit/common-types';
 import {
-  Between,
   ILike,
   In,
   IsNull,
@@ -22,21 +20,7 @@ import {
 } from 'typeorm';
 
 const TYPE_ORM_TRANSFORMERS: WhereOperationTransformer = {
-  [WhereOperation.BETWEEN]: {
-    class: ['TwoValueCondition'],
-    toDbCondition: <T, V extends Extract<keyof T, string>>(
-      condition: Condition<T, V>,
-    ) => {
-      return {
-        [condition.field as string]: Between<T[V]>(
-          (condition as TwoValueCondition<T, V>).value,
-          (condition as TwoValueCondition<T, V>).secondValue,
-        ),
-      };
-    },
-  },
   [WhereOperation.GREATER_THAN]: {
-    class: ['OneValueCondition'],
     toDbCondition: <T, V extends Extract<keyof T, string>>(
       condition: Condition<T, V>,
     ) => {
@@ -48,7 +32,6 @@ const TYPE_ORM_TRANSFORMERS: WhereOperationTransformer = {
     },
   },
   [WhereOperation.GREATER_THAN_OR_EQUAL]: {
-    class: ['OneValueCondition'],
     toDbCondition: <T, V extends Extract<keyof T, string>>(
       condition: Condition<T, V>,
     ) => {
@@ -60,7 +43,6 @@ const TYPE_ORM_TRANSFORMERS: WhereOperationTransformer = {
     },
   },
   [WhereOperation.ILIKE]: {
-    class: ['OneValueCondition'],
     toDbCondition: <T, V extends Extract<keyof T, string>>(
       condition: Condition<T, V>,
     ) => {
@@ -72,7 +54,6 @@ const TYPE_ORM_TRANSFORMERS: WhereOperationTransformer = {
     },
   },
   [WhereOperation.ILIKE_END_WITH]: {
-    class: ['OneValueCondition'],
     toDbCondition: <T, V extends Extract<keyof T, string>>(
       condition: Condition<T, V>,
     ) => {
@@ -84,7 +65,6 @@ const TYPE_ORM_TRANSFORMERS: WhereOperationTransformer = {
     },
   },
   [WhereOperation.ILIKE_START_WITH]: {
-    class: ['OneValueCondition'],
     toDbCondition: <T, V extends Extract<keyof T, string>>(
       condition: Condition<T, V>,
     ) => {
@@ -96,7 +76,6 @@ const TYPE_ORM_TRANSFORMERS: WhereOperationTransformer = {
     },
   },
   [WhereOperation.IN]: {
-    class: ['ManyValuesCondition'],
     toDbCondition: <T, V extends Extract<keyof T, string>>(
       condition: Condition<T, V>,
     ) => {
@@ -108,7 +87,6 @@ const TYPE_ORM_TRANSFORMERS: WhereOperationTransformer = {
     },
   },
   [WhereOperation.IS_EMPTY]: {
-    class: ['NoValueCondition'],
     toDbCondition: <T, V extends Extract<keyof T, string>>(
       condition: Condition<T, V>,
     ) => {
@@ -118,7 +96,6 @@ const TYPE_ORM_TRANSFORMERS: WhereOperationTransformer = {
     },
   },
   [WhereOperation.IS_NOT_EMPTY]: {
-    class: ['NoValueCondition'],
     toDbCondition: <T, V extends Extract<keyof T, string>>(
       condition: Condition<T, V>,
     ) => {
@@ -128,7 +105,6 @@ const TYPE_ORM_TRANSFORMERS: WhereOperationTransformer = {
     },
   },
   [WhereOperation.IS_NOT_NULL]: {
-    class: ['NoValueCondition'],
     toDbCondition: <T, V extends Extract<keyof T, string>>(
       condition: Condition<T, V>,
     ) => {
@@ -138,7 +114,6 @@ const TYPE_ORM_TRANSFORMERS: WhereOperationTransformer = {
     },
   },
   [WhereOperation.IS_NULL]: {
-    class: ['NoValueCondition'],
     toDbCondition: <T, V extends Extract<keyof T, string>>(
       condition: Condition<T, V>,
     ) => {
@@ -148,7 +123,6 @@ const TYPE_ORM_TRANSFORMERS: WhereOperationTransformer = {
     },
   },
   [WhereOperation.LESS_THAN]: {
-    class: ['OneValueCondition'],
     toDbCondition: <T, V extends Extract<keyof T, string>>(
       condition: Condition<T, V>,
     ) => {
@@ -160,7 +134,6 @@ const TYPE_ORM_TRANSFORMERS: WhereOperationTransformer = {
     },
   },
   [WhereOperation.LESS_THAN_OR_EQUAL]: {
-    class: ['OneValueCondition'],
     toDbCondition: <T, V extends Extract<keyof T, string>>(
       condition: Condition<T, V>,
     ) => {
@@ -172,7 +145,6 @@ const TYPE_ORM_TRANSFORMERS: WhereOperationTransformer = {
     },
   },
   [WhereOperation.LIKE]: {
-    class: ['OneValueCondition'],
     toDbCondition: <T, V extends Extract<keyof T, string>>(
       condition: Condition<T, V>,
     ) => {
@@ -184,7 +156,6 @@ const TYPE_ORM_TRANSFORMERS: WhereOperationTransformer = {
     },
   },
   [WhereOperation.LIKE_END_WITH]: {
-    class: ['OneValueCondition'],
     toDbCondition: <T, V extends Extract<keyof T, string>>(
       condition: Condition<T, V>,
     ) => {
@@ -196,7 +167,6 @@ const TYPE_ORM_TRANSFORMERS: WhereOperationTransformer = {
     },
   },
   [WhereOperation.LIKE_START_WITH]: {
-    class: ['OneValueCondition'],
     toDbCondition: <T, V extends Extract<keyof T, string>>(
       condition: Condition<T, V>,
     ) => {
@@ -208,7 +178,6 @@ const TYPE_ORM_TRANSFORMERS: WhereOperationTransformer = {
     },
   },
   [WhereOperation.NOT_EQUALS]: {
-    class: ['OneValueCondition'],
     toDbCondition: <T, V extends Extract<keyof T, string>>(
       condition: Condition<T, V>,
     ) => {
@@ -220,7 +189,6 @@ const TYPE_ORM_TRANSFORMERS: WhereOperationTransformer = {
     },
   },
   [WhereOperation.NOT_IN]: {
-    class: ['ManyValuesCondition'],
     toDbCondition: <T, V extends Extract<keyof T, string>>(
       condition: Condition<T, V>,
     ) => {
@@ -232,7 +200,6 @@ const TYPE_ORM_TRANSFORMERS: WhereOperationTransformer = {
     },
   },
   [WhereOperation.EQUALS]: {
-    class: ['OneValueCondition'],
     toDbCondition: <T, V extends Extract<keyof T, string>>(
       condition: Condition<T, V>,
     ) => {

@@ -110,6 +110,7 @@ module.exports = {
         jest: true,
       },
       rules: {
+        'security/detect-object-injection': 'off',
         'sonarjs/no-duplicate-string': 'off',
         '@typescript-eslint/no-unsafe-assignment': 'off',
         '@typescript-eslint/no-unsafe-argument': 'off',

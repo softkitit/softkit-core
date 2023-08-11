@@ -1,50 +1,37 @@
 import { plainToClass, TransformFnParams } from 'class-transformer';
 import { BadRequestException } from '@nestjs/common';
 
-import { ClassConstructor } from 'class-transformer/types/interfaces';
 import { I18nValidationException } from 'nestjs-i18n/dist/interfaces/i18n-validation-error.interface';
 import { IS_ENUM, isEnum, ValidationError } from 'class-validator';
 import {
+  Condition,
   ConditionsArray,
   doesConditionMatchOperation,
   ManyValuesCondition,
   NoValueCondition,
   OneValueCondition,
-  TwoValueCondition,
+  WHERE_OPERATIONS_UTILS,
   WhereOperation,
-} from './query.type';
-import { Condition } from 'typeorm';
+  WhereOperationTransformer,
+} from '../types/query.type';
 
 function retrieveValuesForValidationAndInstance<OBJECT_TYPE>(
-  cnd:
-    | NoValueCondition<
-        keyof OBJECT_TYPE extends string
-          ? Extract<keyof OBJECT_TYPE, string>
-          : never
-      >
-    | OneValueCondition<
-        OBJECT_TYPE,
-        keyof OBJECT_TYPE extends string ? keyof OBJECT_TYPE : never
-      >
-    | TwoValueCondition<
-        OBJECT_TYPE,
-        keyof OBJECT_TYPE extends string ? keyof OBJECT_TYPE : never
-      >
-    | ManyValuesCondition<
-        OBJECT_TYPE,
-        keyof OBJECT_TYPE extends string ? keyof OBJECT_TYPE : never
-      >
-    | { [key: string]: unknown },
+  cnd: Condition<
+    OBJECT_TYPE,
+    keyof OBJECT_TYPE extends string
+      ? Extract<keyof OBJECT_TYPE, string>
+      : never
+  >,
 ): {
   values: unknown[];
-  instance: Condition<OBJECT_TYPE>;
+  instance: Condition<
+    OBJECT_TYPE,
+    keyof OBJECT_TYPE extends string
+      ? Extract<keyof OBJECT_TYPE, string>
+      : never
+  >;
 } {
-  if ('value' in cnd && 'secondValue' in cnd) {
-    return {
-      values: [cnd.value, cnd.secondValue],
-      instance: plainToClass(TwoValueCondition, cnd),
-    };
-  } else if ('value' in cnd) {
+  if ('value' in cnd) {
     return {
       values: [cnd.value],
       instance: plainToClass(OneValueCondition, cnd),
@@ -56,7 +43,7 @@ function retrieveValuesForValidationAndInstance<OBJECT_TYPE>(
       values: values as [],
       instance: plainToClass(ManyValuesCondition, cnd),
     };
-  } else if ('fieldName' in cnd && 'operation' in cnd) {
+  } else if ('field' in cnd && 'op' in cnd) {
     return {
       values: [],
       instance: plainToClass(
@@ -92,7 +79,15 @@ function buildValidationError(
 }
 
 function validateValues<OBJECT_TYPE>(
-  valuesParsed: { values: unknown[]; instance: Condition<OBJECT_TYPE> },
+  valuesParsed: {
+    values: unknown[];
+    instance: Condition<
+      OBJECT_TYPE,
+      keyof OBJECT_TYPE extends string
+        ? Extract<keyof OBJECT_TYPE, string>
+        : never
+    >;
+  },
   validators: {
     validator: (any: unknown) => boolean;
     validatorName: string;
@@ -119,12 +114,10 @@ function validateValues<OBJECT_TYPE>(
 }
 
 // eslint-disable-next-line complexity
-export const whereConditionFromQueryParams = <OBJECT_TYPE extends object>(
+export const buildWhereConditionFromQueryParams = <OBJECT_TYPE extends object>(
   params: TransformFnParams,
-  classConstructor: ClassConstructor<OBJECT_TYPE>,
   fieldsValidatorsDefinitions: {
     [key in Extract<keyof OBJECT_TYPE, string>]: {
-      // eslint-disable-next-line @typescript-eslint/ban-types
       validator: (any: unknown) => boolean;
       validatorName: string;
       constraints?: unknown[];
@@ -219,3 +212,30 @@ export const whereConditionFromQueryParams = <OBJECT_TYPE extends object>(
     validation.map((v) => v.instance),
   ) as ConditionsArray<OBJECT_TYPE>;
 };
+
+export function transformConditionsToDbQuery<T>(
+  conditions: ConditionsArray<T>,
+  transformer: WhereOperationTransformer,
+): { [key: string]: unknown }[] {
+  return conditions.map((cnds) => {
+    // eslint-disable-next-line unicorn/no-array-reduce
+    return cnds.reduce(
+      (acc, cnd) => {
+        const { toDbCondition } = transformer[cnd.op];
+        const classes = WHERE_OPERATIONS_UTILS[cnd.op].conditionClasses;
+
+        const condition = cnd as Condition<T, Extract<keyof T, string>>;
+
+        if ((classes as string[]).includes(condition.constructor.name)) {
+          acc[condition.field] = toDbCondition(condition);
+          return acc;
+        } else {
+          throw new BadRequestException(
+            'common.validation.OPERATION_CONDITION_DOESNT_MATCH',
+          );
+        }
+      },
+      {} as { [key: string]: unknown },
+    );
+  });
+}

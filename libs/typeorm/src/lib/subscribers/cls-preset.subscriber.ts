@@ -47,6 +47,7 @@ export class ClsPresetSubscriber<ClsStoreType extends TenantClsStore>
     presetType: PresetType,
   ) {
     const topLevelEntity = inheritanceTree[0].name;
+    // todo check for bunch of entities
     const allEntities = inheritanceTree.map((e) => e.name);
 
     const metadataFields =

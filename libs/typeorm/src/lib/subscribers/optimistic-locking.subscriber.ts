@@ -17,8 +17,10 @@ export class OptimisticLockingSubscriber implements EntitySubscriberInterface {
     // To know if an entity has a version number, we check if versionColumn
     // is defined in the metadata of that entity.
     // event.databaseEntity doesn't work for update method
+
     if (event.metadata.versionColumn && event.entity && event.databaseEntity) {
       // Getting the current version of the requested entity update
+
       const versionFromUpdate = Reflect.get(
         event.entity,
         event.metadata.versionColumn.propertyName,

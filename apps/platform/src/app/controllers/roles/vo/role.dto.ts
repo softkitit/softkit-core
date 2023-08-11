@@ -6,7 +6,7 @@ import {
   PaginationQueryParams,
   Sort,
 } from '@saas-buildkit/common-types';
-import { whereConditionFromQueryParams } from '@saas-buildkit/common-types';
+import { buildWhereConditionFromQueryParams } from '@saas-buildkit/common-types';
 import { Transform } from 'class-transformer';
 import { Allow, IS_DATE, isDateString } from 'class-validator';
 
@@ -48,9 +48,8 @@ export class RolePaginationQueryParams extends PaginationQueryParams<WhereCondit
     type: String,
   })
   @Transform((value) => {
-    return whereConditionFromQueryParams<WhereConditionsUpdateUserRole>(
+    return buildWhereConditionFromQueryParams<WhereConditionsUpdateUserRole>(
       value,
-      WhereConditionsUpdateUserRole,
       {
         createdAt: [
           {
