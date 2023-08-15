@@ -1,5 +1,4 @@
 import { plainToClass, TransformFnParams } from 'class-transformer';
-import { BadRequestException } from '@nestjs/common';
 
 import { I18nValidationException } from '@saas-buildkit/nestjs-i18n/dist/interfaces/i18n-validation-error.interface';
 import { ValidationError } from 'class-validator';
@@ -14,11 +13,23 @@ import {
   WhereOperationTransformer,
 } from '../types/query.type';
 import {
+  IsArrayValidatorDefinition,
   IsEnumValidatorDefinition,
+  IsObjectValidatorDefinition,
   IValidatorDefinition,
   throwValidationException,
   validateAndReturnError,
 } from '@saas-buildkit/validation';
+
+export type ConditionWithValues<OBJECT_TYPE> = {
+  values: unknown[];
+  instance?: Condition<
+    OBJECT_TYPE,
+    keyof OBJECT_TYPE extends string
+      ? Extract<keyof OBJECT_TYPE, string>
+      : never
+  >;
+};
 
 function retrieveValuesForValidationAndInstance<OBJECT_TYPE>(
   cnd: Condition<
@@ -27,15 +38,7 @@ function retrieveValuesForValidationAndInstance<OBJECT_TYPE>(
       ? Extract<keyof OBJECT_TYPE, string>
       : never
   >,
-): {
-  values: unknown[];
-  instance: Condition<
-    OBJECT_TYPE,
-    keyof OBJECT_TYPE extends string
-      ? Extract<keyof OBJECT_TYPE, string>
-      : never
-  >;
-} {
+): ConditionWithValues<OBJECT_TYPE> {
   if ('value' in cnd) {
     return {
       values: [cnd.value],
@@ -57,24 +60,16 @@ function retrieveValuesForValidationAndInstance<OBJECT_TYPE>(
       ) as unknown as NoValueCondition<Extract<keyof OBJECT_TYPE, string>>,
     };
   } else {
-    // todo fix exception
-    throw new BadRequestException(
-      'common.validation.INTERNAL_SHOULD_BE_OBJECT',
-    );
+    return {
+      values: [],
+      instance: undefined,
+    };
   }
 }
 
 function validateValues<OBJECT_TYPE>(
   fieldName: string,
-  valuesParsed: {
-    values: unknown[];
-    instance: Condition<
-      OBJECT_TYPE,
-      keyof OBJECT_TYPE extends string
-        ? Extract<keyof OBJECT_TYPE, string>
-        : never
-    >;
-  },
+  valuesParsed: ConditionWithValues<OBJECT_TYPE>,
   validators: {
     definition: IValidatorDefinition<unknown, unknown>;
     constraint?: unknown;
@@ -114,10 +109,10 @@ export const buildWhereConditionFromQueryParams = <OBJECT_TYPE extends object>(
 
   const whereConditionsParsed = JSON.parse(value);
 
-  if (!Array.isArray(whereConditionsParsed)) {
-    // todo replace with custom exception
-    throw new BadRequestException('common.validation.SHOULD_BE_ARRAY');
-  }
+  throwValidationException(IsArrayValidatorDefinition, {
+    key: params.key,
+    value: value,
+  });
 
   if (whereConditionsParsed.length === 0) {
     return [];
@@ -138,12 +133,10 @@ export const buildWhereConditionFromQueryParams = <OBJECT_TYPE extends object>(
 
   const allValidations = whereConditions.map((conditionsGroup) => {
     return conditionsGroup.map((cnd) => {
-      if (typeof cnd !== 'object') {
-        // todo replace with custom exception
-        throw new BadRequestException(
-          'common.validation.INTERNAL_SHOULD_BE_OBJECT',
-        );
-      }
+      throwValidationException(IsObjectValidatorDefinition, {
+        key: params.key,
+        value: cnd,
+      });
 
       const fieldName = cnd.field as string;
 
@@ -180,7 +173,7 @@ export const buildWhereConditionFromQueryParams = <OBJECT_TYPE extends object>(
         IsEnumValidatorDefinition,
         {
           key: 'operation',
-          value: valuesParsed.instance.constructor.name,
+          value: valuesParsed?.instance?.constructor?.name,
         },
         conditionMatchOperation,
       );
