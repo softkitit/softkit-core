@@ -15,6 +15,7 @@ import {
 import {
   IsArrayValidatorDefinition,
   IsEnumValidatorDefinition,
+  IsJSONValidatorDefinition,
   IsObjectValidatorDefinition,
   IValidatorDefinition,
   throwValidationException,
@@ -107,6 +108,14 @@ export const buildWhereConditionFromQueryParams = <OBJECT_TYPE extends object>(
     return [];
   }
 
+  throwValidationException(IsJSONValidatorDefinition, {
+    key: params.key,
+    value: value,
+  });
+
+  /**
+   * above check do use JSON.parse internally so it safe to use it here
+   * */
   const whereConditionsParsed = JSON.parse(value);
 
   throwValidationException(IsArrayValidatorDefinition, {

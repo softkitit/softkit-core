@@ -1,6 +1,7 @@
 export * from './enum.validator';
 export * from './is-array.validator';
 export * from './is-boolean.validator';
+export * from './is-json.validator';
 export * from './is-max.validator';
 export * from './is-min.validator';
 export * from './is-not-empty.validator';
