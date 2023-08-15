@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
-  IsIntegerStringLocalized,
+  IsIntegerStringCombinedLocalized,
   IsStringEnumLocalized,
   toObjectsArrayFromString,
 } from '@saas-buildkit/validation';
@@ -38,7 +38,7 @@ export class PaginationQueryParams<WHERE_CONDITION> {
     minimum: 0,
     type: Number,
   })
-  @IsIntegerStringLocalized({
+  @IsIntegerStringCombinedLocalized({
     min: 0,
   })
   page = 0;
@@ -51,7 +51,7 @@ export class PaginationQueryParams<WHERE_CONDITION> {
     maximum: 100,
     type: Number,
   })
-  @IsIntegerStringLocalized({
+  @IsIntegerStringCombinedLocalized({
     min: 1,
     max: 100,
   })
@@ -82,7 +82,7 @@ export class PaginationQueryParams<WHERE_CONDITION> {
 }
 
 export function DefaultSortTransformAndSwaggerApi<T>(
-  fields?: Extract<keyof T, string>[],
+  fields: Extract<keyof T, string>[],
 ) {
   return applyDecorators(
     Transform((value: TransformFnParams) => {

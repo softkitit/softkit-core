@@ -3,7 +3,7 @@ import { HttpStatus } from '@nestjs/common';
 import { NestFastifyApplication } from '@nestjs/platform-fastify';
 import { Test, TestingModule } from '@nestjs/testing';
 import { fileLoader } from 'nest-typed-config';
-import { I18nValidationException } from 'nestjs-i18n/dist/interfaces/i18n-validation-error.interface';
+import { I18nValidationException } from '@saas-buildkit/nestjs-i18n/dist/interfaces/i18n-validation-error.interface';
 import * as path from 'node:path';
 import { wrapInTransaction } from 'typeorm-transactional';
 import {

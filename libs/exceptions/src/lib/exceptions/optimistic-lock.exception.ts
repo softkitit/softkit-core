@@ -1,6 +1,7 @@
 import { HttpStatus } from '@nestjs/common';
 import { AbstractHttpException } from './abstract-http.exception';
 
+/** todo implement swagger definition for this exception*/
 export class OptimisticLockException extends AbstractHttpException {
   constructor(
     public readonly currentVersion: number,

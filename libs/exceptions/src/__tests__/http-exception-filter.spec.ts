@@ -12,6 +12,7 @@ import {
 import { Test } from '@nestjs/testing';
 import {
   AnyExceptionFilter,
+  ErrorResponse,
   FailedToCreateEntityException,
   GeneralForbiddenException,
   GeneralInternalServerException,
@@ -24,7 +25,6 @@ import {
   OverrideDefaultForbiddenExceptionFilter,
   OverrideDefaultNotFoundFilter,
 } from '../';
-import { ErrorResponse } from '@saas-buildkit/common-types';
 
 describe('http exception filter e2e test', () => {
   let app: NestFastifyApplication;

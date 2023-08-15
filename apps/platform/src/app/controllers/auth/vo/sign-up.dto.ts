@@ -1,6 +1,6 @@
 import {
   IsEmailLocalized,
-  IsRequiredStringLocalized,
+  IsStringCombinedLocalized,
   MatchesWithProperty,
   PasswordLocalized,
 } from '@saas-buildkit/validation';
@@ -16,7 +16,7 @@ export class CreateUserRequest {
   /**
    * Original password
    * */
-  @IsRequiredStringLocalized()
+  @IsStringCombinedLocalized()
   @PasswordLocalized()
   password!: string;
 
@@ -27,16 +27,16 @@ export class CreateUserRequest {
   @MatchesWithProperty(CreateUserRequest, (s) => s.password, {
     message: 'validation.REPEAT_PASSWORD_DOESNT_MATCH',
   })
-  @IsRequiredStringLocalized()
+  @IsStringCombinedLocalized()
   repeatedPassword!: string;
 
-  @IsRequiredStringLocalized({ maxLength: 256 })
+  @IsStringCombinedLocalized({ maxLength: 256 })
   firstName!: string;
 
-  @IsRequiredStringLocalized({ maxLength: 256 })
+  @IsStringCombinedLocalized({ maxLength: 256 })
   lastName!: string;
 
-  @IsRequiredStringLocalized({ maxLength: 256 })
+  @IsStringCombinedLocalized({ maxLength: 256 })
   companyName!: string;
 }
 
@@ -51,17 +51,17 @@ export class SignInRequest {
   /**
    * @example absD123k&
    * */
-  @IsRequiredStringLocalized()
+  @IsStringCombinedLocalized()
   @PasswordLocalized()
   password!: string;
 }
 
 export class ApproveSignUpRequest {
-  @IsRequiredStringLocalized()
+  @IsStringCombinedLocalized()
   // todo uuid validation
   approvalId!: string;
 
-  @IsRequiredStringLocalized({ minLength: 6, maxLength: 6 })
+  @IsStringCombinedLocalized({ minLength: 6, maxLength: 6 })
   code!: string;
 }
 

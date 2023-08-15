@@ -121,12 +121,7 @@ export class ManyValuesCondition<
   values!: OBJECT[K][];
 }
 
-export function doesConditionMatchOperation(
-  operation: WhereOperation,
-  constructorName: string,
-) {
+export function getAvailableConditionsByOperations(operation: WhereOperation) {
   // eslint-disable-next-line security/detect-object-injection
-  return WHERE_OPERATIONS_UTILS[operation].conditionClasses.includes(
-    constructorName as ConditionClassName,
-  );
+  return WHERE_OPERATIONS_UTILS[operation].conditionClasses;
 }

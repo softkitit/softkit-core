@@ -1,22 +1,22 @@
-import { IsRequiredStringLocalized } from '@saas-buildkit/validation';
+import { IsStringCombinedLocalized } from '@saas-buildkit/validation';
 
 export class IdpMappingDto {
-  @IsRequiredStringLocalized({
+  @IsStringCombinedLocalized({
     minLength: 1,
     maxLength: 512,
   })
   firstName!: string;
-  @IsRequiredStringLocalized({
+  @IsStringCombinedLocalized({
     minLength: 1,
     maxLength: 512,
   })
   lastName!: string;
-  @IsRequiredStringLocalized({
+  @IsStringCombinedLocalized({
     minLength: 1,
     maxLength: 512,
   })
   email!: string;
-  @IsRequiredStringLocalized({
+  @IsStringCombinedLocalized({
     minLength: 1,
     maxLength: 512,
   })

@@ -1,19 +1,24 @@
 import { plainToClass, TransformFnParams } from 'class-transformer';
 import { BadRequestException } from '@nestjs/common';
 
-import { I18nValidationException } from 'nestjs-i18n/dist/interfaces/i18n-validation-error.interface';
-import { IS_ENUM, isEnum, ValidationError } from 'class-validator';
+import { I18nValidationException } from '@saas-buildkit/nestjs-i18n/dist/interfaces/i18n-validation-error.interface';
+import { ValidationError } from 'class-validator';
 import {
   Condition,
   ConditionsArray,
-  doesConditionMatchOperation,
+  getAvailableConditionsByOperations,
   ManyValuesCondition,
   NoValueCondition,
   OneValueCondition,
-  WHERE_OPERATIONS_UTILS,
   WhereOperation,
   WhereOperationTransformer,
 } from '../types/query.type';
+import {
+  IsEnumValidatorDefinition,
+  IValidatorDefinition,
+  throwValidationException,
+  validateAndReturnError,
+} from '@saas-buildkit/validation';
 
 function retrieveValuesForValidationAndInstance<OBJECT_TYPE>(
   cnd: Condition<
@@ -59,26 +64,8 @@ function retrieveValuesForValidationAndInstance<OBJECT_TYPE>(
   }
 }
 
-function buildValidationError(
-  value: unknown,
-  fieldName: string,
-  validator: {
-    validator: (any: unknown) => boolean;
-    validatorName: string;
-    constraints?: unknown[];
-    errorMessage: string;
-  },
-) {
-  const validationError = new ValidationError();
-  validationError.value = value;
-  validationError.property = fieldName;
-  validationError.constraints = {
-    [validator.validatorName]: validator.errorMessage,
-  };
-  return validationError;
-}
-
 function validateValues<OBJECT_TYPE>(
+  fieldName: string,
   valuesParsed: {
     values: unknown[];
     instance: Condition<
@@ -89,25 +76,21 @@ function validateValues<OBJECT_TYPE>(
     >;
   },
   validators: {
-    validator: (any: unknown) => boolean;
-    validatorName: string;
-    constraints?: unknown[];
-    errorMessage: string;
+    definition: IValidatorDefinition<unknown, unknown>;
+    constraint?: unknown;
   }[],
-  fieldName: string,
 ) {
   return valuesParsed.values.flatMap((value) => {
     //   validate each value using validators
     //   if any of them is invalid throw exception
     return validators
       .map((validator) => {
-        const valid = validator.validator(value);
-
-        if (!valid) {
-          return buildValidationError(value, fieldName, validator);
-        }
-        // eslint-disable-next-line unicorn/no-useless-undefined
-        return undefined;
+        return validateAndReturnError(
+          validator.definition,
+          fieldName,
+          value,
+          validator.constraint,
+        );
       })
       .filter((error): error is ValidationError => error !== undefined);
   });
@@ -118,10 +101,8 @@ export const buildWhereConditionFromQueryParams = <OBJECT_TYPE extends object>(
   params: TransformFnParams,
   fieldsValidatorsDefinitions: {
     [key in Extract<keyof OBJECT_TYPE, string>]: {
-      validator: (any: unknown) => boolean;
-      validatorName: string;
-      constraints?: unknown[];
-      errorMessage: string;
+      definition: IValidatorDefinition<unknown, unknown>;
+      constraint?: unknown;
     }[];
   },
 ): ConditionsArray<OBJECT_TYPE> => {
@@ -171,27 +152,40 @@ export const buildWhereConditionFromQueryParams = <OBJECT_TYPE extends object>(
           fieldName as Extract<keyof OBJECT_TYPE, string>
         ];
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const isWhereOperation = {
-        valid: isEnum(cnd.op, WhereOperation),
-        validatorName: IS_ENUM,
-      };
+      throwValidationException(
+        IsEnumValidatorDefinition,
+        {
+          key: 'op',
+          value: cnd.op,
+        },
+        WhereOperation,
+      );
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const isFieldNameAvailable = {
-        valid: isEnum(fieldName, Object.keys(fieldsValidatorsDefinitions)),
-        validatorName: IS_ENUM,
-      };
+      throwValidationException(
+        IsEnumValidatorDefinition,
+        {
+          key: 'field',
+          value: fieldName,
+        },
+        Object.keys(fieldsValidatorsDefinitions),
+      );
 
       const valuesParsed = retrieveValuesForValidationAndInstance(cnd);
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const conditionMatchOperation = doesConditionMatchOperation(
+      const conditionMatchOperation = getAvailableConditionsByOperations(
         cnd.op,
-        valuesParsed.instance.constructor.name,
       );
 
-      const allErrors = validateValues(valuesParsed, validators, fieldName);
+      throwValidationException(
+        IsEnumValidatorDefinition,
+        {
+          key: 'operation',
+          value: valuesParsed.instance.constructor.name,
+        },
+        conditionMatchOperation,
+      );
+
+      const allErrors = validateValues(fieldName, valuesParsed, validators);
 
       return {
         errors: allErrors,
@@ -222,18 +216,10 @@ export function transformConditionsToDbQuery<T>(
     return cnds.reduce(
       (acc, cnd) => {
         const { toDbCondition } = transformer[cnd.op];
-        const classes = WHERE_OPERATIONS_UTILS[cnd.op].conditionClasses;
-
         const condition = cnd as Condition<T, Extract<keyof T, string>>;
 
-        if ((classes as string[]).includes(condition.constructor.name)) {
-          acc[condition.field] = toDbCondition(condition);
-          return acc;
-        } else {
-          throw new BadRequestException(
-            'common.validation.OPERATION_CONDITION_DOESNT_MATCH',
-          );
-        }
+        acc[condition.field] = toDbCondition(condition);
+        return acc;
       },
       {} as { [key: string]: unknown },
     );

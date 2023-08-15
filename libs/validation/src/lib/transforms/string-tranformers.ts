@@ -1,8 +1,9 @@
 import { plainToClass, TransformFnParams } from 'class-transformer';
-import { BadRequestException } from '@nestjs/common';
 import { ClassConstructor } from 'class-transformer/types/interfaces';
+import { IsEnumValidatorDefinition } from '../validators/primitives';
+import { validateAndThrow } from '../validators/primitives/utils/validator-definition.utils';
 
-export const lowerCaseTransformer = (
+export const trimAndLowercaseTransformer = (
   params: TransformFnParams,
 ): string | undefined => params.value?.toLowerCase().trim();
 
@@ -13,25 +14,14 @@ export const toInteger = (params: TransformFnParams): number | undefined => {
     return undefined;
   }
 
-  if (typeof value !== 'string' || value.length === 0) {
-    // todo replace with custom exception
-    throw new BadRequestException('common.validation.INTEGER');
-  }
-
-  // Check if the value is a valid integer
-  if (/^-?(?!0\d)\d+$/.test(value)) {
-    return Number.parseInt(value, 10);
-  } else {
-    // todo replace with custom exception
-    throw new BadRequestException('common.validation.INTEGER');
-  }
+  return Number.parseInt(value, 10);
 };
 
 export const toObjectsArrayFromString = <T>(
   params: TransformFnParams,
   keys: Array<keyof T>,
   constr: ClassConstructor<T>,
-  keysValues?: string[],
+  keysValues: string[],
   objectsSeparator = ',',
   valuesSeparator = ':',
 ) => {
@@ -41,18 +31,12 @@ export const toObjectsArrayFromString = <T>(
     return;
   }
 
-  if (typeof value !== 'string' || value.length === 0) {
-    // todo replace with custom exception
-    throw new BadRequestException('common.validation.DOESNT_MATCH_FORMAT');
+  if (typeof value !== 'string') {
+    return {};
   }
 
   return value.split(objectsSeparator).map((v) => {
     const values = v.split(valuesSeparator);
-
-    if (values.length !== keys.length) {
-      // todo replace with custom exception
-      throw new BadRequestException('common.validation.DOESNT_MATCH_FORMAT');
-    }
 
     // eslint-disable-next-line unicorn/no-array-reduce
     const record = values.reduce(
@@ -60,12 +44,12 @@ export const toObjectsArrayFromString = <T>(
         // eslint-disable-next-line security/detect-object-injection
         const keyName = keys[index];
 
-        if (
-          keysValues !== undefined &&
-          !keysValues.includes(keyName.toString())
-        ) {
-          throw new BadRequestException('common.validation.STRING_ENUM');
-        }
+        validateAndThrow(
+          IsEnumValidatorDefinition,
+          params.key,
+          keyName.toString(),
+          keysValues,
+        );
 
         // eslint-disable-next-line security/detect-object-injection
         acc[keyName] = curr;

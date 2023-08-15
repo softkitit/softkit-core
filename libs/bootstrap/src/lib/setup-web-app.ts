@@ -7,7 +7,10 @@ import {
 import { TestingModule } from '@nestjs/testing/testing-module';
 import { useContainer } from 'class-validator';
 import { FastifyInstance } from 'fastify/types/instance';
-import { I18nValidationExceptionFilter, I18nValidationPipe } from 'nestjs-i18n';
+import {
+  I18nValidationExceptionFilter,
+  I18nValidationPipe,
+} from '@saas-buildkit/nestjs-i18n';
 import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
 import { initializeTransactionalContext } from 'typeorm-transactional';
 import { getTransactionalContext } from 'typeorm-transactional/dist/common';
@@ -24,6 +27,7 @@ import { AppConfig } from './config/app';
 import { setupSwagger, SwaggerConfig } from '@saas-buildkit/swagger-utils';
 import { PostgresDbFailedErrorFilter } from '@saas-buildkit/typeorm';
 import { LoggingInterceptor } from '@saas-buildkit/logger';
+import { responseBodyFormatter } from '@saas-buildkit/i18n';
 
 function buildFastifyAdapter() {
   return new FastifyAdapter({
@@ -105,7 +109,9 @@ async function bootstrapBaseWebApp(
     new OverrideDefaultForbiddenExceptionFilter(httpAdapterHost),
     new PostgresDbFailedErrorFilter(httpAdapterHost),
     new HttpExceptionFilter(httpAdapterHost),
-    new I18nValidationExceptionFilter(),
+    new I18nValidationExceptionFilter({
+      responseBodyFormatter,
+    }),
   );
 
   app.useGlobalInterceptors(new LoggingInterceptor());

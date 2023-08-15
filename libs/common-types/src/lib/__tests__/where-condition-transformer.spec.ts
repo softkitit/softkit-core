@@ -20,6 +20,7 @@ import {
 import { buildWhereConditionFromQueryParams } from '../transformers/where-condition.transformer';
 import { TransformationType } from 'class-transformer';
 import { faker } from '@faker-js/faker';
+import { BadRequestException } from '@nestjs/common';
 
 enum SampleEnum {
   VALUE = 'VALUE',
@@ -357,6 +358,21 @@ describe('transform json data success cases', () => {
     }
   });
 
-  it.todo('invalid json passed');
-  it.todo('do not allow to pass string for operations like gt/lt');
+  describe('invalid data passed', () => {
+    it('invalid json passed', async () => {
+      expect(() =>
+        buildWhereConditionFromQueryParams(
+          {
+            value: 'not a valid json',
+            key: 'where',
+            type: TransformationType.PLAIN_TO_CLASS,
+            obj: {},
+            options: {},
+          },
+          validators,
+        ),
+      ).toThrow(BadRequestException);
+    });
+    it.todo('do not allow to pass string for operations like gt/lt');
+  });
 });

@@ -3,7 +3,7 @@
 .docker-data/
 
 # compiled output
-dist
+./dist
 tmp
 /out-tsc
 

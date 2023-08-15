@@ -1,6 +1,6 @@
 import {
   IsBooleanLocalized,
-  IsRequiredStringLocalized,
+  IsStringCombinedLocalized,
   IsUrlLocalized,
 } from '@saas-buildkit/validation';
 import { Type } from 'class-transformer';
@@ -12,7 +12,7 @@ export class SetupSamlConfiguration {
   @IsUrlLocalized()
   entryPoint!: string;
 
-  @IsRequiredStringLocalized()
+  @IsStringCombinedLocalized()
   certificate!: string;
 
   @Type(/* istanbul ignore next */ () => IdpMappingDto)

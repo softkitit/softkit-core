@@ -1,4 +1,4 @@
-import { HeaderResolver, I18nModule } from 'nestjs-i18n';
+import { HeaderResolver, I18nModule } from '@saas-buildkit/nestjs-i18n';
 import { I18Config } from './config/i18';
 
 /**

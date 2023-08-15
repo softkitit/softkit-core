@@ -6,8 +6,8 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
-import { I18nContext } from 'nestjs-i18n';
-import { ErrorResponse } from '@saas-buildkit/common-types';
+import { I18nContext } from '@saas-buildkit/nestjs-i18n';
+import { ErrorResponse } from '../vo/error-response.dto';
 
 @Catch(ForbiddenException)
 export class OverrideDefaultForbiddenExceptionFilter

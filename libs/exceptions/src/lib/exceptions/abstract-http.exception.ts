@@ -1,12 +1,12 @@
-import { I18nContext, I18nService } from 'nestjs-i18n';
-import { ErrorResponse } from '@saas-buildkit/common-types';
+import { I18nContext, I18nService } from '@saas-buildkit/nestjs-i18n';
+import { ErrorResponse } from '../vo/error-response.dto';
 
 export class AbstractHttpException {
   constructor(
     public title: string,
     public detail: string,
     public status: number,
-    public data?: Record<string, unknown>,
+    public data?: object | object[],
     public rootCause?: unknown,
   ) {}
 
@@ -25,6 +25,10 @@ export class AbstractHttpException {
       status: this.status,
       instance: requestId,
     } satisfies ErrorResponse;
+  }
+
+  getStatus(): number {
+    return this.status;
   }
 
   getPresetHeadersValues(): Record<string, string> {

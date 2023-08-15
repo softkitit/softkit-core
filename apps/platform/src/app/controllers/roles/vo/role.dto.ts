@@ -8,7 +8,7 @@ import {
 } from '@saas-buildkit/common-types';
 import { buildWhereConditionFromQueryParams } from '@saas-buildkit/common-types';
 import { Transform } from 'class-transformer';
-import { Allow, IS_DATE, isDateString } from 'class-validator';
+import { Allow } from 'class-validator';
 
 export class CustomUserRoleWithoutPermissionsDto extends OmitType(
   CustomUserRole,
@@ -51,13 +51,7 @@ export class RolePaginationQueryParams extends PaginationQueryParams<WhereCondit
     return buildWhereConditionFromQueryParams<WhereConditionsUpdateUserRole>(
       value,
       {
-        createdAt: [
-          {
-            validator: isDateString,
-            validatorName: IS_DATE,
-            errorMessage: IS_DATE,
-          },
-        ],
+        createdAt: [],
       },
     );
   })

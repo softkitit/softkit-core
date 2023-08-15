@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { I18n, I18nContext, I18nService } from 'nestjs-i18n';
+import { I18n, I18nContext, I18nService } from '@saas-buildkit/nestjs-i18n';
 import { AuthService, SamlService } from '../../services';
 
 import {
