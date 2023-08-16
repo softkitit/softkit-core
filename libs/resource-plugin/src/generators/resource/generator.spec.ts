@@ -20,7 +20,7 @@ describe('resource generator', () => {
     tree = createTreeWithNestApplication(options.projectName);
   });
 
-  it('should creat 2 files and appropriate folders', async () => {
+  it('should creat 9 files for all embedded resources and appropriate folders', async () => {
     const changesBeforeGeneratorRun = [...tree.listChanges()];
     await resourceGenerator(tree, options);
     const config = readProjectConfiguration(tree, options.projectName);
@@ -31,7 +31,7 @@ describe('resource generator', () => {
       .slice(changesBeforeGeneratorRun.length);
 
     // this generator should create 2 files
-    expect(changesAfterGenerator.length).toBe(2);
+    expect(changesAfterGenerator.length).toBe(9);
 
     const indexTsFile = changesAfterGenerator.find((change) => {
       return change.path.includes('index');
