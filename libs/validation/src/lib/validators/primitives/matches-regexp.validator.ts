@@ -1,10 +1,10 @@
 import { MATCHES, Matches, matches, ValidationOptions } from 'class-validator';
-import { IValidatorDefinition } from './validator-definition.interface';
 import { i18nValidationMessage } from '@saas-buildkit/nestjs-i18n';
+import { IValidatorDefinition } from './validator-definition.interface';
 
 const MESSAGE = 'common.validation.REGEXP';
 
-export const MatchesLocalized = (
+export const MatchesRegexpLocalized = (
   pattern: RegExp,
   validationOptions: ValidationOptions = {},
 ) =>
@@ -13,9 +13,9 @@ export const MatchesLocalized = (
     ...validationOptions,
   });
 
-export const MatchesValidatorDefinition = {
+export const MatchesRegexpValidatorDefinition = {
   name: MATCHES,
   validator: matches,
   defaultValidationMessage: MESSAGE,
-  decorator: MatchesLocalized,
+  decorator: MatchesRegexpLocalized,
 } satisfies IValidatorDefinition<string, RegExp>;

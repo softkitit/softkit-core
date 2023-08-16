@@ -1,34 +1,13 @@
 import { faker } from '@faker-js/faker';
-import {
-  Body,
-  Controller,
-  Get,
-  Module,
-  Optional,
-  Post,
-  Query,
-  ValidationPipe,
-} from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import { Test, TestingModule } from '@nestjs/testing';
-import { ValidateNested, useContainer } from 'class-validator';
-
-import {
-  IsBooleanLocalized,
-  IsEmailLocalized,
-  IsIntegerStringLocalized,
-  IsRequiredStringLocalized,
-  IsStringEnumLocalized,
-  IsUrlLocalized,
-  IsUUIDLocalized,
-  MatchesWithProperty,
-  PasswordLocalized,
-  toObjectsArrayFromString,
-} from '../index';
-import { Transform, Type } from 'class-transformer';
+import { useContainer } from 'class-validator';
+import { SampleDto } from './app/vo/sample.dto';
+import { SampleModule } from './app/sample.module';
 
 describe('validation e2e test', () => {
   let app: NestFastifyApplication;
@@ -380,99 +359,3 @@ describe('validation e2e test', () => {
     );
   });
 });
-
-class SortParams {
-  @IsStringEnumLocalized(['A', 'B'])
-  direction!: string;
-
-  @IsStringEnumLocalized(['C', 'D'])
-  sortValue!: string;
-}
-
-class SampleSort {
-  @ValidateNested({
-    each: true,
-    always: true,
-  })
-  @Type(() => SortParams)
-  @Transform((value) => {
-    return toObjectsArrayFromString<SortParams>(
-      value,
-      ['direction', 'sortValue'],
-      SortParams,
-    );
-  })
-  sortParams!: SortParams[];
-}
-
-class SampleQueryParam {
-  @IsIntegerStringLocalized({
-    required: true,
-  })
-  page!: number;
-
-  @IsUUIDLocalized()
-  uuid!: string;
-}
-
-class SampleDto {
-  @IsEmailLocalized()
-  email!: string;
-
-  @IsRequiredStringLocalized()
-  @PasswordLocalized()
-  password!: string;
-
-  @PasswordLocalized()
-  @MatchesWithProperty(SampleDto, (s) => s.password, {
-    message: 'validation.REPEAT_PASSWORD_DOESNT_MATCH',
-  })
-  @IsRequiredStringLocalized()
-  repeatedPassword!: string;
-
-  @IsRequiredStringLocalized()
-  firstName!: string;
-
-  @IsRequiredStringLocalized({
-    minLength: 10,
-  })
-  lastName!: string;
-
-  @IsRequiredStringLocalized({
-    minLength: 0,
-    maxLength: 100,
-  })
-  middleName!: string;
-
-  @IsBooleanLocalized()
-  someCheckboxValue!: boolean;
-
-  @IsUrlLocalized()
-  url!: string;
-
-  @Optional()
-  optionalField?: string;
-}
-
-@Controller('/sample')
-class SampleController {
-  @Post()
-  async create(@Body() dto: SampleDto) {
-    return dto;
-  }
-
-  @Get()
-  async get(@Query() dto: SampleQueryParam) {
-    return dto;
-  }
-
-  @Get('sort')
-  async getSort(@Query() dto: SampleSort) {
-    return dto;
-  }
-}
-
-@Module({
-  controllers: [SampleController],
-})
-class SampleModule {}

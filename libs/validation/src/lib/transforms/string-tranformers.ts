@@ -1,7 +1,8 @@
 import { plainToClass, TransformFnParams } from 'class-transformer';
 import { ClassConstructor } from 'class-transformer/types/interfaces';
-import { IsEnumValidatorDefinition } from '../validators/primitives';
-import { validateAndThrow } from '../validators/primitives/utils/validator-definition.utils';
+import { MatchesRegexpValidatorDefinition } from '../validators/primitives/matches-regexp.validator';
+import { validateAndThrow } from '../validators/primitives/utils';
+import { IsEnumValidatorDefinition } from '../validators';
 
 export const trimAndLowercaseTransformer = (
   params: TransformFnParams,
@@ -13,6 +14,14 @@ export const toInteger = (params: TransformFnParams): number | undefined => {
   if (value === undefined) {
     return undefined;
   }
+
+  validateAndThrow(
+    MatchesRegexpValidatorDefinition,
+    params.key,
+    value,
+    /^-?(?!0\d)\d+$/,
+    'common.validation.NOT_INTEGER',
+  );
 
   return Number.parseInt(value, 10);
 };

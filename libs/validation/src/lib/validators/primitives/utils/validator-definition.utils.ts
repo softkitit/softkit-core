@@ -15,15 +15,18 @@ export function validationDefinitionToI18NError<T, E>(
   validatorDefinition: IValidatorDefinition<T, E>,
   params: TransformFnParamsEssentials,
   constraint?: E,
+  overrideDefaultMessage?: string,
   args?: unknown,
 ): I18nValidationError {
   // it's transforming a message to format -
   // "common.validation.MAX_LENGTH|{ "constraints": [ "10" ], "args": {} }"
   const validationMessageFormatted = i18nValidationMessage(
-    params.key,
+    overrideDefaultMessage === undefined
+      ? validatorDefinition.defaultValidationMessage
+      : overrideDefaultMessage,
     args,
   )({
-    // even this one is not really used and not passed to the message function
+    // this one is not really used and not passed to the message function
     property: params.key,
     value: params.value,
     constraints: constraint === undefined ? [] : [constraint],
@@ -47,6 +50,7 @@ export function validateAndThrow<T, E>(
   fieldName: string,
   value: T,
   constraint?: E,
+  overrideDefaultMessage?: string,
   args?: unknown,
 ) {
   const isValid = validatorDefinition.validator(value, constraint as E);
@@ -59,6 +63,7 @@ export function validateAndThrow<T, E>(
         value,
       },
       constraint,
+      overrideDefaultMessage,
       args,
     );
   }
@@ -69,6 +74,7 @@ export function validateAndReturnError<T, E>(
   fieldName: string,
   value: T,
   constraint: E,
+  overrideDefaultMessage?: string,
   args?: unknown,
 ) {
   const isValid = validatorDefinition.validator(value, constraint);
@@ -82,6 +88,7 @@ export function validateAndReturnError<T, E>(
           value,
         },
         constraint,
+        overrideDefaultMessage,
         args,
       );
 }
@@ -90,12 +97,14 @@ function throwValidationException<T, E>(
   validatorDefinition: IValidatorDefinition<T, E>,
   params: TransformFnParamsEssentials,
   constraint?: E,
+  overrideDefaultMessage?: string,
   args?: unknown,
 ) {
   const validationError = validationDefinitionToI18NError(
     validatorDefinition,
     params,
     constraint,
+    overrideDefaultMessage,
     args,
   );
 
