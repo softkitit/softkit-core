@@ -46,10 +46,10 @@ export function validateAndThrow<T, E>(
   validatorDefinition: IValidatorDefinition<T, E>,
   fieldName: string,
   value: T,
-  constraint: E,
+  constraint?: E,
   args?: unknown,
 ) {
-  const isValid = validatorDefinition.validator(value, constraint);
+  const isValid = validatorDefinition.validator(value, constraint as E);
 
   if (!isValid) {
     throwValidationException(
@@ -86,7 +86,7 @@ export function validateAndReturnError<T, E>(
       );
 }
 
-export function throwValidationException<T, E>(
+function throwValidationException<T, E>(
   validatorDefinition: IValidatorDefinition<T, E>,
   params: TransformFnParamsEssentials,
   constraint?: E,

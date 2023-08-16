@@ -15,4 +15,4 @@ export const IsArrayValidatorDefinition = {
   validator: isArray,
   defaultValidationMessage: MESSAGE,
   decorator: IsArrayLocalized,
-} satisfies IValidatorDefinition<boolean, undefined>;
+} satisfies IValidatorDefinition<unknown, undefined>;

@@ -14,4 +14,4 @@ export const IsMaxValidatorDefinition = {
   validator: max,
   defaultValidationMessage: MESSAGE,
   decorator: IsMaxLocalized,
-} satisfies IValidatorDefinition<string, number>;
+} satisfies IValidatorDefinition<number, number>;

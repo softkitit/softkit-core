@@ -2,25 +2,24 @@ import {
   ManyValuesCondition,
   NoValueCondition,
   OneValueCondition,
-  WHERE_OPERATIONS_UTILS,
   WhereOperation,
+  WhereOperationTransformer,
 } from '../types/query.type';
 import {
-  IS_BOOLEAN,
-  IS_DATE,
-  IS_ENUM,
-  IS_NUMBER,
-  IS_STRING,
-  isBoolean,
-  isDate,
-  isEnum,
-  isNumber,
-  isString,
-} from 'class-validator';
-import { buildWhereConditionFromQueryParams } from '../transformers/where-condition.transformer';
+  buildWhereConditionFromQueryParams,
+  transformConditionsToDbQuery,
+} from '../transformers/where-condition.transformer';
 import { TransformationType } from 'class-transformer';
 import { faker } from '@faker-js/faker';
-import { BadRequestException } from '@nestjs/common';
+import {
+  IsBooleanValidatorDefinition,
+  IsDateValidatorDefinition,
+  IsEnumValidatorDefinition,
+  IsNumberValidatorDefinition,
+  IsStringValidatorDefinition,
+  IValidatorDefinition,
+} from '@saas-buildkit/validation';
+import { GeneralBadRequestException } from '@saas-buildkit/exceptions';
 
 enum SampleEnum {
   VALUE = 'VALUE',
@@ -35,73 +34,39 @@ class TestEntity {
   createdAt!: Date;
 }
 
-const sampleDtoValues: TestEntity = {
-  id: 'id',
-  age: 1,
-  isCool: true,
-  sampleEnum: SampleEnum.VALUE,
-  createdAt: new Date(),
-};
-
 const validators: {
   [key in Extract<keyof TestEntity, string>]: {
-    validator: (any: unknown) => boolean;
-    validatorName: string;
-    constraints?: unknown[];
-    errorMessage: string;
+    definition: IValidatorDefinition<unknown, object>;
+    constraint?: unknown;
   }[];
 } = {
   id: [
     {
-      validator: isString,
-      validatorName: IS_STRING,
-      errorMessage: 'common.validation.IS_STRING',
+      definition: IsStringValidatorDefinition,
     },
   ],
   age: [
     {
-      validator: isNumber,
-      validatorName: IS_NUMBER,
-      errorMessage: 'common.validation.IS_STRING',
+      definition: IsNumberValidatorDefinition,
     },
   ],
   isCool: [
     {
-      validator: isBoolean,
-      validatorName: IS_BOOLEAN,
-      errorMessage: 'common.validation.IS_BOOLEAN',
+      definition: IsBooleanValidatorDefinition,
     },
   ],
   sampleEnum: [
     {
-      validator: (value: unknown) => isEnum(value, SampleEnum),
-      validatorName: IS_ENUM,
-      errorMessage: 'common.validation.IS_ENUM',
+      definition: IsEnumValidatorDefinition,
+      constraint: SampleEnum,
     },
   ],
   createdAt: [
     {
-      validator: isDate,
-      validatorName: IS_DATE,
-      errorMessage: 'common.validation.IS_DATE',
+      definition: IsDateValidatorDefinition,
     },
   ],
 };
-
-// eslint-disable-next-line unicorn/no-array-reduce
-const allOperationsByClass = Object.entries(WHERE_OPERATIONS_UTILS).reduce(
-  (acc, [key, value]) => {
-    for (const conditionClass of value.conditionClasses) {
-      // eslint-disable-next-line security/detect-object-injection
-      const accValues = acc[conditionClass] || [];
-      accValues.push(key);
-      // eslint-disable-next-line security/detect-object-injection
-      acc[conditionClass] = accValues;
-    }
-    return acc;
-  },
-  {} as { [key: string]: string[] },
-);
 
 describe('transform json data success cases', () => {
   it.each([
@@ -371,8 +336,139 @@ describe('transform json data success cases', () => {
           },
           validators,
         ),
-      ).toThrow(BadRequestException);
+      ).toThrow(GeneralBadRequestException);
     });
-    it.todo('do not allow to pass string for operations like gt/lt');
+
+    it.each([
+      {
+        field: 'id',
+        op: 'invalid operation',
+        values: ['1', '2', '3'],
+      },
+      {
+        field: 'id',
+        op: 'invalid operation',
+        // invalid type, must be string
+        values: [1, 2, 3],
+      },
+      {
+        field: 'unkownname',
+        op: WhereOperation.NOT_IN,
+        values: [1, 2, 3],
+      },
+      {
+        field: 'sampleEnum',
+        op: WhereOperation.EQUALS,
+        value: 'invalid value',
+      },
+    ])('invalid values tests: %s', async (operation) => {
+      const operationsArrays = [operation];
+      const operationString = JSON.stringify(operationsArrays);
+
+      expect(() =>
+        buildWhereConditionFromQueryParams(
+          {
+            value: operationString,
+            key: 'where',
+            type: TransformationType.PLAIN_TO_CLASS,
+            obj: {},
+            options: {},
+          },
+          validators,
+        ),
+      ).toThrow(GeneralBadRequestException);
+    });
+
+    it.each([
+      '[{}, {}]',
+      '[{"bla":"bla"}, {}]',
+      '[[[{}]], [[{}]]]',
+      '[[{}], [{}]]',
+      ' ',
+    ])('empty objects and array failed cases: %s', async (operation) => {
+      expect(() =>
+        buildWhereConditionFromQueryParams(
+          {
+            value: operation,
+            key: 'where',
+            type: TransformationType.PLAIN_TO_CLASS,
+            obj: {},
+            options: {},
+          },
+          validators,
+        ),
+      ).toThrow(GeneralBadRequestException);
+    });
+
+    it.each(['[[], []]', '[]', ''])(
+      'empty objects and array success cases: %s',
+      async (operation) => {
+        const operations = buildWhereConditionFromQueryParams(
+          {
+            value: operation,
+            key: 'where',
+            type: TransformationType.PLAIN_TO_CLASS,
+            obj: {},
+            options: {},
+          },
+          validators,
+        );
+
+        expect(operations.length).toBe(0);
+      },
+    );
+  });
+
+  describe('transform conditions to db query', () => {
+    it.each([
+      {
+        field: 'id',
+        op: WhereOperation.IN,
+        values: ['1', '2', '3'],
+      },
+      {
+        field: 'age',
+        op: WhereOperation.NOT_IN,
+        values: [1, 2, 3],
+      },
+    ])('simple transformer: %s', async (operation) => {
+      const operationsArrays = [operation];
+      const operationString = JSON.stringify(operationsArrays);
+
+      const transformedConditions = buildWhereConditionFromQueryParams(
+        {
+          value: operationString,
+          key: 'where',
+          type: TransformationType.PLAIN_TO_CLASS,
+          obj: {},
+          options: {},
+        },
+        validators,
+      );
+
+      // eslint-disable-next-line unicorn/no-array-reduce
+      const transformer = Object.entries(WhereOperation).reduce(
+        (acc, [key, val]) => {
+          acc[val.toString()] = {
+            toDbCondition: (cnd: ManyValuesCondition<any, any>) => {
+              return `${val} ${cnd.values}`;
+            },
+          };
+          return acc;
+        },
+        {} as { [key: string]: unknown },
+      ) as WhereOperationTransformer;
+
+      const transformedQuery = transformConditionsToDbQuery(
+        transformedConditions,
+        transformer,
+      );
+
+      expect(transformedQuery).toStrictEqual([
+        {
+          [operation.field]: `${operation.op} ${operation.values}`,
+        },
+      ]);
+    });
   });
 });

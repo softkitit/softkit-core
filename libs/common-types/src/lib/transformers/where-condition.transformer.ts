@@ -1,6 +1,5 @@
 import { plainToClass, TransformFnParams } from 'class-transformer';
 
-import { I18nValidationException } from '@saas-buildkit/nestjs-i18n/dist/interfaces/i18n-validation-error.interface';
 import { ValidationError } from 'class-validator';
 import {
   Condition,
@@ -18,9 +17,10 @@ import {
   IsJSONValidatorDefinition,
   IsObjectValidatorDefinition,
   IValidatorDefinition,
-  throwValidationException,
+  validateAndThrow,
   validateAndReturnError,
 } from '@saas-buildkit/validation';
+import { GeneralBadRequestException } from '@saas-buildkit/exceptions';
 
 export type ConditionWithValues<OBJECT_TYPE> = {
   values: unknown[];
@@ -61,6 +61,12 @@ function retrieveValuesForValidationAndInstance<OBJECT_TYPE>(
       ) as unknown as NoValueCondition<Extract<keyof OBJECT_TYPE, string>>,
     };
   } else {
+    /** that's not possible to come here, because code before is checking if all conditions are valid
+     * if field is present
+     * if operation is valid and exists, etc... so some of these must exists and will be mapped anyway
+     *
+     */
+    /* istanbul ignore next */
     return {
       values: [],
       instance: undefined,
@@ -108,20 +114,20 @@ export const buildWhereConditionFromQueryParams = <OBJECT_TYPE extends object>(
     return [];
   }
 
-  throwValidationException(IsJSONValidatorDefinition, {
-    key: params.key,
-    value: value,
-  });
+  const rootFieldName = params.key;
+
+  validateAndThrow(IsJSONValidatorDefinition, rootFieldName, value);
 
   /**
    * above check do use JSON.parse internally so it safe to use it here
    * */
   const whereConditionsParsed = JSON.parse(value);
 
-  throwValidationException(IsArrayValidatorDefinition, {
-    key: params.key,
-    value: value,
-  });
+  validateAndThrow(
+    IsArrayValidatorDefinition,
+    rootFieldName,
+    whereConditionsParsed,
+  );
 
   if (whereConditionsParsed.length === 0) {
     return [];
@@ -134,43 +140,30 @@ export const buildWhereConditionFromQueryParams = <OBJECT_TYPE extends object>(
    * but be more friendly for client usage
    * */
   const whereConditions = (
-    whereConditionsParsed.length === 1 &&
-    !Array.isArray(whereConditionsParsed[0])
+    whereConditionsParsed.length > 0 && !Array.isArray(whereConditionsParsed[0])
       ? [whereConditionsParsed]
       : whereConditionsParsed
   ) as ConditionsArray<OBJECT_TYPE>;
 
   const allValidations = whereConditions.map((conditionsGroup) => {
     return conditionsGroup.map((cnd) => {
-      throwValidationException(IsObjectValidatorDefinition, {
-        key: params.key,
-        value: cnd,
-      });
+      validateAndThrow(IsObjectValidatorDefinition, rootFieldName, cnd);
 
       const fieldName = cnd.field as string;
+
+      validateAndThrow(IsEnumValidatorDefinition, 'op', cnd.op, WhereOperation);
+
+      validateAndThrow(
+        IsEnumValidatorDefinition,
+        'field',
+        fieldName,
+        Object.keys(fieldsValidatorsDefinitions),
+      );
 
       const validators =
         fieldsValidatorsDefinitions[
           fieldName as Extract<keyof OBJECT_TYPE, string>
         ];
-
-      throwValidationException(
-        IsEnumValidatorDefinition,
-        {
-          key: 'op',
-          value: cnd.op,
-        },
-        WhereOperation,
-      );
-
-      throwValidationException(
-        IsEnumValidatorDefinition,
-        {
-          key: 'field',
-          value: fieldName,
-        },
-        Object.keys(fieldsValidatorsDefinitions),
-      );
 
       const valuesParsed = retrieveValuesForValidationAndInstance(cnd);
 
@@ -178,12 +171,11 @@ export const buildWhereConditionFromQueryParams = <OBJECT_TYPE extends object>(
         cnd.op,
       );
 
-      throwValidationException(
+      // todo this can be improved by using a custom validator
+      validateAndThrow(
         IsEnumValidatorDefinition,
-        {
-          key: 'operation',
-          value: valuesParsed?.instance?.constructor?.name,
-        },
+        'operation',
+        valuesParsed?.instance?.constructor?.name,
         conditionMatchOperation,
       );
 
@@ -201,12 +193,12 @@ export const buildWhereConditionFromQueryParams = <OBJECT_TYPE extends object>(
   );
 
   if (allErrors.length > 0) {
-    throw new I18nValidationException(allErrors);
+    throw new GeneralBadRequestException(allErrors);
   }
 
-  return allValidations.map((validation) =>
-    validation.map((v) => v.instance),
-  ) as ConditionsArray<OBJECT_TYPE>;
+  return allValidations
+    .map((validation) => validation.map((v) => v.instance))
+    .filter((v) => v.length > 0) as ConditionsArray<OBJECT_TYPE>;
 };
 
 export function transformConditionsToDbQuery<T>(
