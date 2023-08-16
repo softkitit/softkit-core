@@ -64,7 +64,6 @@ function retrieveValuesForValidationAndInstance<OBJECT_TYPE>(
     /** that's not possible to come here, because code before is checking if all conditions are valid
      * if field is present
      * if operation is valid and exists, etc... so some of these must exists and will be mapped anyway
-     *
      */
     /* istanbul ignore next */
     return {
