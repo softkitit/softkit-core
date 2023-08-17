@@ -1,30 +1,7 @@
 import { plainToClass, TransformFnParams } from 'class-transformer';
 import { ClassConstructor } from 'class-transformer/types/interfaces';
-import { MatchesRegexpValidatorDefinition } from '../validators/primitives/matches-regexp.validator';
 import { validateAndThrow } from '../validators/primitives/utils';
 import { IsEnumValidatorDefinition } from '../validators';
-
-export const trimAndLowercaseTransformer = (
-  params: TransformFnParams,
-): string | undefined => params.value?.toLowerCase().trim();
-
-export const toInteger = (params: TransformFnParams): number | undefined => {
-  const value = params.value;
-
-  if (value === undefined) {
-    return undefined;
-  }
-
-  validateAndThrow(
-    MatchesRegexpValidatorDefinition,
-    params.key,
-    value,
-    /^-?(?!0\d)\d+$/,
-    'common.validation.NOT_INTEGER',
-  );
-
-  return Number.parseInt(value, 10);
-};
 
 export const toObjectsArrayFromString = <T>(
   params: TransformFnParams,
@@ -37,10 +14,19 @@ export const toObjectsArrayFromString = <T>(
   const value = params.value;
 
   if (value === undefined) {
+    /**
+     * there is no real circumstance where this would happen, because it used for query params
+     * and it there is not query params class-validator not invoking this
+     */
+    /* istanbul ignore next */
     return;
   }
 
   if (typeof value !== 'string') {
+    /**
+     * there is no real circumstance where this would happen, because it used for query params
+     */
+    /* istanbul ignore next */
     return {};
   }
 
@@ -56,7 +42,7 @@ export const toObjectsArrayFromString = <T>(
         validateAndThrow(
           IsEnumValidatorDefinition,
           params.key,
-          keyName.toString(),
+          keyName?.toString(),
           keysValues,
         );
 

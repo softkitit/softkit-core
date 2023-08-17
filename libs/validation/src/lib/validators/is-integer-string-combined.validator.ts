@@ -3,7 +3,7 @@ import { ValidatorOptions } from 'class-validator';
 import { MinLocalized } from './primitives';
 import { Transform } from 'class-transformer';
 import { MaxLengthLocalized } from './primitives/is-max-length.validator';
-import { toInteger } from '../transforms/string-tranformers';
+import { toIntegerTransformer } from '../transforms/';
 
 export interface IsIntegerStringCombinedOptions {
   min?: number;
@@ -23,7 +23,7 @@ export const IsIntegerStringCombinedLocalized = ({
   maxValidationOptions = {},
 }: IsIntegerStringCombinedOptions = {}) => {
   const decorators = [
-    Transform(toInteger),
+    Transform(toIntegerTransformer),
     min ? MinLocalized(min, minValidationOptions) : undefined,
     max ? MaxLengthLocalized(max, maxValidationOptions) : undefined,
   ].filter((v): v is PropertyDecorator => v !== undefined);

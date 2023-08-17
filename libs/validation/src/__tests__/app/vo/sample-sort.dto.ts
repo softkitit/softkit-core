@@ -4,6 +4,7 @@ import {
 } from '../../../index';
 import { ValidateNested } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
+import { NotEmptyArrayLocalized } from '../../../lib/validators/primitives/not-empty-array.validator';
 
 export class SampleSort {
   @ValidateNested({
@@ -19,6 +20,7 @@ export class SampleSort {
       ['direction', 'sortValue'],
     );
   })
+  @NotEmptyArrayLocalized()
   sortParams!: SortParams[];
 }
 

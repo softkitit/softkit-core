@@ -1,7 +1,7 @@
 import { applyDecorators } from '@nestjs/common';
 import { Transform } from 'class-transformer';
 import { IsEmail, ValidatorOptions } from 'class-validator';
-import { trimAndLowercaseTransformer } from '../transforms/string-tranformers';
+import { trimAndLowercaseTransformer } from '../transforms/';
 import { MaxLengthLocalized } from './primitives/is-max-length.validator';
 
 export interface IsEmailLocalizedOptions {

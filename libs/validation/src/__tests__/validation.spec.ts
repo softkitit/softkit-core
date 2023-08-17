@@ -357,5 +357,15 @@ describe('validation e2e test', () => {
         expect(response.statusCode).toBe(400);
       },
     );
+
+    it('should throw bad request without any query params', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        url: '/sample/sort',
+        query: {},
+      });
+
+      expect(response.statusCode).toBe(400);
+    });
   });
 });
