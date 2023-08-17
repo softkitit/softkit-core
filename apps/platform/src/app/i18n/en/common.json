@@ -26,6 +26,10 @@
       "MISSING_CONFIGURATION_FOR_FEATURE_DETAIL": "The {featureName} feature you are trying to use is not configured. Please contact your administrator. If you are an administrator, please configure {featureName} first.",
       "OBJECT_NOT_FOUND_DETAIL": "Can not find {objectName}. It doesn't exist anymore or you don't have access to it."
     },
+    "BAD_REQUEST": {
+      "TITLE": "Bad Request",
+      "GENERAL_DETAIL": "The request you sent is not valid. Please check your request and try again."
+    },
     "CONFLICT": {
       "TITLE": "Conflict Error",
       "OPTIMISTIC_LOCK": "Can not save changes for {entityName}. It has been changed by another user.",

@@ -111,6 +111,7 @@ async function bootstrapBaseWebApp(
     new HttpExceptionFilter(httpAdapterHost),
     new I18nValidationExceptionFilter({
       responseBodyFormatter,
+      detailedErrors: true,
     }),
   );
 

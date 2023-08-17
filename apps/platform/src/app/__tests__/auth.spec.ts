@@ -3,7 +3,6 @@ import { HttpStatus } from '@nestjs/common';
 import { NestFastifyApplication } from '@nestjs/platform-fastify';
 import { Test, TestingModule } from '@nestjs/testing';
 import { fileLoader } from 'nest-typed-config';
-import { I18nValidationException } from '@saas-buildkit/nestjs-i18n/dist/interfaces/i18n-validation-error.interface';
 import * as path from 'node:path';
 import { wrapInTransaction } from 'typeorm-transactional';
 import {
@@ -180,7 +179,7 @@ describe('auth e2e test', () => {
           ...successSignupDto,
           password: '123123123',
         },
-        invalidFields: ['password'],
+        invalidFields: ['password', 'repeatedPassword'],
       },
       {
         requestBody: {
@@ -204,17 +203,22 @@ describe('auth e2e test', () => {
       });
 
       expect(response.statusCode).toBe(400);
-      expect(JSON.parse(response.body).message).toBeDefined();
-      expect(JSON.parse(response.body).message).toContain('Bad Request');
+      const responseBodyObj = JSON.parse(response.body);
 
-      for (const invalidField of data.invalidFields) {
-        const errors = (JSON.parse(response.body) as I18nValidationException)
-          .errors;
-        expect(
-          errors.find((err) => {
-            return err.property === invalidField;
-          }),
-        ).toBeDefined();
+      expect(responseBodyObj.title.length).toBeGreaterThan(0);
+      expect(responseBodyObj.detail.length).toBeGreaterThan(0);
+      expect(responseBodyObj.status).toBe(400);
+      expect(responseBodyObj.data.length).toBe(data.invalidFields.length);
+
+      for (const invalidField of responseBodyObj.data) {
+        expect(data.invalidFields.includes(invalidField.property)).toBeTruthy();
+        const constraintMessages = Object.values(
+          invalidField.constraints,
+        ) as string[];
+
+        for (const message of constraintMessages) {
+          expect(message.length).toBeGreaterThan(0);
+        }
       }
     });
 

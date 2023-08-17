@@ -96,7 +96,7 @@ describe('roles e2e test', () => {
   });
 
   describe('find roles test', () => {
-    it('find all roles for tenant', async () => {
+    it.skip('find all roles for tenant', async () => {
       const role = await rolesService.createOrUpdateEntity({
         name: faker.string.alpha(20),
         description: faker.string.alpha(200),

@@ -30,6 +30,10 @@ export type I18nTranslations = {
                 "MISSING_CONFIGURATION_FOR_FEATURE_DETAIL": string;
                 "OBJECT_NOT_FOUND_DETAIL": string;
             };
+            "BAD_REQUEST": {
+                "TITLE": string;
+                "GENERAL_DETAIL": string;
+            };
             "CONFLICT": {
                 "TITLE": string;
                 "OPTIMISTIC_LOCK": string;
