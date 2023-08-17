@@ -17,7 +17,7 @@ export const NotEmptyArrayLocalized = (
     ...validationOptions,
   });
 
-export const IsArrayValidatorDefinition = {
+export const NotEmptyArrayValidatorDefinition = {
   name: ARRAY_NOT_EMPTY,
   validator: arrayNotEmpty,
   defaultValidationMessage: MESSAGE,

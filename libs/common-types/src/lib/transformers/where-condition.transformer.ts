@@ -12,7 +12,7 @@ import {
   WhereOperationTransformer,
 } from '../types/query.type';
 import {
-  IsArrayValidatorDefinition,
+  NotEmptyArrayValidatorDefinition,
   IsEnumValidatorDefinition,
   IsJSONValidatorDefinition,
   IsObjectValidatorDefinition,
@@ -97,7 +97,6 @@ function validateValues<OBJECT_TYPE>(
   });
 }
 
-// eslint-disable-next-line complexity
 export const buildWhereConditionFromQueryParams = <OBJECT_TYPE extends object>(
   params: TransformFnParams,
   fieldsValidatorsDefinitions: {
@@ -123,14 +122,10 @@ export const buildWhereConditionFromQueryParams = <OBJECT_TYPE extends object>(
   const whereConditionsParsed = JSON.parse(value);
 
   validateAndThrow(
-    IsArrayValidatorDefinition,
+    NotEmptyArrayValidatorDefinition,
     rootFieldName,
     whereConditionsParsed,
   );
-
-  if (whereConditionsParsed.length === 0) {
-    return [];
-  }
 
   /**
    * allow to pass single condition without embedding and array

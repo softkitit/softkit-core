@@ -86,7 +86,7 @@
     "@nestjs/swagger": "^7.1.1",
     "@nestjs/typeorm": "^10.0.0",
     "@nx/devkit": "16.5.5",
-    "@saas-buildkit/nestjs-i18n": "^10.3.0",
+    "@saas-buildkit/nestjs-i18n": "^10.3.1",
     "@swc/helpers": "~0.5.0",
     "argon2": "^0.30.3",
     "axios": "^1.0.0",

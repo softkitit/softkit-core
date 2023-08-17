@@ -384,6 +384,7 @@ describe('transform json data success cases', () => {
       '[{"bla":"bla"}, {}]',
       '[[[{}]], [[{}]]]',
       '[[{}], [{}]]',
+      '[]',
       ' ',
     ])('empty objects and array failed cases: %s', async (operation) => {
       expect(() =>
@@ -400,7 +401,7 @@ describe('transform json data success cases', () => {
       ).toThrow(GeneralBadRequestException);
     });
 
-    it.each(['[[], []]', '[]', ''])(
+    it.each(['[[], []]', ''])(
       'empty objects and array success cases: %s',
       async (operation) => {
         const operations = buildWhereConditionFromQueryParams(

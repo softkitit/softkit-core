@@ -12,4 +12,6 @@ export * from './is-string.validator';
 export * from './is-string-integer.validator';
 export * from './is-url.validator';
 export * from './is-uuid.validator';
+export * from './matches-regexp.validator';
+export * from './not-empty-array.validator';
 export * from './validator-definition.interface';

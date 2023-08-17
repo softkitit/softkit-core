@@ -15,7 +15,7 @@ export const MatchesRegexpLocalized = (
 
 export const MatchesRegexpValidatorDefinition = {
   name: MATCHES,
-  validator: matches,
+  validator: (value: string, pattern: RegExp) => matches(value, pattern),
   defaultValidationMessage: MESSAGE,
   decorator: MatchesRegexpLocalized,
 } satisfies IValidatorDefinition<string, RegExp>;

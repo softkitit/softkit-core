@@ -1,6 +1,6 @@
 import { TransformFnParams } from 'class-transformer';
 import { validateAndThrow } from '../validators/primitives/utils';
-import { MatchesRegexpValidatorDefinition } from '../validators/primitives/matches-regexp.validator';
+import { MatchesRegexpValidatorDefinition } from '../validators/primitives/';
 
 export const toIntegerTransformer = (
   params: TransformFnParams,
@@ -11,11 +11,13 @@ export const toIntegerTransformer = (
     return undefined;
   }
 
+  const constraint = /^-?(?!0\d)\d+$/;
+
   validateAndThrow(
     MatchesRegexpValidatorDefinition,
     params.key,
-    value,
-    /^-?(?!0\d)\d+$/,
+    value as string,
+    constraint,
     'common.validation.NOT_INTEGER',
   );
 
