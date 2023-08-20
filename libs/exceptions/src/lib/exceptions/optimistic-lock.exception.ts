@@ -1,5 +1,6 @@
 import { HttpStatus } from '@nestjs/common';
 import { AbstractHttpException } from './abstract-http.exception';
+import { i18nString } from '../utils';
 
 /** todo implement swagger definition for this exception*/
 export class OptimisticLockException extends AbstractHttpException {
@@ -10,8 +11,8 @@ export class OptimisticLockException extends AbstractHttpException {
     rootCause?: unknown,
   ) {
     super(
-      'common.exception.CONFLICT.TITLE',
-      'common.exception.CONFLICT.OPTIMISTIC_LOCK',
+      i18nString('exception.CONFLICT.TITLE'),
+      i18nString('exception.CONFLICT.OPTIMISTIC_LOCK'),
       HttpStatus.CONFLICT,
       { entityName },
       rootCause,

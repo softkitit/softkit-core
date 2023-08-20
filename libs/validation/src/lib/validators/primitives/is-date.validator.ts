@@ -5,10 +5,10 @@ import {
   isDateString,
   ValidationOptions,
 } from 'class-validator';
-import { i18nValidationMessage } from '@saas-buildkit/nestjs-i18n';
 import ValidatorJS from 'validator';
+import { i18n, i18nString } from '../../utils';
 
-const MESSAGE = 'common.validation.DATE';
+const MESSAGE = 'validation.DATE';
 
 export const IsDateLocalized = (
   dateOptions: ValidatorJS.IsISO8601Options = {},
@@ -21,7 +21,7 @@ export const IsDateLocalized = (
       strictSeparator: true,
     },
     {
-      message: i18nValidationMessage(MESSAGE),
+      message: i18n(MESSAGE),
       ...validationOptions,
     },
   );
@@ -29,6 +29,6 @@ export const IsDateLocalized = (
 export const IsDateValidatorDefinition = {
   name: IS_DATE_STRING,
   validator: isDateString,
-  defaultValidationMessage: MESSAGE,
+  defaultValidationMessage: i18nString(MESSAGE),
   decorator: IsDateLocalized,
 } satisfies IValidatorDefinition<string, ValidatorJS.IsISO8601Options>;

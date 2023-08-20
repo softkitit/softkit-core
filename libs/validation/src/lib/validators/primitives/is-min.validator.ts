@@ -1,17 +1,17 @@
 import { IValidatorDefinition } from './validator-definition.interface';
 import { MIN, min, Min, ValidationOptions } from 'class-validator';
-import { i18nValidationMessage } from '@saas-buildkit/nestjs-i18n';
+import { i18n, i18nString } from '../../utils';
 
-const MESSAGE = 'common.validation.MIN';
+const MESSAGE = 'validation.MIN';
 
 export const MinLocalized = (
   n: number,
   validationOptions: ValidationOptions = {},
-) => Min(n, { message: i18nValidationMessage(MESSAGE), ...validationOptions });
+) => Min(n, { message: i18n(MESSAGE), ...validationOptions });
 
 export const MinValidatorDefinition = {
   name: MIN,
   validator: min,
-  defaultValidationMessage: MESSAGE,
+  defaultValidationMessage: i18nString(MESSAGE),
   decorator: MinLocalized,
 } satisfies IValidatorDefinition<string, number>;

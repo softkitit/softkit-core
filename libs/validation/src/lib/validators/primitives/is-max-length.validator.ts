@@ -5,22 +5,22 @@ import {
   ValidationOptions,
 } from 'class-validator';
 import { IValidatorDefinition } from './validator-definition.interface';
-import { i18nValidationMessage } from '@saas-buildkit/nestjs-i18n';
+import { i18n, i18nString } from '../../utils';
 
-const MESSAGE = 'common.validation.MAX_LENGTH';
+const MESSAGE = 'validation.MAX_STRING_LENGTH';
 
 export const MaxLengthLocalized = (
   n: number,
   validationOptions: ValidationOptions = {},
 ) =>
   MaxLength(n, {
-    message: i18nValidationMessage(MESSAGE),
+    message: i18n(MESSAGE),
     ...validationOptions,
   });
 
 export const IsMaxLengthValidatorDefinition = {
   name: MAX_LENGTH,
   validator: maxLength,
-  defaultValidationMessage: MESSAGE,
+  defaultValidationMessage: i18nString(MESSAGE),
   decorator: MaxLengthLocalized,
 } satisfies IValidatorDefinition<string, number>;

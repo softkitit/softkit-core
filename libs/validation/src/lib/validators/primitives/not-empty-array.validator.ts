@@ -5,21 +5,21 @@ import {
   ValidationOptions,
 } from 'class-validator';
 import { IValidatorDefinition } from './validator-definition.interface';
-import { i18nValidationMessage } from '@saas-buildkit/nestjs-i18n';
+import { i18n, i18nString } from '../../utils';
 
-const MESSAGE = 'common.validation.NOT_EMPTY_ARRAY';
+const MESSAGE = 'validation.NOT_EMPTY_ARRAY';
 
 export const NotEmptyArrayLocalized = (
   validationOptions: ValidationOptions = {},
 ) =>
   ArrayNotEmpty({
-    message: i18nValidationMessage(MESSAGE),
+    message: i18n(MESSAGE),
     ...validationOptions,
   });
 
 export const NotEmptyArrayValidatorDefinition = {
   name: ARRAY_NOT_EMPTY,
   validator: arrayNotEmpty,
-  defaultValidationMessage: MESSAGE,
+  defaultValidationMessage: i18nString(MESSAGE),
   decorator: NotEmptyArrayLocalized,
 } satisfies IValidatorDefinition<unknown, undefined>;

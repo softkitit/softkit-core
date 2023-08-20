@@ -1,0 +1,33 @@
+{
+  "NOT_FOUND": {
+    "TITLE": "Not Found",
+    "GENERAL_DETAIL": "Can not find the appropriate object. It doesn't exist anymore or you don't have access to it.",
+    "MISSING_CONFIGURATION_FOR_FEATURE_DETAIL": "The {featureName} feature you are trying to use is not configured. Please contact your administrator. If you are an administrator, please configure {featureName} first.",
+    "OBJECT_NOT_FOUND_DETAIL": "Can not find {objectName}. It doesn't exist anymore or you don't have access to it."
+  },
+  "BAD_REQUEST": {
+    "TITLE": "Bad Request",
+    "GENERAL_DETAIL": "The request you sent is not valid. Please check your request and try again."
+  },
+  "CONFLICT": {
+    "TITLE": "Conflict Error",
+    "OPTIMISTIC_LOCK": "Can not save changes for {entityName}. It has been changed by another user.",
+    "ENTITY_ALREADY_EXISTS": "Can not save changes for {entityName}. This data already created by another user.",
+    "CAN_NOT_CREATE_ENTITY": "Can not create {entityName} with {fieldName}: {fieldValue}. It already exists."
+  },
+
+  "INTERNAL_ERROR": {
+    "TITLE": "Internal Server Error",
+    "GENERAL_DETAIL": "An error occurred while processing your request. You don't need to contact support unless you want to. We are already working on it, and will contact you with explanation for this error."
+  },
+
+  "FORBIDDEN": {
+    "TITLE": "Access Denied",
+    "GENERAL_DETAIL": "You don't have access to this resource. Please contact your administrator. If you are an administrator, please check your permissions."
+  },
+  "UNAUTHORIZED": {
+    "TITLE": "Unauthorized",
+    "GENERAL_DETAIL": "Apologies, but you are not authorized to proceed with this action."
+  }
+
+}

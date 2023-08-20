@@ -1,9 +1,7 @@
 import { IS_ENUM, IsEnum, isEnum, ValidationOptions } from 'class-validator';
 import { applyDecorators } from '@nestjs/common';
 import { IValidatorDefinition } from './validator-definition.interface';
-import { i18nValidationMessage } from '@saas-buildkit/nestjs-i18n';
-
-const MESSAGE = 'common.validation.STRING_ENUM';
+import { i18n } from '../../utils';
 
 export const IsStringEnumLocalized = (
   enumType: object | string[],
@@ -11,7 +9,7 @@ export const IsStringEnumLocalized = (
 ) => {
   return applyDecorators(
     IsEnum(enumType, {
-      message: i18nValidationMessage(MESSAGE),
+      message: i18n('validation.STRING_ENUM'),
       ...validationOptions,
     }),
   );
@@ -20,6 +18,6 @@ export const IsStringEnumLocalized = (
 export const IsEnumValidatorDefinition = {
   name: IS_ENUM,
   validator: isEnum,
-  defaultValidationMessage: MESSAGE,
+  defaultValidationMessage: 'validation.STRING_ENUM',
   decorator: IsStringEnumLocalized,
 } satisfies IValidatorDefinition<unknown, object>;

@@ -5,15 +5,16 @@ import {
   IsString,
   ValidationOptions,
 } from 'class-validator';
+import { i18n, i18nString } from '../../utils';
 
-const MESSAGE = 'common.validation.STRING';
+const MESSAGE = 'validation.STRING';
 
 export const IsStringLocalized = (validationOptions: ValidationOptions = {}) =>
-  IsString({ message: MESSAGE, ...validationOptions });
+  IsString({ message: i18n(MESSAGE), ...validationOptions });
 
 export const IsStringValidatorDefinition = {
   name: IS_STRING,
   validator: isString,
-  defaultValidationMessage: MESSAGE,
+  defaultValidationMessage: i18nString(MESSAGE),
   decorator: IsStringLocalized,
 } satisfies IValidatorDefinition<string, undefined>;

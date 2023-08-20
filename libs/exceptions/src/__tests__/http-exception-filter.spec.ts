@@ -25,15 +25,29 @@ import {
   OverrideDefaultForbiddenExceptionFilter,
   OverrideDefaultNotFoundFilter,
 } from '../';
+import { I18nJsonLoader, I18nModule } from '@saas-buildkit/nestjs-i18n';
+import * as path from 'node:path';
 
 describe('http exception filter e2e test', () => {
   let app: NestFastifyApplication;
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
-      imports: [],
+      imports: [
+        I18nModule.forRoot({
+          fallbackLanguage: 'en',
+          typesOutputPath: path.join(
+            __dirname,
+            '../lib/generated/i18n.generated.ts',
+          ),
+          loaders: [
+            new I18nJsonLoader({
+              path: path.join(__dirname, '../lib/i18n/'),
+            }),
+          ],
+        }),
+      ],
       controllers: [SimpleHttpExceptionController],
-      providers: [],
     }).compile();
 
     app = module.createNestApplication(new FastifyAdapter());
@@ -59,10 +73,8 @@ describe('http exception filter e2e test', () => {
     expect(response.statusCode).toBe(404);
     expect(errorBody.status).toBe(404);
     expect(errorBody.type).toBeDefined();
-    expect(errorBody.title).toBe('common.exception.NOT_FOUND.TITLE');
-    expect(errorBody.detail).toContain(
-      'common.exception.NOT_FOUND.GENERAL_DETAIL',
-    );
+    expect(errorBody.title).toBe('Not Found');
+    expect(errorBody.detail).toContain('not find');
     expect(errorBody.instance).toContain('req-');
   });
 
@@ -79,7 +91,7 @@ describe('http exception filter e2e test', () => {
     expect(errorBody.type).toBeDefined();
     // specific error because i18n is not connected
     expect(errorBody.title).toBe('Not Found');
-    expect(errorBody.detail).toBe('Resource not found');
+    expect(errorBody.detail).toContain('Can not find');
     expect(errorBody.instance).toContain('req-');
   });
 
@@ -94,9 +106,9 @@ describe('http exception filter e2e test', () => {
     expect(response.statusCode).toBe(403);
     expect(errorBody.status).toBe(403);
     expect(errorBody.type).toBeDefined();
-    expect(errorBody.title).toBe('Forbidden');
+    expect(errorBody.title).toBe('Access Denied');
     expect(errorBody.detail).toContain(
-      'Forbidden access to the resource. Check permissions.',
+      "You don't have access to this resource. Please contact",
     );
     expect(errorBody.instance).toContain('req-');
   });
@@ -112,8 +124,8 @@ describe('http exception filter e2e test', () => {
     expect(response.statusCode).toBe(403);
     expect(errorBody.status).toBe(403);
     expect(errorBody.type).toBeDefined();
-    expect(errorBody.title).toBe('common.exception.FORBIDDEN.TITLE');
-    expect(errorBody.detail).toBe(`common.exception.FORBIDDEN.GENERAL_DETAIL`);
+    expect(errorBody.title).toBe('Access Denied');
+    expect(errorBody.detail).toContain(`You don't have access`);
     expect(errorBody.instance).toContain('req-');
   });
 
@@ -128,10 +140,8 @@ describe('http exception filter e2e test', () => {
     expect(response.statusCode).toBe(401);
     expect(errorBody.status).toBe(401);
     expect(errorBody.type).toBeDefined();
-    expect(errorBody.title).toBe('common.exception.UNAUTHORIZED.TITLE');
-    expect(errorBody.detail).toBe(
-      'common.exception.UNAUTHORIZED.GENERAL_DETAIL',
-    );
+    expect(errorBody.title).toBe('Unauthorized');
+    expect(errorBody.detail).toContain('you are not authorized');
     expect(errorBody.instance).toContain('req-');
   });
 
@@ -146,9 +156,9 @@ describe('http exception filter e2e test', () => {
     expect(response.statusCode).toBe(500);
     expect(errorBody.status).toBe(500);
     expect(errorBody.type).toBeDefined();
-    expect(errorBody.title).toBe('common.exception.INTERNAL_ERROR.TITLE');
-    expect(errorBody.detail).toBe(
-      'common.exception.INTERNAL_ERROR.GENERAL_DETAIL',
+    expect(errorBody.title).toBe('Internal Server Error');
+    expect(errorBody.detail).toContain(
+      'error occurred while processing your request',
     );
     expect(errorBody.instance).toContain('req-');
   });
@@ -164,10 +174,8 @@ describe('http exception filter e2e test', () => {
     expect(response.statusCode).toBe(404);
     expect(errorBody.status).toBe(404);
     expect(errorBody.type).toBeDefined();
-    expect(errorBody.title).toBe('common.exception.NOT_FOUND.TITLE');
-    expect(errorBody.detail).toBe(
-      'common.exception.NOT_FOUND.MISSING_CONFIGURATION_FOR_FEATURE_DETAIL',
-    );
+    expect(errorBody.title).toBe('Not Found');
+    expect(errorBody.detail).toContain('Please contact your administrator');
     expect(errorBody.instance).toContain('req-');
   });
 
@@ -182,10 +190,8 @@ describe('http exception filter e2e test', () => {
     expect(response.statusCode).toBe(404);
     expect(errorBody.status).toBe(404);
     expect(errorBody.type).toBeDefined();
-    expect(errorBody.title).toBe('common.exception.NOT_FOUND.TITLE');
-    expect(errorBody.detail).toBe(
-      'common.exception.NOT_FOUND.OBJECT_NOT_FOUND_DETAIL',
-    );
+    expect(errorBody.title).toBe('Not Found');
+    expect(errorBody.detail).toContain('Can not find saml_configuration');
     expect(errorBody.instance).toContain('req-');
   });
 
@@ -200,8 +206,8 @@ describe('http exception filter e2e test', () => {
     expect(response.statusCode).toBe(409);
     expect(errorBody.status).toBe(409);
     expect(errorBody.type).toBeDefined();
-    expect(errorBody.title).toBe('common.exception.CONFLICT.TITLE');
-    expect(errorBody.detail).toBe('common.exception.CONFLICT.OPTIMISTIC_LOCK');
+    expect(errorBody.title).toBe('Conflict Error');
+    expect(errorBody.detail).toContain('Can not save changes for');
     expect(errorBody.instance).toContain('req-');
   });
 
@@ -216,8 +222,8 @@ describe('http exception filter e2e test', () => {
     expect(response.statusCode).toBe(500);
     expect(errorBody.status).toBe(500);
     expect(errorBody.type).toBeDefined();
-    expect(errorBody.title).toBe('Internal Error');
-    expect(errorBody.detail).toBe('Internal Server Error');
+    expect(errorBody.title).toBe('Internal Server Error');
+    expect(errorBody.detail).toContain("You don't need to contact support");
     expect(errorBody.instance).toContain('req-');
   });
 
@@ -232,9 +238,9 @@ describe('http exception filter e2e test', () => {
     expect(response.statusCode).toBe(HttpStatus.CONFLICT);
     expect(errorBody.status).toBe(HttpStatus.CONFLICT);
     expect(errorBody.type).toBeDefined();
-    expect(errorBody.title).toBe('common.exception.CONFLICT.TITLE');
-    expect(errorBody.detail).toBe(
-      'common.exception.CONFLICT.CAN_NOT_CREATE_ENTITY',
+    expect(errorBody.title).toBe('Conflict Error');
+    expect(errorBody.detail).toContain(
+      'Can not create saml_configuration_idp_metadata',
     );
     expect(errorBody.instance).toContain('req-');
   });

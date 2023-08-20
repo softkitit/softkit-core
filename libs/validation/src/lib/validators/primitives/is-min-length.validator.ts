@@ -6,8 +6,9 @@ import {
 } from 'class-validator';
 import { IValidatorDefinition } from './validator-definition.interface';
 import { i18nValidationMessage } from '@saas-buildkit/nestjs-i18n';
+import { i18nString } from '../../utils';
 
-const MESSAGE = 'common.validation.MIN_LENGTH';
+const MESSAGE = 'validation.MIN_STRING_LENGTH';
 
 export const MinLengthLocalized = (
   n: number,
@@ -21,6 +22,6 @@ export const MinLengthLocalized = (
 export const MinValidatorDefinition = {
   name: MIN_LENGTH,
   validator: minLength,
-  defaultValidationMessage: MESSAGE,
+  defaultValidationMessage: i18nString(MESSAGE),
   decorator: MinLengthLocalized,
 } satisfies IValidatorDefinition<string, number>;

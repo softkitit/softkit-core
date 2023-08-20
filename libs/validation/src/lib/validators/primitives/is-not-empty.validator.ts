@@ -5,20 +5,21 @@ import {
   ValidationOptions,
 } from 'class-validator';
 import { IValidatorDefinition } from './validator-definition.interface';
+import { i18n, i18nString } from '../../utils';
 
-const MESSAGE = 'common.validation.REQUIRED_NOT_EMPTY';
+const MESSAGE = 'validation.NOT_EMPTY';
 
 export const IsNotEmptyLocalized = (
   validationOptions: ValidationOptions = {},
 ) =>
   IsNotEmpty({
-    message: MESSAGE,
+    message: i18n(MESSAGE),
     ...validationOptions,
   });
 
 export const IsNotEmptyValidatorDefinition = {
   name: IS_NOT_EMPTY,
   validator: isNotEmpty,
-  defaultValidationMessage: MESSAGE,
+  defaultValidationMessage: i18nString(MESSAGE),
   decorator: IsNotEmptyLocalized,
 } satisfies IValidatorDefinition<string, undefined>;

@@ -34,7 +34,7 @@ import {
     TypeOrmModule.forFeature(Object.values(Entities)),
     JwtModule,
     setupI18NModule(
-      path.join(__dirname, './i18n'),
+      __dirname,
       path.join(__dirname, './generated/i18n.generated.ts'),
     ),
     setupLoggerModule(),

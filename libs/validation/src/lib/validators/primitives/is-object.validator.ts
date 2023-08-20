@@ -5,13 +5,13 @@ import {
   ValidationOptions,
 } from 'class-validator';
 import { IValidatorDefinition } from './validator-definition.interface';
-import { i18nValidationMessage } from '@saas-buildkit/nestjs-i18n';
+import { i18n } from '../../utils';
 
-const MESSAGE = 'common.validation.OBJECT';
+const MESSAGE = 'validation.OBJECT';
 
 export const IsObjectLocalized = (validationOptions: ValidationOptions = {}) =>
   IsObject({
-    message: i18nValidationMessage(MESSAGE),
+    message: i18n(MESSAGE),
     ...validationOptions,
   });
 

@@ -4,6 +4,7 @@ import {
   I18nValidationException,
 } from '@saas-buildkit/nestjs-i18n';
 import { ErrorResponse } from '../vo/error-response.dto';
+import { i18nString } from '../utils';
 
 export class GeneralBadRequestException extends I18nValidationException {
   constructor(
@@ -16,10 +17,10 @@ export class GeneralBadRequestException extends I18nValidationException {
 
   toErrorResponse(): Omit<ErrorResponse, 'data' | 'instance'> {
     return {
-      title: 'common.exception.BAD_REQUEST.TITLE',
+      title: i18nString('exception.BAD_REQUEST.TITLE'),
       detail:
         this.detail === undefined
-          ? 'common.exception.BAD_REQUEST.GENERAL_DETAIL'
+          ? i18nString('exception.BAD_REQUEST.GENERAL_DETAIL')
           : this.detail,
       status: HttpStatus.BAD_REQUEST,
       type: 'todo implement link to docs',

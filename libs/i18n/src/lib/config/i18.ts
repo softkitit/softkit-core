@@ -1,6 +1,8 @@
-import { IsBoolean } from 'class-validator';
+import { IsString } from 'class-validator';
 
 export class I18Config {
-  @IsBoolean()
-  watch = true;
+  @IsString({
+    each: true,
+  })
+  paths!: string[];
 }

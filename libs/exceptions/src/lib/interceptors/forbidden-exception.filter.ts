@@ -8,6 +8,7 @@ import {
 import { HttpAdapterHost } from '@nestjs/core';
 import { I18nContext } from '@saas-buildkit/nestjs-i18n';
 import { ErrorResponse } from '../vo/error-response.dto';
+import { I18nTranslations } from '../generated/i18n.generated';
 
 @Catch(ForbiddenException)
 export class OverrideDefaultForbiddenExceptionFilter
@@ -21,16 +22,15 @@ export class OverrideDefaultForbiddenExceptionFilter
     const { httpAdapter } = this.httpAdapterHost;
 
     const ctx = host.switchToHttp();
-    const i18n = I18nContext.current(host);
+    const i18n = I18nContext.current<I18nTranslations>(host);
 
     const response = {
       // todo implement link to the docs, get from config
       type: 'todo implement link to the docs, get from config',
-      title: i18n?.translate('common.exception.FORBIDDEN.TITLE') || 'Forbidden',
+      title: i18n?.translate('exception.FORBIDDEN.TITLE') || 'Forbidden',
       detail:
-        i18n
-          ?.translate('common.exception.FORBIDDEN.GENERAL_DETAIL')
-          .toString() || 'Forbidden access to the resource. Check permissions.',
+        i18n?.translate('exception.FORBIDDEN.GENERAL_DETAIL').toString() ||
+        'Forbidden access to the resource. Check permissions.',
       status: HttpStatus.FORBIDDEN,
       instance: ctx.getRequest().id,
     } satisfies ErrorResponse;

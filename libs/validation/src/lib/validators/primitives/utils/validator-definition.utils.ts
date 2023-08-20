@@ -5,6 +5,8 @@ import {
 } from '@saas-buildkit/nestjs-i18n';
 import { TransformFnParams } from 'class-transformer';
 import { GeneralBadRequestException } from '@saas-buildkit/exceptions';
+import { Path } from '@saas-buildkit/nestjs-i18n/dist/types';
+import { I18nTranslations } from '../../../generated/i18n.generated';
 
 type TransformFnParamsEssentials = Omit<
   TransformFnParams,
@@ -74,7 +76,7 @@ export function validateAndReturnError<T, E>(
   fieldName: string,
   value: T,
   constraint: E,
-  overrideDefaultMessage?: string,
+  overrideDefaultMessage?: Path<I18nTranslations>,
   args?: unknown,
 ) {
   const isValid = validatorDefinition.validator(value, constraint);

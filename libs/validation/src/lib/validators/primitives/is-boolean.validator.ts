@@ -5,19 +5,19 @@ import {
   ValidationOptions,
 } from 'class-validator';
 import { IValidatorDefinition } from './validator-definition.interface';
-import { i18nValidationMessage } from '@saas-buildkit/nestjs-i18n';
+import { i18n, i18nString } from '../../utils';
 
-const MESSAGE = 'common.validation.BOOLEAN';
+const MESSAGE = 'validation.BOOLEAN';
 
 export const IsBooleanLocalized = (validationOptions: ValidationOptions = {}) =>
   IsBoolean({
-    message: i18nValidationMessage(MESSAGE),
+    message: i18n(MESSAGE),
     ...validationOptions,
   });
 
 export const IsBooleanValidatorDefinition = {
   name: IS_BOOLEAN,
   validator: isBoolean,
-  defaultValidationMessage: MESSAGE,
+  defaultValidationMessage: i18nString(MESSAGE),
   decorator: IsBooleanLocalized,
 } satisfies IValidatorDefinition<boolean, undefined>;

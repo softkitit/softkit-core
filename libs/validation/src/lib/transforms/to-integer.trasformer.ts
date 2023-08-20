@@ -1,6 +1,7 @@
 import { TransformFnParams } from 'class-transformer';
 import { validateAndThrow } from '../validators/primitives/utils';
 import { MatchesRegexpValidatorDefinition } from '../validators/primitives/';
+import { i18nString } from '../utils';
 
 export const toIntegerTransformer = (
   params: TransformFnParams,
@@ -18,7 +19,7 @@ export const toIntegerTransformer = (
     params.key,
     value as string,
     constraint,
-    'common.validation.NOT_INTEGER',
+    i18nString('validation.INTEGER'),
   );
 
   return Number.parseInt(value, 10);
