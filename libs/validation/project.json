@@ -15,7 +15,12 @@
         "packageJson": "libs/validation/package.json",
         "main": "libs/validation/src/index.ts",
         "assets": [
-          "libs/validation/*.md"
+          "libs/validation/*.md",
+          {
+            "glob": "**/*",
+            "input": "libs/validation/src/lib/i18n/",
+            "output": "i18n"
+          }
         ]
       }
     },

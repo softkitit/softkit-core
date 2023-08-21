@@ -33,10 +33,7 @@ import {
   imports: [
     TypeOrmModule.forFeature(Object.values(Entities)),
     JwtModule,
-    setupI18NModule(
-      __dirname,
-      path.join(__dirname, './generated/i18n.generated.ts'),
-    ),
+    setupI18NModule(__dirname),
     setupLoggerModule(),
     setupYamlBaseConfigModule(path.join(__dirname, './assets'), RootConfig),
     setupClsModule(),

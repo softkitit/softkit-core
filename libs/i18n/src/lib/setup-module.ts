@@ -11,7 +11,6 @@ import * as path from 'node:path';
  * */
 export function setupI18NModule(
   baseDir: string,
-  typesOutputPath: string,
   {
     fallbacks = {
       'en-*': 'en',
@@ -32,7 +31,6 @@ export function setupI18NModule(
             path: path.join(baseDir, p),
           });
         }),
-        typesOutputPath: typesOutputPath,
       };
     },
     resolvers: [HeaderResolver],

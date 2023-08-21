@@ -101,8 +101,7 @@ async function bootstrapBaseWebApp(
   const httpAdapterHost = app.get(HttpAdapterHost);
   app.useGlobalPipes(new I18nValidationPipe(DEFAULT_VALIDATION_OPTIONS));
 
-  // order matters here - first filter to catch the error wins and the rest are ignored
-  // so first narrow once and then global any exception filter (catch all, if nothing else caught it)
+  // so first global one and then narrow
   app.useGlobalFilters(
     new AnyExceptionFilter(httpAdapterHost),
     new OverrideDefaultNotFoundFilter(httpAdapterHost),

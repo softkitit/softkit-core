@@ -15,7 +15,12 @@
         "packageJson": "libs/exceptions/package.json",
         "main": "libs/exceptions/src/index.ts",
         "assets": [
-          "libs/exceptions/*.md"
+          "libs/exceptions/*.md",
+          {
+            "glob": "**/*",
+            "input": "libs/exceptions/src/lib/i18n/",
+            "output": "i18n"
+          }
         ]
       }
     },
