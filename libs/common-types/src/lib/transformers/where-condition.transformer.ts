@@ -97,14 +97,16 @@ function validateValues<OBJECT_TYPE>(
   });
 }
 
+export type WhereParams<T extends object> = {
+  [key in Extract<keyof T, string>]: {
+    definition: IValidatorDefinition<unknown, unknown>;
+    constraint?: unknown;
+  }[];
+};
+
 export const buildWhereConditionFromQueryParams = <OBJECT_TYPE extends object>(
   params: TransformFnParams,
-  fieldsValidatorsDefinitions: {
-    [key in Extract<keyof OBJECT_TYPE, string>]: {
-      definition: IValidatorDefinition<unknown, unknown>;
-      constraint?: unknown;
-    }[];
-  },
+  fieldsValidatorsDefinitions: WhereParams<OBJECT_TYPE>,
 ): ConditionsArray<OBJECT_TYPE> => {
   const value = params.value;
 

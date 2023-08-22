@@ -3714,6 +3714,7 @@ __metadata:
     nanoid: ^3.3.6
     nest-typed-config: ^2.7.0
     nestjs-cls: ^3.5.0
+    nestjs-paginate: ^8.1.7
     nestjs-pino: ^3.3.0
     newrelic: ^10.4.2
     nx: 16.5.5
@@ -12760,6 +12761,20 @@ __metadata:
     "@nestjs/common": "> 7.0.0 < 11"
     "@nestjs/core": "> 7.0.0 < 11"
   checksum: d24d14de78cafe07e466bed83abcdaf8c6878ea437f8dca1acd71492e7cf9b4b9bd868ec3e94cb0f82091b549d4a2d50c18e024e86f21520d269bed5c9c09fc2
+  languageName: node
+  linkType: hard
+
+"nestjs-paginate@npm:^8.1.7":
+  version: 8.1.7
+  resolution: "nestjs-paginate@npm:8.1.7"
+  dependencies:
+    lodash: ^4.17.21
+  peerDependencies:
+    "@nestjs/common": ^10.0.5
+    express: ^4.18.2
+    fastify: ^4.19.2
+    typeorm: ^0.3.17
+  checksum: ba697166ea93e6c63c91912ba82b9d9e8346f8b4783e609a750335aecd91f0788c7d72c5e13e74162fdca4c5c9b13f312a6582a2286d4cd6a676efcabc26219a
   languageName: node
   linkType: hard
 

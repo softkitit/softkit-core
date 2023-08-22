@@ -96,6 +96,7 @@
     "nanoid": "^3.3.6",
     "nest-typed-config": "^2.7.0",
     "nestjs-cls": "^3.5.0",
+    "nestjs-paginate": "^8.1.7",
     "nestjs-pino": "^3.3.0",
     "newrelic": "^10.4.2",
     "passport": "^0.6.0",

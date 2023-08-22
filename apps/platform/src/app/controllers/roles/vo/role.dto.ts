@@ -1,14 +1,6 @@
-import { ApiProperty, OmitType, PickType } from '@nestjs/swagger';
+import { OmitType, PickType } from '@nestjs/swagger';
 import { CustomUserRole } from '../../../database/entities';
-import {
-  ConditionsArray,
-  DefaultSortTransformAndSwaggerApi,
-  PaginationQueryParams,
-  Sort,
-} from '@saas-buildkit/common-types';
-import { buildWhereConditionFromQueryParams } from '@saas-buildkit/common-types';
-import { Transform } from 'class-transformer';
-import { Allow } from 'class-validator';
+import { FilterOperator, PaginateConfig } from 'nestjs-paginate';
 
 export class CustomUserRoleWithoutPermissionsDto extends OmitType(
   CustomUserRole,
@@ -40,24 +32,18 @@ export class WhereConditionsUpdateUserRole extends PickType(CustomUserRole, [
   'createdAt',
 ] as const) {}
 
-export class RolePaginationQueryParams extends PaginationQueryParams<WhereConditionsUpdateUserRole> {
-  @ApiProperty({
-    description:
-      'where conditions to be applied. If not provided, default value is []',
-    required: false,
-    type: String,
-  })
-  @Transform((value) => {
-    return buildWhereConditionFromQueryParams<WhereConditionsUpdateUserRole>(
-      value,
-      {
-        createdAt: [],
-      },
-    );
-  })
-  @Allow()
-  override where: ConditionsArray<WhereConditionsUpdateUserRole> = [];
-
-  @DefaultSortTransformAndSwaggerApi<CustomUserRole>(['id', 'createdAt'])
-  override sort: Sort[] = [];
-}
+export const ROLES_PAGINATION_CONFIG: PaginateConfig<CustomUserRole> = {
+  defaultLimit: 50,
+  maxLimit: 100,
+  searchableColumns: ['name', 'roleType'],
+  filterableColumns: {
+    id: [FilterOperator.EQ, FilterOperator.IN],
+    name: [FilterOperator.CONTAINS],
+  },
+  select: ['id', 'name', 'createdAt', 'updatedAt', 'roleType'],
+  sortableColumns: ['id', 'name', 'createdAt', 'updatedAt'],
+  defaultSortBy: [
+    ['createdAt', 'DESC'],
+    ['id', 'DESC'],
+  ],
+};

@@ -17,19 +17,17 @@ import {
 import {
   CreateUserRole,
   CustomUserRoleWithoutPermissionsDto,
-  RolePaginationQueryParams,
+  ROLES_PAGINATION_CONFIG,
   UpdateUserRole,
-  WhereConditionsUpdateUserRole,
 } from './vo/role.dto';
 import {
   ApiOkResponsePaginated,
+  ApiPagination,
   IdParamUUID,
-  InfinityPaginationResultType,
-  transformConditionsToDbQuery,
   VersionNumberParam,
 } from '@saas-buildkit/common-types';
 import { Permissions, SkipAuth } from '@saas-buildkit/auth';
-import { TYPE_ORM_TRANSFORMERS } from '@saas-buildkit/typeorm';
+import { Paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
 
 @ApiTags('Roles')
 @Controller({
@@ -46,25 +44,13 @@ export class RolesController {
   @SkipAuth()
   @ApiOkResponsePaginated(CustomUserRoleWithoutPermissionsDto)
   // @Permissions('platform.roles.read')
+  @ApiPagination(ROLES_PAGINATION_CONFIG)
   async findAll(
-    @Query()
-    pagination: RolePaginationQueryParams,
-  ): Promise<
-    InfinityPaginationResultType<CustomUserRoleWithoutPermissionsDto>
-  > {
-    const conditions =
-      transformConditionsToDbQuery<WhereConditionsUpdateUserRole>(
-        pagination.where,
-        TYPE_ORM_TRANSFORMERS,
-      );
-
+    @Paginate()
+    query: PaginateQuery,
+  ): Promise<Paginated<CustomUserRoleWithoutPermissionsDto>> {
     return this.customUserRoleService
-      .findAll(
-        conditions,
-        pagination.page,
-        pagination.size,
-        pagination.toTypeOrmSortParams(),
-      )
+      .findAll(query, ROLES_PAGINATION_CONFIG)
       .then(({ data, ...other }) => {
         const resultData = data.map((item) => {
           return plainToClass(CustomUserRoleWithoutPermissionsDto, item);
@@ -73,7 +59,7 @@ export class RolesController {
         return {
           ...other,
           data: resultData,
-        };
+        } as Paginated<CustomUserRoleWithoutPermissionsDto>;
       });
   }
 

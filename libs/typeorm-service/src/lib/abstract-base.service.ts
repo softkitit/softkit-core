@@ -1,6 +1,6 @@
-import { FindOneOptions, FindOptionsOrder, FindOptionsWhere } from 'typeorm';
+import { FindOneOptions } from 'typeorm';
 import { BaseEntityHelper } from '@saas-buildkit/typeorm';
-import { InfinityPaginationResultType } from '@saas-buildkit/common-types';
+import { PaginateConfig, Paginated, PaginateQuery } from 'nestjs-paginate';
 
 export abstract class AbstractBaseService<
   ENTITY extends BaseEntityHelper,
@@ -31,11 +31,9 @@ export abstract class AbstractBaseService<
   ): Promise<ENTITY | undefined>;
 
   abstract findAll(
-    where: FindOptionsWhere<ENTITY>,
-    page: number,
-    limit: number,
-    sort?: FindOptionsOrder<ENTITY>,
-  ): Promise<InfinityPaginationResultType<ENTITY>>;
+    query: PaginateQuery,
+    config: PaginateConfig<ENTITY>,
+  ): Promise<Paginated<ENTITY>>;
 
   abstract archive(id: ENTITY['id'], version: number): Promise<boolean>;
 
