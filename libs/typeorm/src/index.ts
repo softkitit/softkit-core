@@ -3,7 +3,6 @@ export * from './lib/config/typeorm-config.service';
 export * from './lib/entities/entity-helper';
 export * from './lib/entities/tenant-entity-helper';
 export * from './lib/interceptors/postgres-db-failed-error.filter';
-export * from './lib/queries/typeorm-operation-transformer';
 export * from './lib/repositories/base.repository';
 export * from './lib/repositories/tenant-base.repository';
 export * from './lib/subscribers/cls-preset.subscriber';
