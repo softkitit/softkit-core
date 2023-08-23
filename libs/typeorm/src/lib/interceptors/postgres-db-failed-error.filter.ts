@@ -44,7 +44,7 @@ export class PostgresDbFailedErrorFilter implements ExceptionFilter {
               })
               .toString() || 'Object already exists',
           instance: ctx.getRequest().id,
-        };
+        } satisfies ErrorResponse;
         break;
       }
       default: {
@@ -59,7 +59,7 @@ export class PostgresDbFailedErrorFilter implements ExceptionFilter {
               ?.translate('common.exception.INTERNAL_ERROR.GENERAL_DETAIL')
               .toString() || 'Internal Server Error',
           instance: ctx.getRequest().id,
-        };
+        } satisfies ErrorResponse;
         break;
       }
     }

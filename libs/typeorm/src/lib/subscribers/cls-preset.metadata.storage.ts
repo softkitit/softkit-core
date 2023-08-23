@@ -29,8 +29,6 @@ class ClsPresetMetadataStorage<CLS_STORAGE_TYPE extends TenantClsStore> {
     entities: string[],
   ) {
     // eslint-disable-next-line security/detect-object-injection
-
-    // eslint-disable-next-line security/detect-object-injection
     const result = this.metadataFieldsForHierarchy[topLevelEntity];
 
     if (result === undefined) {

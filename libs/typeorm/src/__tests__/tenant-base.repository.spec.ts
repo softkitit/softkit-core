@@ -2,40 +2,30 @@ import { faker } from '@faker-js/faker';
 import { Injectable } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import {
-  InjectDataSource,
   TypeOrmModule,
   TypeOrmModuleOptions,
   TypeOrmOptionsFactory,
 } from '@nestjs/typeorm';
 import { ClsModule, ClsService } from 'nestjs-cls';
-import {
-  Column,
-  DataSource,
-  DataSourceOptions,
-  Entity,
-  EntityNotFoundError,
-  Index,
-  JoinColumn,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { DataSource, DataSourceOptions, EntityNotFoundError } from 'typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import {
   addTransactionalDataSource,
   initializeTransactionalContext,
 } from 'typeorm-transactional';
-import { BaseEntityHelper } from '../lib/entities/entity-helper';
-import { BaseRepository } from '../lib/repositories/base.repository';
-import { BaseTenantEntityHelper } from '../lib/entities/tenant-entity-helper';
-import { BaseTenantRepository } from '../lib/repositories/tenant-base.repository';
 import { ClsPresetSubscriber } from '../lib/subscribers/cls-preset.subscriber';
 import { TenantClsStore } from '../lib/vo/tenant-base-cls-store';
 import { expectNotNullAndGet, startDb } from '@saas-buildkit/test-utils';
+import { TenantRepository } from './app/tenant.repository';
+import { TenantEntity } from './app/tenant.entity';
+import { TestTenantBaseEntity } from './app/test-base-tenant.entity';
+import { TestBaseTenantRepository } from './app/test-base-tenant.repository';
 
 describe('tenant base entity test', () => {
-  let testBaseRepository: TestBaseRepository;
+  let testBaseRepository: TestBaseTenantRepository;
   let tenantRepository: TenantRepository;
   let clsService: ClsService<TenantClsStore>;
-  let objectToSave: Partial<TestBaseEntity>;
+  let objectToSave: Partial<TestTenantBaseEntity>;
   let createdTenant: TenantEntity;
 
   beforeAll(async () => {
@@ -47,7 +37,7 @@ describe('tenant base entity test', () => {
         return {
           ...typeormOptions,
           subscribers: [],
-          entities: [TestBaseEntity, TenantEntity],
+          entities: [TestTenantBaseEntity, TenantEntity],
           namingStrategy: new SnakeNamingStrategy(),
         } as TypeOrmModuleOptions;
       }
@@ -57,7 +47,7 @@ describe('tenant base entity test', () => {
 
     const module = await Test.createTestingModule({
       imports: [
-        TypeOrmModule.forFeature([TestBaseEntity, TenantEntity]),
+        TypeOrmModule.forFeature([TestTenantBaseEntity, TenantEntity]),
         ClsModule.forRoot(),
         TypeOrmModule.forRootAsync({
           useClass: TypeOrmConfigService,
@@ -74,10 +64,14 @@ describe('tenant base entity test', () => {
           },
         }),
       ],
-      providers: [TestBaseRepository, TenantRepository, ClsPresetSubscriber],
+      providers: [
+        TestBaseTenantRepository,
+        TenantRepository,
+        ClsPresetSubscriber,
+      ],
     }).compile();
 
-    testBaseRepository = module.get(TestBaseRepository);
+    testBaseRepository = module.get(TestBaseTenantRepository);
     tenantRepository = module.get(TenantRepository);
     clsService = module.get(ClsService);
   });
@@ -121,7 +115,7 @@ describe('tenant base entity test', () => {
   });
 
   test('insert and update multiple records test', async () => {
-    let savedEntityWithFirstTenant: TestBaseEntity;
+    let savedEntityWithFirstTenant: TestTenantBaseEntity;
 
     await clsService.runWith(
       {
@@ -302,7 +296,7 @@ describe('tenant base entity test', () => {
     ).rejects.toThrow();
 
     await expect(() =>
-      testBaseRepository.softRemove({} as unknown as TestBaseEntity),
+      testBaseRepository.softRemove({} as unknown as TestTenantBaseEntity),
     ).rejects.toThrow();
 
     await expect(() =>
@@ -310,7 +304,7 @@ describe('tenant base entity test', () => {
     ).rejects.toThrow();
 
     await expect(() =>
-      testBaseRepository.recover({} as unknown as TestBaseEntity),
+      testBaseRepository.recover({} as unknown as TestTenantBaseEntity),
     ).rejects.toThrow();
   });
 
@@ -695,62 +689,3 @@ describe('tenant base entity test', () => {
     );
   });
 });
-
-@Entity()
-class TestBaseEntity extends BaseTenantEntityHelper {
-  @PrimaryGeneratedColumn('uuid')
-  override id!: string;
-
-  // having it nullable is useful for set password later logic
-  @Column({ nullable: true, length: 256 })
-  password?: string;
-
-  @Column({ type: String, nullable: false, length: 128 })
-  firstName!: string;
-
-  @Column({ type: String, nullable: false, length: 128 })
-  lastName!: string;
-
-  @Column({ type: Number, nullable: true })
-  sampleNumber?: number;
-
-  @Column({ type: String, nullable: true, length: 128 })
-  nullableStringField?: string | null;
-
-  @JoinColumn()
-  tenant?: TenantEntity | null;
-}
-
-@Injectable()
-class TestBaseRepository extends BaseTenantRepository<TestBaseEntity> {
-  constructor(
-    @InjectDataSource()
-    ds: DataSource,
-    clsService: ClsService<TenantClsStore>,
-  ) {
-    super(TestBaseEntity, ds, clsService);
-  }
-}
-
-@Entity()
-class TenantEntity extends BaseEntityHelper {
-  @PrimaryGeneratedColumn('uuid')
-  override id!: string;
-
-  @Column({ type: String, unique: true, nullable: true })
-  @Index()
-  tenantUrl!: string;
-
-  @Column({ type: String, nullable: false, length: 1024 })
-  tenantName!: string;
-}
-
-@Injectable()
-class TenantRepository extends BaseRepository<TenantEntity> {
-  constructor(
-    @InjectDataSource()
-    ds: DataSource,
-  ) {
-    super(TenantEntity, ds);
-  }
-}

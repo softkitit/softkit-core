@@ -2,29 +2,22 @@ import { faker } from '@faker-js/faker';
 import { Injectable } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import {
-  InjectDataSource,
   TypeOrmModule,
   TypeOrmModuleOptions,
   TypeOrmOptionsFactory,
 } from '@nestjs/typeorm';
-import {
-  Column,
-  DataSource,
-  DataSourceOptions,
-  Entity,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { DataSource, DataSourceOptions } from 'typeorm';
 import {
   addTransactionalDataSource,
   getDataSourceByName,
   initializeTransactionalContext,
 } from 'typeorm-transactional';
-import { BaseEntityHelper } from '../lib/entities/entity-helper';
-import { BaseRepository } from '../lib/repositories/base.repository';
 import { OptimisticLockingSubscriber } from '../lib/subscribers/optimistic-locking.subscriber';
 import { startDb } from '@saas-buildkit/test-utils';
 import { OptimisticLockException } from '@saas-buildkit/exceptions';
 import { getTransactionalContext } from 'typeorm-transactional/dist/common';
+import { TestBaseEntity } from './app/test-base.entity';
+import { TestBaseRepository } from './app/test-base.repository';
 
 describe('optimistic lost subscriber test', () => {
   let optimisticLockSubscriber: OptimisticLockingSubscriber;
@@ -125,33 +118,4 @@ describe('optimistic lost subscriber test', () => {
       ).rejects.toBeInstanceOf(OptimisticLockException);
     },
   );
-
-  @Entity({})
-  class TestBaseEntity extends BaseEntityHelper {
-    @PrimaryGeneratedColumn('uuid')
-    override id!: string;
-
-    // having it nullable is useful for set password later logic
-    @Column({ nullable: true, length: 256 })
-    password?: string;
-
-    @Column({ type: String, nullable: false, length: 128 })
-    firstName!: string;
-
-    @Column({ type: String, nullable: false, length: 128 })
-    lastName!: string;
-
-    @Column({ type: String, nullable: true, length: 128 })
-    nullableStringField?: string | null;
-  }
-
-  @Injectable()
-  class TestBaseRepository extends BaseRepository<TestBaseEntity> {
-    constructor(
-      @InjectDataSource()
-      private ds: DataSource,
-    ) {
-      super(TestBaseEntity, ds);
-    }
-  }
 });

@@ -30,7 +30,7 @@ export class OptimisticLockingSubscriber implements EntitySubscriberInterface {
       const versionFromDatabase =
         event.databaseEntity[event.metadata.versionColumn.propertyName];
 
-      // they should match otherwise someone has changed it underneath us
+      // they should match otherwise someone has changed it before
       if (versionFromDatabase !== versionFromUpdate) {
         throw new OptimisticLockException(
           versionFromDatabase,
