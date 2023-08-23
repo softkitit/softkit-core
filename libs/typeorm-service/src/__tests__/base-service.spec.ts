@@ -15,7 +15,6 @@ import {
 import { expectNotNullAndGet, startDb } from '@saas-buildkit/test-utils';
 import { ObjectNotFoundException } from '@saas-buildkit/exceptions';
 import { PAGINATED_CONFIG, UserEntity } from './app/user.entity';
-import { FilterOperator } from 'nestjs-paginate';
 import { UserService } from './app/user.service';
 import { UserRepository } from './app/user.repository';
 
@@ -235,12 +234,12 @@ describe('base service tests', () => {
     ).toBeDefined();
   });
 
-  it.skip.each([
+  it.each([
     [20, 5, 4],
     [10, 3, 4],
     [10, 1000, 1],
   ])(
-    'find all paginated test: %s',
+    'find all paginated test: number of items - %s, page size - %s, expected number of iterations - %s',
     async (
       numberOfItems: number,
       pageSize: number,
@@ -253,7 +252,7 @@ describe('base service tests', () => {
       const dataToSave = [...Array.from({ length: numberOfItems }).keys()].map(
         (a) => {
           return {
-            password: a + uniqueId,
+            password: a + '_' + uniqueId,
             firstName,
             lastName: faker.person.lastName(),
             nullableStringField: faker.person.jobTitle(),
@@ -267,12 +266,13 @@ describe('base service tests', () => {
 
       let numberOfIterations: number;
 
-      for (let i = 0; ; i++) {
+      for (let i = 1; ; i++) {
         const entities = await testBaseService.findAll(
           {
             filter: {
-              firstName: [FilterOperator.EQ, firstName],
+              firstName: firstName,
             },
+            page: i,
             limit: pageSize,
             path: 'test',
           },
@@ -282,8 +282,8 @@ describe('base service tests', () => {
         allEntities.push(...entities.data);
         expect(entities.meta.totalItems).toBe(numberOfItems);
 
-        if (!entities.links.next) {
-          numberOfIterations = i + 1;
+        if (allEntities.length === entities.meta.totalItems) {
+          numberOfIterations = i;
           break;
         }
       }
@@ -293,7 +293,7 @@ describe('base service tests', () => {
       const allPasswords = new Set(allEntities.map(({ password }) => password));
 
       for (let i = 0; i < numberOfItems; i++) {
-        expect(allPasswords.has(i + uniqueId)).toBe(true);
+        expect(allPasswords).toContain(i + '_' + uniqueId);
       }
     },
   );
