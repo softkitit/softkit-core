@@ -4,7 +4,7 @@ import { FilterOperator, PaginateConfig } from 'nestjs-paginate';
 import { FilterSuffix } from 'nestjs-paginate/lib/filter';
 
 @Entity()
-export class TestBaseEntity extends BaseEntityHelper {
+export class UserEntity extends BaseEntityHelper {
   @PrimaryGeneratedColumn('uuid')
   override id!: string;
 
@@ -25,7 +25,7 @@ export class TestBaseEntity extends BaseEntityHelper {
   notFilterable?: string | null;
 }
 
-export const PAGINATED_CONFIG: PaginateConfig<TestBaseEntity> = {
+export const PAGINATED_CONFIG: PaginateConfig<UserEntity> = {
   filterableColumns: {
     firstName: true,
     lastName: [

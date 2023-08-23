@@ -14,13 +14,13 @@ import {
 } from 'typeorm-transactional';
 import { expectNotNullAndGet, startDb } from '@saas-buildkit/test-utils';
 import { ObjectNotFoundException } from '@saas-buildkit/exceptions';
-import { PAGINATED_CONFIG, TestBaseEntity } from './app/test-base.entity';
-import { TestBaseService } from './app/test-base.service';
-import { TestBaseRepository } from './app/test-base.repository';
+import { PAGINATED_CONFIG, UserEntity } from './app/user.entity';
 import { FilterOperator } from 'nestjs-paginate';
+import { UserService } from './app/user.service';
+import { UserRepository } from './app/user.repository';
 
 describe('base service tests', () => {
-  let testBaseService: TestBaseService;
+  let testBaseService: UserService;
 
   beforeAll(async () => {
     const { typeormOptions } = await startDb();
@@ -30,7 +30,7 @@ describe('base service tests', () => {
       createTypeOrmOptions(): TypeOrmModuleOptions {
         return {
           ...typeormOptions,
-          entities: [TestBaseEntity],
+          entities: [UserEntity],
         } as TypeOrmModuleOptions;
       }
     }
@@ -39,7 +39,7 @@ describe('base service tests', () => {
 
     const module = await Test.createTestingModule({
       imports: [
-        TypeOrmModule.forFeature([TestBaseEntity]),
+        TypeOrmModule.forFeature([UserEntity]),
         TypeOrmModule.forRootAsync({
           useClass: TypeOrmConfigService,
           dataSourceFactory: async (options?: DataSourceOptions) => {
@@ -60,10 +60,10 @@ describe('base service tests', () => {
         }),
       ],
 
-      providers: [TestBaseRepository, TestBaseService],
+      providers: [UserRepository, UserService],
     }).compile();
 
-    testBaseService = module.get(TestBaseService);
+    testBaseService = module.get(UserService);
   });
 
   test('create one test', async () => {
@@ -332,7 +332,7 @@ describe('base service tests', () => {
 
 function checkAllTestFieldsPresent(
   dtoForSaving: { firstName: string; lastName: string; password: string },
-  saved?: TestBaseEntity,
+  saved?: UserEntity,
 ) {
   if (!saved) {
     return;
