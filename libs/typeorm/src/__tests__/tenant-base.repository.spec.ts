@@ -18,14 +18,14 @@ import { TenantClsStore } from '../lib/vo/tenant-base-cls-store';
 import { expectNotNullAndGet, startDb } from '@saas-buildkit/test-utils';
 import { TenantRepository } from './app/tenant.repository';
 import { TenantEntity } from './app/tenant.entity';
-import { TestTenantBaseEntity } from './app/test-base-tenant.entity';
-import { TestBaseTenantRepository } from './app/test-base-tenant.repository';
+import { TenantUserEntity } from './app/test-base-tenant.entity';
+import { UserTenantRepository } from './app/user-tenant-repository.service';
 
 describe('tenant base entity test', () => {
-  let testBaseRepository: TestBaseTenantRepository;
+  let testBaseRepository: UserTenantRepository;
   let tenantRepository: TenantRepository;
   let clsService: ClsService<TenantClsStore>;
-  let objectToSave: Partial<TestTenantBaseEntity>;
+  let objectToSave: Partial<TenantUserEntity>;
   let createdTenant: TenantEntity;
 
   beforeAll(async () => {
@@ -37,7 +37,7 @@ describe('tenant base entity test', () => {
         return {
           ...typeormOptions,
           subscribers: [],
-          entities: [TestTenantBaseEntity, TenantEntity],
+          entities: [TenantUserEntity, TenantEntity],
           namingStrategy: new SnakeNamingStrategy(),
         } as TypeOrmModuleOptions;
       }
@@ -47,7 +47,7 @@ describe('tenant base entity test', () => {
 
     const module = await Test.createTestingModule({
       imports: [
-        TypeOrmModule.forFeature([TestTenantBaseEntity, TenantEntity]),
+        TypeOrmModule.forFeature([TenantUserEntity, TenantEntity]),
         ClsModule.forRoot(),
         TypeOrmModule.forRootAsync({
           useClass: TypeOrmConfigService,
@@ -64,14 +64,10 @@ describe('tenant base entity test', () => {
           },
         }),
       ],
-      providers: [
-        TestBaseTenantRepository,
-        TenantRepository,
-        ClsPresetSubscriber,
-      ],
+      providers: [UserTenantRepository, TenantRepository, ClsPresetSubscriber],
     }).compile();
 
-    testBaseRepository = module.get(TestBaseTenantRepository);
+    testBaseRepository = module.get(UserTenantRepository);
     tenantRepository = module.get(TenantRepository);
     clsService = module.get(ClsService);
   });
@@ -115,7 +111,7 @@ describe('tenant base entity test', () => {
   });
 
   test('insert and update multiple records test', async () => {
-    let savedEntityWithFirstTenant: TestTenantBaseEntity;
+    let savedEntityWithFirstTenant: TenantUserEntity;
 
     await clsService.runWith(
       {
@@ -296,7 +292,7 @@ describe('tenant base entity test', () => {
     ).rejects.toThrow();
 
     await expect(() =>
-      testBaseRepository.softRemove({} as unknown as TestTenantBaseEntity),
+      testBaseRepository.softRemove({} as unknown as TenantUserEntity),
     ).rejects.toThrow();
 
     await expect(() =>
@@ -304,7 +300,7 @@ describe('tenant base entity test', () => {
     ).rejects.toThrow();
 
     await expect(() =>
-      testBaseRepository.recover({} as unknown as TestTenantBaseEntity),
+      testBaseRepository.recover({} as unknown as TenantUserEntity),
     ).rejects.toThrow();
   });
 

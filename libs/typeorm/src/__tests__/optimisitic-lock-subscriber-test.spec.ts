@@ -16,12 +16,12 @@ import { OptimisticLockingSubscriber } from '../lib/subscribers/optimistic-locki
 import { startDb } from '@saas-buildkit/test-utils';
 import { OptimisticLockException } from '@saas-buildkit/exceptions';
 import { getTransactionalContext } from 'typeorm-transactional/dist/common';
-import { TestBaseEntity } from './app/test-base.entity';
-import { TestBaseRepository } from './app/test-base.repository';
+import { UserEntity } from './app/user.entity';
+import { UserRepository } from './app/user-repository.service';
 
 describe('optimistic lost subscriber test', () => {
   let optimisticLockSubscriber: OptimisticLockingSubscriber;
-  let testBaseRepository: TestBaseRepository;
+  let testBaseRepository: UserRepository;
 
   beforeAll(async () => {
     const { typeormOptions } = await startDb();
@@ -35,7 +35,7 @@ describe('optimistic lost subscriber test', () => {
       createTypeOrmOptions(): TypeOrmModuleOptions {
         return {
           ...typeormOptions,
-          entities: [TestBaseEntity],
+          entities: [UserEntity],
           subscribers: [],
         } as TypeOrmModuleOptions;
       }
@@ -43,7 +43,7 @@ describe('optimistic lost subscriber test', () => {
 
     const module = await Test.createTestingModule({
       imports: [
-        TypeOrmModule.forFeature([TestBaseEntity]),
+        TypeOrmModule.forFeature([UserEntity]),
         TypeOrmModule.forRootAsync({
           useClass: TypeOrmConfigService,
           dataSourceFactory: async (options?: DataSourceOptions) => {
@@ -67,10 +67,10 @@ describe('optimistic lost subscriber test', () => {
         }),
       ],
 
-      providers: [TestBaseRepository, OptimisticLockingSubscriber],
+      providers: [UserRepository, OptimisticLockingSubscriber],
     }).compile();
 
-    testBaseRepository = module.get(TestBaseRepository);
+    testBaseRepository = module.get(UserRepository);
     optimisticLockSubscriber = module.get(OptimisticLockingSubscriber);
   });
 

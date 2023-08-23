@@ -6,7 +6,6 @@ import {
   EntityTarget,
   FindManyOptions,
   FindOneOptions,
-  FindOptionsOrder,
   FindOptionsWhere,
   In,
   IsNull,
@@ -19,6 +18,12 @@ import {
 import { IsolationLevel } from 'typeorm/driver/types/IsolationLevel';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { BaseEntityHelper } from '../entities/entity-helper';
+import {
+  paginate,
+  PaginateConfig,
+  Paginated,
+  PaginateQuery,
+} from 'nestjs-paginate';
 
 export abstract class BaseRepository<
   ENTITY extends BaseEntityHelper,
@@ -62,19 +67,17 @@ export abstract class BaseRepository<
   }
 
   async findAllPaginated(
-    where: FindOptionsWhere<ENTITY> | FindOptionsWhere<ENTITY>[] = {},
-    page = 0,
-    limit = 100,
-    order: FindOptionsOrder<ENTITY> = {},
-  ) {
-    const options: FindManyOptions<ENTITY> = {
-      where,
-      take: limit,
-      skip: page * limit,
-      order,
-    };
+    query: PaginateQuery,
+    config: PaginateConfig<ENTITY>,
+  ): Promise<Paginated<ENTITY>> {
+    const where = this.presetWhereOptions(config.where || {});
 
-    return this.find(options);
+    const updatedConfig = {
+      ...config,
+      where,
+    } satisfies PaginateConfig<ENTITY>;
+
+    return paginate(query, this, updatedConfig as PaginateConfig<ENTITY>);
   }
 
   async findSingle(

@@ -6,17 +6,18 @@ import {
   TypeOrmModuleOptions,
   TypeOrmOptionsFactory,
 } from '@nestjs/typeorm';
-import { DataSource, DataSourceOptions, In, QueryFailedError } from 'typeorm';
+import { DataSource, DataSourceOptions, QueryFailedError } from 'typeorm';
 import {
   addTransactionalDataSource,
   initializeTransactionalContext,
 } from 'typeorm-transactional';
 import { expectNotNullAndGet, startDb } from '@saas-buildkit/test-utils';
-import { TestBaseEntity } from './app/test-base.entity';
-import { TestBaseRepository } from './app/test-base.repository';
+import { USER_PAGINATED_CONFIG, UserEntity } from './app/user.entity';
+import { UserRepository } from './app/user-repository.service';
+import { FilterOperator } from 'nestjs-paginate';
 
 describe('start db and populate the entity', () => {
-  let testBaseRepository: TestBaseRepository;
+  let testBaseRepository: UserRepository;
 
   beforeAll(async () => {
     const { typeormOptions } = await startDb();
@@ -26,7 +27,7 @@ describe('start db and populate the entity', () => {
       createTypeOrmOptions(): TypeOrmModuleOptions {
         return {
           ...typeormOptions,
-          entities: [TestBaseEntity],
+          entities: [UserEntity],
         } as TypeOrmModuleOptions;
       }
     }
@@ -35,7 +36,7 @@ describe('start db and populate the entity', () => {
 
     const module = await Test.createTestingModule({
       imports: [
-        TypeOrmModule.forFeature([TestBaseEntity]),
+        TypeOrmModule.forFeature([UserEntity]),
         TypeOrmModule.forRootAsync({
           useClass: TypeOrmConfigService,
           dataSourceFactory: async (options?: DataSourceOptions) => {
@@ -53,10 +54,10 @@ describe('start db and populate the entity', () => {
           },
         }),
       ],
-      providers: [TestBaseRepository],
+      providers: [UserRepository],
     }).compile();
 
-    testBaseRepository = module.get(TestBaseRepository);
+    testBaseRepository = module.get(UserRepository);
   });
 
   test('insert and find test', async () => {
@@ -402,8 +403,8 @@ describe('start db and populate the entity', () => {
 
     await expect(
       testBaseRepository.runInTransaction(async (qr) => {
-        await qr.manager.save(TestBaseEntity, toSaveSuccess);
-        await qr.manager.save(TestBaseEntity, toSaveFailed);
+        await qr.manager.save(UserEntity, toSaveSuccess);
+        await qr.manager.save(UserEntity, toSaveFailed);
       }),
     ).rejects.toBeInstanceOf(QueryFailedError);
 
@@ -430,18 +431,26 @@ describe('start db and populate the entity', () => {
     };
 
     await testBaseRepository.runInTransaction(async (qr) => {
-      await qr.manager.save(TestBaseEntity, toSaveSuccessFirst);
-      await qr.manager.save(TestBaseEntity, toSaveSuccessSecond);
+      await qr.manager.save(UserEntity, toSaveSuccessFirst);
+      await qr.manager.save(UserEntity, toSaveSuccessSecond);
     });
 
-    const savedEntity = await testBaseRepository.findAllPaginated({
-      firstName: In([
-        toSaveSuccessFirst.firstName,
-        toSaveSuccessSecond.firstName,
-      ]),
-    });
+    const savedEntity = await testBaseRepository.findAllPaginated(
+      {
+        path: 'users',
+        filter: {
+          firstName: [
+            FilterOperator.IN,
+            [toSaveSuccessFirst.firstName, toSaveSuccessSecond.firstName].join(
+              ',',
+            ),
+          ].join(':'),
+        },
+      },
+      USER_PAGINATED_CONFIG,
+    );
 
-    expect(savedEntity.length).toBe(2);
+    expect(savedEntity.data.length).toBe(2);
   });
 
   test('save and update', async () => {
@@ -495,7 +504,7 @@ describe('start db and populate the entity', () => {
 
 function checkAllTestFieldsPresent(
   dtoForSaving: { firstName: string; lastName: string; password: string },
-  saved?: TestBaseEntity | null,
+  saved?: UserEntity | null,
 ) {
   expect(saved).toBeDefined();
 

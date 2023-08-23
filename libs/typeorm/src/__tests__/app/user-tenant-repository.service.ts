@@ -4,15 +4,15 @@ import { BaseTenantRepository } from '../../lib/repositories/tenant-base.reposit
 import { InjectDataSource } from '@nestjs/typeorm';
 import { ClsService } from 'nestjs-cls';
 import { TenantClsStore } from '../../lib/vo/tenant-base-cls-store';
-import { TestTenantBaseEntity } from './test-base-tenant.entity';
+import { TenantUserEntity } from './test-base-tenant.entity';
 
 @Injectable()
-export class TestBaseTenantRepository extends BaseTenantRepository<TestTenantBaseEntity> {
+export class UserTenantRepository extends BaseTenantRepository<TenantUserEntity> {
   constructor(
     @InjectDataSource()
     ds: DataSource,
     clsService: ClsService<TenantClsStore>,
   ) {
-    super(TestTenantBaseEntity, ds, clsService);
+    super(TenantUserEntity, ds, clsService);
   }
 }

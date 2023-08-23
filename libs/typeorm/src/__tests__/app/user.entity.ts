@@ -1,8 +1,9 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseEntityHelper } from '../../lib/entities/entity-helper';
+import { PaginateConfig } from 'nestjs-paginate';
 
 @Entity()
-export class TestBaseEntity extends BaseEntityHelper {
+export class UserEntity extends BaseEntityHelper {
   @PrimaryGeneratedColumn('uuid')
   override id!: string;
 
@@ -19,3 +20,10 @@ export class TestBaseEntity extends BaseEntityHelper {
   @Column({ type: String, nullable: true, length: 128 })
   nullableStringField?: string | null;
 }
+
+export const USER_PAGINATED_CONFIG: PaginateConfig<UserEntity> = {
+  sortableColumns: ['id', 'createdAt'],
+  filterableColumns: {
+    firstName: true,
+  },
+};

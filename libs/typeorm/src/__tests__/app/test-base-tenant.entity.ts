@@ -3,7 +3,7 @@ import { BaseTenantEntityHelper } from '../../lib/entities/tenant-entity-helper'
 import { TenantEntity } from './tenant.entity';
 
 @Entity()
-export class TestTenantBaseEntity extends BaseTenantEntityHelper {
+export class TenantUserEntity extends BaseTenantEntityHelper {
   @PrimaryGeneratedColumn('uuid')
   override id!: string;
 

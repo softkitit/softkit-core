@@ -4,12 +4,7 @@ import { BaseEntityHelper, BaseRepository } from '@saas-buildkit/typeorm';
 import { AbstractBaseService } from './abstract-base.service';
 import { toCapitalizedWords } from '@saas-buildkit/string-utils';
 import { ObjectNotFoundException } from '@saas-buildkit/exceptions';
-import {
-  paginate,
-  PaginateConfig,
-  Paginated,
-  PaginateQuery,
-} from 'nestjs-paginate';
+import { PaginateConfig, Paginated, PaginateQuery } from 'nestjs-paginate';
 import { ClassConstructor, plainToInstance } from 'class-transformer';
 import { ClassTransformOptions } from 'class-transformer/types/interfaces';
 
@@ -76,7 +71,7 @@ export class BaseEntityService<
     query: PaginateQuery,
     config: PaginateConfig<ENTITY>,
   ): Promise<Paginated<ENTITY>> {
-    return paginate(query, this.repository, config);
+    return this.repository.findAllPaginated(query, config);
   }
 
   @Transactional()
@@ -86,7 +81,7 @@ export class BaseEntityService<
     clazz: ClassConstructor<T>,
     options?: ClassTransformOptions,
   ): Promise<Paginated<T>> {
-    return this.findAll(query, config).then((paginated) => {
+    return this.repository.findAllPaginated(query, config).then((paginated) => {
       const data = paginated.data.map((item) => {
         return plainToInstance(clazz, item, options);
       });
