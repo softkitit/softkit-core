@@ -21,12 +21,11 @@ import {
   UpdateUserRole,
 } from './vo/role.dto';
 import {
-  ApiOkResponsePaginated,
-  ApiPagination,
   IdParamUUID,
+  PaginatedSwaggerDocs,
   VersionNumberParam,
 } from '@saas-buildkit/common-types';
-import { Permissions, SkipAuth } from '@saas-buildkit/auth';
+import { Permissions } from '@saas-buildkit/auth';
 import { Paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
 
 @ApiTags('Roles')
@@ -41,13 +40,10 @@ export class RolesController {
   ) {}
 
   @Get()
-  @SkipAuth()
-  @ApiOkResponsePaginated(
+  @PaginatedSwaggerDocs(
     CustomUserRoleWithoutPermissionsDto,
     ROLES_PAGINATION_CONFIG,
   )
-  // @Permissions('platform.roles.read')
-  @ApiPagination(ROLES_PAGINATION_CONFIG)
   async findAll(
     @Paginate()
     query: PaginateQuery,

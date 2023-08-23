@@ -80,6 +80,7 @@ export class PaginatedMetaDocumented<T> {
             type: 'string',
           },
           {
+            type: 'string',
             enum: ['ASC', 'DESC'],
           },
         ],
