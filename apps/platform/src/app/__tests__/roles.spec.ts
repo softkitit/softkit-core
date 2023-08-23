@@ -15,7 +15,7 @@ import { DbConfig } from '@saas-buildkit/typeorm';
 import { bootstrapBaseWebApp } from '@saas-buildkit/bootstrap';
 import { TokenService } from '@saas-buildkit/auth';
 import { startDb } from '@saas-buildkit/test-utils';
-import { InfinityPaginationResultType } from '@saas-buildkit/common-types';
+import { PaginatedDocumented } from '@saas-buildkit/common-types';
 
 describe('roles e2e test', () => {
   let app: NestFastifyApplication;
@@ -115,7 +115,7 @@ describe('roles e2e test', () => {
 
       expect(response.statusCode).toEqual(200);
 
-      const responseBody: InfinityPaginationResultType<CustomUserRoleWithoutPermissionsDto> =
+      const responseBody: PaginatedDocumented<CustomUserRoleWithoutPermissionsDto> =
         response.json();
 
       expect(responseBody.data.length).toEqual(1);

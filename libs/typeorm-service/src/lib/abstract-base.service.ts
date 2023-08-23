@@ -1,6 +1,8 @@
 import { FindOneOptions } from 'typeorm';
 import { BaseEntityHelper } from '@saas-buildkit/typeorm';
 import { PaginateConfig, Paginated, PaginateQuery } from 'nestjs-paginate';
+import { ClassConstructor } from 'class-transformer';
+import { ClassTransformOptions } from 'class-transformer/types/interfaces';
 
 export abstract class AbstractBaseService<
   ENTITY extends BaseEntityHelper,
@@ -34,6 +36,13 @@ export abstract class AbstractBaseService<
     query: PaginateQuery,
     config: PaginateConfig<ENTITY>,
   ): Promise<Paginated<ENTITY>>;
+
+  abstract findAllAndTransform<T extends Partial<ENTITY>>(
+    query: PaginateQuery,
+    config: PaginateConfig<ENTITY>,
+    clazz: ClassConstructor<T>,
+    options?: ClassTransformOptions,
+  ): Promise<Paginated<T>>;
 
   abstract archive(id: ENTITY['id'], version: number): Promise<boolean>;
 

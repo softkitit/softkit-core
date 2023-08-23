@@ -42,7 +42,10 @@ export class RolesController {
 
   @Get()
   @SkipAuth()
-  @ApiOkResponsePaginated(CustomUserRoleWithoutPermissionsDto)
+  @ApiOkResponsePaginated(
+    CustomUserRoleWithoutPermissionsDto,
+    ROLES_PAGINATION_CONFIG,
+  )
   // @Permissions('platform.roles.read')
   @ApiPagination(ROLES_PAGINATION_CONFIG)
   async findAll(

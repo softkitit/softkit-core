@@ -1,8 +1,7 @@
 import { DeepPartial, FindOneOptions } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
-import { BaseEntityHelper } from '@saas-buildkit/typeorm';
+import { BaseEntityHelper, BaseRepository } from '@saas-buildkit/typeorm';
 import { AbstractBaseService } from './abstract-base.service';
-import { BaseRepository } from '@saas-buildkit/typeorm';
 import { toCapitalizedWords } from '@saas-buildkit/string-utils';
 import { ObjectNotFoundException } from '@saas-buildkit/exceptions';
 import {
@@ -11,6 +10,8 @@ import {
   Paginated,
   PaginateQuery,
 } from 'nestjs-paginate';
+import { ClassConstructor, plainToInstance } from 'class-transformer';
+import { ClassTransformOptions } from 'class-transformer/types/interfaces';
 
 export class BaseEntityService<
   ENTITY extends BaseEntityHelper,
@@ -76,6 +77,24 @@ export class BaseEntityService<
     config: PaginateConfig<ENTITY>,
   ): Promise<Paginated<ENTITY>> {
     return paginate(query, this.repository, config);
+  }
+
+  @Transactional()
+  override findAllAndTransform<T extends Partial<ENTITY>>(
+    query: PaginateQuery,
+    config: PaginateConfig<ENTITY>,
+    clazz: ClassConstructor<T>,
+    options?: ClassTransformOptions,
+  ): Promise<Paginated<T>> {
+    return this.findAll(query, config).then((paginated) => {
+      const data = paginated.data.map((item) => {
+        return plainToInstance(clazz, item, options);
+      });
+      return {
+        ...paginated,
+        data,
+      } as never as Paginated<T>;
+    });
   }
 
   @Transactional()
