@@ -17,6 +17,7 @@ import { ObjectNotFoundException } from '@saas-buildkit/exceptions';
 import { PAGINATED_CONFIG, UserEntity } from './app/user.entity';
 import { UserService } from './app/user.service';
 import { UserRepository } from './app/user.repository';
+import { UserDto } from './app/user.dto';
 
 describe('base service tests', () => {
   let testBaseService: UserService;
@@ -267,17 +268,37 @@ describe('base service tests', () => {
       let numberOfIterations: number;
 
       for (let i = 1; ; i++) {
-        const entities = await testBaseService.findAll(
-          {
-            filter: {
-              firstName: firstName,
-            },
-            page: i,
-            limit: pageSize,
-            path: 'test',
+        const filterQuery = {
+          filter: {
+            firstName: firstName,
           },
+          page: i,
+          limit: pageSize,
+          path: 'test',
+        };
+        const entities = await testBaseService.findAllPaginated(
+          filterQuery,
           PAGINATED_CONFIG,
         );
+
+        const entitiesTransformed =
+          await testBaseService.findAllPaginatedAndTransform(
+            filterQuery,
+            PAGINATED_CONFIG,
+            UserDto,
+          );
+
+        const entitiesManualTransformedData = {
+          ...entities,
+          data: entities.data.map((e) => {
+            return {
+              id: e.id,
+              createdAt: e.createdAt,
+            };
+          }),
+        };
+
+        expect(entitiesTransformed).toEqual(entitiesManualTransformedData);
 
         allEntities.push(...entities.data);
         expect(entities.meta.totalItems).toBe(numberOfItems);
@@ -287,6 +308,16 @@ describe('base service tests', () => {
           break;
         }
       }
+
+      const allEntitiesFromDb = await testBaseService.findAll(1, 1000);
+
+      const allIdsFromDb = allEntitiesFromDb
+        .filter((e) => e.firstName === firstName)
+        .map((e) => e.id)
+        .sort();
+
+      const allRetrievedEntities = allEntities.map((e) => e.id).sort();
+      expect(allIdsFromDb).toEqual(allRetrievedEntities);
 
       expect(numberOfIterations).toBe(expectedNumberOfIterations);
 

@@ -1,4 +1,4 @@
-import { FindOneOptions } from 'typeorm';
+import { FindOneOptions, FindOptionsOrder } from 'typeorm';
 import { BaseEntityHelper } from '@saas-buildkit/typeorm';
 import { PaginateConfig, Paginated, PaginateQuery } from 'nestjs-paginate';
 import { ClassConstructor } from 'class-transformer';
@@ -14,6 +14,12 @@ export abstract class AbstractBaseService<
       // insert type
       | Omit<ENTITY, keyof EXCLUDE_FIELDS_FOR_SAVE_TYPE | 'id' | 'version'>,
   ): Promise<ENTITY>;
+
+  abstract findAll(
+    page: number,
+    limit: number,
+    order?: FindOptionsOrder<ENTITY>,
+  ): Promise<ENTITY[]>;
 
   abstract createOrUpdateEntities(
     entity: // update type
@@ -32,12 +38,12 @@ export abstract class AbstractBaseService<
     throwExceptionIfNotFound: boolean,
   ): Promise<ENTITY | undefined>;
 
-  abstract findAll(
+  abstract findAllPaginated(
     query: PaginateQuery,
     config: PaginateConfig<ENTITY>,
   ): Promise<Paginated<ENTITY>>;
 
-  abstract findAllAndTransform<T extends Partial<ENTITY>>(
+  abstract findAllPaginatedAndTransform<T>(
     query: PaginateQuery,
     config: PaginateConfig<ENTITY>,
     clazz: ClassConstructor<T>,

@@ -303,12 +303,9 @@ export abstract class BaseRepository<
   /**
    * @deprecated The method should not be used
    */
-  override async softRemove<T extends DeepPartial<ENTITY>>(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    entity: T,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    options?: SaveOptions,
-  ): Promise<T & ENTITY> {
+  override async softRemove<T extends DeepPartial<ENTITY>>(): Promise<
+    T & ENTITY
+  > {
     this.logger
       .warn(`softRemove method is not recommended to use in repository ${this.metadata.name}
     Because it doesn't with versioning. Use archive instead.`);

@@ -15,7 +15,7 @@ import { DbConfig } from '@saas-buildkit/typeorm';
 import { bootstrapBaseWebApp } from '@saas-buildkit/bootstrap';
 import { TokenService } from '@saas-buildkit/auth';
 import { startDb } from '@saas-buildkit/test-utils';
-import { PaginatedDocumented } from '@saas-buildkit/common-types';
+import { Paginated } from 'nestjs-paginate';
 
 describe('roles e2e test', () => {
   let app: NestFastifyApplication;
@@ -115,7 +115,7 @@ describe('roles e2e test', () => {
 
       expect(response.statusCode).toEqual(200);
 
-      const responseBody: PaginatedDocumented<CustomUserRoleWithoutPermissionsDto> =
+      const responseBody: Paginated<CustomUserRoleWithoutPermissionsDto> =
         response.json();
 
       expect(responseBody.data.length).toEqual(1);

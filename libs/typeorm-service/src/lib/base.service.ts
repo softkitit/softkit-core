@@ -1,11 +1,15 @@
-import { DeepPartial, FindOneOptions } from 'typeorm';
+import { DeepPartial, FindOneOptions, FindOptionsOrder } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 import { BaseEntityHelper, BaseRepository } from '@saas-buildkit/typeorm';
 import { AbstractBaseService } from './abstract-base.service';
 import { toCapitalizedWords } from '@saas-buildkit/string-utils';
 import { ObjectNotFoundException } from '@saas-buildkit/exceptions';
 import { PaginateConfig, Paginated, PaginateQuery } from 'nestjs-paginate';
-import { ClassConstructor, plainToInstance } from 'class-transformer';
+import {
+  ClassConstructor,
+  instanceToPlain,
+  plainToInstance,
+} from 'class-transformer';
 import { ClassTransformOptions } from 'class-transformer/types/interfaces';
 
 export class BaseEntityService<
@@ -67,7 +71,7 @@ export class BaseEntityService<
   }
 
   @Transactional()
-  override async findAll(
+  override async findAllPaginated(
     query: PaginateQuery,
     config: PaginateConfig<ENTITY>,
   ): Promise<Paginated<ENTITY>> {
@@ -75,15 +79,32 @@ export class BaseEntityService<
   }
 
   @Transactional()
-  override findAllAndTransform<T extends Partial<ENTITY>>(
+  override async findAll(
+    page = 1,
+    limit = 20,
+    order?: FindOptionsOrder<ENTITY>,
+  ): Promise<ENTITY[]> {
+    return this.repository.find({
+      take: limit,
+      skip: (page - 1) * limit,
+      order: order,
+    });
+  }
+
+  @Transactional()
+  override findAllPaginatedAndTransform<T>(
     query: PaginateQuery,
     config: PaginateConfig<ENTITY>,
     clazz: ClassConstructor<T>,
-    options?: ClassTransformOptions,
+    // eslint-disable-next-line unicorn/no-object-as-default-parameter
+    options: ClassTransformOptions = {
+      excludeExtraneousValues: true,
+    },
   ): Promise<Paginated<T>> {
     return this.repository.findAllPaginated(query, config).then((paginated) => {
       const data = paginated.data.map((item) => {
-        return plainToInstance(clazz, item, options);
+        const plain = instanceToPlain(item);
+        return plainToInstance(clazz, plain, options);
       });
       return {
         ...paginated,

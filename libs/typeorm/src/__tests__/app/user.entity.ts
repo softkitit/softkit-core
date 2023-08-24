@@ -25,5 +25,6 @@ export const USER_PAGINATED_CONFIG: PaginateConfig<UserEntity> = {
   sortableColumns: ['id', 'createdAt'],
   filterableColumns: {
     firstName: true,
+    lastName: true,
   },
 };

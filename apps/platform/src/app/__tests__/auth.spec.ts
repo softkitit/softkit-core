@@ -95,16 +95,16 @@ describe('auth e2e test', () => {
         });
 
       const tenantsBeforeSignUp = await app.get(TenantService).findAll();
-      const tenantsCountBeforeSignUp = tenantsBeforeSignUp.count;
+      const tenantsCountBeforeSignUp = tenantsBeforeSignUp.length;
 
       const usersBeforeSignUp = await app.get(UserService).findAll();
-      const usersCountBeforeSignUp = usersBeforeSignUp.count;
+      const usersCountBeforeSignUp = usersBeforeSignUp.length;
 
       const approvalsBeforeSignUp = await app
         .get(ExternalApprovalService)
         .findAll();
 
-      const approvalsCountBeforeSignUp = approvalsBeforeSignUp.count;
+      const approvalsCountBeforeSignUp = approvalsBeforeSignUp.length;
 
       await wrapInTransaction(async () => {
         const response = await app.inject({
@@ -116,13 +116,13 @@ describe('auth e2e test', () => {
         // counts of all of these entities should remain the same after failed the signup
 
         const users = await app.get(UserService).findAll();
-        expect(users.count).toBe(usersCountBeforeSignUp);
+        expect(users.length).toBe(usersCountBeforeSignUp);
 
         const allTenants = await app.get(TenantService).findAll();
-        expect(allTenants.count).toBe(tenantsCountBeforeSignUp);
+        expect(allTenants.length).toBe(tenantsCountBeforeSignUp);
 
         const allApprovals = await app.get(ExternalApprovalService).findAll();
-        expect(allApprovals.count).toBe(approvalsCountBeforeSignUp);
+        expect(allApprovals.length).toBe(approvalsCountBeforeSignUp);
 
         expect(response.statusCode).toBe(500);
       });
@@ -232,9 +232,9 @@ describe('auth e2e test', () => {
       expect(signUpResponse.statusCode).toBe(201);
 
       const approvals = await approvalService.findAll();
-      expect(approvals.count).toBe(1);
+      expect(approvals.length).toBe(1);
 
-      const approvalObject = approvals.data[0];
+      const approvalObject = approvals[0];
 
       await app.inject({
         method: 'POST',
@@ -274,9 +274,9 @@ describe('auth e2e test', () => {
 
       expect(signUpResponse.statusCode).toBe(201);
       const approvals = await approvalService.findAll();
-      expect(approvals.count).toBe(1);
+      expect(approvals.length).toBe(1);
 
-      const approvalObject = approvals.data[0];
+      const approvalObject = approvals[0];
 
       const response = await app.inject({
         method: 'POST',
@@ -312,9 +312,9 @@ describe('auth e2e test', () => {
 
       expect(signUpResponse.statusCode).toBe(201);
       const approvals = await approvalService.findAll();
-      expect(approvals.count).toBe(1);
+      expect(approvals.length).toBe(1);
 
-      const approvalObject = approvals.data[0];
+      const approvalObject = approvals[0];
 
       const response = await app.inject({
         method: 'POST',
