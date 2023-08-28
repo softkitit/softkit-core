@@ -27,6 +27,7 @@ export class HttpClientConfig {
   @Min(0)
   /**
    * milliseconds to wait for the server to send the response before aborting the request
+   * timeout should account retries as well, it's time for the function invocation and not an individual request
    * */
   timeout = 10_000;
 

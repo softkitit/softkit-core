@@ -14,6 +14,7 @@ import {
   InternalProxyHttpException,
   InternalServiceUnavailableHttpException,
 } from '@saas-buildkit/exceptions';
+import { REQUEST_ID_HEADER } from '../lib/constants';
 
 const defaultRetryConfig: HttpRetryConfig = {
   retriesCount: 3,
@@ -189,16 +190,45 @@ describe('Circuit breaker and retry', () => {
     expect(err.config).toBeDefined();
   });
 
+  it('Retry and circuit breaker with presetting auth token using cls service', async () => {
+    const clsData: UserRequestClsStore = {
+      authHeader: 'Bearer authHeader',
+      tenantId: 'tenantId',
+      userId: 'userId',
+      reqId: 'reqId',
+    };
+
+    await clsService.runWith(clsData, async () => {
+      const axiosResponse = await axiosInstance.get(
+        '/sample/get-passed-headers',
+      );
+
+      expect(axiosResponse.status).toBe(200);
+      const resultData = axiosResponse.data;
+
+      expect({
+        Authorization: resultData['authorization'],
+        [REQUEST_ID_HEADER]: resultData[REQUEST_ID_HEADER],
+      }).toStrictEqual({
+        Authorization: clsData.authHeader,
+        [REQUEST_ID_HEADER]: clsData.reqId,
+      });
+    });
+  });
+
   describe('Just retry', () => {
-    let axiosInstance: AxiosInstance;
+    let axiosInstanceWithoutCircuitBreaker: AxiosInstance;
 
     beforeEach(async () => {
-      axiosInstance = await createAxiosInstance(clsService, {
-        timeout: 1000,
-        url: appHost,
-        retryConfig: defaultRetryConfig,
-        serviceName: 'sample',
-      });
+      axiosInstanceWithoutCircuitBreaker = await createAxiosInstance(
+        clsService,
+        {
+          timeout: 1000,
+          url: appHost,
+          retryConfig: defaultRetryConfig,
+          serviceName: 'sample',
+        },
+      );
     });
 
     afterEach(async () => {
@@ -206,10 +236,12 @@ describe('Circuit breaker and retry', () => {
       clearAllMocks();
     });
 
-    it('got internal server error with retry only', async () => {
+    it('got internal server error with retry only: with retry %s', async () => {
       const allResponses = await Promise.allSettled(
         Array.from({ length: 100 }).map(() => {
-          return axiosInstance.get('/sample/always-internal-server-error');
+          return axiosInstanceWithoutCircuitBreaker.get(
+            '/sample/always-internal-server-error',
+          );
         }),
       );
 
@@ -223,6 +255,97 @@ describe('Circuit breaker and retry', () => {
         expect(err.response).toBeDefined();
         expect(err.response.message).toBe('Internal server error');
       }
+    });
+
+    it.each([RetryType.STATIC, RetryType.LINEAR, RetryType.EXPONENTIAL])(
+      'internal server error with different retries : %s',
+      async (retryType) => {
+        const axiosInstanceWithRetry = await createAxiosInstance(clsService, {
+          timeout: 2000,
+          url: appHost,
+          serviceName: 'sample',
+          retryConfig: {
+            ...defaultRetryConfig,
+            retryType,
+          },
+        });
+
+        try {
+          await axiosInstanceWithRetry.get(
+            '/sample/always-internal-server-error',
+          );
+        } catch {
+          /* empty */
+        }
+
+        expect(sampleController.counters.internalServerError).toBe(4);
+      },
+    );
+  });
+
+  describe('Just circuit breaker', () => {
+    let axiosInstanceWithoutRetries: AxiosInstance;
+
+    beforeEach(async () => {
+      axiosInstanceWithoutRetries = await createAxiosInstance(clsService, {
+        timeout: 1000,
+        url: appHost,
+        circuitBreakerConfig: {
+          ...defaultCircuitBreakerConfig,
+        },
+        serviceName: 'sample',
+      });
+    });
+
+    afterEach(async () => {
+      await app.close();
+      clearAllMocks();
+    });
+
+    /** the explanation is the same as without retries method, check above*/
+    it('every third failure without retry', async () => {
+      const requests = Array.from({ length: 100 });
+
+      const allResponses = [];
+
+      for (const request of requests) {
+        try {
+          const axiosResponse = await axiosInstanceWithoutRetries.get(
+            '/sample/failing-every-third',
+          );
+          allResponses.push(axiosResponse);
+        } catch (error) {
+          allResponses.push(error);
+        }
+      }
+      expect(sampleController.counters.everyThird).toBe(11);
+
+      // every third request must be success
+      const successResponses = allResponses
+        .slice(0, 11)
+        .filter((_, i) => i % 3 === 0);
+
+      for (const v of successResponses) {
+        expect((v as AxiosResponse).status).toBe(200);
+      }
+
+      const allFailed = allResponses.slice(0, 11).filter((_, i) => i % 3 !== 0);
+
+      for (const v of allFailed) {
+        const err = v as InternalProxyHttpException;
+        expect(err.status).toBe(500);
+        expect(err.config).toBeDefined();
+        expect(err.response).toBeDefined();
+      }
+
+      // all other should be locked by circuit breaker
+      for (const v of allResponses.slice(11)) {
+        const err = v as InternalServiceUnavailableHttpException;
+        expect(err.status).toBe(503);
+        expect(err.title).toBe('exception.SERVICE_UNAVAILABLE.TITLE');
+      }
+
+      expect(allResponses.length).toBe(100);
     });
   });
 });

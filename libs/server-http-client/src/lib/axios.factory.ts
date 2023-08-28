@@ -24,6 +24,7 @@ function configureRetries(
   switch (retryConfig?.retryType) {
     case RetryType.EXPONENTIAL: {
       axiosRetry(axiosInstance, {
+        retries: retryConfig.retriesCount + 1,
         retryDelay: (retryCount: number, error: AxiosError) =>
           axiosRetry.exponentialDelay(retryCount, error, retryConfig.delay),
       });
@@ -44,8 +45,10 @@ function configureRetries(
       break;
     }
     default: {
+      // this is obvious developer mistake that will be caught on app start
+      /* istanbul ignore next */
       throw new Error(
-        `Invalid retry type for http client, please check your config. ${config}`,
+        `Invalid retry type for http client, please check your config. RetryType - ${retryConfig.retryType}`,
       );
     }
   }
@@ -68,8 +71,11 @@ function proxyHttpException(serviceName: string) {
               response.status,
               response.data,
               error.config,
+              error,
             );
           }
+          // this will be reported as internal server error by default filter
+          /* istanbul ignore next */
           throw error;
         }
       }

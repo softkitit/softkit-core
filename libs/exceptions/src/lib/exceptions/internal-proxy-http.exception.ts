@@ -11,5 +11,6 @@ export class InternalProxyHttpException {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public response: any,
     public config?: object,
+    public rootCause?: unknown,
   ) {}
 }

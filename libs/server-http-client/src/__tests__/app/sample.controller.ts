@@ -1,4 +1,4 @@
-import { BadRequestException, Controller, Get } from '@nestjs/common';
+import { BadRequestException, Controller, Get, Headers } from '@nestjs/common';
 
 @Controller('sample')
 export class SampleController {
@@ -42,5 +42,10 @@ export class SampleController {
     } finally {
       this.counters.everyThird++;
     }
+  }
+
+  @Get('get-passed-headers')
+  async getPassedHeaders(@Headers() headers: Record<string, string>) {
+    return headers;
   }
 }
