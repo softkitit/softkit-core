@@ -1,11 +1,27 @@
-import { Allow, IsEmail, IsOptional, IsString, IsUrl } from 'class-validator';
+import {
+  IsEmail,
+  IsOptional,
+  IsString,
+  IsUrl,
+  Allow,
+  IsBoolean,
+} from 'class-validator';
+import { BooleanTypeTransform } from '@saas-buildkit/validation';
 
 export class SwaggerConfig {
   @IsString()
   title!: string;
 
+  @BooleanTypeTransform
+  @IsBoolean()
+  enabled = false;
+
   @IsString()
   swaggerPath!: string;
+
+  @IsString()
+  @IsOptional()
+  docsOutputPath!: string;
 
   @IsString()
   description!: string;

@@ -1,4 +1,8 @@
 {
+  "SERVICE_UNAVAILABLE": {
+    "TITLE": "Service Unavailable",
+    "GENERAL_DETAIL": "The service is currently unavailable. Please try again later."
+  },
   "NOT_FOUND": {
     "TITLE": "Not Found",
     "GENERAL_DETAIL": "Can not find the appropriate object. It doesn't exist anymore or you don't have access to it.",

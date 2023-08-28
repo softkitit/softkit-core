@@ -51,6 +51,9 @@
       "@saas-buildkit/resource-plugin": [
         "libs/resource-plugin/src/index.ts"
       ],
+      "@saas-buildkit/server-http-client": [
+        "libs/server-http-client/src/index.ts"
+      ],
       "@saas-buildkit/string-utils": [
         "libs/string-utils/src/index.ts"
       ],

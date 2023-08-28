@@ -1,4 +1,8 @@
-import { ClassSerializerInterceptor, VersioningType } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  INestApplication,
+  VersioningType,
+} from '@nestjs/common';
 import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
 import {
   FastifyAdapter,
@@ -14,7 +18,6 @@ import {
 import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
 import { initializeTransactionalContext } from 'typeorm-transactional';
 import { getTransactionalContext } from 'typeorm-transactional/dist/common';
-import { REQUEST_ID_HEADER } from './vo/constants';
 import { generateRandomId } from '@saas-buildkit/crypto';
 import {
   AnyExceptionFilter,
@@ -28,6 +31,7 @@ import { setupSwagger, SwaggerConfig } from '@saas-buildkit/swagger-utils';
 import { PostgresDbFailedErrorFilter } from '@saas-buildkit/typeorm';
 import { LoggingInterceptor } from '@saas-buildkit/logger';
 import { responseBodyFormatter } from '@saas-buildkit/i18n';
+import { REQUEST_ID_HEADER } from '@saas-buildkit/server-http-client';
 
 function buildFastifyAdapter() {
   return new FastifyAdapter({
@@ -40,7 +44,24 @@ function buildFastifyAdapter() {
   });
 }
 
-async function bootstrapBaseWebApp(
+function setupGlobalFilters(
+  app: INestApplication,
+  httpAdapterHost: HttpAdapterHost,
+) {
+  app.useGlobalFilters(
+    new AnyExceptionFilter(httpAdapterHost),
+    new OverrideDefaultNotFoundFilter(httpAdapterHost),
+    new OverrideDefaultForbiddenExceptionFilter(httpAdapterHost),
+    new PostgresDbFailedErrorFilter(httpAdapterHost),
+    new HttpExceptionFilter(httpAdapterHost),
+    new I18nValidationExceptionFilter({
+      responseBodyFormatter,
+      detailedErrors: true,
+    }),
+  );
+}
+
+async function createNestWebApp(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   module: any | TestingModule,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -48,6 +69,29 @@ async function bootstrapBaseWebApp(
 ) {
   const isTestingModule = module instanceof TestingModule;
 
+  if (isTestingModule && originalModule === undefined) {
+    throw new Error(
+      'If you are using TestingModule, you must pass the original module as the second argument',
+    );
+  }
+
+  return isTestingModule
+    ? module.createNestApplication<NestFastifyApplication>(
+        buildFastifyAdapter(),
+      )
+    : await NestFactory.create<NestFastifyApplication>(
+        module,
+        buildFastifyAdapter(),
+        {},
+      );
+}
+
+async function bootstrapBaseWebApp(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  module: any | TestingModule,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  originalModule?: any,
+) {
   // todo wait for the pr in this package to be merged
   //  transition to use AsyncCls instead of ClsHook
   const transactionalContext = getTransactionalContext();
@@ -57,21 +101,7 @@ async function bootstrapBaseWebApp(
     initializeTransactionalContext();
   }
 
-  if (isTestingModule && originalModule === undefined) {
-    throw new Error(
-      'If you are using TestingModule, you must pass the original module as the second argument',
-    );
-  }
-
-  const app = isTestingModule
-    ? module.createNestApplication<NestFastifyApplication>(
-        buildFastifyAdapter(),
-      )
-    : await NestFactory.create<NestFastifyApplication>(
-        module,
-        buildFastifyAdapter(),
-        {},
-      );
+  const app = await createNestWebApp(module, originalModule);
 
   const fastifyInstance: FastifyInstance = app.getHttpAdapter().getInstance();
 
@@ -95,24 +125,15 @@ async function bootstrapBaseWebApp(
 
   app.enableShutdownHooks();
 
-  app.useLogger(app.get(Logger));
+  const logger = app.get(Logger);
+  app.useLogger(logger);
   app.flushLogs();
 
   const httpAdapterHost = app.get(HttpAdapterHost);
   app.useGlobalPipes(new I18nValidationPipe(DEFAULT_VALIDATION_OPTIONS));
 
   // so first global one and then narrow
-  app.useGlobalFilters(
-    new AnyExceptionFilter(httpAdapterHost),
-    new OverrideDefaultNotFoundFilter(httpAdapterHost),
-    new OverrideDefaultForbiddenExceptionFilter(httpAdapterHost),
-    new PostgresDbFailedErrorFilter(httpAdapterHost),
-    new HttpExceptionFilter(httpAdapterHost),
-    new I18nValidationExceptionFilter({
-      responseBodyFormatter,
-      detailedErrors: true,
-    }),
-  );
+  setupGlobalFilters(app, httpAdapterHost);
 
   app.useGlobalInterceptors(new LoggingInterceptor());
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
@@ -129,7 +150,11 @@ async function bootstrapBaseWebApp(
     type: VersioningType.URI,
   });
 
-  setupSwagger(swaggerConfig, app);
+  const swaggerSetup = setupSwagger(swaggerConfig, app);
+
+  if (!swaggerSetup) {
+    logger.log(`Swagger is disabled by config, skipping...`);
+  }
 
   await app.listen(appConfig.port, '0.0.0.0');
 

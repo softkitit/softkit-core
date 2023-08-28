@@ -20,13 +20,14 @@ import {
   ROLES_PAGINATION_CONFIG,
   UpdateUserRole,
 } from './vo/role.dto';
-import {
-  IdParamUUID,
-  PaginatedSwaggerDocs,
-  VersionNumberParam,
-} from '@saas-buildkit/common-types';
+import { IdParamUUID, VersionNumberParam } from '@saas-buildkit/common-types';
 import { Permissions } from '@saas-buildkit/auth';
-import { Paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
+import {
+  Paginate,
+  Paginated,
+  PaginatedSwaggerDocs,
+  PaginateQuery,
+} from 'nestjs-paginate';
 
 @ApiTags('Roles')
 @Controller({
@@ -86,7 +87,7 @@ export class RolesController {
 
   @Put(':id')
   @Permissions('platform.roles.update')
-  async updateOne(@Param('id') id: IdParamUUID, @Body() role: UpdateUserRole) {
+  async updateOne(@Param() id: IdParamUUID, @Body() role: UpdateUserRole) {
     return this.customUserRoleTenantService
       .createOrUpdateEntity({
         id,

@@ -3,6 +3,10 @@
 import { Path } from "@saas-buildkit/nestjs-i18n";
 export type I18nTranslations = {
     "exception": {
+        "SERVICE_UNAVAILABLE": {
+            "TITLE": string;
+            "GENERAL_DETAIL": string;
+        };
         "NOT_FOUND": {
             "TITLE": string;
             "GENERAL_DETAIL": string;
