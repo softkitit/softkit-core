@@ -1,9 +1,4 @@
-import axios, {
-  AxiosError,
-  AxiosInstance,
-  AxiosRequestConfig,
-  InternalAxiosRequestConfig,
-} from 'axios';
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
 import { HttpClientConfig } from './config/http-client.config';
 import { ClsService } from 'nestjs-cls';
 import { UserRequestClsStore } from './vo/user-request-cls-store';
@@ -15,13 +10,6 @@ import {
   InternalProxyHttpException,
   InternalServiceUnavailableHttpException,
 } from '@saas-buildkit/exceptions';
-
-export interface AxiosInterceptorsOptions {
-  modifyRequest?: (
-    request: InternalAxiosRequestConfig,
-  ) => InternalAxiosRequestConfig | Promise<InternalAxiosRequestConfig>;
-  returnResponseToClientInCaseOfError: boolean;
-}
 
 function configureRetries(
   config: HttpClientConfig,
@@ -65,19 +53,31 @@ function configureRetries(
   return axiosInstance;
 }
 
-// function proxyHttpException() {
-//   return (response: AxiosResponse) => {
-//     if (response.status < 200 || response.status >= 300) {
-//       throw new InternalProxyHttpException(
-//         response.status,
-//         response.data,
-//         response.headers as Record<string, string>,
-//       );
-//     }
-//
-//     return response;
-//   };
-// }
+function proxyHttpException(serviceName: string) {
+  return (error: AxiosError | Error) => {
+    if ('code' in error) {
+      const response = error.response;
+      // eslint-disable-next-line sonarjs/no-small-switch
+      switch (error.code) {
+        case 'EOPENBREAKER': {
+          throw new InternalServiceUnavailableHttpException(serviceName, error);
+        }
+        default: {
+          if (response) {
+            throw new InternalProxyHttpException(
+              response.status,
+              response.data,
+              error.config,
+            );
+          }
+          throw error;
+        }
+      }
+    }
+
+    throw error;
+  };
+}
 
 export async function createAxiosInstance<T extends UserRequestClsStore>(
   clsService: ClsService<T>,
@@ -100,23 +100,19 @@ export async function createAxiosInstance<T extends UserRequestClsStore>(
       name: config.serviceName,
       capacity: config.circuitBreakerConfig.maxConcurrentRequests,
     });
-
-    // circuitBreaker.fallback(
-    //   (config: AxiosRequestConfig, error?: AxiosError) => {
-    //     if (error?.response && options.returnResponseToClientInCaseOfError) {
-    //       proxyHttpException()(error.response);
-    //     }
-    //     throw error;
-    //   },
-    // );
   }
 
-  const axiosInstance = configureRetries(
-    config,
-    axios.create({
-      ...axiosAdditionalConfig,
-      ...config,
-    }),
+  const originalInstance = axios.create({
+    ...axiosAdditionalConfig,
+    ...config,
+    baseURL: config.url,
+  });
+
+  const axiosInstance = configureRetries(config, originalInstance);
+
+  axiosInstance.interceptors.response.use(
+    (value) => value,
+    proxyHttpException(config.serviceName),
   );
 
   axiosInstance.interceptors.request.use((request) => {
@@ -128,31 +124,15 @@ export async function createAxiosInstance<T extends UserRequestClsStore>(
     }
     if (circuitBreaker) {
       request.adapter = async (c) => {
-        return await circuitBreaker
-          .fire({
-            ...c,
-            adapter: undefined,
-          })
-          .catch((error) => {
-            if (error.code === 'EOPENBREAKER') {
-              throw new InternalServiceUnavailableHttpException(
-                config.serviceName,
-                error,
-              );
-            } else if (error.response) {
-              throw new InternalProxyHttpException(
-                error.response.status,
-                error.response,
-                error.config,
-              );
-            }
-            throw error;
-          });
+        return await circuitBreaker.fire({
+          ...c,
+          adapter: undefined,
+        });
       };
     }
 
     return request;
   });
 
-  return configureRetries(config, axiosInstance);
+  return axiosInstance;
 }

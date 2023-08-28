@@ -10,27 +10,32 @@ import { UserRequestClsStore } from '../lib/vo/user-request-cls-store';
 import { AxiosInstance, AxiosResponse } from 'axios';
 import clearAllMocks = jest.clearAllMocks;
 import { SampleController } from './app/sample.controller';
-import { InternalServiceUnavailableHttpException } from '@saas-buildkit/exceptions';
+import {
+  InternalProxyHttpException,
+  InternalServiceUnavailableHttpException,
+} from '@saas-buildkit/exceptions';
 
-describe('Circuit breaker', () => {
+const defaultRetryConfig: HttpRetryConfig = {
+  retriesCount: 3,
+  retryType: RetryType.STATIC,
+  delay: 100,
+};
+
+const defaultCircuitBreakerConfig: HttpCircuitBreakerConfig = {
+  timeout: 1000,
+  resetTimeout: 1000,
+  errorThresholdPercentage: 63,
+  volumeThreshold: 10,
+  rollingCountTimeout: 10_000,
+};
+
+describe('Circuit breaker and retry', () => {
   let appUrl: string;
   let app: INestApplication;
   let axiosInstance: AxiosInstance;
+  let appHost: string;
   let sampleController: SampleController;
-
-  const defaultRetryConfig: HttpRetryConfig = {
-    retriesCount: 3,
-    retryType: RetryType.STATIC,
-    delay: 100,
-  };
-
-  const defaultCircuitBreakerConfig: HttpCircuitBreakerConfig = {
-    timeout: 1000,
-    resetTimeout: 1000,
-    errorThresholdPercentage: 63,
-    volumeThreshold: 10,
-    rollingCountTimeout: 10_000,
-  };
+  let clsService: ClsService<UserRequestClsStore>;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -43,16 +48,17 @@ describe('Circuit breaker', () => {
 
     sampleController = app.get(SampleController);
 
-    const clsService = app.get<ClsService<UserRequestClsStore>>(ClsService);
+    clsService = app.get<ClsService<UserRequestClsStore>>(ClsService);
     appUrl = await app.getUrl();
 
     const split = appUrl.split(':');
     const appPort = split.at(-1);
 
+    appHost = `http://localhost:${appPort}`;
     axiosInstance = await createAxiosInstance(clsService, {
       timeout: 1000,
       circuitBreakerConfig: defaultCircuitBreakerConfig,
-      url: `http://localhost:${appPort}`,
+      url: appHost,
       retryConfig: defaultRetryConfig,
       serviceName: 'sample',
     });
@@ -90,7 +96,7 @@ describe('Circuit breaker', () => {
         expect(response.status).toBe('rejected');
 
         const err = response.status === 'rejected' && response.reason;
-        expect(err.response.status).toBe(400);
+        expect(err.status).toBe(400);
       }
     });
 
@@ -179,7 +185,44 @@ describe('Circuit breaker', () => {
 
     expect(err.status).toBe(500);
     expect(err.response).toBeDefined();
-    expect(err.response.statusText).toBe('Internal Server Error');
+    expect(err.response.message).toBe('Internal server error');
     expect(err.config).toBeDefined();
+  });
+
+  describe('Just retry', () => {
+    let axiosInstance: AxiosInstance;
+
+    beforeEach(async () => {
+      axiosInstance = await createAxiosInstance(clsService, {
+        timeout: 1000,
+        url: appHost,
+        retryConfig: defaultRetryConfig,
+        serviceName: 'sample',
+      });
+    });
+
+    afterEach(async () => {
+      await app.close();
+      clearAllMocks();
+    });
+
+    it('got internal server error with retry only', async () => {
+      const allResponses = await Promise.allSettled(
+        Array.from({ length: 100 }).map(() => {
+          return axiosInstance.get('/sample/always-internal-server-error');
+        }),
+      );
+
+      expect(sampleController.counters.internalServerError).toBe(400);
+
+      expect(allResponses.length).toBe(100);
+      for (const response of allResponses) {
+        const err = response.status === 'rejected' && response.reason;
+        expect(err).toBeInstanceOf(InternalProxyHttpException);
+        expect(err.status).toBe(500);
+        expect(err.response).toBeDefined();
+        expect(err.response.message).toBe('Internal server error');
+      }
+    });
   });
 });

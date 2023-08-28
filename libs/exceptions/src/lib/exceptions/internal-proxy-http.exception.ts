@@ -8,7 +8,8 @@ import { HttpStatus } from '@nestjs/common';
 export class InternalProxyHttpException {
   constructor(
     public status: HttpStatus,
-    public response: object,
-    public config: object,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    public response: any,
+    public config?: object,
   ) {}
 }
