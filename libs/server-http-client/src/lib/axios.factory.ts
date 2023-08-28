@@ -124,6 +124,7 @@ export async function createAxiosInstance<T extends UserRequestClsStore>(
   axiosInstance.interceptors.request.use((request) => {
     const store = clsService.get();
     if (store) {
+      // TODO pass also i18n information
       request.headers['Authorization'] = store.authHeader;
       // eslint-disable-next-line security/detect-object-injection
       request.headers[REQUEST_ID_HEADER] = store.reqId;
