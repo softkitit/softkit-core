@@ -19,6 +19,9 @@ export class HttpClientConfig {
   })
   url!: string;
 
+  @IsString()
+  serviceName!: string;
+
   @IsNumber()
   @Type(() => Number)
   @Min(0)

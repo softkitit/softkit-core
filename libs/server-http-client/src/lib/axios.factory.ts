@@ -11,6 +11,10 @@ import { REQUEST_ID_HEADER } from './constants';
 import * as CircuitBreaker from 'opossum';
 import axiosRetry from 'axios-retry';
 import { RetryType } from './config/vo/retry-type';
+import {
+  InternalProxyHttpException,
+  InternalServiceUnavailableHttpException,
+} from '@saas-buildkit/exceptions';
 
 export interface AxiosInterceptorsOptions {
   modifyRequest?: (
@@ -93,6 +97,7 @@ export async function createAxiosInstance<T extends UserRequestClsStore>(
   if (config.circuitBreakerConfig) {
     circuitBreaker = new CircuitBreaker(proxyCall, {
       ...config.circuitBreakerConfig,
+      name: config.serviceName,
       capacity: config.circuitBreakerConfig.maxConcurrentRequests,
     });
 
@@ -106,14 +111,13 @@ export async function createAxiosInstance<T extends UserRequestClsStore>(
     // );
   }
 
-  const axiosInstance = axios.create({
-    ...axiosAdditionalConfig,
-    ...config,
-  });
-
-  // if (options.returnResponseToClientInCaseOfError) {
-  //   axiosInstance.interceptors.response.use(proxyHttpException());
-  // }
+  const axiosInstance = configureRetries(
+    config,
+    axios.create({
+      ...axiosAdditionalConfig,
+      ...config,
+    }),
+  );
 
   axiosInstance.interceptors.request.use((request) => {
     const store = clsService.get();
@@ -123,11 +127,27 @@ export async function createAxiosInstance<T extends UserRequestClsStore>(
       request.headers[REQUEST_ID_HEADER] = store.reqId;
     }
     if (circuitBreaker) {
-      request.adapter = async (config) => {
-        return await circuitBreaker.fire({
-          ...config,
-          adapter: undefined,
-        });
+      request.adapter = async (c) => {
+        return await circuitBreaker
+          .fire({
+            ...c,
+            adapter: undefined,
+          })
+          .catch((error) => {
+            if (error.code === 'EOPENBREAKER') {
+              throw new InternalServiceUnavailableHttpException(
+                config.serviceName,
+                error,
+              );
+            } else if (error.response) {
+              throw new InternalProxyHttpException(
+                error.response.status,
+                error.response,
+                error.config,
+              );
+            }
+            throw error;
+          });
       };
     }
 

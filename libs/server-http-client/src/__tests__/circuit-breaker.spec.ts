@@ -10,6 +10,7 @@ import { UserRequestClsStore } from '../lib/vo/user-request-cls-store';
 import { AxiosInstance, AxiosResponse } from 'axios';
 import clearAllMocks = jest.clearAllMocks;
 import { SampleController } from './app/sample.controller';
+import { InternalServiceUnavailableHttpException } from '@saas-buildkit/exceptions';
 
 describe('Circuit breaker', () => {
   let appUrl: string;
@@ -53,6 +54,7 @@ describe('Circuit breaker', () => {
       circuitBreakerConfig: defaultCircuitBreakerConfig,
       url: `http://localhost:${appPort}`,
       retryConfig: defaultRetryConfig,
+      serviceName: 'sample',
     });
   });
 
@@ -146,8 +148,9 @@ describe('Circuit breaker', () => {
 
     // all remaining responses must be failed because of closed broker
     for (const response of allResponses.slice(4)) {
-      const r = response as Error;
-      expect(r.message).toBe('Breaker is open');
+      const r = response as InternalServiceUnavailableHttpException;
+      expect(r.title).toBe('exception.SERVICE_UNAVAILABLE.TITLE');
+      expect(r.status).toBe(503);
     }
 
     // all other requests must be failed because the breaker will be closed
@@ -174,7 +177,9 @@ describe('Circuit breaker', () => {
 
     const err = error.status === 'rejected' && error.reason;
 
-    expect(err.name).toBe('AxiosError');
-    expect(err.message).toBe('Request failed with status code 500');
+    expect(err.status).toBe(500);
+    expect(err.response).toBeDefined();
+    expect(err.response.statusText).toBe('Internal Server Error');
+    expect(err.config).toBeDefined();
   });
 });
