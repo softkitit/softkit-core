@@ -1,4 +1,11 @@
-import { BadRequestException, Controller, Get, Headers } from '@nestjs/common';
+import {
+  BadRequestException,
+  Controller,
+  Get,
+  Headers,
+  Inject,
+} from '@nestjs/common';
+import { AxiosInstance } from 'axios';
 
 @Controller('sample')
 export class SampleController {
@@ -6,8 +13,12 @@ export class SampleController {
     badRequest: 0,
     success: 0,
     internalServerError: 0,
+    selfCallFail: 0,
     everyThird: 0,
+    wait: 0,
   };
+
+  constructor(@Inject('AXIOS') private readonly axios: AxiosInstance) {}
 
   @Get('always-bad-request')
   async alwaysBadRequest() {
@@ -30,6 +41,19 @@ export class SampleController {
     throw new Error('Internal server error');
   }
 
+  @Get('self-call-fail')
+  async selfCallFail() {
+    this.counters.selfCallFail++;
+
+    await this.axios.get('/sample/always-internal-server-error');
+
+    // unreachable code
+    /* istanbul ignore next */
+    return {
+      success: true,
+    };
+  }
+
   @Get('failing-every-third')
   async failingEveryThird() {
     await new Promise((resolve) => setTimeout(resolve, 30));
@@ -47,5 +71,14 @@ export class SampleController {
   @Get('get-passed-headers')
   async getPassedHeaders(@Headers() headers: Record<string, string>) {
     return headers;
+  }
+
+  @Get('wait-for-2s')
+  async waitForTwoSeconds() {
+    this.counters.wait++;
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    return {
+      success: true,
+    };
   }
 }

@@ -10,11 +10,11 @@ import { UserRequestClsStore } from '../lib/vo/user-request-cls-store';
 import { AxiosInstance, AxiosResponse } from 'axios';
 import clearAllMocks = jest.clearAllMocks;
 import { SampleController } from './app/sample.controller';
-import {
-  InternalProxyHttpException,
-  InternalServiceUnavailableHttpException,
-} from '@saas-buildkit/exceptions';
+import { InternalServiceUnavailableHttpException } from '@saas-buildkit/exceptions';
 import { REQUEST_ID_HEADER } from '../lib/constants';
+import { InternalProxyHttpException } from '../lib/exceptions/internal-proxy-http.exception';
+import { InternalProxyHttpExceptionFilter } from '../lib/interceptors/internal-proxy-http.filter';
+import { HttpAdapterHost } from '@nestjs/core';
 
 const defaultRetryConfig: HttpRetryConfig = {
   retriesCount: 3,
@@ -44,6 +44,9 @@ describe('Circuit breaker and retry', () => {
     }).compile();
 
     app = module.createNestApplication();
+    const httpAdapterHost = app.get(HttpAdapterHost);
+    app.useGlobalFilters(new InternalProxyHttpExceptionFilter(httpAdapterHost));
+
     await app.init();
     await app.listen(0);
 
@@ -102,6 +105,14 @@ describe('Circuit breaker and retry', () => {
     });
 
     expect(sampleController.counters.badRequest).toBe(100);
+  });
+
+  it('should handle timeout properly', async () => {
+    await expect(
+      axiosInstance.get('/sample/wait-for-2s'),
+    ).rejects.toBeInstanceOf(InternalServiceUnavailableHttpException);
+    // do not retry on timeouts
+    expect(sampleController.counters.wait).toBe(1);
   });
 
   it('send failed requests and fallback to the fallback function', async () => {
@@ -186,7 +197,7 @@ describe('Circuit breaker and retry', () => {
 
     expect(err.status).toBe(500);
     expect(err.response).toBeDefined();
-    expect(err.response.message).toBe('Internal server error');
+    expect(err.response.statusText).toBe('Internal Server Error');
     expect(err.config).toBeDefined();
   });
 
@@ -253,7 +264,7 @@ describe('Circuit breaker and retry', () => {
         expect(err).toBeInstanceOf(InternalProxyHttpException);
         expect(err.status).toBe(500);
         expect(err.response).toBeDefined();
-        expect(err.response.message).toBe('Internal server error');
+        expect(err.response.statusText).toBe('Internal Server Error');
       }
     });
 

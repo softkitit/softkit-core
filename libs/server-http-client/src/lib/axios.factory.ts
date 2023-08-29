@@ -6,10 +6,8 @@ import { REQUEST_ID_HEADER } from './constants';
 import * as CircuitBreaker from 'opossum';
 import axiosRetry from 'axios-retry';
 import { RetryType } from './config/vo/retry-type';
-import {
-  InternalProxyHttpException,
-  InternalServiceUnavailableHttpException,
-} from '@saas-buildkit/exceptions';
+import { InternalServiceUnavailableHttpException } from '@saas-buildkit/exceptions';
+import { InternalProxyHttpException } from './exceptions/internal-proxy-http.exception';
 
 function configureRetries(
   config: HttpClientConfig,
@@ -62,14 +60,16 @@ function proxyHttpException(serviceName: string) {
       const response = error.response;
       // eslint-disable-next-line sonarjs/no-small-switch
       switch (error.code) {
+        case 'ETIMEDOUT':
         case 'EOPENBREAKER': {
           throw new InternalServiceUnavailableHttpException(serviceName, error);
         }
+
         default: {
           if (response) {
             throw new InternalProxyHttpException(
               response.status,
-              response.data,
+              response,
               error.config,
               error,
             );

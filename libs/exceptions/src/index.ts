@@ -5,7 +5,6 @@ export * from './lib/exceptions/general-forbidden.exception';
 export * from './lib/exceptions/general-internal-server.exception';
 export * from './lib/exceptions/general-not-found.exception';
 export * from './lib/exceptions/general-unauthorized.exception';
-export * from './lib/exceptions/internal-proxy-http.exception';
 export * from './lib/exceptions/internal-service-unavailable.exception';
 export * from './lib/exceptions/missing-configuration-for-feature.exception';
 export * from './lib/exceptions/object-not-found.exception';
