@@ -19,6 +19,11 @@
       "factory": "./src/generators/controller/generator",
       "schema": "./src/generators/controller/schema.json",
       "description": "controller generator"
+    },
+    "lib": {
+      "factory": "./src/generators/lib/generator",
+      "schema": "./src/generators/lib/schema.json",
+      "description": "lib generator"
     }
   }
 }

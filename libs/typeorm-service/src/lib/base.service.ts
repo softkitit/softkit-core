@@ -35,7 +35,7 @@ export class BaseEntityService<
       throw new ObjectNotFoundException(this.entityFriendlyName);
     }
 
-    return result === null ? undefined : result;
+    return result ?? undefined;
   }
 
   @Transactional()
@@ -67,7 +67,7 @@ export class BaseEntityService<
       throw new ObjectNotFoundException(this.entityFriendlyName);
     }
 
-    return result === null ? undefined : result;
+    return result ?? undefined;
   }
 
   @Transactional()
