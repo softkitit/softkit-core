@@ -461,6 +461,27 @@
         ]
       }
     },
+    "/api/platform/v1/roles/test-proxy": {
+      "get": {
+        "operationId": "RolesController_testProxy",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Roles"
+        ]
+      }
+    },
     "/api/platform/v1/tenants/configuration/saml": {
       "post": {
         "operationId": "TenantsConfigurationController_setupSaml",

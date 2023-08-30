@@ -8,8 +8,10 @@ import { SwaggerConfig } from '@saas-buildkit/swagger-utils';
 import { I18Config } from '@saas-buildkit/i18n';
 import { DbConfig } from '@saas-buildkit/typeorm';
 import { AppConfig } from '@saas-buildkit/bootstrap';
+import { HttpClientConfig } from '@saas-buildkit/server-http-client';
+import { PlatformClientConfig } from '@saas-buildkit/platform-client';
 
-export default class RootConfig {
+export default class RootConfig implements PlatformClientConfig {
   @Type(() => LoggerConfig)
   @ValidateNested()
   public readonly logs!: LoggerConfig;
@@ -17,6 +19,10 @@ export default class RootConfig {
   @Type(() => AuthConfig)
   @ValidateNested()
   public readonly auth!: AuthConfig;
+
+  @Type(() => HttpClientConfig)
+  @ValidateNested()
+  public readonly platformClient!: HttpClientConfig;
 
   @Type(() => AppConfig)
   @ValidateNested()

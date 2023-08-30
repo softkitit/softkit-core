@@ -3,7 +3,7 @@ import { HttpClientConfig } from './config/http-client.config';
 import { ClsService } from 'nestjs-cls';
 import { UserRequestClsStore } from './vo/user-request-cls-store';
 import { REQUEST_ID_HEADER } from './constants';
-import * as CircuitBreaker from 'opossum';
+import CircuitBreaker from 'opossum';
 import axiosRetry from 'axios-retry';
 import { RetryType } from './config/vo/retry-type';
 import { InternalServiceUnavailableHttpException } from '@saas-buildkit/exceptions';

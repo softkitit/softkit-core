@@ -1,9 +1,6 @@
 import { Test } from '@nestjs/testing';
 import { SampleModule } from './app/sample.module';
 import { INestApplication } from '@nestjs/common';
-import { HttpRetryConfig } from '../lib/config/http-retry.config';
-import { RetryType } from '../lib/config/vo/retry-type';
-import { HttpCircuitBreakerConfig } from '../lib/config/http-circuit-breaker.config';
 import { createAxiosInstance } from '../lib/axios.factory';
 import { ClsModule, ClsService } from 'nestjs-cls';
 import { UserRequestClsStore } from '../lib/vo/user-request-cls-store';
@@ -13,20 +10,6 @@ import { SampleController } from './app/sample.controller';
 import { InternalProxyHttpExceptionFilter } from '../lib/interceptors/internal-proxy-http.filter';
 import { HttpAdapterHost } from '@nestjs/core';
 import { expectNotNullAndGet } from '@saas-buildkit/test-utils';
-
-const defaultRetryConfig: HttpRetryConfig = {
-  retriesCount: 3,
-  retryType: RetryType.STATIC,
-  delay: 100,
-};
-
-const defaultCircuitBreakerConfig: HttpCircuitBreakerConfig = {
-  timeout: 1000,
-  resetTimeout: 1000,
-  errorThresholdPercentage: 63,
-  volumeThreshold: 10,
-  rollingCountTimeout: 10_000,
-};
 
 describe('Circuit breaker and retry with filter', () => {
   let appUrl: string;

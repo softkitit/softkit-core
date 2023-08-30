@@ -27,6 +27,7 @@ import {
   PermissionsGuard,
   TokenService,
 } from '@saas-buildkit/auth';
+import { PlatformClientModule } from '@saas-buildkit/platform-client';
 
 /* istanbul ignore next */
 @Module({
@@ -37,6 +38,7 @@ import {
     setupLoggerModule(),
     setupYamlBaseConfigModule(path.join(__dirname, './assets'), RootConfig),
     setupClsModule(),
+    PlatformClientModule,
     TypeOrmModule.forRootAsync({
       useClass: TypeOrmConfigService,
       dataSourceFactory: async (options?: DataSourceOptions) => {

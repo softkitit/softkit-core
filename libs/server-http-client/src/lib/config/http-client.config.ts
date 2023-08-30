@@ -13,8 +13,7 @@ import { HttpCircuitBreakerConfig } from './http-circuit-breaker.config';
 export class HttpClientConfig {
   @IsString()
   @IsUrl({
-    require_protocol: true,
-    require_host: true,
+    require_tld: false,
     protocols: ['http', 'https'],
   })
   url!: string;

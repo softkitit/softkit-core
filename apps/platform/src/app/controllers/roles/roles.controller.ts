@@ -21,13 +21,14 @@ import {
   UpdateUserRole,
 } from './vo/role.dto';
 import { IdParamUUID, VersionNumberParam } from '@saas-buildkit/common-types';
-import { Permissions } from '@saas-buildkit/auth';
+import { Permissions, SkipAuth } from '@saas-buildkit/auth';
 import {
   Paginate,
   Paginated,
   PaginatedSwaggerDocs,
   PaginateQuery,
 } from 'nestjs-paginate';
+import { RolesApi } from '@saas-buildkit/platform-client';
 
 @ApiTags('Roles')
 @Controller({
@@ -37,6 +38,7 @@ import {
 export class RolesController {
   constructor(
     private readonly customUserRoleService: CustomUserRoleService,
+    private readonly rolesApi: RolesApi,
     private readonly customUserRoleTenantService: CustomUserRoleTenantService,
   ) {}
 
@@ -45,6 +47,7 @@ export class RolesController {
     CustomUserRoleWithoutPermissionsDto,
     ROLES_PAGINATION_CONFIG,
   )
+  @SkipAuth()
   async findAll(
     @Paginate()
     query: PaginateQuery,
@@ -105,5 +108,12 @@ export class RolesController {
     @Query() query: VersionNumberParam,
   ) {
     return this.customUserRoleTenantService.archive(path.id, query.version);
+  }
+
+  @SkipAuth()
+  @Get('test-proxy')
+  async testProxy() {
+    const promise = await this.rolesApi.rolesControllerFindAll();
+    return promise.data;
   }
 }
