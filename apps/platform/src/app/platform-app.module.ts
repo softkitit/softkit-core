@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, Logger } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -20,7 +20,6 @@ import { setupLoggerModule } from '@saas-buildkit/logger';
 import { setupYamlBaseConfigModule } from '@saas-buildkit/config';
 import { setupClsModule } from '@saas-buildkit/async-storage';
 import { TypeOrmConfigService } from '@saas-buildkit/typeorm';
-import { Logger } from '@nestjs/common';
 import {
   JwtAuthGuard,
   JwtStrategy,
@@ -28,6 +27,7 @@ import {
   TokenService,
 } from '@saas-buildkit/auth';
 import { PlatformClientModule } from '@saas-buildkit/platform-client';
+import { HealthCheckModule } from '@saas-buildkit/healthcheck';
 
 /* istanbul ignore next */
 @Module({
@@ -39,6 +39,7 @@ import { PlatformClientModule } from '@saas-buildkit/platform-client';
     setupYamlBaseConfigModule(path.join(__dirname, './assets'), RootConfig),
     setupClsModule(),
     PlatformClientModule,
+    HealthCheckModule,
     TypeOrmModule.forRootAsync({
       useClass: TypeOrmConfigService,
       dataSourceFactory: async (options?: DataSourceOptions) => {

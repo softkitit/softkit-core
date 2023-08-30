@@ -10,6 +10,7 @@ import { DbConfig } from '@saas-buildkit/typeorm';
 import { AppConfig } from '@saas-buildkit/bootstrap';
 import { HttpClientConfig } from '@saas-buildkit/server-http-client';
 import { PlatformClientConfig } from '@saas-buildkit/platform-client';
+import { HealthConfig } from '@saas-buildkit/healthcheck';
 
 export default class RootConfig implements PlatformClientConfig {
   @Type(() => LoggerConfig)
@@ -39,6 +40,10 @@ export default class RootConfig implements PlatformClientConfig {
   @Type(() => DbConfig)
   @ValidateNested()
   public readonly db!: DbConfig;
+
+  @Type(() => HealthConfig)
+  @ValidateNested()
+  public readonly health!: HealthConfig;
 
   @Type(() => SamlConfig)
   @ValidateNested()

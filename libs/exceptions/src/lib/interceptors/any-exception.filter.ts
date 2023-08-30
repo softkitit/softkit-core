@@ -1,4 +1,10 @@
-import { ArgumentsHost, Catch, ExceptionFilter, Logger } from '@nestjs/common';
+import {
+  ArgumentsHost,
+  Catch,
+  ExceptionFilter,
+  Logger,
+  ServiceUnavailableException,
+} from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 import { I18nContext } from '@saas-buildkit/nestjs-i18n';
 import { ErrorResponse } from '../vo/error-response.dto';
@@ -16,6 +22,11 @@ export class AnyExceptionFilter implements ExceptionFilter {
     const { httpAdapter } = this.httpAdapterHost;
 
     const ctx = host.switchToHttp();
+
+    if (exception instanceof ServiceUnavailableException) {
+      httpAdapter.reply(ctx.getResponse(), exception.getResponse(), 503);
+    }
+
     const i18n = I18nContext.current<I18nTranslations>(host);
 
     const response = {

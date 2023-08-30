@@ -42,6 +42,9 @@
       "@saas-buildkit/exceptions": [
         "libs/exceptions/src/index.ts"
       ],
+      "@saas-buildkit/healthcheck": [
+        "libs/health-check/src/index.ts"
+      ],
       "@saas-buildkit/i18n": [
         "libs/i18n/src/index.ts"
       ],
