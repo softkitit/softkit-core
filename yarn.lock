@@ -2200,6 +2200,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fastify/helmet@npm:^11.0.0":
+  version: 11.0.0
+  resolution: "@fastify/helmet@npm:11.0.0"
+  dependencies:
+    fastify-plugin: ^4.2.1
+    helmet: ^7.0.0
+  checksum: 36a5d1eb3893ba32f9e421680263f18d9ebea76016a340161ff45b87b9a5a5d74b71626eb8a8da8dfac034ce31197b4af8d0434d8d5593711290493d33797719
+  languageName: node
+  linkType: hard
+
 "@fastify/middie@npm:8.3.0":
   version: 8.3.0
   resolution: "@fastify/middie@npm:8.3.0"
@@ -3743,6 +3753,7 @@ __metadata:
   resolution: "@saas-buildkit/source@workspace:."
   dependencies:
     "@faker-js/faker": ^8.0.2
+    "@fastify/helmet": ^11.0.0
     "@fastify/static": ^6.10.2
     "@liaoliaots/nestjs-redis": ^9.0.5
     "@nestjs/common": ^10.1.0
@@ -3797,6 +3808,7 @@ __metadata:
     eslint-plugin-sonarjs: ^0.19.0
     eslint-plugin-unicorn: ^48.0.0
     eslint-plugin-unused-imports: ^3.0.0
+    helmet: ^7.0.0
     husky: ^8.0.0
     hygen: 6.2.11
     ioredis: ^5.3.2
@@ -9391,7 +9403,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fastify-plugin@npm:^4.0.0":
+"fastify-plugin@npm:^4.0.0, fastify-plugin@npm:^4.2.1":
   version: 4.5.1
   resolution: "fastify-plugin@npm:4.5.1"
   checksum: ddd1b2d470c3acd9397c2617b5842dcf71a6f9a32f05d02be1c12e8d37b8fc03af656900cec38e2afef5e9a3dfe5f994317810f4c5e9960b127b1ca179b56f73
@@ -10291,6 +10303,13 @@ __metadata:
     capital-case: ^1.0.4
     tslib: ^2.0.3
   checksum: 571c83eeb25e8130d172218712f807c0b96d62b020981400bccc1503a7cf14b09b8b10498a962d2739eccf231d950e3848ba7d420b58a6acd2f9283439546cd9
+  languageName: node
+  linkType: hard
+
+"helmet@npm:^7.0.0":
+  version: 7.0.0
+  resolution: "helmet@npm:7.0.0"
+  checksum: 3622b8b68b7ac4736369fe7717adb5b87ddcdcda7c11c13277d79fb5670acab032e8c971835565b1d2144d234f3e0dbcd327a44249b9e61f0f64c0c753faf1bc
   languageName: node
   linkType: hard
 

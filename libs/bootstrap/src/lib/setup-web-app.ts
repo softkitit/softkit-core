@@ -32,6 +32,7 @@ import { PostgresDbFailedErrorFilter } from '@saas-buildkit/typeorm';
 import { LoggingInterceptor } from '@saas-buildkit/logger';
 import { responseBodyFormatter } from '@saas-buildkit/i18n';
 import { REQUEST_ID_HEADER } from '@saas-buildkit/server-http-client';
+import { fastifyHelmet } from '@fastify/helmet';
 
 function buildFastifyAdapter() {
   return new FastifyAdapter({
@@ -118,6 +119,8 @@ async function bootstrapBaseWebApp(
     .decorateReply('end', function () {
       this.send('');
     });
+
+  app.register(fastifyHelmet, {});
 
   useContainer(app.select(originalModule || module), {
     fallbackOnErrors: true,
