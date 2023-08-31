@@ -1,0 +1,44 @@
+import { NestFastifyApplication } from '@nestjs/platform-fastify';
+import { Test, TestingModule } from '@nestjs/testing';
+import * as path from 'node:path';
+import { DbConfig } from '@saas-buildkit/typeorm';
+import { startDb } from '@saas-buildkit/test-utils';
+import { bootstrapBaseWebApp } from '@saas-buildkit/bootstrap';
+import { <%= pascalCase(name) -%>AppModule } from '../<%= name -%>-app.module';
+
+describe('Test <%= pascalCase(name) -%>AppModule tests', () => {
+  let app: NestFastifyApplication;
+  let dbOptions: Partial<DbConfig>;
+
+  beforeAll(async () => {
+    const { typeormOptions } = await startDb(true);
+    dbOptions = typeormOptions as Partial<DbConfig>;
+  });
+
+  beforeEach(async () => {
+    const moduleFixture: TestingModule = await Test.createTestingModule({
+      imports: [<%= pascalCase(name) -%>AppModule],
+    })
+    <% if (db) { %>
+      .overrideProvider(DbConfig)
+      .useValue({
+        ...dbOptions,
+        migrations: [path.join(__dirname, '../database/migrations/*.ts')],
+        logging: true,
+      })
+    <% } %>
+      .compile();
+    app = await bootstrapBaseWebApp(moduleFixture, <%= pascalCase(name) -%>AppModule);
+  });
+
+  afterEach(async () => {
+    await app.close();
+    jest.clearAllMocks();
+  });
+
+  describe('Test <%= name -%> app start up', () => {
+    it('app bootstrap', async () => {
+      expect(app).toBeDefined();
+    });
+  });
+});

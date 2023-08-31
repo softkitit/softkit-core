@@ -18,7 +18,7 @@ export class SamlStrategy extends PassportStrategy(Strategy, 'saml') {
 
   constructor(
     private readonly authService: AuthService,
-    private readonly samlConfig: SamlConfig,
+    readonly samlConfig: SamlConfig,
     private request: FastifyRequest,
     private response: FastifyReply,
     readonly entryPoint: string,

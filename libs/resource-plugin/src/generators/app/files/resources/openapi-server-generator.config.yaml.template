@@ -1,0 +1,8 @@
+fileNaming: camelCase
+ensureUniqueParams: true
+apiPackage: <%= name -%>-client-api
+paramNaming: original
+enumPropertyNaming: UPPERCASE
+withNodeImports: true
+enablePostProcessFile: true
+

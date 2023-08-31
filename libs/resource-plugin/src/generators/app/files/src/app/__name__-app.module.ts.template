@@ -1,0 +1,100 @@
+import { Module, Logger } from '@nestjs/common';
+import * as path from 'node:path';
+import * as Controllers from './controllers';
+import * as Entities from './database/entities';
+import * as Repositories from './repositories';
+import * as Services from './services';
+
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { DataSource, DataSourceOptions } from 'typeorm';
+import { addTransactionalDataSource } from 'typeorm-transactional';
+import { getDataSourceByName } from 'typeorm-transactional/dist/common';
+import { TypeOrmConfigService } from '@saas-buildkit/typeorm';
+
+import <%= pascalCase(name) -%>RootConfig from './config/<%= name -%>root.config';
+
+
+import { APP_GUARD } from '@nestjs/core';
+import { JwtModule, JwtService } from '@nestjs/jwt';
+
+import {
+  JwtAuthGuard,
+  JwtStrategy,
+  PermissionsGuard,
+  TokenService,
+} from '@saas-buildkit/auth';
+
+
+import { setupI18NModule } from '@saas-buildkit/i18n';
+
+import { setupLoggerModule } from '@saas-buildkit/logger';
+import { setupYamlBaseConfigModule } from '@saas-buildkit/config';
+import { setupClsModule } from '@saas-buildkit/async-storage';
+
+import { HealthCheckModule } from '@saas-buildkit/healthcheck';
+
+/* istanbul ignore next */
+@Module({
+  imports: [
+
+<% if (auth) { %>
+    JwtModule,
+<% } %>
+<% if (i18n) { %>
+    setupI18NModule(__dirname),
+<% } %>
+    setupLoggerModule(),
+    setupYamlBaseConfigModule(path.join(__dirname, './assets'), <%= pascalCase(name) -%>RootConfig),
+    setupClsModule(),
+
+<% if (health) { %>
+    HealthCheckModule,
+<% } %>
+
+<% if (db) { %>
+    TypeOrmModule.forFeature(Object.values(Entities)),
+    TypeOrmModule.forRootAsync({
+      useClass: TypeOrmConfigService,
+      dataSourceFactory: async (options?: DataSourceOptions) => {
+        if (!options) {
+          // this will be a startup error we don't need to cover it with tests
+          /* istanbul ignore next */
+          throw new Error(`Can not initialize data source, options are empty`);
+        }
+
+        // it's needed only for e2e tests
+        const existDatasource = getDataSourceByName('default');
+
+        if (existDatasource) {
+          return existDatasource;
+        }
+
+        const dataSource = new DataSource(options);
+        addTransactionalDataSource(dataSource);
+
+        return await dataSource.initialize();
+      },
+    }),
+  ],
+<% } %>
+  controllers: Object.values(Controllers),
+  providers: [
+    ...Object.values(Services),
+    ...Object.values(Repositories),
+    Logger,
+<% if (auth) { %>
+    JwtStrategy,
+    JwtService,
+    TokenService,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: PermissionsGuard,
+    },
+<% } %>
+  ],
+})
+export class <%= pascalCase(name) -%>AppModule {}

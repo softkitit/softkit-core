@@ -9,6 +9,7 @@ describe('lib generator', () => {
   const options: LibGeneratorSchema = {
     name: 'test',
     config: true,
+    languages: ['en', 'de'],
     buildable: true,
     i18n: true,
   };
@@ -22,11 +23,11 @@ describe('lib generator', () => {
     const config = readProjectConfiguration(tree, 'test');
 
     const fileChanges = tree.listChanges();
-    expect(fileChanges.length).toEqual(23);
+    expect(fileChanges.length).toEqual(24);
 
     const i18nFiles = fileChanges.filter((path) => path.path.includes('i18n'));
 
-    expect(i18nFiles.length).toEqual(3);
+    expect(i18nFiles.length).toEqual(4);
 
     const configFile = fileChanges.find((path) =>
       path.path.includes('config/test.config.ts'),
@@ -46,11 +47,11 @@ describe('lib generator', () => {
     const config = readProjectConfiguration(tree, 'test');
 
     const fileChanges = tree.listChanges();
-    expect(fileChanges.length).toEqual(22);
+    expect(fileChanges.length).toEqual(23);
 
     const i18nFiles = fileChanges.filter((path) => path.path.includes('i18n'));
 
-    expect(i18nFiles.length).toEqual(3);
+    expect(i18nFiles.length).toEqual(4);
 
     const configFile = fileChanges.find((path) =>
       path.path.includes('config/test.config.ts'),
@@ -104,7 +105,7 @@ describe('lib generator', () => {
     expect(config).toBeDefined();
 
     const fileChanges = tree.listChanges();
-    expect(fileChanges.length).toEqual(23);
+    expect(fileChanges.length).toEqual(24);
 
     const configFile = fileChanges.find((path) =>
       path.path.includes('config/library-name.config.ts'),

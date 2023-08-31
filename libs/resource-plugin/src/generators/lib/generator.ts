@@ -50,6 +50,13 @@ export async function libGenerator(tree: Tree, options: LibGeneratorSchema) {
         },
       );
     }
+
+    for (const lang of options.languages) {
+      tree.write(
+        joinPathFragments(libRoot, `src/lib/i18n/${lang}/${options.name}.json`),
+        `{}`,
+      );
+    }
   }
 
   await formatFiles(tree);

@@ -72,6 +72,7 @@ module.exports = {
         'unicorn/no-abusive-eslint-disable': 'off',
         'unicorn/no-array-callback-reference': 'off',
         'unicorn/prefer-module': 'off',
+        'unicorn/no-empty-file': 'off',
         'jest/expect-expect': 'off',
         'unicorn/prefer-top-level-await': 'off',
         '@typescript-eslint/interface-name-prefix': 'off',

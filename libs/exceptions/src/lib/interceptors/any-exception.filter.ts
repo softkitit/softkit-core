@@ -33,9 +33,9 @@ export class AnyExceptionFilter implements ExceptionFilter {
       // todo implement link to the docs, get from config
       type: 'todo implement link to the docs, get from config',
       title:
-        i18n?.translate('exception.INTERNAL_ERROR.TITLE') || 'Internal Error',
+        i18n?.translate('exception.INTERNAL_ERROR.TITLE') ?? 'Internal Error',
       detail:
-        i18n?.translate('exception.INTERNAL_ERROR.GENERAL_DETAIL').toString() ||
+        i18n?.translate('exception.INTERNAL_ERROR.GENERAL_DETAIL').toString() ??
         'Internal Server Error',
       status: 500,
       instance: ctx.getRequest().id,

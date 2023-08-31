@@ -7,7 +7,11 @@
     "default rules",
     "eslint rules",
     "eslint config",
-    "eslint backend rules"
+    "eslint backend rules",
+    "eslint packaged",
+    "eslint shareable config",
+    "eslint buildable config",
+    "eslint publish config"
   ],
   "devDependencies": {
     "@nx/eslint-plugin": "16.5.5",

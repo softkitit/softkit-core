@@ -53,7 +53,8 @@ export class TenantService extends BaseEntityService<
       .replaceAll(/-+/g, '-')
       .replaceAll(/^-|-$/g, '');
 
-    const tenantUrl = `${tenantUrlPrefix}.${this.appConfig.frontendUrl}`;
+    // todo make this configurable, it's probably not nessaary to be like this
+    const tenantUrl = `${tenantUrlPrefix}`;
 
     const tenantUrlExists = await this.repository.count({
       where: {
@@ -65,9 +66,7 @@ export class TenantService extends BaseEntityService<
       this.logger.warn(
         `This finally happened! ${tenantUrlPrefix} repeated, probably someone registered second time or someone with a similar company name`,
       );
-      return `${tenantUrlPrefix}-${Math.floor(Date.now() / 1000)}.${
-        this.appConfig.frontendUrl
-      }`;
+      return `${tenantUrlPrefix}-${Math.floor(Date.now() / 1000)}`;
     }
 
     return tenantUrl;
