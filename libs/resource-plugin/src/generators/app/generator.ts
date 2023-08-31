@@ -1,13 +1,9 @@
-import {
-  formatFiles,
-  generateFiles,
-  joinPathFragments,
-  Tree,
-} from '@nx/devkit';
+import { generateFiles, joinPathFragments, Tree } from '@nx/devkit';
 import { applicationGenerator } from '@nx/nest';
 
 import { AppGeneratorSchema } from './schema';
 import { paramCase, pascalCase, snakeCase } from 'change-case';
+import i18nGenerator from '../i18n/generator';
 
 export async function appGenerator(tree: Tree, options: AppGeneratorSchema) {
   options.name = paramCase(options.name);
@@ -41,14 +37,13 @@ export async function appGenerator(tree: Tree, options: AppGeneratorSchema) {
     for (const c of dbFiles) tree.delete(c.path);
   }
 
-  if (!options.i18n) {
-    const i18nFiles = tree.listChanges().filter((c) => c.path.includes('i18n'));
-    for (const c of i18nFiles) tree.delete(c.path);
-
-    //   todo generate i18n languages
+  if (options.i18n) {
+    await i18nGenerator(tree, {
+      ...options,
+      buildable: true,
+      baseFolder: 'apps',
+    });
   }
-
-  await formatFiles(tree);
 }
 
 export default appGenerator;

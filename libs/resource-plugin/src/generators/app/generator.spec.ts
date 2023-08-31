@@ -11,6 +11,7 @@ describe('app generator', () => {
     title: 'Test',
     description: 'Test',
     i18n: true,
+    languages: ['en', 'es', 'fr'],
     auth: true,
     health: true,
     e2eTestRunner: 'none',
@@ -39,24 +40,25 @@ describe('app generator', () => {
       {
         auth: false,
       },
-      31,
+      34,
     ],
     [
       {
         health: false,
       },
-      31,
+      34,
     ],
     [
       {
         db: false,
       },
-      28,
+      31,
     ],
     [
       {
         db: false,
         auth: false,
+        languages: ['en'],
         i18n: false,
         health: false,
       },
@@ -83,7 +85,7 @@ describe('app generator', () => {
 
     const listChanges = tree.listChanges();
 
-    expect(listChanges.length).toBe(31);
+    expect(listChanges.length).toBe(34);
 
     const allDbFiles = listChanges.filter(
       (c) => c.path.includes('/db/') || c.path.includes('/repositories/'),
@@ -93,7 +95,7 @@ describe('app generator', () => {
 
     const i18nFiles = listChanges.filter((c) => c.path.includes('i18n'));
 
-    expect(i18nFiles.length).toBe(2);
+    expect(i18nFiles.length).toBe(5);
 
     const assetsFiles = listChanges.filter((c) => c.path.includes('/assets/'));
 

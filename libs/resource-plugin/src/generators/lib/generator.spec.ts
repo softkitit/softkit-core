@@ -12,6 +12,7 @@ describe('lib generator', () => {
     languages: ['en', 'de'],
     buildable: true,
     i18n: true,
+    unitTestRunner: 'jest',
   };
 
   beforeEach(() => {

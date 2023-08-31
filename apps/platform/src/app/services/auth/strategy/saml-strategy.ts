@@ -47,7 +47,9 @@ export class SamlStrategy extends PassportStrategy(Strategy, 'saml') {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public override async success(user: Profile, info: unknown) {
-    this.logger.log(`Successfully logged in user through saml ${user.email}`);
+    this.logger.log(
+      `Successfully logged in user through saml ${user.email}. ${info}`,
+    );
 
     const relayState = decodeBase64StringObjectFromUrl(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

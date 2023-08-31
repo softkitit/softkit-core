@@ -6,6 +6,7 @@ export interface AppGeneratorSchema extends ApplicationGeneratorOptions {
   description: string;
   i18n: boolean;
   health: boolean;
+  languages: string[];
   auth: boolean;
   db: boolean;
   dbType?: string;

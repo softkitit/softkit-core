@@ -1,13 +1,8 @@
-import {
-  formatFiles,
-  generateFiles,
-  joinPathFragments,
-  Tree,
-  updateJson,
-} from '@nx/devkit';
+import { generateFiles, joinPathFragments, Tree } from '@nx/devkit';
 import { LibGeneratorSchema } from './schema';
 import { libraryGenerator } from '@nx/nest';
 import { paramCase, pascalCase } from 'change-case';
+import i18nGenerator from '../i18n/generator';
 
 export async function libGenerator(tree: Tree, options: LibGeneratorSchema) {
   options.name = paramCase(options.name);
@@ -25,41 +20,13 @@ export async function libGenerator(tree: Tree, options: LibGeneratorSchema) {
   }
 
   if (options.i18n) {
-    const configFolder = joinPathFragments(__dirname, './files/i18n');
-
-    generateFiles(tree, configFolder, libRoot, {
-      ...options,
-      pascalCase,
+    await i18nGenerator(tree, {
+      name: options.name,
+      languages: options.languages,
+      baseFolder: 'libs',
+      buildable: options.buildable,
     });
-
-    if (options.buildable) {
-      updateJson(
-        tree,
-        joinPathFragments(options.name, 'project.json'),
-        (prjJson) => {
-          // if scripts is undefined, set it to an empty object
-          prjJson.targets.build.options.assets = [
-            ...prjJson.targets.build.options.assets,
-            {
-              glob: '**/*',
-              input: `libs/${options.name}/src/lib/i18n/`,
-              output: 'i18n',
-            },
-          ];
-          return prjJson;
-        },
-      );
-    }
-
-    for (const lang of options.languages) {
-      tree.write(
-        joinPathFragments(libRoot, `src/lib/i18n/${lang}/${options.name}.json`),
-        `{}`,
-      );
-    }
   }
-
-  await formatFiles(tree);
 }
 
 export default libGenerator;
