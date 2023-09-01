@@ -6,23 +6,18 @@
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/libs/eslint-backend",
         "main": "libs/eslint-backend/src/index.js",
         "tsConfig": "libs/eslint-backend/tsconfig.lib.json",
-        "assets": [
-          "libs/eslint-backend/*.md"
-        ]
+        "assets": ["libs/eslint-backend/*.md"],
+        "updateBuildableProjectDepsInPackageJson": true
       }
     },
     "publish": {
       "command": "node tools/scripts/publish.mjs eslint {args.ver} {args.tag}",
-      "dependsOn": [
-        "build"
-      ]
+      "dependsOn": ["build"]
     }
   },
   "tags": []

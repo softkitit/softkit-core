@@ -12,7 +12,8 @@
         "tsConfig": "libs/test-utils/tsconfig.lib.json",
         "packageJson": "libs/test-utils/package.json",
         "main": "libs/test-utils/src/index.ts",
-        "assets": ["libs/test-utils/*.md"]
+        "assets": ["libs/test-utils/*.md"],
+        "updateBuildableProjectDepsInPackageJson": true
       }
     },
     "publish": {

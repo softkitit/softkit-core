@@ -6,41 +6,30 @@
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/libs/auth",
         "tsConfig": "libs/auth/tsconfig.lib.json",
         "packageJson": "libs/auth/package.json",
         "main": "libs/auth/src/index.ts",
-        "assets": [
-          "libs/auth/*.md"
-        ]
+        "assets": ["libs/auth/*.md"],
+        "updateBuildableProjectDepsInPackageJson": true
       }
     },
     "publish": {
       "command": "node tools/scripts/publish.mjs auth {args.ver} {args.tag}",
-      "dependsOn": [
-        "build"
-      ]
+      "dependsOn": ["build"]
     },
     "lint": {
       "executor": "@nx/linter:eslint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
+      "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": [
-          "libs/auth/**/*.ts"
-        ]
+        "lintFilePatterns": ["libs/auth/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": [
-        "{workspaceRoot}/coverage/{projectRoot}"
-      ],
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
         "jestConfig": "libs/auth/jest.config.ts",
         "passWithNoTests": true
