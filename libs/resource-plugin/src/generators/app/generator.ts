@@ -5,6 +5,43 @@ import { AppGeneratorSchema } from './schema';
 import { paramCase, pascalCase, snakeCase } from 'change-case';
 import i18nGenerator from '../i18n/generator';
 
+function updateProjectJson(tree: Tree, options: AppGeneratorSchema) {
+  updateJson(
+    tree,
+    joinPathFragments(options.name, 'project.json'),
+    (prjJson) => {
+      // if scripts is undefined, set it to an empty object
+      prjJson.targets.build.options.assets = [
+        ...prjJson.targets.build.options.assets,
+        {
+          glob: '**/*',
+          input: `apps/${options.name}/src/app/assets`,
+          output: 'assets',
+        },
+      ];
+      prjJson.targets.build.options.tsPlugins = [
+        ...(prjJson.targets.build.options.tsPlugins || []),
+        {
+          name: '@nestjs/swagger/plugin',
+          options: {
+            dtoFileNameSuffix: [
+              options.db ? '.entity.ts' : '',
+              '.dto.ts',
+            ].filter((value) => value !== ''),
+            controllerFileNameSuffix: ['.controller.ts'],
+            classValidatorShim: true,
+            dtoKeyOfComment: 'description',
+            controllerKeyOfComment: 'description',
+            introspectComments: true,
+          },
+        },
+      ];
+
+      return prjJson;
+    },
+  );
+}
+
 export async function appGenerator(tree: Tree, options: AppGeneratorSchema) {
   options.name = paramCase(options.name);
   const appRoot = `apps/${options.name}`;
@@ -44,41 +81,7 @@ export async function appGenerator(tree: Tree, options: AppGeneratorSchema) {
       baseFolder: 'apps',
     });
   }
-
-  updateJson(
-    tree,
-    joinPathFragments(options.name, 'project.json'),
-    (prjJson) => {
-      // if scripts is undefined, set it to an empty object
-      prjJson.targets.build.options.assets = [
-        ...prjJson.targets.build.options.assets,
-        {
-          glob: '**/*',
-          input: `apps/${options.name}/src/app/assets`,
-          output: 'assets',
-        },
-      ];
-      prjJson.targets.build.options.tsPlugins = [
-        ...(prjJson.targets.build.options.tsPlugins || []),
-        {
-          name: '@nestjs/swagger/plugin',
-          options: {
-            dtoFileNameSuffix: [
-              options.db ? '.entity.ts' : '',
-              '.dto.ts',
-            ].filter((value) => value !== ''),
-            controllerFileNameSuffix: ['.controller.ts'],
-            classValidatorShim: true,
-            dtoKeyOfComment: 'description',
-            controllerKeyOfComment: 'description',
-            introspectComments: true,
-          },
-        },
-      ];
-
-      return prjJson;
-    },
-  );
+  updateProjectJson(tree, options);
 }
 
 export default appGenerator;
