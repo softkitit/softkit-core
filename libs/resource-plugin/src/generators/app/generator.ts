@@ -19,6 +19,16 @@ function updateProjectJson(tree: Tree, options: AppGeneratorSchema) {
           output: 'assets',
         },
       ];
+
+      prjJson.targets['generate-client'] = {
+        executor: 'nx:run-commands',
+        options: {
+          commands: [
+            `openapi-generator-cli generate -i ./apps/${options.name}/resources/openapi-docs.json -g typescript-axios -o libs/clients/${options.name}-client/src/lib/generated -c ./apps/${options.name}/resources/openapi-server-generator.config.yaml`,
+          ],
+        },
+      };
+
       prjJson.targets.build.options.tsPlugins = [
         ...(prjJson.targets.build.options.tsPlugins || []),
         {

@@ -1,0 +1,1 @@
+export const <%= constantCase(name) -%>_CLIENT_TOKEN = '<%= constantCase(name) -%>_CLIENT_AXIOS';

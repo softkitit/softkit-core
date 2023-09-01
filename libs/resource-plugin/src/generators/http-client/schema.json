@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "HttpClient",
+  "title": "",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Application name in your workspace, e.g. 'platform'",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "What is app name?",
+      "x-dropdown": "projects",
+      "minLength": 1
+    },
+    "directory": {
+      "type": "string",
+      "description": "Base libs folder",
+      "x-prompt": "What is base libs folder?",
+      "minLength": 1,
+      "default": "clients"
+    }
+  },
+  "required": ["name"]
+}

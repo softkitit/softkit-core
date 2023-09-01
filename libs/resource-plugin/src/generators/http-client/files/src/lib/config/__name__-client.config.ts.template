@@ -1,0 +1,5 @@
+import { HttpClientConfig } from '@saas-buildkit/server-http-client';
+
+export interface <%= pascalCase(name) -%>ClientConfig {
+  <%= camelCase(name) -%>Client: HttpClientConfig;
+}

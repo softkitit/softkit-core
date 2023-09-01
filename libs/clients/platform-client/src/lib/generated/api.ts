@@ -274,6 +274,83 @@ export interface ErrorResponse {
 /**
  * 
  * @export
+ * @interface HealthControllerGetHealth200Response
+ */
+export interface HealthControllerGetHealth200Response {
+    /**
+     * 
+     * @type {string}
+     * @memberof HealthControllerGetHealth200Response
+     */
+    'status'?: string;
+    /**
+     * 
+     * @type {{ [key: string]: HealthControllerGetHealth200ResponseInfoValue; }}
+     * @memberof HealthControllerGetHealth200Response
+     */
+    'info'?: { [key: string]: HealthControllerGetHealth200ResponseInfoValue; } | null;
+    /**
+     * 
+     * @type {{ [key: string]: HealthControllerGetHealth200ResponseInfoValue; }}
+     * @memberof HealthControllerGetHealth200Response
+     */
+    'error'?: { [key: string]: HealthControllerGetHealth200ResponseInfoValue; } | null;
+    /**
+     * 
+     * @type {{ [key: string]: HealthControllerGetHealth200ResponseInfoValue; }}
+     * @memberof HealthControllerGetHealth200Response
+     */
+    'details'?: { [key: string]: HealthControllerGetHealth200ResponseInfoValue; };
+}
+/**
+ * 
+ * @export
+ * @interface HealthControllerGetHealth200ResponseInfoValue
+ */
+export interface HealthControllerGetHealth200ResponseInfoValue {
+    [key: string]: string | any;
+
+    /**
+     * 
+     * @type {string}
+     * @memberof HealthControllerGetHealth200ResponseInfoValue
+     */
+    'status'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface HealthControllerGetHealth503Response
+ */
+export interface HealthControllerGetHealth503Response {
+    /**
+     * 
+     * @type {string}
+     * @memberof HealthControllerGetHealth503Response
+     */
+    'status'?: string;
+    /**
+     * 
+     * @type {{ [key: string]: HealthControllerGetHealth200ResponseInfoValue; }}
+     * @memberof HealthControllerGetHealth503Response
+     */
+    'info'?: { [key: string]: HealthControllerGetHealth200ResponseInfoValue; } | null;
+    /**
+     * 
+     * @type {{ [key: string]: HealthControllerGetHealth200ResponseInfoValue; }}
+     * @memberof HealthControllerGetHealth503Response
+     */
+    'error'?: { [key: string]: HealthControllerGetHealth200ResponseInfoValue; } | null;
+    /**
+     * 
+     * @type {{ [key: string]: HealthControllerGetHealth200ResponseInfoValue; }}
+     * @memberof HealthControllerGetHealth503Response
+     */
+    'details'?: { [key: string]: HealthControllerGetHealth200ResponseInfoValue; };
+}
+/**
+ * 
+ * @export
  * @interface IdpMappingDto
  */
 export interface IdpMappingDto {
@@ -1214,6 +1291,100 @@ export class AuthApi extends BaseAPI {
 
 
 /**
+ * HealthApi - axios parameter creator
+ * @export
+ */
+export const HealthApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        healthControllerGetHealth: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/platform/health`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * HealthApi - functional programming interface
+ * @export
+ */
+export const HealthApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = HealthApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async healthControllerGetHealth(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<HealthControllerGetHealth200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.healthControllerGetHealth(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * HealthApi - factory interface
+ * @export
+ */
+export const HealthApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = HealthApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        healthControllerGetHealth(options?: any): AxiosPromise<HealthControllerGetHealth200Response> {
+            return localVarFp.healthControllerGetHealth(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * HealthApi - object-oriented interface
+ * @export
+ * @class HealthApi
+ * @extends {BaseAPI}
+ */
+export class HealthApi extends BaseAPI {
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof HealthApi
+     */
+    public healthControllerGetHealth(options?: AxiosRequestConfig) {
+        return HealthApiFp(this.configuration).healthControllerGetHealth(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
  * RolesApi - axios parameter creator
  * @export
  */
@@ -1268,7 +1439,7 @@ export const RolesApiAxiosParamCreator = function (configuration?: Configuration
          * @throws {RequiredError}
          */
         rolesControllerFindAll: async (page?: number, limit?: number, filter_id?: Array<string>, filter_name?: Array<string>, sortBy?: Array<string>, search?: string, searchBy?: string, select?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/platform/v1/roles/find-all-asdfasdfsdf`;
+            const localVarPath = `/api/platform/v1/roles`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;

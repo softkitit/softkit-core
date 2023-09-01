@@ -1,5 +1,5 @@
 import { Module, Provider } from '@nestjs/common';
-import { PLATFORM_CLIENT_TOKEN } from './constants';
+import { <%= constantCase(name) -%>_CLIENT_TOKEN as CLIENT_TOKEN } from './constants';
 import {
   createAxiosInstance,
   UserRequestClsStore,
@@ -7,7 +7,7 @@ import {
 import { ClsService } from 'nestjs-cls';
 import * as AllApis from './generated/api';
 import { AxiosInstance } from 'axios';
-import { PlatformClientConfig } from './config/platform-client.config';
+import { <%= pascalCase(name) -%>ClientConfig } from './config/<%= name -%>-client.config';
 import { ROOT_CONFIG_ALIAS_TOKEN } from '@saas-buildkit/config';
 import { BaseAPI } from './generated/base';
 
@@ -18,7 +18,7 @@ const ApiClasses = Object.values(AllApis).filter((a) => {
 @Module({
   providers: [
     {
-      provide: PLATFORM_CLIENT_TOKEN,
+      provide: CLIENT_TOKEN,
       useFactory: (
         clsService: ClsService<UserRequestClsStore>,
         config: PlatformClientConfig,
@@ -31,9 +31,9 @@ const ApiClasses = Object.values(AllApis).filter((a) => {
       provide: ApiClass,
       useFactory: (axiosInstance: AxiosInstance) =>
         new ApiClass(undefined, undefined, axiosInstance),
-      inject: [PLATFORM_CLIENT_TOKEN],
+      inject: [CLIENT_TOKEN],
     })).map((a) => a as Provider),
   ],
   exports: ApiClasses.map((a) => a as Provider),
 })
-export class PlatformClientModule {}
+export class <%= pascalCase(name) -%>ClientModule {}
