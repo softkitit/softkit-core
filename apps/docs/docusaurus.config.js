@@ -4,8 +4,9 @@
 /** @type {import("@docusaurus/types").Config} */
 const config = {
   title: 'Softkit Docs',
-  tagline: 'Welcome to Softkit Docs',
+  tagline: 'Softkit makes it easy to build modern applications with the best developer experience.',
   favicon: 'img/favicon.ico',
+  trailingSlash: true,
 
   // Set the production url of your site here
   url: 'https://docs.softkit.io',
@@ -41,11 +42,12 @@ const config = {
       '@docusaurus/preset-classic',
       {
         docs: {
+          routeBasePath: "/",
+          showLastUpdateAuthor: true,
+          showLastUpdateTime: true,
           sidebarPath: require.resolve('./sidebars.js'),
         },
-        blog: {
-          showReadingTime: true,
-        },
+        blog: false,
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
@@ -58,6 +60,7 @@ const config = {
     ({
       // Replace with your project's social card
       image: 'img/docusaurus-social-card.jpg',
+
       navbar: {
         title: '',
         hideOnScroll: false,
@@ -74,7 +77,7 @@ const config = {
             label: 'Tutorial',
           },
           {
-            href: 'https://github.com/facebook/docusaurus',
+            href: 'https://github.com/softkitit/docusaurus',
             label: 'GitHub',
             position: 'right',
           },
@@ -88,7 +91,7 @@ const config = {
             items: [
               {
                 label: 'Tutorial',
-                to: '/docs/intro',
+                to: '/',
               },
             ],
           },
@@ -124,6 +127,12 @@ const config = {
           },
         ],
         copyright: `Copyright © ${new Date().getFullYear()} Softkit OU`,
+      },
+      docs: {
+        sidebar: {
+          autoCollapseCategories: true,
+          hideable: true,
+        },
       },
       colorMode: {
         defaultMode: 'dark',

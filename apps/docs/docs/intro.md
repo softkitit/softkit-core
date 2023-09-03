@@ -1,9 +1,10 @@
 ---
 sidebar_position: 1
 title: Getting Started
+slug: /
 ---
-# Getting Started With [Softkit](/about)
-
+# Getting Started With [Softkit](/about/)
+---
 This is a quick start guide to get you up and running with Softkit.
 Softkit is a set of tools and services that help you build and run your software part of the business.
 It is designed to be used by developers to automate routing tasks and to help focus on building your product, and decrease the probability of tech debt from day one.
@@ -11,22 +12,22 @@ It is designed to be used by developers to automate routing tasks and to help fo
 ## Main Features
 
 - **[Softkit CLI](/cli)** - A CLI tool that helps you to create new services by generating code for you.
-- [Authentication and Authorization]((/auth)), Including configuration per tenant for SAML and OpenId Connect
+- [Authentication and Authorization]((/auth/)), Including configuration per tenant for SAML and OpenId Connect
 - First class multi-tenancy support, with logical segregation
-- [Logging](/logging) and [Monitoring](/monitoring). Supported from the box providers:
+- [Logging](/logging) and [Monitoring](/monitoring/). Supported from the box providers:
   - [New Relic](https://newrelic.com/)
   - [Grafana](https://grafana.com/)
   - [Sentry](https://sentry.io/)
   - [Datadog](https://www.datadoghq.com/)
-- [Localization](/localization)
-- [Typed Config Management](/config)
-- [Health Monitoring](/health-monitoring)
-- [Test Standards and Utils](/test-utils)
-- [Standardized Error Handling](/error-handling) - following [RFC7807](https://tools.ietf.org/html/rfc7807)
+- [Localization](/localization/)
+- [Typed Config Management](/config/)
+- [Health Monitoring](/health-monitoring/)
+- [Test Standards and Utils](/test-utils/)
+- [Standardized Error Handling](/error-handling/) - following [RFC7807](https://tools.ietf.org/html/rfc7807)
 - [Take responsibilities to support every library that we do use](/support-libraries)
 - [Automatic Swagger Open API documentation generation](/swagger)
-- [Automatic API client generation](/http-api-clients)
-- [Support for multiple databases](/databases):
+- [Automatic API client generation](/http-api-clients/)
+- [Support for multiple databases](/databases/):
   - **SQL**
     - [PostgreSQL (Our team preference for general purposes)](https://www.postgresql.org/)
     - [MySQL](https://www.mysql.com/)
@@ -38,16 +39,16 @@ It is designed to be used by developers to automate routing tasks and to help fo
     - [SQL.js](https://github.com/sql-js/sql.js)
   - **NoSQL**
     - [MongoDB](https://www.mongodb.com/)
-- [Deploy & Publish](/devops) - A set of tools and practices that helps you to manage your infrastructure and application configurations
-  - [CI/CD](/devops/ci-cd) - Automation for ci/cd setup
-  - [Docker](/devops/docker) - Docker images for all services
-  - [GitOps](/devops/gitops) - A set of tools and practices that helps you to manage your infrastructure and application configurations using Git as a single source of truth
-  - [Kubernetes](/devops/kubernetes) - Kubernetes manifests for all services
-  - [Terraform](/devops/terraform) - Terraform manifests for all services
+- [Deploy & Publish](/devops/) - A set of tools and practices that helps you to manage your infrastructure and application configurations
+  - [CI/CD](/devops/ci-cd/) - Automation for ci/cd setup
+  - [Docker](/devops/docker/) - Docker images for all services
+  - [GitOps](/devops/gitops/) - A set of tools and practices that helps you to manage your infrastructure and application configurations using Git as a single source of truth
+  - [Kubernetes](/devops/kubernetes/) - Kubernetes manifests for all services
+  - [Terraform](/devops/terraform/) - Terraform manifests for all services
 [//]: # (  - [AWS]&#40;/devops/aws&#41; - AWS utilities and Terraform manifests for all services)
 [//]: # (  - [GCP]&#40;/devops/gcp&#41; - GCP utilities and Terraform manifests for all services)
 [//]: # (  - [Azure]&#40;/devops/azure&#41; - Azure utilities and Terraform manifests for all services)
-- [Marketplace With Ready Made Services](/marketplace)
+- [Marketplace With Ready Made Services](/marketplace/)
 
 
 ### Quick Start
