@@ -20,7 +20,7 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "docusaurus serve apps/docs"
+          "docusaurus start apps/docs"
         ]
       }
     }
