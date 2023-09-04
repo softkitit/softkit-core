@@ -1,0 +1,6 @@
+name: Merge on main
+on:
+  pull_request:
+    branches:
+      - main
+    types: [ closed ]

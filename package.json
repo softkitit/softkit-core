@@ -18,10 +18,12 @@
   "packageManager": "yarn@3.6.3",
   "devDependencies": {
     "@commitlint/cli": "^17.7.1",
+    "@commitlint/config-conventional": "^17.0.0",
     "@commitlint/config-nx-scopes": "^17.6.4",
     "@docusaurus/eslint-plugin": "^2.4.1",
     "@docusaurus/module-type-aliases": "2.4.1",
     "@faker-js/faker": "^8.0.2",
+    "@jscutlery/semver": "^3.1.0",
     "@nestjs/schematics": "^10.0.1",
     "@nestjs/testing": "^10.1.0",
     "@nx/eslint-plugin": "16.7.4",
