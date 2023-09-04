@@ -12,10 +12,13 @@
     "migration:generate": "sh -c 'export MIGRATION_APP_NAME=${0}; yarn run typeorm --dataSource=libs/typeorm/src/lib/migration/migration-data-source.ts migration:generate apps/${0}/src/app/database/migrations/${1}'",
     "migration:create-empty": "yarn run typeorm migration:create apps/${0}/src/app/database/migrations/${1}",
     "prebuild": "rimraf dist",
+    "test:all": "nx affected:test --all --codeCoverage --skip-nx-cache",
     "prepare": "husky install"
   },
   "packageManager": "yarn@3.6.3",
   "devDependencies": {
+    "@commitlint/cli": "^17.7.1",
+    "@commitlint/config-nx-scopes": "^17.6.4",
     "@docusaurus/eslint-plugin": "^2.4.1",
     "@docusaurus/module-type-aliases": "2.4.1",
     "@faker-js/faker": "^8.0.2",
@@ -70,6 +73,7 @@
     "rimraf": "^5.0.1",
     "source-map-support": "^0.5.21",
     "supertest": "^6.3.3",
+    "svg-term-cli": "^2.1.1",
     "testcontainers": "^9.12.0",
     "ts-jest": "^29.1.1",
     "ts-loader": "^9.4.4",
