@@ -1,0 +1,40 @@
+---
+title: Backend Client Generator
+sidebar_label: Backend Client Generator
+slug: /features/code-generators/backend-client-generator
+---
+
+# Backend Client Generator
+
+---
+
+## General Information
+
+This generator helps to create a client library that will be consumed by other backend that need to make synchronous calls to your microservice through HTTP.
+
+## How to install it
+
+```bash
+yarn add -D @softkit/resource-plugin
+```
+:::note
+If you are using our starter kit, this generator is already installed.
+:::
+
+## How to use it
+
+
+
+
+## Why is it only for backend?
+
+It has an automatic NestJS module generation and so ideally should be consumed by a NestJS application.
+
+It has a dependency on [ClsService](/features/cls-service) for automatic user token and request id propagation for tracing and convenience.
+
+Also it has a super convenient feature to [proxy errors](/features/backend-http-client) from your microservice to the client application.
+
+
+
+
+

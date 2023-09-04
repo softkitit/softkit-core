@@ -16,6 +16,14 @@
         "production": {}
       }
     },
+    "check-spell": {
+      "executor": "nx:run-commands",
+        "options": {
+            "commands": [
+              "cspell \"**/*.{md,mdx}\" -c ./apps/docs/cspell.json"
+            ]
+        }
+    },
     "serve": {
       "executor": "nx:run-commands",
       "options": {

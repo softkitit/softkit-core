@@ -58,9 +58,12 @@ const config = {
   themeConfig:
     /** @type {import("@docusaurus/preset-classic").ThemeConfig} */
     ({
-      // Replace with your project's social card
-      image: 'img/docusaurus-social-card.jpg',
-
+      algolia: {
+        appId: "Z9EWM9H0BN",
+        apiKey: "aab3af965df3c8049e5da4701e289618",
+        indexName: "softkit",
+        contextualSearch: true,
+      },
       navbar: {
         title: '',
         hideOnScroll: false,
@@ -72,9 +75,15 @@ const config = {
         items: [
           {
             type: 'docSidebar',
-            sidebarId: 'tutorialSidebar',
+            sidebarId: 'baseSidebar',
             position: 'left',
-            label: 'Tutorial',
+            label: 'Getting Started',
+            activeBaseRegex: '^/$'
+          },
+          {
+            to: "/faq",
+            position: "left",
+            label: "FAQ",
           },
           {
             href: 'https://github.com/softkitit/docusaurus',

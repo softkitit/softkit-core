@@ -1,0 +1,31 @@
+
+{
+    "version": "0.1",
+    "language": "en",
+    "dictionaries": [
+        "english"
+    ],
+    "dictionaryDefinitions": [
+        {
+            "name": "english",
+            "path": "./dictionary/en-custom.txt"
+        }
+    ],
+    "flagWords": [
+        "hte"
+    ],
+    "ignoreRegExpList": [
+        "code-block",
+        "html-video-element"
+    ],
+    "patterns": [
+        {
+            "name": "code-block",
+            "pattern": "/```([\\s\\S]*?)```/gm"
+        },
+        {
+            "name": "html-video-element",
+            "pattern": "/^<video[^>]*>/gm"
+        }
+    ]
+}
