@@ -31,12 +31,6 @@
           "docusaurus start apps/docs"
         ]
       }
-    },
-    "version": {
-      "executor": "@jscutlery/semver:version",
-      "options": {
-        "preset": "conventional"
-      }
     }
   }
 }
