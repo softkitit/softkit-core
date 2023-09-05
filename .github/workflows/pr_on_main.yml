@@ -23,7 +23,12 @@ jobs:
       # Checkout code
       - uses: actions/checkout@v3
         with:
+          ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
+
+      - uses: volta-cli/action@v4
+        with:
+          package-json-path: '${{ github.workspace }}/package.json'
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
