@@ -1,9 +1,6 @@
 import { I18nValidationException } from '@saas-buildkit/nestjs-i18n/dist/interfaces/i18n-validation-error.interface';
 import { ArgumentsHost } from '@nestjs/common';
-import {
-  ErrorResponse,
-  GeneralBadRequestException,
-} from '@saas-buildkit/exceptions';
+import { ErrorResponse, GeneralBadRequestException } from '@softkit/exceptions';
 import { I18nContext } from '@saas-buildkit/nestjs-i18n';
 
 export function responseBodyFormatter(

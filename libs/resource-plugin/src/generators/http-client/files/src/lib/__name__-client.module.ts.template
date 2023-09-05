@@ -3,12 +3,12 @@ import { <%= constantCase(name) -%>_CLIENT_TOKEN as CLIENT_TOKEN } from './const
 import {
   createAxiosInstance,
   UserRequestClsStore,
-} from '@saas-buildkit/server-http-client';
+} from '@softkit/server-http-client';
 import { ClsService } from 'nestjs-cls';
 import * as AllApis from './generated/api';
 import { AxiosInstance } from 'axios';
 import { <%= pascalCase(name) -%>ClientConfig } from './config/<%= name -%>-client.config';
-import { ROOT_CONFIG_ALIAS_TOKEN } from '@saas-buildkit/config';
+import { ROOT_CONFIG_ALIAS_TOKEN } from '@softkit/config';
 import { BaseAPI } from './generated/base';
 
 const ApiClasses = Object.values(AllApis).filter((a) => {

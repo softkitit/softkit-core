@@ -4,7 +4,7 @@ import { I18nService } from '@saas-buildkit/nestjs-i18n';
 import { SamlConfigurationService, TenantService } from '../../services';
 
 import { SetupSamlConfiguration } from './vo/saml-configuration.dto';
-import { SimpleResponseForCreatedEntityWithMessage } from '@saas-buildkit/common-types';
+import { SimpleResponseForCreatedEntityWithMessage } from '@softkit/common-types';
 
 @ApiTags('Tenants')
 @Controller({

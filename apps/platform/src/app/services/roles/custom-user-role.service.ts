@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Transactional } from 'typeorm-transactional';
 import { CustomUserRole } from '../../database/entities';
 import { CustomUserRoleRepository } from '../../repositories';
-import { BaseEntityService } from '@saas-buildkit/typeorm-service';
+import { BaseEntityService } from '@softkit/typeorm-service';
 import { RoleType } from '../../database/entities/roles/types/default-role.enum';
 import { IsNull } from 'typeorm';
 

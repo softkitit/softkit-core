@@ -1,5 +1,5 @@
 {
-  "name": "@saas-buildkit/exceptions",
+  "name": "@softkit/exceptions",
   "version": "1.0.0",
   "type": "commonjs",
   "keywords": [

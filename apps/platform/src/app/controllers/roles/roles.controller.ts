@@ -20,15 +20,15 @@ import {
   ROLES_PAGINATION_CONFIG,
   UpdateUserRole,
 } from './vo/role.dto';
-import { IdParamUUID, VersionNumberParam } from '@saas-buildkit/common-types';
-import { Permissions, SkipAuth } from '@saas-buildkit/auth';
+import { IdParamUUID, VersionNumberParam } from '@softkit/common-types';
+import { Permissions, SkipAuth } from '@softkit/auth';
 import {
   Paginate,
   Paginated,
   PaginatedSwaggerDocs,
   PaginateQuery,
 } from 'nestjs-paginate';
-import { RolesApi } from '@saas-buildkit/platform-client';
+import { RolesApi } from '@softkit/platform-client';
 
 @ApiTags('Roles')
 @Controller({

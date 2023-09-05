@@ -9,7 +9,7 @@ import clearAllMocks = jest.clearAllMocks;
 import { SampleController } from './app/sample.controller';
 import { InternalProxyHttpExceptionFilter } from '../lib/interceptors/internal-proxy-http.filter';
 import { HttpAdapterHost } from '@nestjs/core';
-import { expectNotNullAndGet } from '@saas-buildkit/test-utils';
+import { expectNotNullAndGet } from '@softkit/test-utils';
 
 describe('Circuit breaker and retry with filter', () => {
   let appUrl: string;

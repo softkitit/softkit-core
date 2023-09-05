@@ -8,15 +8,15 @@ import { UserStatus } from '../../database/entities/users/types/user-status.enum
 import { CustomUserRoleService } from '../roles/custom-user-role.service';
 
 import AbstractAuthUserService from './abstract-auth-user-service';
-import { TokenService } from '@saas-buildkit/auth';
-import { hashPassword, verifyPassword } from '@saas-buildkit/crypto';
+import { TokenService } from '@softkit/auth';
+import { hashPassword, verifyPassword } from '@softkit/crypto';
 import {
   FailedToCreateEntityException,
   GeneralForbiddenException,
   GeneralInternalServerException,
   GeneralNotFoundException,
   GeneralUnauthorizedException,
-} from '@saas-buildkit/exceptions';
+} from '@softkit/exceptions';
 import { TenantService } from '../tenants/tenant.service';
 
 @Injectable()
@@ -34,7 +34,7 @@ export class AuthService {
   ) {}
 
   /**
-   * @throws {GeneralNotFoundException} if we can't approve the user email
+   * @throws {Ge neralNotFoundException} if we can't approve the user email
    * (e.g. wrong code, user already approved, etc.)
    * */
   @Transactional()
@@ -70,12 +70,12 @@ export class AuthService {
          *  this should never happen, but just in case we need to react and help
          *  most likely it's some basic configuration issue, or issue after refactoring
          */
-        /* istanbul ignore next */
+        /* istanbul ignore n ext */
         this.logger.error(
           `User trying to login with SAML, but default role is not set for tenant: ${tenantId}.
           This looks like a client configuration issue we need to react and help.`,
         );
-        /* istanbul ignore next */
+        /* istanbul ignore n ext */
         throw new GeneralInternalServerException();
       }
 
@@ -98,7 +98,7 @@ export class AuthService {
       createUserDto.email,
     );
 
-    // if user exists just return empty response to prevent exposing emails of registered users
+    // if user exists ju st return empty response to prevent exposing emails of registered users
     if (user) {
       this.logger.warn(
         `User trying to register with same email again: ${createUserDto.email}`,
@@ -137,7 +137,7 @@ export class AuthService {
   }
 
   /**
-   * we don't want to expose if user exists or not to prevent brute force attacks on emails of registered users
+   * we don't wa nt to expose if user exists or not to prevent brute force attacks on emails of registered users
    * we just return Not Found
    * @throws {GeneralUnauthorizedException} if user not found or password is incorrect
    * */

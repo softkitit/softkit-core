@@ -18,64 +18,64 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@saas-buildkit/async-storage": [
+      "@softkit/async-storage": [
         "libs/async-storage/src/index.ts"
       ],
-      "@saas-buildkit/auth": [
+      "@softkit/auth": [
         "libs/auth/src/index.ts"
       ],
-      "@saas-buildkit/bootstrap": [
+      "@softkit/bootstrap": [
         "libs/bootstrap/src/index.ts"
       ],
-      "@saas-buildkit/common-types": [
+      "@softkit/common-types": [
         "libs/common-types/src/index.ts"
       ],
-      "@saas-buildkit/config": [
+      "@softkit/config": [
         "libs/config/src/index.ts"
       ],
-      "@saas-buildkit/crypto": [
+      "@softkit/crypto": [
         "libs/crypto/src/index.ts"
       ],
-      "@saas-buildkit/eslint-backend": [
+      "@softkit/eslint-backend": [
         "libs/eslint-backend/src/index.js"
       ],
-      "@saas-buildkit/exceptions": [
+      "@softkit/exceptions": [
         "libs/exceptions/src/index.ts"
       ],
-      "@saas-buildkit/healthcheck": [
+      "@softkit/healthcheck": [
         "libs/health-check/src/index.ts"
       ],
-      "@saas-buildkit/i18n": [
+      "@softkit/i18n": [
         "libs/i18n/src/index.ts"
       ],
-      "@saas-buildkit/logger": [
+      "@softkit/logger": [
         "libs/logger/src/index.ts"
       ],
-      "@saas-buildkit/platform-client": [
+      "@softkit/platform-client": [
         "libs/clients/platform-client/src/index.ts"
       ],
-      "@saas-buildkit/resource-plugin": [
+      "@softkit/resource-plugin": [
         "libs/resource-plugin/src/index.ts"
       ],
-      "@saas-buildkit/server-http-client": [
+      "@softkit/server-http-client": [
         "libs/server-http-client/src/index.ts"
       ],
-      "@saas-buildkit/string-utils": [
+      "@softkit/string-utils": [
         "libs/string-utils/src/index.ts"
       ],
-      "@saas-buildkit/swagger-utils": [
+      "@softkit/swagger-utils": [
         "libs/swagger-utils/src/index.ts"
       ],
-      "@saas-buildkit/test-utils": [
+      "@softkit/test-utils": [
         "libs/test-utils/src/index.ts"
       ],
-      "@saas-buildkit/typeorm": [
+      "@softkit/typeorm": [
         "libs/typeorm/src/index.ts"
       ],
-      "@saas-buildkit/typeorm-service": [
+      "@softkit/typeorm-service": [
         "libs/typeorm-service/src/index.ts"
       ],
-      "@saas-buildkit/validation": [
+      "@softkit/validation": [
         "libs/validation/src/index.ts"
       ]
     }

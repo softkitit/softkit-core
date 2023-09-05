@@ -7,7 +7,7 @@
   "type": "object",
   "examples": [
     {
-      "command": "nx g @saas-buildkit/lib mylib --directory=myapp",
+      "command": "nx g @softkit/lib mylib --directory=myapp",
       "description": "Generate libs/myapp/mylib"
     }
   ],

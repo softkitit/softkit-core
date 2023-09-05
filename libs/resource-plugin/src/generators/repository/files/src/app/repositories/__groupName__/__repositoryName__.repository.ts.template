@@ -9,7 +9,7 @@ import {
 <% } else { %>
     BaseRepository as BaseRepository
 <% } %>
-} from '@saas-buildkit/typeorm';
+} from '@softkit/typeorm';
 
 <% if (tenantBaseRepository) { %>
 import { ClsService } from 'nestjs-cls';

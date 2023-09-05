@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   IsUUIDLocalized,
   IsIntegerStringCombinedLocalized,
-} from '@saas-buildkit/validation';
+} from '@softkit/validation';
 
 export class SimpleResponseForCreatedEntityWithMessage<ID> {
   @ApiProperty({

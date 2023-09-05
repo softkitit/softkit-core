@@ -1,9 +1,9 @@
 import { DeepPartial, FindOneOptions, FindOptionsOrder } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
-import { BaseEntityHelper, BaseRepository } from '@saas-buildkit/typeorm';
+import { BaseEntityHelper, BaseRepository } from '@softkit/typeorm';
 import { AbstractBaseService } from './abstract-base.service';
-import { toCapitalizedWords } from '@saas-buildkit/string-utils';
-import { ObjectNotFoundException } from '@saas-buildkit/exceptions';
+import { toCapitalizedWords } from '@softkit/string-utils';
+import { ObjectNotFoundException } from '@softkit/exceptions';
 import { PaginateConfig, Paginated, PaginateQuery } from 'nestjs-paginate';
 import {
   ClassConstructor,

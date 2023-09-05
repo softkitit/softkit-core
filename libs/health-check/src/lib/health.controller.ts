@@ -7,7 +7,7 @@ import {
 } from '@nestjs/terminus';
 import { HealthConfig } from './config/health.config';
 import { HealthIndicatorFunction } from '@nestjs/terminus/dist/health-indicator';
-import { SkipAuth } from '@saas-buildkit/auth';
+import { SkipAuth } from '@softkit/auth';
 import { ApiTags } from '@nestjs/swagger';
 
 @Controller({

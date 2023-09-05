@@ -4,7 +4,7 @@ import {
   i18nValidationMessage,
 } from '@saas-buildkit/nestjs-i18n';
 import { TransformFnParams } from 'class-transformer';
-import { GeneralBadRequestException } from '@saas-buildkit/exceptions';
+import { GeneralBadRequestException } from '@softkit/exceptions';
 import { Path } from '@saas-buildkit/nestjs-i18n/dist/types';
 import { I18nTranslations } from '../../../generated/i18n.generated';
 

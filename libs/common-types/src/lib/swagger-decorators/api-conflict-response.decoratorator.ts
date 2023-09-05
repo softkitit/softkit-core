@@ -4,7 +4,7 @@ import {
   ApiExtraModels,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { ErrorResponse } from '@saas-buildkit/exceptions';
+import { ErrorResponse } from '@softkit/exceptions';
 
 export const ApiConflictResponsePaginated = (description: string) =>
   applyDecorators(

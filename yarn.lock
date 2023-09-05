@@ -5707,9 +5707,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@saas-buildkit/source@workspace:.":
+"@softkit/source@workspace:.":
   version: 0.0.0-use.local
-  resolution: "@saas-buildkit/source@workspace:."
+  resolution: "@softkit/source@workspace:."
   dependencies:
     "@commitlint/cli": ^17.7.1
     "@commitlint/config-conventional": ^17.0.0

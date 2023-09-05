@@ -3,7 +3,7 @@ import {
   IsStringCombinedLocalized,
   MatchesWithProperty,
   PasswordLocalized,
-} from '@saas-buildkit/validation';
+} from '@softkit/validation';
 
 export class CreateUserRequest {
   /**
@@ -58,7 +58,7 @@ export class SignInRequest {
 
 export class ApproveSignUpRequest {
   @IsStringCombinedLocalized()
-  // todo uuid validation
+  // todo  uuid validation
   approvalId!: string;
 
   @IsStringCombinedLocalized({ minLength: 6, maxLength: 6 })

@@ -2,15 +2,15 @@ import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
 
 import { SamlConfig } from './saml.config';
-import { LoggerConfig } from '@saas-buildkit/logger';
-import { AuthConfig } from '@saas-buildkit/auth';
-import { SwaggerConfig } from '@saas-buildkit/swagger-utils';
-import { I18Config } from '@saas-buildkit/i18n';
-import { DbConfig } from '@saas-buildkit/typeorm';
-import { AppConfig } from '@saas-buildkit/bootstrap';
-import { HttpClientConfig } from '@saas-buildkit/server-http-client';
-import { PlatformClientConfig } from '@saas-buildkit/platform-client';
-import { HealthConfig } from '@saas-buildkit/healthcheck';
+import { LoggerConfig } from '@softkit/logger';
+import { AuthConfig } from '@softkit/auth';
+import { SwaggerConfig } from '@softkit/swagger-utils';
+import { I18Config } from '@softkit/i18n';
+import { DbConfig } from '@softkit/typeorm';
+import { AppConfig } from '@softkit/bootstrap';
+import { HttpClientConfig } from '@softkit/server-http-client';
+import { PlatformClientConfig } from '@softkit/platform-client';
+import { HealthConfig } from '@softkit/healthcheck';
 
 export default class RootConfig implements PlatformClientConfig {
   @Type(() => LoggerConfig)

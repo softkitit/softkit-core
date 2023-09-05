@@ -3,12 +3,12 @@ import { PLATFORM_CLIENT_TOKEN } from './constants';
 import {
   createAxiosInstance,
   UserRequestClsStore,
-} from '@saas-buildkit/server-http-client';
+} from '@softkit/server-http-client';
 import { ClsService } from 'nestjs-cls';
 import * as AllApis from './generated/api';
 import { AxiosInstance } from 'axios';
 import { PlatformClientConfig } from './config/platform-client.config';
-import { ROOT_CONFIG_ALIAS_TOKEN } from '@saas-buildkit/config';
+import { ROOT_CONFIG_ALIAS_TOKEN } from '@softkit/config';
 import { BaseAPI } from './generated/base';
 
 const ApiClasses = Object.values(AllApis).filter((a) => {

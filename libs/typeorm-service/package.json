@@ -1,5 +1,5 @@
 {
-  "name": "@saas-buildkit/typeorm-service",
+  "name": "@softkit/typeorm-service",
   "version": "1.0.0",
   "type": "commonjs",
   "keywords": [

@@ -1,5 +1,5 @@
 {
-  "name": "@saas-buildkit/logger",
+  "name": "@softkit/logger",
   "version": "1.0.0",
   "type": "commonjs",
   "keywords": [

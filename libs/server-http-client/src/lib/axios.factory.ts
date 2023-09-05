@@ -6,7 +6,7 @@ import { REQUEST_ID_HEADER } from './constants';
 import CircuitBreaker from 'opossum';
 import axiosRetry from 'axios-retry';
 import { RetryType } from './config/vo/retry-type';
-import { InternalServiceUnavailableHttpException } from '@saas-buildkit/exceptions';
+import { InternalServiceUnavailableHttpException } from '@softkit/exceptions';
 import { InternalProxyHttpException } from './exceptions/internal-proxy-http.exception';
 
 function configureRetries(

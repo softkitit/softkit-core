@@ -11,10 +11,10 @@ import { UserStatus } from '../database/entities/users/types/user-status.enum';
 import { PlatformAppModule } from '../platform-app.module';
 import { UserRepository } from '../repositories';
 import { CustomUserRoleService, TenantService } from '../services';
-import { DbConfig } from '@saas-buildkit/typeorm';
-import { bootstrapBaseWebApp } from '@saas-buildkit/bootstrap';
-import { TokenService } from '@saas-buildkit/auth';
-import { startDb } from '@saas-buildkit/test-utils';
+import { DbConfig } from '@softkit/typeorm';
+import { bootstrapBaseWebApp } from '@softkit/bootstrap';
+import { TokenService } from '@softkit/auth';
+import { startDb } from '@softkit/test-utils';
 import { Paginated } from 'nestjs-paginate';
 
 describe('roles e2e test', () => {

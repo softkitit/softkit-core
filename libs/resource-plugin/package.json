@@ -1,12 +1,12 @@
 {
-  "name": "@saas-buildkit/resource-plugin",
+  "name": "@softkit/resource-plugin",
   "version": "1.0.0",
   "type": "commonjs",
   "keywords": [
     "generator",
     "utils",
     "build",
-    "saas-buildkit"
+    "softkit"
   ],
   "generators": "./generators.json",
   "dependencies": {

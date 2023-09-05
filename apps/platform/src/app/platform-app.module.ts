@@ -15,19 +15,19 @@ import * as Repositories from './repositories';
 import * as Services from './services';
 import AbstractAuthUserService from './services/auth/abstract-auth-user-service';
 import AuthUserService from './services/users/auth-user.service';
-import { setupI18NModule } from '@saas-buildkit/i18n';
-import { setupLoggerModule } from '@saas-buildkit/logger';
-import { setupYamlBaseConfigModule } from '@saas-buildkit/config';
-import { setupClsModule } from '@saas-buildkit/async-storage';
-import { TypeOrmConfigService } from '@saas-buildkit/typeorm';
+import { setupI18NModule } from '@softkit/i18n';
+import { setupLoggerModule } from '@softkit/logger';
+import { setupYamlBaseConfigModule } from '@softkit/config';
+import { setupClsModule } from '@softkit/async-storage';
+import { TypeOrmConfigService } from '@softkit/typeorm';
 import {
   JwtAuthGuard,
   JwtStrategy,
   PermissionsGuard,
   TokenService,
-} from '@saas-buildkit/auth';
-import { PlatformClientModule } from '@saas-buildkit/platform-client';
-import { HealthCheckModule } from '@saas-buildkit/healthcheck';
+} from '@softkit/auth';
+import { PlatformClientModule } from '@softkit/platform-client';
+import { HealthCheckModule } from '@softkit/healthcheck';
 
 /* istanbul ignore next */
 @Module({
@@ -44,7 +44,7 @@ import { HealthCheckModule } from '@saas-buildkit/healthcheck';
       useClass: TypeOrmConfigService,
       dataSourceFactory: async (options?: DataSourceOptions) => {
         if (!options) {
-          // this will be a startup error we don't need to cover it with tests
+          // this will be a startup error we don't need to c over it with tests
           /* istanbul ignore next */
           throw new Error(`Can not initialize data source, options are empty`);
         }

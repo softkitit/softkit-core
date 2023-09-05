@@ -1,4 +1,4 @@
 import { <%= pascalCase(name) -%>AppModule } from './<%= name -%>-app.module.ts';
-import { bootstrapBaseWebApp } from '@saas-buildkit/bootstrap';
+import { bootstrapBaseWebApp } from '@softkit/bootstrap';
 
 void bootstrapBaseWebApp(<%= pascalCase(name) -%>AppModule);

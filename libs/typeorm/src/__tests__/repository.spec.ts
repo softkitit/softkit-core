@@ -11,7 +11,7 @@ import {
   addTransactionalDataSource,
   initializeTransactionalContext,
 } from 'typeorm-transactional';
-import { expectNotNullAndGet, startDb } from '@saas-buildkit/test-utils';
+import { expectNotNullAndGet, startDb } from '@softkit/test-utils';
 import { USER_PAGINATED_CONFIG, UserEntity } from './app/user.entity';
 import { UserRepository } from './app/user-repository.service';
 import { FilterOperator } from 'nestjs-paginate';

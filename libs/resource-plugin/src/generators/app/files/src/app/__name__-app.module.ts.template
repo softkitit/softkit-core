@@ -9,7 +9,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { addTransactionalDataSource } from 'typeorm-transactional';
 import { getDataSourceByName } from 'typeorm-transactional/dist/common';
-import { TypeOrmConfigService } from '@saas-buildkit/typeorm';
+import { TypeOrmConfigService } from '@softkit/typeorm';
 
 import <%= pascalCase(name) -%>RootConfig from './config/<%= name -%>root.config';
 
@@ -22,16 +22,16 @@ import {
   JwtStrategy,
   PermissionsGuard,
   TokenService,
-} from '@saas-buildkit/auth';
+} from '@softkit/auth';
 
 
-import { setupI18NModule } from '@saas-buildkit/i18n';
+import { setupI18NModule } from '@softkit/i18n';
 
-import { setupLoggerModule } from '@saas-buildkit/logger';
-import { setupYamlBaseConfigModule } from '@saas-buildkit/config';
-import { setupClsModule } from '@saas-buildkit/async-storage';
+import { setupLoggerModule } from '@softkit/logger';
+import { setupYamlBaseConfigModule } from '@softkit/config';
+import { setupClsModule } from '@softkit/async-storage';
 
-import { HealthCheckModule } from '@saas-buildkit/healthcheck';
+import { HealthCheckModule } from '@softkit/healthcheck';
 
 /* istanbul ignore next */
 @Module({

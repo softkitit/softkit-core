@@ -13,8 +13,8 @@ import {
   initializeTransactionalContext,
 } from 'typeorm-transactional';
 import { OptimisticLockingSubscriber } from '../lib/subscribers/optimistic-locking.subscriber';
-import { startDb } from '@saas-buildkit/test-utils';
-import { OptimisticLockException } from '@saas-buildkit/exceptions';
+import { startDb } from '@softkit/test-utils';
+import { OptimisticLockException } from '@softkit/exceptions';
 import { getTransactionalContext } from 'typeorm-transactional/dist/common';
 import { UserEntity } from './app/user.entity';
 import { UserRepository } from './app/user-repository.service';
