@@ -54,7 +54,7 @@ jobs:
 
       - name: Install environment
         if: steps.yarn-cache.outputs.cache-hit != 'true'
-        run: yarn install --immutable-cache
+        run: yarn install
 
       - name: Run lint
         run: npx nx affected:lint -- --base="origin/main"
