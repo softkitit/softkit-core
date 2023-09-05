@@ -53,7 +53,7 @@ jobs:
 
       - name: Install environment
         if: steps.yarn-cache.outputs.cache-hit != 'true'
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable --immutable-cache --check-cache
 
       - name: Run lint
         run: nx affected:lint -- --base="origin/main"
