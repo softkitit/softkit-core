@@ -53,8 +53,8 @@ export class TenantService extends BaseEntityService<
       .replaceAll(/-+/g, '-')
       .replaceAll(/^-|-$/g, '');
 
-    // todo make this configurable, it's probably not nessaary to be like this
-    const tenantUrl = `${tenantUrlPrefix}`;
+    // todo make this configurable, it's probably not necessary to be like this
+    const tenantUrl = `${tenantUrlPrefix}.${this.appConfig.frontendUrl}`;
 
     const tenantUrlExists = await this.repository.count({
       where: {

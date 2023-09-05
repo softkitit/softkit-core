@@ -293,9 +293,7 @@ describe('tenant base entity test', () => {
       userRepository.softDelete(faker.string.uuid()),
     ).rejects.toThrow();
 
-    await expect(() =>
-      userRepository.softRemove({} as unknown as TenantUserEntity),
-    ).rejects.toThrow();
+    await expect(() => userRepository.softRemove()).rejects.toThrow();
 
     await expect(() =>
       userRepository.restore(faker.string.uuid()),
