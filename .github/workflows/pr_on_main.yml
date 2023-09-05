@@ -21,14 +21,17 @@ jobs:
     # Define Steps
     steps:
       # Checkout code
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           fetch-depth: 0
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
+          cache: 'yarn'
+          cache-dependency-path:
+            - .yarn.lock
           node-version: ${{ matrix.node-version }}
 
       # Make sure we have all branches
@@ -53,13 +56,13 @@ jobs:
 
       - name: Install environment
         if: steps.yarn-cache.outputs.cache-hit != 'true'
-        run: yarn install --immutable --immutable-cache --check-cache
+        run: yarn install --immutable-cache
 
       - name: Run lint
-        run: nx affected:lint -- --base="origin/main"
+        run: npx nx affected:lint -- --base="origin/main"
 
       - name: Tests coverage
-        run: nx affected:test -- --base="origin/main" --codeCoverage --parallel=false
+        run: npx nx affected:test -- --base="origin/main" --codeCoverage --parallel=false
 
       - name: Report to coveralls
         uses: coverallsapp/github-action@v2.2.0
