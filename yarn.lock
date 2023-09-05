@@ -5796,6 +5796,7 @@ __metadata:
     nestjs-paginate: ^8.2.1
     nestjs-pino: ^3.3.0
     newrelic: ^10.4.2
+    ngx-deploy-npm: ^7.0.1
     nx: 16.7.4
     nx-cloud: 16.3.0
     openapi-typescript-codegen: ^0.25.0
@@ -18667,6 +18668,16 @@ __metadata:
   bin:
     newrelic-naming-rules: bin/test-naming-rules.js
   checksum: d8eb4ccc16c2e73e72914dda64ca019cbc7d89f503722078982196182d76ddad4a161071baad1c894223b5569bfca3717c65ed14717585a45943edc5044cc645
+  languageName: node
+  linkType: hard
+
+"ngx-deploy-npm@npm:^7.0.1":
+  version: 7.0.1
+  resolution: "ngx-deploy-npm@npm:7.0.1"
+  peerDependencies:
+    "@nx/devkit": ^16.0.0
+    tslib: ^2.3.0
+  checksum: ec5f9d930370f7c959a4cd3f9fe46fd16638178432f2645a0113815da64404becb89d5c5b5ff62d0321edff8efa9c59d89b25e1f6d169e0063c97ca0b0e90907
   languageName: node
   linkType: hard
 

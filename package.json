@@ -17,6 +17,7 @@
   },
   "packageManager": "yarn@3.6.3",
   "devDependencies": {
+    "ngx-deploy-npm": "^7.0.1",
     "@commitlint/cli": "^17.7.1",
     "@commitlint/config-conventional": "^17.0.0",
     "@commitlint/config-nx-scopes": "^17.6.4",
