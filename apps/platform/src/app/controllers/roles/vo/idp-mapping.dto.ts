@@ -1,4 +1,4 @@
-import { IsStringCombinedLocalized } from '@saas-buildkit/validation';
+import { IsStringCombinedLocalized } from '@softkit/validation';
 
 export class IdpMappingDto {
   @IsStringCombinedLocalized({

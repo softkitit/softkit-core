@@ -1,5 +1,5 @@
 import { FindOneOptions, FindOptionsOrder } from 'typeorm';
-import { BaseEntityHelper } from '@saas-buildkit/typeorm';
+import { BaseEntityHelper } from '@softkit/typeorm';
 import { PaginateConfig, Paginated, PaginateQuery } from 'nestjs-paginate';
 import { ClassConstructor } from 'class-transformer';
 import { ClassTransformOptions } from 'class-transformer/types/interfaces';

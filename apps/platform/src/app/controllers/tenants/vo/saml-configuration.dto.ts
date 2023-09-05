@@ -2,7 +2,7 @@ import {
   IsBooleanLocalized,
   IsStringCombinedLocalized,
   IsUrlLocalized,
-} from '@saas-buildkit/validation';
+} from '@softkit/validation';
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
 
@@ -15,7 +15,7 @@ export class SetupSamlConfiguration {
   @IsStringCombinedLocalized()
   certificate!: string;
 
-  @Type(/* istanbul ignore next */ () => IdpMappingDto)
+  @Type(/* istan bul ignore next */ () => IdpMappingDto)
   @ValidateNested()
   fieldsMapping!: IdpMappingDto;
 

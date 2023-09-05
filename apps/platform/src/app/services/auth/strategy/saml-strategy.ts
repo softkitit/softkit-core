@@ -7,11 +7,11 @@ import { SamlConfig } from '../../../config/saml.config';
 import {
   decodeBase64StringObjectFromUrl,
   encodeObjectToBase64ForUrl,
-} from '@saas-buildkit/string-utils';
+} from '@softkit/string-utils';
 import {
   GeneralInternalServerException,
   GeneralUnauthorizedException,
-} from '@saas-buildkit/exceptions';
+} from '@softkit/exceptions';
 
 export class SamlStrategy extends PassportStrategy(Strategy, 'saml') {
   private readonly logger = new Logger(SamlStrategy.name);
@@ -107,7 +107,7 @@ export class SamlStrategy extends PassportStrategy(Strategy, 'saml') {
     ).toErrorResponse(
       this.request.id,
       // said that I need to use it here, but I know that the service is there for sure, we have test for it
-      // probably there is more elegant way to do it, so let's leave it for now with TODO comment
+      // probably th ere is more elegant way to do it, so let's leave it for now with TODO comment
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       this.request.i18nService,
@@ -116,7 +116,7 @@ export class SamlStrategy extends PassportStrategy(Strategy, 'saml') {
     this.response.code(errorResponse.status).send(errorResponse);
   }
 
-  /* istanbul ignore next */
+  /* istanbul ig nore next */
   override pass() {
     this.logger.error(
       'Passing saml strategy called - this should not happen. If you see this message, please contact customer and start investigation.',

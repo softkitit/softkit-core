@@ -1,4 +1,4 @@
 import { PlatformAppModule } from './platform-app.module';
-import { bootstrapBaseWebApp } from '@saas-buildkit/bootstrap';
+import { bootstrapBaseWebApp } from '@softkit/bootstrap';
 
 void bootstrapBaseWebApp(PlatformAppModule);

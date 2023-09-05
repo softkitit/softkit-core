@@ -6,30 +6,42 @@
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/libs/clients/platform-client",
         "tsConfig": "libs/clients/platform-client/tsconfig.lib.json",
         "packageJson": "libs/clients/platform-client/package.json",
         "main": "libs/clients/platform-client/src/index.ts",
-        "assets": ["libs/clients/platform-client/*.md"],
+        "assets": [
+          "libs/clients/platform-client/*.md"
+        ],
         "updateBuildableProjectDepsInPackageJson": true
       }
     },
     "publish": {
       "command": "node tools/scripts/publish.mjs clients-platform-client {args.ver} {args.tag}",
-      "dependsOn": ["build"]
+      "dependsOn": [
+        "build"
+      ]
     },
     "lint": {
       "executor": "@nx/linter:eslint",
-      "outputs": ["{options.outputFile}"],
+      "outputs": [
+        "{options.outputFile}"
+      ],
       "options": {
-        "lintFilePatterns": ["libs/clients/platform-client/**/*.ts"]
+        "lintFilePatterns": [
+          "libs/clients/platform-client/**/*.ts"
+        ]
       }
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
       "options": {
         "jestConfig": "libs/clients/platform-client/jest.config.ts",
         "passWithNoTests": true
@@ -39,6 +51,12 @@
           "ci": true,
           "codeCoverage": true
         }
+      }
+    },
+    "version": {
+      "executor": "@jscutlery/semver:version",
+      "options": {
+        "preset": "conventional"
       }
     }
   },

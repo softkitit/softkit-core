@@ -17,15 +17,15 @@ export class OverrideDefaultForbiddenExceptionFilter
   constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
 
   catch(exception: ForbiddenException, host: ArgumentsHost): void {
-    // In certain situations `httpAdapter` might not be available in the
-    // constructor method, thus we should resolve it here.
+    // In ce rtain situations `httpAdapter` might not be available in the
+    // const ructor method, thus we should resolve it here.
     const { httpAdapter } = this.httpAdapterHost;
 
     const ctx = host.switchToHttp();
     const i18n = I18nContext.current<I18nTranslations>(host);
 
     const response = {
-      // todo implement link to the docs, get from config
+      // todo  implement link to the docs, get from config
       type: 'todo implement link to the docs, get from config',
       title: i18n?.translate('exception.FORBIDDEN.TITLE') || 'Forbidden',
       detail:

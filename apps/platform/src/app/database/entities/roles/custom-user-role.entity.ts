@@ -10,7 +10,7 @@ import {
 import { Tenant } from '../tenants/tenant.entity';
 import { Permission } from './permission.entity';
 import { RoleType } from './types/default-role.enum';
-import { BaseTenantEntityHelper } from '@saas-buildkit/typeorm';
+import { BaseTenantEntityHelper } from '@softkit/typeorm';
 
 @Entity('roles')
 export class CustomUserRole extends BaseTenantEntityHelper {

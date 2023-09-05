@@ -1,5 +1,5 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { hashPassword } from '@saas-buildkit/crypto';
+import { hashPassword } from '@softkit/crypto';
 
 export class InitialSeed1690601842579 implements MigrationInterface {
   ADMIN_USER_EMAIL = 'john.doe-admin@softkit.dev';

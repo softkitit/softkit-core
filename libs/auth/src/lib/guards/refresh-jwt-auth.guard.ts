@@ -4,7 +4,7 @@ import { ClsService } from 'nestjs-cls';
 import { ExtractJwt } from 'passport-jwt';
 import { TokenService } from '../services/token.service';
 import { UserClsStore } from '../vo/user-cls-store';
-import { GeneralUnauthorizedException } from '@saas-buildkit/exceptions';
+import { GeneralUnauthorizedException } from '@softkit/exceptions';
 
 @Injectable()
 export class RefreshJwtAuthGuard extends AuthGuard('refresh-jwt') {

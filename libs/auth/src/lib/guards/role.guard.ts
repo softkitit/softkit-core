@@ -2,7 +2,7 @@ import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { logger } from '@saas-buildkit/nestjs-i18n';
 import { JwtPayload } from '../vo/payload';
-import { GeneralInternalServerException } from '@saas-buildkit/exceptions';
+import { GeneralInternalServerException } from '@softkit/exceptions';
 
 @Injectable()
 export class RolesGuard implements CanActivate {

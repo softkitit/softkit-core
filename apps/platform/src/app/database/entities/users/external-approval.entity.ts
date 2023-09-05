@@ -9,10 +9,10 @@ import {
 import { ApprovalType } from './types/approval-type.enum';
 
 import { User } from './user.entity';
-import { BaseEntityHelper } from '@saas-buildkit/typeorm';
+import { BaseEntityHelper } from '@softkit/typeorm';
 
 /**
- * External approval entity.
+ * E xternal approval entity.
  * Used for external approval of user email or phone number or whatever else is required approval
  * you can use or do not use the code field, it's up to you
  * for email approval id is enough

@@ -9,7 +9,7 @@ import {
 <% } else { %>
     BaseEntityHelper as BaseEntity
 <% } %>
-} from '@saas-buildkit/typeorm';
+} from '@softkit/typeorm';
 
 @Entity('<%= snakeCase(entityName) -%>')
 export class <%= pascalCase(entityName) -%> extends BaseEntity {

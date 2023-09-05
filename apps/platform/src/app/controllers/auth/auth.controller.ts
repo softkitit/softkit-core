@@ -19,11 +19,11 @@ import {
   CreateUserRequest,
   SignInRequest,
 } from './vo/sign-up.dto';
-import { SkipAuth } from '@saas-buildkit/auth';
+import { SkipAuth } from '@softkit/auth';
 import {
   ApiConflictResponsePaginated,
   SimpleResponseForCreatedEntityWithMessage,
-} from '@saas-buildkit/common-types';
+} from '@softkit/common-types';
 
 @ApiTags('Auth')
 @Controller({

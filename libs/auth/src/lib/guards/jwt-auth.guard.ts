@@ -7,7 +7,7 @@ import { firstValueFrom, Observable } from 'rxjs';
 import { SKIP_AUTH } from '../vo/constants';
 import { TokenService } from '../services/token.service';
 import { UserClsStore } from '../vo/user-cls-store';
-import { GeneralUnauthorizedException } from '@saas-buildkit/exceptions';
+import { GeneralUnauthorizedException } from '@softkit/exceptions';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {

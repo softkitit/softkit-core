@@ -9,7 +9,7 @@ describe('http-client generator', () => {
   const options: HttpClientGeneratorSchema = {
     name: 'test',
     directory: 'clients',
-    importPath: '@saas-buildkit/nestjs-http-client',
+    importPath: '@softkit/nestjs-http-client',
   };
 
   beforeEach(() => {

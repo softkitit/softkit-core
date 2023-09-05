@@ -18,20 +18,20 @@ import {
 import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
 import { initializeTransactionalContext } from 'typeorm-transactional';
 import { getTransactionalContext } from 'typeorm-transactional/dist/common';
-import { generateRandomId } from '@saas-buildkit/crypto';
+import { generateRandomId } from '@softkit/crypto';
 import {
   AnyExceptionFilter,
   HttpExceptionFilter,
   OverrideDefaultForbiddenExceptionFilter,
   OverrideDefaultNotFoundFilter,
-} from '@saas-buildkit/exceptions';
-import { DEFAULT_VALIDATION_OPTIONS } from '@saas-buildkit/validation';
+} from '@softkit/exceptions';
+import { DEFAULT_VALIDATION_OPTIONS } from '@softkit/validation';
 import { AppConfig } from './config/app';
-import { setupSwagger, SwaggerConfig } from '@saas-buildkit/swagger-utils';
-import { PostgresDbFailedErrorFilter } from '@saas-buildkit/typeorm';
-import { LoggingInterceptor } from '@saas-buildkit/logger';
-import { responseBodyFormatter } from '@saas-buildkit/i18n';
-import { REQUEST_ID_HEADER } from '@saas-buildkit/server-http-client';
+import { setupSwagger, SwaggerConfig } from '@softkit/swagger-utils';
+import { PostgresDbFailedErrorFilter } from '@softkit/typeorm';
+import { LoggingInterceptor } from '@softkit/logger';
+import { responseBodyFormatter } from '@softkit/i18n';
+import { REQUEST_ID_HEADER } from '@softkit/server-http-client';
 import { fastifyHelmet } from '@fastify/helmet';
 
 function buildFastifyAdapter() {

@@ -4,7 +4,7 @@ import { AuthConfig } from '../lib/config/auth';
 import { JwtPayload } from '../lib/vo/payload';
 import { TokenService } from '../lib/services/token.service';
 import { AuthConfigMock } from './utils/auth-config.mock';
-import { GeneralUnauthorizedException } from '@saas-buildkit/exceptions';
+import { GeneralUnauthorizedException } from '@softkit/exceptions';
 
 describe('test token service', () => {
   let tokenService: TokenService;

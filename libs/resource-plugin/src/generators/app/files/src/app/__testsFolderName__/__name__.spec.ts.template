@@ -1,9 +1,9 @@
 import { NestFastifyApplication } from '@nestjs/platform-fastify';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as path from 'node:path';
-import { DbConfig } from '@saas-buildkit/typeorm';
-import { startDb } from '@saas-buildkit/test-utils';
-import { bootstrapBaseWebApp } from '@saas-buildkit/bootstrap';
+import { DbConfig } from '@softkit/typeorm';
+import { startDb } from '@softkit/test-utils';
+import { bootstrapBaseWebApp } from '@softkit/bootstrap';
 import { <%= pascalCase(name) -%>AppModule } from '../<%= name -%>-app.module';
 
 describe('Test <%= pascalCase(name) -%>AppModule tests', () => {

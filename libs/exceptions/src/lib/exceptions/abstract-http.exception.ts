@@ -18,7 +18,7 @@ export class AbstractHttpException {
     const detail = i18nService?.translate(this.detail, { args: this.data });
 
     return {
-      // todo implement link to the docs, get from config
+      // todo  implement link to the docs, get from config
       type: 'todo implement link to the docs, get from config',
       title: title?.toString() || this.title,
       detail: detail?.toString() ?? this.detail,

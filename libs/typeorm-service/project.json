@@ -6,30 +6,42 @@
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/libs/typeorm-service",
         "tsConfig": "libs/typeorm-service/tsconfig.lib.json",
         "packageJson": "libs/typeorm-service/package.json",
         "main": "libs/typeorm-service/src/index.ts",
-        "assets": ["libs/typeorm-service/*.md"],
+        "assets": [
+          "libs/typeorm-service/*.md"
+        ],
         "updateBuildableProjectDepsInPackageJson": true
       }
     },
     "publish": {
       "command": "node tools/scripts/publish.mjs typeorm-service {args.ver} {args.tag}",
-      "dependsOn": ["build"]
+      "dependsOn": [
+        "build"
+      ]
     },
     "lint": {
       "executor": "@nx/linter:eslint",
-      "outputs": ["{options.outputFile}"],
+      "outputs": [
+        "{options.outputFile}"
+      ],
       "options": {
-        "lintFilePatterns": ["libs/typeorm-service/**/*.ts"]
+        "lintFilePatterns": [
+          "libs/typeorm-service/**/*.ts"
+        ]
       }
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
       "options": {
         "jestConfig": "libs/typeorm-service/jest.config.ts",
         "passWithNoTests": true
@@ -39,6 +51,12 @@
           "ci": true,
           "codeCoverage": true
         }
+      }
+    },
+    "version": {
+      "executor": "@jscutlery/semver:version",
+      "options": {
+        "preset": "conventional"
       }
     }
   },

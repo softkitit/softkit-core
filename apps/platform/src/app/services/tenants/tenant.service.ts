@@ -4,8 +4,8 @@ import { Tenant } from '../../database/entities';
 import { TenantsRepository } from '../../repositories';
 
 import { CustomUserRoleService } from '../roles/custom-user-role.service';
-import { BaseEntityService } from '@saas-buildkit/typeorm-service';
-import { AppConfig } from '@saas-buildkit/bootstrap';
+import { BaseEntityService } from '@softkit/typeorm-service';
+import { AppConfig } from '@softkit/bootstrap';
 
 @Injectable()
 export class TenantService extends BaseEntityService<
@@ -53,8 +53,8 @@ export class TenantService extends BaseEntityService<
       .replaceAll(/-+/g, '-')
       .replaceAll(/^-|-$/g, '');
 
-    // todo make this configurable, it's probably not nessaary to be like this
-    const tenantUrl = `${tenantUrlPrefix}`;
+    // todo make this configurable, it's probably not necessary to be like this
+    const tenantUrl = `${tenantUrlPrefix}.${this.appConfig.frontendUrl}`;
 
     const tenantUrlExists = await this.repository.count({
       where: {

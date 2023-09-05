@@ -23,8 +23,8 @@ import {
 import {
   ApiOkResponsePaginated,
   InfinityPaginationResultType,
-} from '@saas-buildkit/common-types';
-import { Permissions } from '@saas-buildkit/auth';
+} from '@softkit/common-types';
+import { Permissions } from '@softkit/auth';
 
 @ApiTags('<%= capitalCase(controllerName) -%>')
 @Controller({

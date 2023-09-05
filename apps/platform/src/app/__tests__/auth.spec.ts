@@ -20,9 +20,9 @@ import {
   TenantService,
   UserService,
 } from '../services';
-import { DbConfig } from '@saas-buildkit/typeorm';
-import { startDb } from '@saas-buildkit/test-utils';
-import { bootstrapBaseWebApp } from '@saas-buildkit/bootstrap';
+import { DbConfig } from '@softkit/typeorm';
+import { startDb } from '@softkit/test-utils';
+import { bootstrapBaseWebApp } from '@softkit/bootstrap';
 
 describe('auth e2e test', () => {
   let app: NestFastifyApplication;

@@ -10,7 +10,7 @@ import { UserRequestClsStore } from '../lib/vo/user-request-cls-store';
 import { AxiosInstance, AxiosResponse } from 'axios';
 import clearAllMocks = jest.clearAllMocks;
 import { SampleController } from './app/sample.controller';
-import { InternalServiceUnavailableHttpException } from '@saas-buildkit/exceptions';
+import { InternalServiceUnavailableHttpException } from '@softkit/exceptions';
 import { REQUEST_ID_HEADER } from '../lib/constants';
 import { InternalProxyHttpException } from '../lib/exceptions/internal-proxy-http.exception';
 import { InternalProxyHttpExceptionFilter } from '../lib/interceptors/internal-proxy-http.filter';

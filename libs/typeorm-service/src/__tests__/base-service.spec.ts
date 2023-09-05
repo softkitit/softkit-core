@@ -12,8 +12,8 @@ import {
   addTransactionalDataSource,
   initializeTransactionalContext,
 } from 'typeorm-transactional';
-import { expectNotNullAndGet, startDb } from '@saas-buildkit/test-utils';
-import { ObjectNotFoundException } from '@saas-buildkit/exceptions';
+import { expectNotNullAndGet, startDb } from '@softkit/test-utils';
+import { ObjectNotFoundException } from '@softkit/exceptions';
 import { PAGINATED_CONFIG, UserEntity } from './app/user.entity';
 import { UserService } from './app/user.service';
 import { UserRepository } from './app/user.repository';

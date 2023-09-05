@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { CustomUserRole } from '../../database/entities';
-import { BaseTenantRepository, TenantClsStore } from '@saas-buildkit/typeorm';
+import { BaseTenantRepository, TenantClsStore } from '@softkit/typeorm';
 import { ClsService } from 'nestjs-cls';
 
 @Injectable()

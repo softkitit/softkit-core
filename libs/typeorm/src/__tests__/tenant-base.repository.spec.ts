@@ -15,7 +15,7 @@ import {
 } from 'typeorm-transactional';
 import { ClsPresetSubscriber } from '../lib/subscribers/cls-preset.subscriber';
 import { TenantClsStore } from '../lib/vo/tenant-base-cls-store';
-import { expectNotNullAndGet, startDb } from '@saas-buildkit/test-utils';
+import { expectNotNullAndGet, startDb } from '@softkit/test-utils';
 import { TenantRepository } from './app/tenant.repository';
 import { TenantEntity } from './app/tenant.entity';
 import { TenantUserEntity } from './app/test-base-tenant.entity';
@@ -293,9 +293,7 @@ describe('tenant base entity test', () => {
       userRepository.softDelete(faker.string.uuid()),
     ).rejects.toThrow();
 
-    await expect(() =>
-      userRepository.softRemove({} as unknown as TenantUserEntity),
-    ).rejects.toThrow();
+    await expect(() => userRepository.softRemove()).rejects.toThrow();
 
     await expect(() =>
       userRepository.restore(faker.string.uuid()),

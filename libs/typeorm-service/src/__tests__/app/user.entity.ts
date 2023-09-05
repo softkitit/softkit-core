@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { BaseEntityHelper } from '@saas-buildkit/typeorm';
+import { BaseEntityHelper } from '@softkit/typeorm';
 import { FilterOperator, PaginateConfig } from 'nestjs-paginate';
 import { FilterSuffix } from 'nestjs-paginate/lib/filter';
 

@@ -1,5 +1,5 @@
 {
-  "name": "@saas-buildkit/source",
+  "name": "@softkit/source",
   "$schema": "node_modules/nx/schemas/project-schema.json",
   "targets": {
     "local-registry": {
@@ -8,6 +8,12 @@
         "port": 4873,
         "config": ".verdaccio/config.yml",
         "storage": "tmp/local-registry/storage"
+      }
+    },
+    "version": {
+      "executor": "@jscutlery/semver:version",
+      "options": {
+        "preset": "conventional"
       }
     }
   }

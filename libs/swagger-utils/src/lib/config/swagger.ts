@@ -6,7 +6,7 @@ import {
   Allow,
   IsBoolean,
 } from 'class-validator';
-import { BooleanTypeTransform } from '@saas-buildkit/validation';
+import { BooleanTypeTransform } from '@softkit/validation';
 
 export class SwaggerConfig {
   @IsString()
