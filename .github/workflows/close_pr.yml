@@ -17,9 +17,8 @@ jobs:
     steps:
       # Checkout code
       - name: Checkout Code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
-          ref: ${{ github.event.pull_request.head.ref }}
           fetch-depth: 0
 
       - name: Configure NPM Token
@@ -32,7 +31,7 @@ jobs:
         run: |
           git config --local user.email "automation@softkit.dev"
           git config --local user.name "GitHub Auto Release"
-          nx affected --target version --push --skipRootChangelog true --base=last-release --changelogHeader "Softkit Core Libraries Changelog" --trackDeps --parallel=false
+          npx nx affected --target version --push --skipRootChangelog true --base=last-release --changelogHeader "Softkit Core Libraries Changelog" --trackDeps --parallel=false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Tag last-release
