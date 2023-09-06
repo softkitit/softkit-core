@@ -36,7 +36,7 @@ jobs:
           git config --local user.name "GitHub Auto Release"
           npx nx affected --target version --push --skipRootChangelog true --base=last-release --changelogHeader "Softkit Core Libraries Changelog" --trackDeps --parallel=false
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
       - name: Tag last-release
         run: |
           git tag -a last-release -m "Last release"
