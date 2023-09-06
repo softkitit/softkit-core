@@ -1,4 +1,9 @@
 Softkit Core Libraries Changelog
+## [0.0.2](https://github.com/saas-buildkit/saas-buildkit-core/compare/swagger-utils-0.0.1...swagger-utils-0.0.2) (2023-09-06)
+
+### Dependency Updates
+
+* `validation` updated to version `0.0.2`
 ## 0.0.1 (2023-09-06)
 
 ### Dependency Updates
