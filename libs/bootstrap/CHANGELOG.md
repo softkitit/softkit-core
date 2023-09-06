@@ -1,4 +1,16 @@
 Softkit Core Libraries Changelog
+## [0.0.4](https://github.com/saas-buildkit/saas-buildkit-core/compare/bootstrap-0.0.3...bootstrap-0.0.4) (2023-09-06)
+
+### Dependency Updates
+
+* `crypto` updated to version `0.0.3`
+* `exceptions` updated to version `0.0.3`
+* `validation` updated to version `0.0.3`
+* `swagger-utils` updated to version `0.0.3`
+* `typeorm` updated to version `0.0.3`
+* `logger` updated to version `0.0.3`
+* `i18n` updated to version `0.0.4`
+* `server-http-client` updated to version `0.0.3`
 ## [0.0.3](https://github.com/saas-buildkit/saas-buildkit-core/compare/bootstrap-0.0.2...bootstrap-0.0.3) (2023-09-06)
 
 ### Dependency Updates
