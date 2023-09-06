@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.0.2](https://github.com/saas-buildkit/saas-buildkit-core/compare/typeorm-0.0.1...typeorm-0.0.2) (2023-09-06)
+
+### Dependency Updates
+
+* `test-utils` updated to version `0.0.2`
+* `exceptions` updated to version `0.0.2`
+* `string-utils` updated to version `0.0.2`
 ## 0.0.1 (2023-09-06)
 
 ### Dependency Updates
