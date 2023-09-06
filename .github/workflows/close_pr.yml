@@ -43,4 +43,4 @@ jobs:
       - name: Tag last-release
         run: |
           git tag -a last-release -m "Last release"
-          git push origin last-release --force
+          git push origin last-release --force --no-verify
