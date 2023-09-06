@@ -35,7 +35,7 @@ jobs:
           git config --local user.name "GitHub Auto Release"
           git remote set-url origin "https://vsamofal:${PERSONAL_GITHUB_TOKEN}@github.com/saas-buildkit/saas-buildkit-core/"
           git remote -v
-          npx nx affected --target version --noVerify --push --skipRootChangelog true --base=last-release --changelogHeader "Softkit Core Libraries Changelog" --trackDeps --parallel=false
+          npx nx affected --target version --noVerify --push --skipRootChangelog true --base=last-release --changelogHeader "Softkit Core Libraries Changelog" --trackDeps --parallel=false --skipCommitTypes=ci
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
