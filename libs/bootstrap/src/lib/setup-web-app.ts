@@ -34,7 +34,7 @@ import { responseBodyFormatter } from '@softkit/i18n';
 import { REQUEST_ID_HEADER } from '@softkit/server-http-client';
 import { fastifyHelmet } from '@fastify/helmet';
 
-function buildFastifyAdapter() {
+export function buildFastifyAdapter() {
   return new FastifyAdapter({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     genReqId: (req: { headers: { [x: string]: any } }) => {
@@ -45,7 +45,7 @@ function buildFastifyAdapter() {
   });
 }
 
-function setupGlobalFilters(
+export function setupGlobalFilters(
   app: INestApplication,
   httpAdapterHost: HttpAdapterHost,
 ) {
@@ -62,7 +62,7 @@ function setupGlobalFilters(
   );
 }
 
-async function createNestWebApp(
+export async function createNestWebApp(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   module: any | TestingModule,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -87,7 +87,31 @@ async function createNestWebApp(
       );
 }
 
-async function bootstrapBaseWebApp(
+export function applyExpressCompatibilityRecommendations(
+  fastifyInstance: FastifyInstance,
+) {
+  // this is a recommendation from fastify to improve compatibility with express middlewares
+  fastifyInstance
+    .addHook('onRequest', async (req) => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      req.socket['encrypted'] = process.env.NODE_ENV === 'production';
+    })
+    .decorateReply('setHeader', function (name: string, value: unknown) {
+      this.header(name, value);
+    })
+    .decorateReply('end', function () {
+      this.send('');
+    });
+}
+
+function setupGlobalInterceptors(app: INestApplication) {
+  app.useGlobalInterceptors(new LoggingInterceptor());
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+  app.useGlobalInterceptors(new LoggerErrorInterceptor());
+}
+
+export async function bootstrapBaseWebApp(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   module: any | TestingModule,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -105,20 +129,7 @@ async function bootstrapBaseWebApp(
   const app = await createNestWebApp(module, originalModule);
 
   const fastifyInstance: FastifyInstance = app.getHttpAdapter().getInstance();
-
-  // this is a recommendation from fastify to improve compatibility with express middlewares
-  fastifyInstance
-    .addHook('onRequest', async (req) => {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      req.socket['encrypted'] = process.env.NODE_ENV === 'production';
-    })
-    .decorateReply('setHeader', function (name: string, value: unknown) {
-      this.header(name, value);
-    })
-    .decorateReply('end', function () {
-      this.send('');
-    });
+  applyExpressCompatibilityRecommendations(fastifyInstance);
 
   app.register(fastifyHelmet, {});
 
@@ -137,10 +148,7 @@ async function bootstrapBaseWebApp(
 
   // so first global one and then narrow
   setupGlobalFilters(app, httpAdapterHost);
-
-  app.useGlobalInterceptors(new LoggingInterceptor());
-  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
-  app.useGlobalInterceptors(new LoggerErrorInterceptor());
+  setupGlobalInterceptors(app);
 
   const appConfig = app.get(AppConfig);
   const swaggerConfig = app.get(SwaggerConfig);
@@ -155,7 +163,13 @@ async function bootstrapBaseWebApp(
 
   const swaggerSetup = setupSwagger(swaggerConfig, app);
 
-  if (!swaggerSetup) {
+  if (swaggerSetup) {
+    logger.log(
+      `Swagger is listening on ${appConfig.prefix || ''}/${
+        swaggerConfig.swaggerPath
+      }`,
+    );
+  } else {
     logger.log(`Swagger is disabled by config, skipping...`);
   }
 
@@ -163,5 +177,3 @@ async function bootstrapBaseWebApp(
 
   return app;
 }
-
-export { bootstrapBaseWebApp };

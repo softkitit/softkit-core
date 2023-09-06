@@ -1,19 +1,45 @@
-# bootstrap
+# Bootstrap Library
 
-This library was generated with [Nx](https://nx.dev).
+This library provides a set of general services, methods and utilities for bootstrapping the application.
+It's configuring default interceptors, swagger, http server, security, etc...
 
+---
+Useful to do not repeat yourself everytime, and shouldn't be used outside Softkit ecosystem
 
+---
 
-## Building
+## Installation
 
-Run `nx build bootstrap` to build the library.
+```bash
+yarn add @softkit/bootstrap
+```
 
+## Usage in your main.ts
 
+```typescript
 
+import { PlatformAppModule } from './your-app.module';
+import { bootstrapBaseWebApp } from '@softkit/bootstrap';
 
+void bootstrapBaseWebApp(PlatformAppModule);
+```
+---
 
-## Running unit tests
+## Usage in tests (e2e)
 
-Run `nx test bootstrap` to execute the unit tests via [Jest](https://jestjs.io).
+```typescript
+import { bootstrapBaseWebApp } from '@softkit/bootstrap';
 
+describe('auth e2e test', () => {
+  let app: NestFastifyApplication;
 
+  beforeAll(async () => {
+
+    const moduleFixture: TestingModule = await Test.createTestingModule({
+      imports: [YourAppModule],
+    }).compile();
+    app = await bootstrapBaseWebApp(moduleFixture, PlatformAppModule);
+  });
+
+});
+```
