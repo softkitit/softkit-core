@@ -34,6 +34,7 @@ jobs:
         run: |
           git config --local user.email "automation@softkit.dev"
           git config --local user.name "GitHub Auto Release"
+          git remote set-url origin "https://vsamofal:${PERSONAL_GITHUB_TOKEN}@github.com/saas-buildkit/saas-buildkit-core/"
           npx nx affected --target version --push --skipRootChangelog true --base=last-release --changelogHeader "Softkit Core Libraries Changelog" --trackDeps --parallel=false
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
