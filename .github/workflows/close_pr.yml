@@ -24,6 +24,9 @@ jobs:
       - name: Install environment
         run: yarn install
 
+      - name: check git remote
+        run: git remote -v
+
       - name: Configure NPM Token
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
@@ -35,7 +38,8 @@ jobs:
           git config --local user.email "automation@softkit.dev"
           git config --local user.name "GitHub Auto Release"
           git remote set-url origin "https://vsamofal:${PERSONAL_GITHUB_TOKEN}@github.com/saas-buildkit/saas-buildkit-core/"
-          npx nx affected --target version --push --skipRootChangelog true --base=last-release --changelogHeader "Softkit Core Libraries Changelog" --trackDeps --parallel=false
+          git remote -v
+          npx nx affected --noVerify --target version --push --skipRootChangelog true --base=last-release --changelogHeader "Softkit Core Libraries Changelog" --trackDeps --parallel=false
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
       - name: Tag last-release
