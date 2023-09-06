@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.0.2](https://github.com/saas-buildkit/saas-buildkit-core/compare/i18n-0.0.1...i18n-0.0.2) (2023-09-06)
+
+
+### Bug Fixes
+
+* **i18n:** added min length validation for i18n ([040fa48](https://github.com/saas-buildkit/saas-buildkit-core/commit/040fa4864f9ff098a5444173490e9eda624ac129))
+
 ## 0.0.1 (2023-09-06)
 
 ### Dependency Updates
