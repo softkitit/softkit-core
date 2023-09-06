@@ -1,5 +1,5 @@
 {
-  "name": "clients-platform-client",
+  "name": "platform-client",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/clients/platform-client/src",
   "projectType": "library",
@@ -21,7 +21,7 @@
       }
     },
     "publish": {
-      "command": "node tools/scripts/publish.mjs clients-platform-client {args.ver} {args.tag}",
+      "command": "node tools/scripts/publish.mjs platform-client {args.ver} {args.tag}",
       "dependsOn": [
         "build"
       ]
