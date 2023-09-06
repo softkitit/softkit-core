@@ -6,6 +6,9 @@ import {
 } from '@nestjs/swagger';
 import { ErrorResponse } from '@softkit/exceptions';
 
+/**
+ * todo consider moving to the appropriate library
+ * */
 export const ApiConflictResponsePaginated = (description: string) =>
   applyDecorators(
     ApiExtraModels(ErrorResponse),

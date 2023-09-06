@@ -1,19 +1,12 @@
-# common-types
+# Common Types Library
 
-This library was generated with [Nx](https://nx.dev).
+This library provides a set of general types and interfaces for the Softkit ecosystem.
 
+Used mostly in auto-generated code. 
 
+## Installation
 
-## Building
-
-Run `nx build common-types` to build the library.
-
-
-
-
-
-## Running unit tests
-
-Run `nx test common-types` to execute the unit tests via [Jest](https://jestjs.io).
-
+```bash
+yard add @softkit/common-types
+```
 
