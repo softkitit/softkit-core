@@ -8,15 +8,3 @@ Softkit Core Libraries Changelog
 
 * Revert "ci: added no build param to npx-deploy-npm to do not depend on ngx build" ([a05a410](https://github.com/saas-buildkit/saas-buildkit-core/commit/a05a41073965039dd9656840a80144dcd6b4e180))
 
-## 0.0.1 (2023-09-06)
-
-
-### Reverts
-
-* Revert "ci: added no build param to npx-deploy-npm to do not depend on ngx build" ([a05a410](https://github.com/saas-buildkit/saas-buildkit-core/commit/a05a41073965039dd9656840a80144dcd6b4e180))
-
-## 0.0.1 (2023-09-06)
-
-## 0.0.1 (2023-09-06)
-
-## 0.0.1 (2023-09-06)
