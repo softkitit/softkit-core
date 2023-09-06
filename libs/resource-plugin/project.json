@@ -70,6 +70,9 @@
     },
     "version": {
       "executor": "@jscutlery/semver:version",
+      "dependsOn": [
+        "build"
+      ],
       "options": {
         "postTargets": [
           "resource-plugin:npm",
@@ -90,10 +93,7 @@
       "options": {
         "access": "public",
         "dryRun": false
-      },
-      "dependsOn": [
-        "^build"
-      ]
+      }
     }
   },
   "tags": []

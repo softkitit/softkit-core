@@ -27,6 +27,9 @@
     },
     "version": {
       "executor": "@jscutlery/semver:version",
+      "dependsOn": [
+        "build"
+      ],
       "options": {
         "postTargets": [
           "eslint-backend:npm",
@@ -47,10 +50,7 @@
       "options": {
         "access": "public",
         "dryRun": false
-      },
-      "dependsOn": [
-        "^build"
-      ]
+      }
     }
   },
   "tags": []
