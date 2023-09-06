@@ -75,7 +75,8 @@
       "executor": "ngx-deploy-npm:deploy",
       "options": {
         "access": "public",
-        "dryRun": false
+        "dryRun": false,
+        "noBuild": true
       },
       "dependsOn": [
         "^build"
