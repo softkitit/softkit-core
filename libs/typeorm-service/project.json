@@ -55,6 +55,9 @@
     },
     "version": {
       "executor": "@jscutlery/semver:version",
+      "dependsOn": [
+        "build"
+      ],
       "options": {
         "postTargets": [
           "typeorm-service:npm",
@@ -75,10 +78,7 @@
       "options": {
         "access": "public",
         "dryRun": false
-      },
-      "dependsOn": [
-        "^build"
-      ]
+      }
     }
   },
   "tags": []
