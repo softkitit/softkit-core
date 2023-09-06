@@ -75,7 +75,10 @@
       "options": {
         "access": "public",
         "dryRun": false
-      }
+      },
+      "dependsOn": [
+        "^build"
+      ]
     }
   },
   "tags": []
