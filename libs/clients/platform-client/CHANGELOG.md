@@ -1,4 +1,6 @@
 Softkit Core Libraries Changelog
+## [0.0.4](https://github.com/saas-buildkit/saas-buildkit-core/compare/platform-client-0.0.3...platform-client-0.0.4) (2023-09-06)
+
 ## [0.0.3](https://github.com/saas-buildkit/saas-buildkit-core/compare/platform-client-0.0.2...platform-client-0.0.3) (2023-09-06)
 
 ### Dependency Updates
