@@ -1,19 +1,29 @@
-# async-storage
-
-This library was generated with [Nx](https://nx.dev).
+# This is a simple wrapper to setup a Cls Async Storage for NestJS
 
 
+```
+This is useful just for do not repeat yourself everytime, and shoudn't be used outside of Softkit ecosystem
+```
 
-## Building
+## Installation
 
-Run `nx build async-storage` to build the library.
+```bash
+yarn add @softkit/async-storage
+```
 
-
-
-
-
-## Running unit tests
-
-Run `nx test async-storage` to execute the unit tests via [Jest](https://jestjs.io).
+## Usage
 
 
+```typescript
+
+import { setupClsModule } from '@softkit/async-storage';
+
+@Module({
+  imports: [
+    setupClsModule(),
+  ]
+})
+export class MainAppAppModule {}
+
+
+```
