@@ -42,5 +42,5 @@ jobs:
           PERSONAL_GITHUB_TOKEN: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
       - name: Tag last-release
         run: |
-          git tag -a last-release -m "Last release"
+          git tag -fa last-release -m "Last release"
           git push origin last-release --force --no-verify
