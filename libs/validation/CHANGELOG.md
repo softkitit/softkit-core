@@ -1,4 +1,9 @@
 Softkit Core Libraries Changelog
+## [0.0.4](https://github.com/saas-buildkit/saas-buildkit-core/compare/validation-0.0.3...validation-0.0.4) (2023-09-07)
+
+### Dependency Updates
+
+* `exceptions` updated to version `0.0.4`
 ## [0.0.3](https://github.com/saas-buildkit/saas-buildkit-core/compare/validation-0.0.2...validation-0.0.3) (2023-09-06)
 
 ### Dependency Updates
