@@ -92,3 +92,37 @@ export class YourAppModule {}
         }
       }
       ```
+      
+
+## Example config file structure
+
+```yaml
+# .env.yaml
+isAuthEnabled: ${AUTH_ENABLED:-true}
+database:
+  host: ${DATABASE_HOST:-127.0.0.1}
+  port: ${DATABASE_PORT:-3000}
+  table:
+    name: ${TABLE_NAME:-users}
+
+databaseAlias:
+  host: ${database.host}
+  port: ${database.port}
+  table:
+    name: ${database.table.name}
+```
+
+`As you can see you can leverage ENV variables in your config files, or use a value to reference another value from your config file`
+
+Your .env.yaml file is usually huge and contains a lot of configs, so it's not very convenient to use it in your code.
+Where the profile files, just overriding some specific things for needed environment
+
+Let's say that for tests we always will be connecting to port `12345`. 
+
+You just need to create this file and it will be used for tests, when you set env var `NESTJS_PROFILES=test`:
+
+```yaml
+# .env-test.yaml
+database:
+  port: 12345
+```
