@@ -11,7 +11,7 @@ import { toCapitalizedWords } from '@softkit/string-utils';
 import { ErrorResponse } from '@softkit/exceptions';
 
 @Catch(QueryFailedError)
-export class PostgresDbFailedErrorFilter implements ExceptionFilter {
+export class PostgresDbQueryFailedErrorFilter implements ExceptionFilter {
   constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
 
   catch(exception: QueryFailedError, host: ArgumentsHost): void {

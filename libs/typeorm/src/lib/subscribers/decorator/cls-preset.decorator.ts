@@ -8,7 +8,7 @@ interface ClsPresetDecoratorOptions<CLS_STORE extends TenantClsStore> {
   presetType?: PresetType;
 }
 
-export function ClsPresetDecorator<CLS_STORE extends TenantClsStore>(
+export function ClsPreset<CLS_STORE extends TenantClsStore>(
   options: ClsPresetDecoratorOptions<CLS_STORE>,
   // eslint-disable-next-line @typescript-eslint/ban-types
 ): Function {

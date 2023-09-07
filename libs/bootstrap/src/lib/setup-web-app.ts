@@ -28,7 +28,7 @@ import {
 import { DEFAULT_VALIDATION_OPTIONS } from '@softkit/validation';
 import { AppConfig } from './config/app';
 import { setupSwagger, SwaggerConfig } from '@softkit/swagger-utils';
-import { PostgresDbFailedErrorFilter } from '@softkit/typeorm';
+import { PostgresDbQueryFailedErrorFilter } from '@softkit/typeorm';
 import { LoggingInterceptor } from '@softkit/logger';
 import { responseBodyFormatter } from '@softkit/i18n';
 import { REQUEST_ID_HEADER } from '@softkit/server-http-client';
@@ -53,7 +53,7 @@ export function setupGlobalFilters(
     new AnyExceptionFilter(httpAdapterHost),
     new OverrideDefaultNotFoundFilter(httpAdapterHost),
     new OverrideDefaultForbiddenExceptionFilter(httpAdapterHost),
-    new PostgresDbFailedErrorFilter(httpAdapterHost),
+    new PostgresDbQueryFailedErrorFilter(httpAdapterHost),
     new HttpExceptionFilter(httpAdapterHost),
     new I18nValidationExceptionFilter({
       responseBodyFormatter,

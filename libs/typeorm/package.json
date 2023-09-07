@@ -6,6 +6,7 @@
     "typeorm",
     "sql",
     "repository layer",
-    "subscribers"
+    "subscribers",
+    "cls auto preset"
   ]
 }
