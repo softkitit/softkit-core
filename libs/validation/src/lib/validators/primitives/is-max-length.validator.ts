@@ -4,7 +4,7 @@ import {
   MaxLength,
   ValidationOptions,
 } from 'class-validator';
-import { IValidatorDefinition } from './validator-definition.interface';
+import { IValidatorDefinition } from '../dynamic/validator-definition.interface';
 import { i18n, i18nString } from '../../utils';
 
 const MESSAGE = 'validation.MAX_STRING_LENGTH';

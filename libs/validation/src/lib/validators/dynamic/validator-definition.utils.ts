@@ -1,4 +1,4 @@
-import { IValidatorDefinition } from '../validator-definition.interface';
+import { IValidatorDefinition } from './validator-definition.interface';
 import {
   I18nValidationError,
   i18nValidationMessage,
@@ -6,14 +6,14 @@ import {
 import { TransformFnParams } from 'class-transformer';
 import { GeneralBadRequestException } from '@softkit/exceptions';
 import { Path } from '@saas-buildkit/nestjs-i18n/dist/types';
-import { I18nTranslations } from '../../../generated/i18n.generated';
+import { I18nTranslations } from '../../generated/i18n.generated';
 
 type TransformFnParamsEssentials = Omit<
   TransformFnParams,
   'obj' | 'type' | 'options'
 >;
 
-export function validationDefinitionToI18NError<T, E>(
+function validationDefinitionToI18NError<T, E>(
   validatorDefinition: IValidatorDefinition<T, E>,
   params: TransformFnParamsEssentials,
   constraint?: E,
@@ -47,6 +47,9 @@ export function validationDefinitionToI18NError<T, E>(
   } satisfies I18nValidationError;
 }
 
+/**
+ * @return void or throw error if invalid
+ * */
 export function validateAndThrow<T, E>(
   validatorDefinition: IValidatorDefinition<T, E>,
   fieldName: string,
@@ -71,6 +74,9 @@ export function validateAndThrow<T, E>(
   }
 }
 
+/**
+ * @return error or undefined if valid
+ * */
 export function validateAndReturnError<T, E>(
   validatorDefinition: IValidatorDefinition<T, E>,
   fieldName: string,

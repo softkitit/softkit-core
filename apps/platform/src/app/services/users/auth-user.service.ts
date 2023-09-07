@@ -108,9 +108,9 @@ export default class AuthUserService extends AbstractAuthUserService {
 
   override async saveRefreshToken(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    userId: string,
+    _userId: string,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    token: string,
+    _token: string,
   ): Promise<void> {
     // todo implement
     this.logger.log(`saveRefreshToken not implemented yet`);

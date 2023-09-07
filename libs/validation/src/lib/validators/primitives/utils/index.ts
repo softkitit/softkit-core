@@ -1,1 +1,1 @@
-export * from './validator-definition.utils';
+export * from '../../dynamic/validator-definition.utils';
