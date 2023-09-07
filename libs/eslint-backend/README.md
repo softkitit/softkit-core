@@ -1,13 +1,9 @@
-# eslint
+# This is a package Eslint configuration for Softkit ecosystem
 
-This library was generated with [Nx](https://nx.dev).
+You can use it if you want, but we will update it based on our needs.
 
+## Installation
 
-
-## Building
-
-Run `nx build eslint` to build the library.
-
-
-
-
+```bash
+yarn add -D @softkit/eslint-config
+```
