@@ -1,4 +1,10 @@
 Softkit Core Libraries Changelog
+## [0.0.4](https://github.com/saas-buildkit/saas-buildkit-core/compare/health-check-0.0.3...health-check-0.0.4) (2023-09-07)
+
+### Dependency Updates
+
+* `validation` updated to version `0.0.4`
+* `auth` updated to version `0.0.4`
 ## [0.0.3](https://github.com/saas-buildkit/saas-buildkit-core/compare/health-check-0.0.2...health-check-0.0.3) (2023-09-06)
 
 ### Dependency Updates
