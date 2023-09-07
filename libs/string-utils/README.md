@@ -1,19 +1,9 @@
-# string-utils
+# String utils library to meet our internal needs
 
-This library was generated with [Nx](https://nx.dev).
+It a simple library that provides some useful string functions, for URLs and case changes.
 
+## Installation
 
-
-## Building
-
-Run `nx build string-utils` to build the library.
-
-
-
-
-
-## Running unit tests
-
-Run `nx test string-utils` to execute the unit tests via [Jest](https://jestjs.io).
-
-
+```bash
+yarn add @softkit/string-utils
+```
