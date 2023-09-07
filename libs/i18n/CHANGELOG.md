@@ -1,4 +1,9 @@
 Softkit Core Libraries Changelog
+## [0.0.5](https://github.com/saas-buildkit/saas-buildkit-core/compare/i18n-0.0.4...i18n-0.0.5) (2023-09-07)
+
+### Dependency Updates
+
+* `exceptions` updated to version `0.0.4`
 ## [0.0.4](https://github.com/saas-buildkit/saas-buildkit-core/compare/i18n-0.0.3...i18n-0.0.4) (2023-09-06)
 
 ### Dependency Updates
