@@ -20,12 +20,6 @@
         "updateBuildableProjectDepsInPackageJson": true
       }
     },
-    "publish": {
-      "command": "node tools/scripts/publish.mjs async-storage {args.ver} {args.tag}",
-      "dependsOn": [
-        "build"
-      ]
-    },
     "lint": {
       "executor": "@nx/linter:eslint",
       "outputs": [

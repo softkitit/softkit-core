@@ -19,12 +19,6 @@
         "updateBuildableProjectDepsInPackageJson": true
       }
     },
-    "publish": {
-      "command": "node tools/scripts/publish.mjs eslint {args.ver} {args.tag}",
-      "dependsOn": [
-        "build"
-      ]
-    },
     "version": {
       "executor": "@jscutlery/semver:version",
       "dependsOn": [
