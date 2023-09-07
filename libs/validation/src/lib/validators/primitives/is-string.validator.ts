@@ -1,4 +1,4 @@
-import { IValidatorDefinition } from './validator-definition.interface';
+import { IValidatorDefinition } from '../dynamic/validator-definition.interface';
 import {
   IS_STRING,
   isString,

@@ -2,6 +2,7 @@ import { BaseRepository } from './base.repository';
 import { ClsService } from 'nestjs-cls';
 import { DataSource, EntityTarget, FindOptionsWhere } from 'typeorm';
 import { BaseTenantEntityHelper } from '../entities/tenant-entity-helper';
+import { TenantClsStore } from '../vo/tenant-base-cls-store';
 
 export abstract class BaseTenantRepository<
   ENTITY extends BaseTenantEntityHelper,
@@ -9,7 +10,7 @@ export abstract class BaseTenantRepository<
   protected constructor(
     et: EntityTarget<ENTITY>,
     dataSource: DataSource,
-    private clsService: ClsService<{ tenantId: string }>,
+    private clsService: ClsService<TenantClsStore>,
   ) {
     super(et, dataSource);
   }

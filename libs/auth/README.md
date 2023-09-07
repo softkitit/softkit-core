@@ -1,19 +1,15 @@
-# auth
+# Auth Library
 
-This library was generated with [Nx](https://nx.dev).
+This library provides a set of general services and utilities for authentication and authorization.
 
+## Installation
 
+```bash
+yarn add @softkit/auth
+```
 
-## Building
+## Usage
 
-Run `nx build auth` to build the library.
-
-
-
-
-
-## Running unit tests
-
-Run `nx test auth` to execute the unit tests via [Jest](https://jestjs.io).
+TBD - this still in development, most likely we will have a separate JWKS implementation for this 
 
 

@@ -9,6 +9,7 @@ It's auto generated using openapi-generator.
 ```bash
 yarn add @softkit/platform-client
 ```
+---
 
 ## Usage
 
@@ -19,6 +20,7 @@ platformClient:
   url: http://localhost:9999
   serviceName: platform
 ```
+---
 
 ### Update your root.config.ts, it needs to implement the appropriate config interface 
 
@@ -38,7 +40,9 @@ export default class RootConfig implements PlatformClientConfig {
 
 ### Import `PlatformClientModule` in your main module
 
-## That's it, api clients will be available in your DI container, you can simply inject it in constructor
+---
+
+### That's it, api clients will be available in your DI container, you can simply inject it in constructor
 
 ```typescript
 

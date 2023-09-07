@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker';
 import { BaseEntityHelper } from '../lib/entities/entity-helper';
 import { BaseTenantEntityHelper } from '../lib/entities/tenant-entity-helper';
 import { ClsPresetSubscriber } from '../lib/subscribers/cls-preset.subscriber';
-import { ClsPresetDecorator } from '../lib/subscribers/decorator/cls-preset.decorator';
+import { ClsPreset } from '../lib/subscribers/decorator/cls-preset.decorator';
 import { PresetType } from '../lib/subscribers/decorator/vo/preset-type';
 import { Injectable } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
@@ -371,14 +371,14 @@ class TestBaseEntity extends BaseTenantEntityHelper {
   @JoinColumn()
   tenant?: TenantEntity | null;
 
-  @ClsPresetDecorator<UserAndTenantClsStore>({
+  @ClsPreset<UserAndTenantClsStore>({
     clsPropertyFieldName: 'userId',
     presetType: PresetType.INSERT,
   })
   @Column({ type: String, nullable: false, length: 128 })
   createdBy!: string;
 
-  @ClsPresetDecorator<UserAndTenantClsStore>({
+  @ClsPreset<UserAndTenantClsStore>({
     clsPropertyFieldName: 'userId',
     presetType: PresetType.UPDATE,
   })

@@ -1,6 +1,6 @@
 import { IS_ENUM, IsEnum, isEnum, ValidationOptions } from 'class-validator';
 import { applyDecorators } from '@nestjs/common';
-import { IValidatorDefinition } from './validator-definition.interface';
+import { IValidatorDefinition } from '../dynamic/validator-definition.interface';
 import { i18n } from '../../utils';
 
 export const IsStringEnumLocalized = (

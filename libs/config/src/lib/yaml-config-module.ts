@@ -5,13 +5,14 @@ import { getProfiles } from './utils/get-profiles';
 import { ROOT_CONFIG_ALIAS_TOKEN } from './constants';
 
 export function setupYamlBaseConfigModule(
-  absolutePath: string,
+  baseDir: string,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   rootSchemaClass: ClassConstructor<unknown>,
-  fileName = '.env.yaml',
+  folderName = 'assets',
+  baseFileName = '.env.yaml',
   profiles = getProfiles(),
 ) {
-  const fileNameSplit = fileName.split('.');
+  const fileNameSplit = baseFileName.split('.');
   const extension = fileNameSplit.at(-1);
   const justName = fileNameSplit.slice(0, -1).join('.');
   const profilesPaths = profiles.map((p) => `${justName}-${p}.${extension}`);
@@ -19,9 +20,9 @@ export function setupYamlBaseConfigModule(
   const dynamicModule = TypedConfigModule.forRoot({
     schema: rootSchemaClass,
     isGlobal: true,
-    load: [fileName, ...profilesPaths].map((name) => {
+    load: [baseFileName, ...profilesPaths].map((name) => {
       return fileLoader({
-        absolutePath: path.join(absolutePath, name),
+        absolutePath: path.join(baseDir, folderName, name),
         ignoreEnvironmentVariableSubstitution: false,
       });
     }),

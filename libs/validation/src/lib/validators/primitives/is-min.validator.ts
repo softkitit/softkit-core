@@ -1,4 +1,4 @@
-import { IValidatorDefinition } from './validator-definition.interface';
+import { IValidatorDefinition } from '../dynamic/validator-definition.interface';
 import { MIN, min, Min, ValidationOptions } from 'class-validator';
 import { i18n, i18nString } from '../../utils';
 

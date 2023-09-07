@@ -1,3 +1,4 @@
+export * from '../dynamic/validator-definition.interface';
 export * from './enum.validator';
 export * from './is-array.validator';
 export * from './is-boolean.validator';
@@ -14,4 +15,3 @@ export * from './is-url.validator';
 export * from './is-uuid.validator';
 export * from './matches-regexp.validator';
 export * from './not-empty-array.validator';
-export * from './validator-definition.interface';
