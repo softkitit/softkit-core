@@ -88,7 +88,6 @@
   },
   "dependencies": {
     "@docusaurus/core": "2.4.1",
-    "tslib": "^2.6.2",
     "@docusaurus/plugin-ideal-image": "^2.4.1",
     "@docusaurus/plugin-sitemap": "^2.4.1",
     "@docusaurus/preset-classic": "2.4.1",
@@ -136,6 +135,7 @@
     "react-dom": "^17.0.2",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
+    "tslib": "^2.6.2",
     "typeorm": "0.3.17",
     "typeorm-naming-strategies": "^4.1.0",
     "typeorm-transactional": "^0.4.1"
