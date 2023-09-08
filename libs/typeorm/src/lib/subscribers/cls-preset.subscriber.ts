@@ -18,12 +18,12 @@ export class ClsPresetSubscriber<ClsStoreType extends TenantClsStore>
     private readonly dataSource: DataSource,
     private readonly clsService: ClsService<ClsStoreType>,
   ) {
-    dataSource.subscribers.push(this);
+    this.dataSource.subscribers.push(this);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   beforeInsert(event: InsertEvent<any>): Promise<any> | void {
-    this.handleEntityChangeEvent(
+    return this.handleEntityChangeEvent(
       event.metadata.inheritanceTree,
       event.entity,
       PresetType.INSERT,
@@ -32,7 +32,7 @@ export class ClsPresetSubscriber<ClsStoreType extends TenantClsStore>
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   beforeUpdate(event: UpdateEvent<any>) {
-    this.handleEntityChangeEvent(
+    return this.handleEntityChangeEvent(
       event.metadata.inheritanceTree,
       event.entity,
       PresetType.UPDATE,
@@ -58,12 +58,18 @@ export class ClsPresetSubscriber<ClsStoreType extends TenantClsStore>
 
     for (const field of metadataFields) {
       if (
-        presetType === field.presetType ||
-        field.presetType === PresetType.ALL
+        field.presetType === PresetType.ALL ||
+        presetType === field.presetType
       ) {
-        entity[field.entityPropertyName] =
-          this.clsService.get()[field.clsStorageKey];
+        const currentValue = entity[field.entityPropertyName];
+        // set value only if it's not provided
+        if (currentValue === null || currentValue === undefined) {
+          entity[field.entityPropertyName] =
+            this.clsService.get()[field.clsStorageKey];
+        }
       }
     }
+
+    return entity;
   }
 }

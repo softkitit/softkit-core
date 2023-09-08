@@ -1,6 +1,9 @@
 import { Column, Entity, JoinColumn, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseTenantEntityHelper } from '../../lib/entities/tenant-entity-helper';
 import { TenantEntity } from './tenant.entity';
+import { ClsPreset } from '../../lib/subscribers/decorator/cls-preset.decorator';
+import { PresetType } from '../../lib/subscribers/decorator/vo/preset-type';
+import { UserAndTenantClsStore } from './cls/user.cls-store';
 
 @Entity()
 export class TenantUserEntity extends BaseTenantEntityHelper {
@@ -22,6 +25,20 @@ export class TenantUserEntity extends BaseTenantEntityHelper {
 
   @Column({ type: String, nullable: true, length: 128 })
   nullableStringField?: string | null;
+
+  @ClsPreset<UserAndTenantClsStore>({
+    clsPropertyFieldName: 'userId',
+    presetType: PresetType.INSERT,
+  })
+  @Column({ type: String, nullable: false, length: 128 })
+  createdBy!: string;
+
+  @ClsPreset<UserAndTenantClsStore>({
+    clsPropertyFieldName: 'userId',
+    presetType: PresetType.UPDATE,
+  })
+  @Column({ type: String, nullable: true, length: 128 })
+  updatedBy!: string;
 
   @JoinColumn()
   tenant?: TenantEntity | null;

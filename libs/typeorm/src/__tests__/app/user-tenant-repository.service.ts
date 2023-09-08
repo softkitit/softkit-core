@@ -4,7 +4,7 @@ import { BaseTenantRepository } from '../../lib/repositories/tenant-base.reposit
 import { InjectDataSource } from '@nestjs/typeorm';
 import { ClsService } from 'nestjs-cls';
 import { TenantClsStore } from '../../lib/vo/tenant-base-cls-store';
-import { TenantUserEntity } from './test-base-tenant.entity';
+import { TenantUserEntity } from './user-tenant.entity';
 
 @Injectable()
 export class TenantUserRepository extends BaseTenantRepository<TenantUserEntity> {

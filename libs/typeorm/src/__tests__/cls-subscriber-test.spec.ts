@@ -1,71 +1,58 @@
 import { faker } from '@faker-js/faker';
-import { BaseEntityHelper } from '../lib/entities/entity-helper';
-import { BaseTenantEntityHelper } from '../lib/entities/tenant-entity-helper';
 import { ClsPresetSubscriber } from '../lib/subscribers/cls-preset.subscriber';
-import { ClsPreset } from '../lib/subscribers/decorator/cls-preset.decorator';
-import { PresetType } from '../lib/subscribers/decorator/vo/preset-type';
 import { Injectable } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import {
-  InjectDataSource,
   TypeOrmModule,
   TypeOrmModuleOptions,
   TypeOrmOptionsFactory,
 } from '@nestjs/typeorm';
 import { ClsModule, ClsService } from 'nestjs-cls';
-import {
-  Column,
-  DataSource,
-  DataSourceOptions,
-  Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { DataSource, DataSourceOptions } from 'typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { expectNotNullAndGet, startDb } from '@softkit/test-utils';
+import { TenantUserEntity } from './app/user-tenant.entity';
+import { TenantUserRepository } from './app/user-tenant-repository.service';
+import { TenantRepository } from './app/tenant.repository';
+import { TenantEntity } from './app/tenant.entity';
+import { UserAndTenantClsStore } from './app/cls/user.cls-store';
 import {
   addTransactionalDataSource,
   getDataSourceByName,
   initializeTransactionalContext,
 } from 'typeorm-transactional';
 import { getTransactionalContext } from 'typeorm-transactional/dist/common';
-// todo fix import
-import { TenantClsStore } from '../lib/vo/tenant-base-cls-store';
-import { expectNotNullAndGet, startDb } from '@softkit/test-utils';
-import { BaseTenantRepository } from '../lib/repositories/tenant-base.repository';
-import { BaseRepository } from '../lib/repositories/base.repository';
 
 describe('tenant base service test', () => {
   const userId = 'doesnt matter';
 
   let tenantRepository: TenantRepository;
-  let testBaseRepository: TestBaseRepository;
+  let tenantUserRepository: TenantUserRepository;
   let clsService: ClsService<UserAndTenantClsStore>;
   let clsPresetSubscriber: ClsPresetSubscriber<UserAndTenantClsStore>;
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     const { typeormOptions } = await startDb();
+
+    if (!getTransactionalContext()) {
+      initializeTransactionalContext();
+    }
 
     @Injectable()
     class TypeOrmConfigService implements TypeOrmOptionsFactory {
       createTypeOrmOptions(): TypeOrmModuleOptions {
         return {
           ...typeormOptions,
-          entities: [TestBaseEntity, TenantEntity],
+          entities: [TenantUserEntity, TenantEntity],
           subscribers: [],
           namingStrategy: new SnakeNamingStrategy(),
         } as TypeOrmModuleOptions;
       }
     }
 
-    if (!getTransactionalContext()) {
-      initializeTransactionalContext();
-    }
-
     const module = await Test.createTestingModule({
       imports: [
-        TypeOrmModule.forFeature([TestBaseEntity, TenantEntity]),
+        TypeOrmModule.forFeature([TenantUserEntity, TenantEntity]),
         TypeOrmModule.forRootAsync({
           useClass: TypeOrmConfigService,
           dataSourceFactory: async (options?: DataSourceOptions) => {
@@ -92,20 +79,16 @@ describe('tenant base service test', () => {
         }),
       ],
 
-      providers: [TestBaseRepository, ClsPresetSubscriber, TenantRepository],
+      providers: [TenantUserRepository, ClsPresetSubscriber, TenantRepository],
     }).compile();
 
     clsService = module.get(ClsService);
     tenantRepository = module.get(TenantRepository);
     clsPresetSubscriber = module.get(ClsPresetSubscriber);
-    testBaseRepository = module.get(TestBaseRepository);
+    tenantUserRepository = module.get(TenantUserRepository);
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
-  });
-
-  beforeEach(() => {
     jest.resetAllMocks();
   });
 
@@ -130,35 +113,34 @@ describe('tenant base service test', () => {
         const beforeInsertSpy = jest.spyOn(clsPresetSubscriber, 'beforeInsert');
         const beforeUpdateSpy = jest.spyOn(clsPresetSubscriber, 'beforeUpdate');
 
-        const testBaseEntity =
-          await testBaseRepository.createOrUpdateWithReload(objectToSave);
+        const saved =
+          await tenantUserRepository.createOrUpdateWithReload(objectToSave);
         expect(beforeInsertSpy).toHaveBeenCalledTimes(1);
 
-        expect(testBaseEntity.tenantId).toBe(tenant.id);
-        checkAllTestFieldsPresent(objectToSave, testBaseEntity);
-        expect(testBaseEntity.createdBy).toBe(userId);
-        expect(testBaseEntity.updatedBy).toBeNull();
+        expect(saved.tenantId).toBe(tenant.id);
+        checkAllTestFieldsPresent(objectToSave, saved);
+        expect(saved.createdBy).toBe(userId);
+        expect(saved.updatedBy).toBeNull();
 
-        const testBaseEntityFound = expectNotNullAndGet(
-          await testBaseRepository.findOneBy({ id: testBaseEntity.id }),
+        const found = expectNotNullAndGet(
+          await tenantUserRepository.findOneBy({ id: saved.id }),
         );
-        expect(testBaseEntity.tenantId).toBe(tenant.id);
-        checkAllTestFieldsPresent(objectToSave, testBaseEntityFound);
+        expect(saved.tenantId).toBe(tenant.id);
+        checkAllTestFieldsPresent(objectToSave, found);
 
         const objectToUpdate = {
           ...objectToSave,
           firstName: 'Vitalii',
-          id: testBaseEntityFound?.id,
-          version: testBaseEntityFound?.version,
+          id: found?.id,
+          version: found?.version,
         };
-        const updatedEntity = await testBaseRepository.createOrUpdateWithReload(
-          objectToUpdate,
-        );
+        const updatedEntity =
+          await tenantUserRepository.createOrUpdateWithReload(objectToUpdate);
 
         expect(beforeUpdateSpy).toHaveBeenCalledTimes(1);
 
         const updatedEntityFound = expectNotNullAndGet(
-          await testBaseRepository.findOneBy({ id: testBaseEntity.id }),
+          await tenantUserRepository.findOneBy({ id: saved.id }),
         );
 
         expect(updatedEntity.tenantId).toBe(tenant.id);
@@ -193,13 +175,13 @@ describe('tenant base service test', () => {
         userId: firstUserId,
       },
       async () => {
-        const testBaseEntity = await testBaseRepository.save(objectToSave);
-        entityId = testBaseEntity.id;
+        const saved = await tenantUserRepository.createOrUpdate(objectToSave);
+        entityId = saved.id;
 
-        expect(testBaseEntity.tenantId).toBe(tenant.id);
-        checkAllTestFieldsPresent(objectToSave, testBaseEntity);
-        expect(testBaseEntity.createdBy).toBe(firstUserId);
-        expect(testBaseEntity.updatedBy).toBeNull();
+        expect(saved.tenantId).toBe(tenant.id);
+        checkAllTestFieldsPresent(objectToSave, saved);
+        expect(saved.createdBy).toBe(firstUserId);
+        expect(saved.updatedBy).toBeNull();
       },
     );
 
@@ -210,14 +192,14 @@ describe('tenant base service test', () => {
           userId: userForUpdate,
         },
         async () => {
-          const testBaseEntity = await testBaseRepository.save({
+          const TenantUserEntity = await tenantUserRepository.createOrUpdate({
             ...objectToSave,
             firstName: faker.person.firstName(),
             id: entityId,
-          } as TestBaseEntity);
+          } as TenantUserEntity);
 
-          const updatedEntityFound = await testBaseRepository.findOneBy({
-            id: testBaseEntity.id,
+          const updatedEntityFound = await tenantUserRepository.findOneBy({
+            id: TenantUserEntity.id,
           });
 
           expect(updatedEntityFound?.id).toBe(entityId);
@@ -249,28 +231,23 @@ describe('tenant base service test', () => {
       async () => {
         const beforeInsertSpy = jest.spyOn(clsPresetSubscriber, 'beforeInsert');
         const beforeUpdateSpy = jest.spyOn(clsPresetSubscriber, 'beforeUpdate');
-        beforeInsertSpy.mockReset();
-        beforeUpdateSpy.mockReset();
 
-        const testBaseEntity = await testBaseRepository.save(objectToSave);
+        const saved = await tenantUserRepository.createOrUpdate(objectToSave);
         expect(beforeInsertSpy).toHaveBeenCalledTimes(1);
         expect(beforeUpdateSpy).toHaveBeenCalledTimes(0);
-        expect(testBaseEntity.tenantId).toBe(tenant.id);
-        checkAllTestFieldsPresent(objectToSave, testBaseEntity);
+        expect(saved.tenantId).toBe(tenant.id);
+        checkAllTestFieldsPresent(objectToSave, saved);
 
-        const testBaseEntityFound = expectNotNullAndGet(
-          await testBaseRepository.findOneBy({
-            id: testBaseEntity.id,
+        const found = expectNotNullAndGet(
+          await tenantUserRepository.findOneBy({
+            id: saved.id,
           }),
         );
 
-        expect(testBaseEntity.tenantId).toBe(tenant.id);
-        checkAllTestFieldsPresent(objectToSave, testBaseEntityFound);
+        expect(saved.tenantId).toBe(tenant.id);
+        checkAllTestFieldsPresent(objectToSave, found);
 
-        await testBaseRepository.archive(
-          testBaseEntityFound.id,
-          testBaseEntityFound.version,
-        );
+        await tenantUserRepository.archive(found.id, found.version);
 
         expect(beforeUpdateSpy).toHaveBeenCalledTimes(1);
       },
@@ -300,15 +277,15 @@ describe('tenant base service test', () => {
         userId,
       },
       async () => {
-        const testBaseEntity = await testBaseRepository.save(objectToSave);
+        const saved = await tenantUserRepository.createOrUpdate(objectToSave);
 
         expectNotNullAndGet(
-          await testBaseRepository.findOneBy({
-            id: testBaseEntity.id,
+          await tenantUserRepository.findOneBy({
+            id: saved.id,
           }),
         );
 
-        return testBaseEntity.id;
+        return saved.id;
       },
     );
 
@@ -319,7 +296,7 @@ describe('tenant base service test', () => {
       },
       async () => {
         await expect(
-          testBaseRepository.findOneBy({
+          tenantUserRepository.findOneBy({
             id: savedEntityId,
           }),
         ).resolves.toBeNull();
@@ -330,7 +307,7 @@ describe('tenant base service test', () => {
 
 function checkAllTestFieldsPresent(
   dtoForSaving: { firstName: string; lastName: string; password: string },
-  saved?: TestBaseEntity | null,
+  saved?: TenantUserEntity | null,
 ) {
   if (!saved) {
     return;
@@ -345,81 +322,4 @@ function checkAllTestFieldsPresent(
   expect(saved.deletedAt).toBeNull();
   expect(saved.tenantId).toBeDefined();
   expect(saved.nullableStringField).toBeNull();
-}
-
-@Entity({})
-class TestBaseEntity extends BaseTenantEntityHelper {
-  @PrimaryGeneratedColumn('uuid')
-  override id!: string;
-
-  // having it nullable is useful for set password later logic
-  @Column({ nullable: true, length: 256 })
-  password?: string;
-
-  @Column({ type: String, nullable: false, length: 128 })
-  firstName!: string;
-
-  @Column({ type: String, nullable: false, length: 128 })
-  lastName!: string;
-
-  @Column({ type: String, nullable: true, length: 128 })
-  nullableStringField?: string | null;
-
-  @ManyToOne(() => TenantEntity, {
-    eager: false,
-  })
-  @JoinColumn()
-  tenant?: TenantEntity | null;
-
-  @ClsPreset<UserAndTenantClsStore>({
-    clsPropertyFieldName: 'userId',
-    presetType: PresetType.INSERT,
-  })
-  @Column({ type: String, nullable: false, length: 128 })
-  createdBy!: string;
-
-  @ClsPreset<UserAndTenantClsStore>({
-    clsPropertyFieldName: 'userId',
-    presetType: PresetType.UPDATE,
-  })
-  @Column({ type: String, nullable: true, length: 128 })
-  updatedBy!: string;
-}
-
-@Entity()
-class TenantEntity extends BaseEntityHelper {
-  @PrimaryGeneratedColumn('uuid')
-  override id!: string;
-
-  @Column({ type: String, unique: true, nullable: true })
-  @Index()
-  tenantUrl!: string;
-
-  @Column({ type: String, nullable: false, length: 1024 })
-  tenantName!: string;
-}
-
-@Injectable()
-class TestBaseRepository extends BaseTenantRepository<TestBaseEntity> {
-  constructor(
-    @InjectDataSource()
-    dataSource: DataSource,
-    clsService: ClsService<UserAndTenantClsStore>,
-  ) {
-    super(TestBaseEntity, dataSource, clsService);
-  }
-}
-
-@Injectable()
-class TenantRepository extends BaseRepository<TenantEntity> {
-  constructor(
-    @InjectDataSource()
-    ds: DataSource,
-  ) {
-    super(TenantEntity, ds);
-  }
-}
-
-interface UserAndTenantClsStore extends TenantClsStore {
-  userId: string;
 }

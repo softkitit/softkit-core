@@ -18,7 +18,7 @@ import { TenantClsStore } from '../lib/vo/tenant-base-cls-store';
 import { expectNotNullAndGet, startDb } from '@softkit/test-utils';
 import { TenantRepository } from './app/tenant.repository';
 import { TenantEntity } from './app/tenant.entity';
-import { TenantUserEntity } from './app/test-base-tenant.entity';
+import { TenantUserEntity } from './app/user-tenant.entity';
 import { TenantUserRepository } from './app/user-tenant-repository.service';
 import { FilterOperator } from 'nestjs-paginate';
 import { USER_PAGINATED_CONFIG } from './app/user.entity';
@@ -79,6 +79,7 @@ describe('tenant base entity test', () => {
       password: faker.hacker.ingverb(),
       firstName: faker.person.firstName() + faker.number.int(),
       lastName: faker.person.lastName(),
+      createdBy: faker.string.uuid(),
     };
 
     createdTenant = await tenantRepository.createOrUpdate({
