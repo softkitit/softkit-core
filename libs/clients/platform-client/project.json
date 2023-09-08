@@ -16,8 +16,7 @@
         "main": "libs/clients/platform-client/src/index.ts",
         "assets": [
           "libs/clients/platform-client/*.md"
-        ],
-        "updateBuildableProjectDepsInPackageJson": true
+        ]
       }
     },
     "lint": {

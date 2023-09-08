@@ -207,9 +207,8 @@ describe('start db and populate the entity', () => {
       nullableStringField: null,
     };
 
-    const savedSecondTime = await testBaseRepository.createOrUpdate(
-      secondToSave,
-    );
+    const savedSecondTime =
+      await testBaseRepository.createOrUpdate(secondToSave);
 
     expect(savedSecondTime.nullableStringField).toBeNull();
 
@@ -485,9 +484,8 @@ describe('start db and populate the entity', () => {
     checkAllTestFieldsPresent(entityToUpdate, updatedRecord);
     expect(insertedRecord.lastName).not.toBe(updatedRecord.lastName);
 
-    const updatedSameRecordWithSameValuesAsInDb = await testBaseRepository.save(
-      entityToUpdate,
-    );
+    const updatedSameRecordWithSameValuesAsInDb =
+      await testBaseRepository.save(entityToUpdate);
 
     const updatedRecordWithoutAnyChanges = await testBaseRepository
       .findSingle(updatedSameRecordWithSameValuesAsInDb.id)

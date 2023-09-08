@@ -16,8 +16,7 @@
         "main": "libs/test-utils/src/index.ts",
         "assets": [
           "libs/test-utils/*.md"
-        ],
-        "updateBuildableProjectDepsInPackageJson": true
+        ]
       }
     },
     "lint": {
@@ -27,7 +26,9 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "libs/test-utils/**/*.ts"
+          "libs/test-utils/**/*.ts",
+          "libs/test-utils/package.json",
+          "libs/test-utils/project.json"
         ]
       }
     },

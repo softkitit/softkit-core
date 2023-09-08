@@ -15,8 +15,7 @@
         "tsConfig": "libs/eslint-backend/tsconfig.lib.json",
         "assets": [
           "libs/eslint-backend/*.md"
-        ],
-        "updateBuildableProjectDepsInPackageJson": true
+        ]
       }
     },
     "version": {

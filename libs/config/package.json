@@ -6,5 +6,11 @@
     "application configuration",
     "config",
     "external config"
-  ]
+  ],
+  "dependencies": {
+    "nest-typed-config": "^2.8.0"
+  },
+  "peerDependencies": {
+    "class-transformer": "^0.5.1"
+  }
 }

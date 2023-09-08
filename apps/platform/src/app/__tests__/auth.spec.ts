@@ -397,9 +397,8 @@ describe('auth e2e test', () => {
         successSignupDto.email,
       );
 
-      const secondUser = await userService.findOneByEmailWithRoles(
-        secondUserEmail,
-      );
+      const secondUser =
+        await userService.findOneByEmailWithRoles(secondUserEmail);
 
       tenantWithSamlConfiguration = await tenantService.findOneById(
         firstUser.tenantId,

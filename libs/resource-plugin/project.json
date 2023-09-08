@@ -35,8 +35,7 @@
             "glob": "executors.json",
             "output": "."
           }
-        ],
-        "updateBuildableProjectDepsInPackageJson": true
+        ]
       }
     },
     "lint": {
@@ -48,6 +47,7 @@
         "lintFilePatterns": [
           "libs/resource-plugin/**/*.ts",
           "libs/resource-plugin/package.json",
+          "libs/resource-plugin/project.json",
           "libs/resource-plugin/generators.json"
         ]
       }

@@ -15,13 +15,6 @@ module.exports = {
   ],
   overrides: [
     {
-      files: ['*.json'],
-      parser: 'jsonc-eslint-parser',
-      rules: {
-        '@nx/dependency-checks': 'error',
-      },
-    },
-    {
       files: ['*.ts', '*.tsx', '*.js', '*.jsx'],
       rules: {
         'unused-imports/no-unused-imports': 'error',
@@ -101,12 +94,7 @@ module.exports = {
       rules: {},
     },
     {
-      files: [
-        '*.spec.ts',
-        '*.spec.tsx',
-        '*.spec.js',
-        '*.spec.jsx',
-      ],
+      files: ['*.spec.ts', '*.spec.tsx', '*.spec.js', '*.spec.jsx'],
       env: {
         jest: true,
       },

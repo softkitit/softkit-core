@@ -73,9 +73,8 @@ describe('base service tests', () => {
       lastName: faker.person.lastName(),
     };
 
-    const savedEntity = await testBaseService.createOrUpdateEntity(
-      objectToSave,
-    );
+    const savedEntity =
+      await testBaseService.createOrUpdateEntity(objectToSave);
 
     checkAllTestFieldsPresent(objectToSave, savedEntity);
   });
@@ -87,9 +86,8 @@ describe('base service tests', () => {
       lastName: faker.person.lastName(),
     };
 
-    const savedEntity = await testBaseService.createOrUpdateEntity(
-      objectToSave,
-    );
+    const savedEntity =
+      await testBaseService.createOrUpdateEntity(objectToSave);
 
     const dataToUpdate = {
       ...objectToSave,
@@ -97,9 +95,8 @@ describe('base service tests', () => {
       firstName: 'updated first name',
     };
 
-    const updatedEntity = await testBaseService.createOrUpdateEntity(
-      dataToUpdate,
-    );
+    const updatedEntity =
+      await testBaseService.createOrUpdateEntity(dataToUpdate);
 
     expect(updatedEntity.id).toBe(savedEntity.id);
     expect(updatedEntity.firstName).toBe(dataToUpdate.firstName);
@@ -113,9 +110,8 @@ describe('base service tests', () => {
       lastName: faker.person.lastName(),
     };
 
-    const savedEntity = await testBaseService.createOrUpdateEntity(
-      objectToSave,
-    );
+    const savedEntity =
+      await testBaseService.createOrUpdateEntity(objectToSave);
 
     expectNotNullAndGet(await testBaseService.findOneById(savedEntity.id));
 
@@ -138,9 +134,8 @@ describe('base service tests', () => {
       lastName: faker.person.lastName(),
     };
 
-    const savedEntity = await testBaseService.createOrUpdateEntity(
-      objectToSave,
-    );
+    const savedEntity =
+      await testBaseService.createOrUpdateEntity(objectToSave);
 
     expectNotNullAndGet(await testBaseService.findOneById(savedEntity.id));
 
@@ -172,9 +167,8 @@ describe('base service tests', () => {
       lastName: faker.person.lastName(),
     };
 
-    const savedEntity = await testBaseService.createOrUpdateEntity(
-      objectToSave,
-    );
+    const savedEntity =
+      await testBaseService.createOrUpdateEntity(objectToSave);
 
     const savedEntityFound = expectNotNullAndGet(
       await testBaseService.findOneById(savedEntity.id),
@@ -188,9 +182,8 @@ describe('base service tests', () => {
       firstName: 'updated first name',
     };
 
-    const updatedEntity = await testBaseService.createOrUpdateEntity(
-      dataToUpdate,
-    );
+    const updatedEntity =
+      await testBaseService.createOrUpdateEntity(dataToUpdate);
 
     const updatedEntityFound = expectNotNullAndGet(
       await testBaseService.findOneById(savedEntity.id),
@@ -226,9 +219,8 @@ describe('base service tests', () => {
       lastName: faker.person.lastName(),
     };
 
-    const savedEntity = await testBaseService.createOrUpdateEntity(
-      objectToSave,
-    );
+    const savedEntity =
+      await testBaseService.createOrUpdateEntity(objectToSave);
 
     await expect(
       testBaseService.findOneByFirstName(savedEntity.firstName),
@@ -336,9 +328,8 @@ describe('base service tests', () => {
       lastName: faker.person.lastName(),
     };
 
-    const savedEntity = await testBaseService.createOrUpdateEntity(
-      objectToSave,
-    );
+    const savedEntity =
+      await testBaseService.createOrUpdateEntity(objectToSave);
 
     const foundEntity = await testBaseService.findOneById(savedEntity.id);
 

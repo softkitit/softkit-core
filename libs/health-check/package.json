@@ -1,5 +1,35 @@
 {
   "name": "@softkit/healthcheck",
   "version": "0.0.4",
-  "type": "commonjs"
+  "type": "commonjs",
+  "keywords": [
+    "nestjs",
+    "healthcheck",
+    "health",
+    "check",
+    "monitoring",
+    "monitor",
+    "liveness",
+    "readiness",
+    "kubernetes",
+    "k8s",
+    "microservice",
+    "microservices",
+    "micro",
+    "service",
+    "services",
+    "health-check",
+    "health-checks"
+  ],
+  "dependencies": {
+    "@nestjs/terminus": "^10.0.1"
+  },
+  "peerDependencies": {
+    "@softkit/validation": "*",
+    "@softkit/auth": "*",
+    "class-validator": "^0.14.0",
+    "class-transformer": "^0.5.1",
+    "@nestjs/common": "^10.2.4",
+    "@nestjs/swagger": "^7.1.10"
+  }
 }

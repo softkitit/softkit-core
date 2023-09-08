@@ -15,9 +15,10 @@
         "packageJson": "libs/common-types/package.json",
         "main": "libs/common-types/src/index.ts",
         "assets": [
-          "libs/common-types/*.md"
-        ],
-        "updateBuildableProjectDepsInPackageJson": true
+          "libs/common-types/*.md",
+          "libs/common-types/package.json",
+          "libs/common-types/project.json"
+        ]
       }
     },
     "lint": {

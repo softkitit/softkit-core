@@ -21,8 +21,7 @@
             "input": "libs/validation/src/lib/i18n/",
             "output": "i18n"
           }
-        ],
-        "updateBuildableProjectDepsInPackageJson": true
+        ]
       }
     },
     "lint": {
@@ -32,7 +31,9 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "libs/validation/**/*.ts"
+          "libs/validation/**/*.ts",
+          "libs/validation/package.json",
+          "libs/validation/project.json"
         ]
       }
     },

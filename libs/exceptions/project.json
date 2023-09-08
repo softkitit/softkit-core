@@ -21,8 +21,7 @@
             "input": "libs/exceptions/src/lib/i18n/",
             "output": "i18n"
           }
-        ],
-        "updateBuildableProjectDepsInPackageJson": true
+        ]
       }
     },
     "lint": {
@@ -32,7 +31,9 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "libs/exceptions/**/*.ts"
+          "libs/exceptions/**/*.ts",
+          "libs/exceptions/package.json",
+          "libs/exceptions/project.json"
         ]
       }
     },
