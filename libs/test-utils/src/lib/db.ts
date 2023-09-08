@@ -1,4 +1,4 @@
-import { PostgreSqlContainer } from 'testcontainers';
+import { PostgreSqlContainer } from '@testcontainers/postgresql';
 
 export async function startDb(
   migrationsRun = false,

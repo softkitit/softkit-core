@@ -1,4 +1,4 @@
-import { StartedPostgreSqlContainer } from 'testcontainers';
+import { StartedPostgreSqlContainer } from '@testcontainers/postgresql';
 import { startDb } from '../lib/db';
 
 describe('start db and populate the entity', () => {
