@@ -1,4 +1,6 @@
 Softkit Core Libraries Changelog
+## [0.0.6](https://github.com/saas-buildkit/saas-buildkit-core/compare/exceptions-0.0.5...exceptions-0.0.6) (2023-09-08)
+
 ## [0.0.5](https://github.com/saas-buildkit/saas-buildkit-core/compare/exceptions-0.0.4...exceptions-0.0.5) (2023-09-08)
 
 
