@@ -5,6 +5,9 @@
   "keywords": [
     "exceptions",
     "http",
+    "nest",
+    "nestjs",
+    "nestjs exception filters",
     "error handling",
     "rfc7807",
     "problem details"
