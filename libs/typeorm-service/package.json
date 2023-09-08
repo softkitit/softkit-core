@@ -1,6 +1,6 @@
 {
   "name": "@softkit/typeorm-service",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "type": "commonjs",
   "keywords": [
     "services",
@@ -10,8 +10,7 @@
     "nestjs service",
     "nest service"
   ],
-  "dependencies": {
-  },
+  "dependencies": {},
   "peerDependencies": {
     "@softkit/typeorm": "*",
     "@softkit/string-utils": "*",
