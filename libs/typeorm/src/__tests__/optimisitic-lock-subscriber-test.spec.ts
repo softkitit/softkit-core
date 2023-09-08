@@ -23,7 +23,7 @@ describe('optimistic lost subscriber test', () => {
   let optimisticLockSubscriber: OptimisticLockingSubscriber;
   let testBaseRepository: UserRepository;
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     const { typeormOptions } = await startDb();
 
     if (!getTransactionalContext()) {
@@ -102,9 +102,8 @@ describe('optimistic lost subscriber test', () => {
         'beforeUpdate',
       );
 
-      const testBaseEntitySave = await testBaseRepository.createOrUpdate(
-        objectToSave,
-      );
+      const testBaseEntitySave =
+        await testBaseRepository.createOrUpdate(objectToSave);
       expect(beforeUpdateSpy).toHaveBeenCalledTimes(0);
 
       const objectForUpdate = {
@@ -116,6 +115,8 @@ describe('optimistic lost subscriber test', () => {
       await expect(
         testBaseRepository.createOrUpdate(objectForUpdate),
       ).rejects.toBeInstanceOf(OptimisticLockException);
+
+      expect(beforeUpdateSpy).toHaveBeenCalledTimes(1);
     },
   );
 });

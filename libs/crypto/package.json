@@ -5,6 +5,18 @@
   "keywords": [
     "crypto",
     "random number",
-    "random string"
-  ]
+    "random string",
+    "nano id",
+    "argon2",
+    "hash",
+    "hashing",
+    "password",
+    "password hashing",
+    "password hash",
+    "password hash generator"
+  ],
+  "dependencies": {
+    "argon2": "^0.31.1",
+    "nanoid": "^3.3.6"
+  }
 }

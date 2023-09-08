@@ -21,15 +21,8 @@
             "input": "libs/exceptions/src/lib/i18n/",
             "output": "i18n"
           }
-        ],
-        "updateBuildableProjectDepsInPackageJson": true
+        ]
       }
-    },
-    "publish": {
-      "command": "node tools/scripts/publish.mjs exceptions {args.ver} {args.tag}",
-      "dependsOn": [
-        "build"
-      ]
     },
     "lint": {
       "executor": "@nx/linter:eslint",
@@ -38,7 +31,9 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "libs/exceptions/**/*.ts"
+          "libs/exceptions/**/*.ts",
+          "libs/exceptions/package.json",
+          "libs/exceptions/project.json"
         ]
       }
     },

@@ -16,15 +16,8 @@
         "main": "libs/clients/platform-client/src/index.ts",
         "assets": [
           "libs/clients/platform-client/*.md"
-        ],
-        "updateBuildableProjectDepsInPackageJson": true
+        ]
       }
-    },
-    "publish": {
-      "command": "node tools/scripts/publish.mjs platform-client {args.ver} {args.tag}",
-      "dependsOn": [
-        "build"
-      ]
     },
     "lint": {
       "executor": "@nx/linter:eslint",

@@ -21,15 +21,8 @@
             "input": "libs/validation/src/lib/i18n/",
             "output": "i18n"
           }
-        ],
-        "updateBuildableProjectDepsInPackageJson": true
+        ]
       }
-    },
-    "publish": {
-      "command": "node tools/scripts/publish.mjs validation {args.ver} {args.tag}",
-      "dependsOn": [
-        "build"
-      ]
     },
     "lint": {
       "executor": "@nx/linter:eslint",
@@ -38,7 +31,9 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "libs/validation/**/*.ts"
+          "libs/validation/**/*.ts",
+          "libs/validation/package.json",
+          "libs/validation/project.json"
         ]
       }
     },

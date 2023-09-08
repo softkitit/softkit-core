@@ -16,15 +16,8 @@
         "main": "libs/typeorm-service/src/index.ts",
         "assets": [
           "libs/typeorm-service/*.md"
-        ],
-        "updateBuildableProjectDepsInPackageJson": true
+        ]
       }
-    },
-    "publish": {
-      "command": "node tools/scripts/publish.mjs typeorm-service {args.ver} {args.tag}",
-      "dependsOn": [
-        "build"
-      ]
     },
     "lint": {
       "executor": "@nx/linter:eslint",
@@ -33,7 +26,9 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "libs/typeorm-service/**/*.ts"
+          "libs/typeorm-service/**/*.ts",
+          "libs/typeorm-service/package.json",
+          "libs/typeorm-service/project.json"
         ]
       }
     },

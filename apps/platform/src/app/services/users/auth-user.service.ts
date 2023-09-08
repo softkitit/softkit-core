@@ -130,9 +130,8 @@ export default class AuthUserService extends AbstractAuthUserService {
   ): Promise<boolean> {
     // todo consider allowing limited amount of times to try to approve account (e.g. 3 times)
     //  than archive and send new email with new code to approve account
-    const approvalEntity = await this.externalApprovalService.findOneById(
-      approveId,
-    );
+    const approvalEntity =
+      await this.externalApprovalService.findOneById(approveId);
 
     if (!approvalEntity) {
       this.logger.log(

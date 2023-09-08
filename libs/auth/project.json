@@ -16,15 +16,8 @@
         "main": "libs/auth/src/index.ts",
         "assets": [
           "libs/auth/*.md"
-        ],
-        "updateBuildableProjectDepsInPackageJson": true
+        ]
       }
-    },
-    "publish": {
-      "command": "node tools/scripts/publish.mjs auth {args.ver} {args.tag}",
-      "dependsOn": [
-        "build"
-      ]
     },
     "lint": {
       "executor": "@nx/linter:eslint",
@@ -33,7 +26,9 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "libs/auth/**/*.ts"
+          "libs/auth/**/*.ts",
+          "libs/auth/package.json",
+          "libs/auth/project.json"
         ]
       }
     },

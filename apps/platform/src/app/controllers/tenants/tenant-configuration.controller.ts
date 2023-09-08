@@ -23,9 +23,8 @@ export class TenantsConfigurationController {
   public async setupSaml(
     @Body() request: SetupSamlConfiguration,
   ): Promise<SimpleResponseForCreatedEntityWithMessage<string>> {
-    const result = await this.samlConfigurationService.createOrUpdateEntity(
-      request,
-    );
+    const result =
+      await this.samlConfigurationService.createOrUpdateEntity(request);
 
     return {
       data: {

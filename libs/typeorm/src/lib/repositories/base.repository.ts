@@ -282,7 +282,7 @@ export abstract class BaseRepository<
    */
   override async softDelete(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    criteria:
+    _criteria:
       | string
       | string[]
       | number
@@ -319,7 +319,7 @@ export abstract class BaseRepository<
    */
   override async restore(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    criteria:
+    _criteria:
       | string
       | string[]
       | number
@@ -341,9 +341,9 @@ export abstract class BaseRepository<
    */
   override async recover<T extends DeepPartial<ENTITY>>(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    entity: T,
+    _entity: T,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    options?: SaveOptions,
+    _options?: SaveOptions,
   ): Promise<T & ENTITY> {
     this.logger
       .warn(`recover method is not recommended to use in repository ${this.metadata.name}
@@ -358,7 +358,7 @@ export abstract class BaseRepository<
    * @deprecated The method should not be used
    * */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  override async findByIds(ids: unknown[]): Promise<ENTITY[]> {
+  override async findByIds(_ids: unknown[]): Promise<ENTITY[]> {
     throw new Error(
       `Method is deprecated don't use it. It's also not working with cls`,
     );
@@ -371,7 +371,7 @@ export abstract class BaseRepository<
   // eslint-disable-next-line sonarjs/no-identical-functions
   override async findOneById(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    id: number | string | Date,
+    _id: number | string | Date,
   ): Promise<ENTITY | null> {
     throw new Error(
       `Method is deprecated don't use it. It's also not working with cls`,

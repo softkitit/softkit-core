@@ -4,6 +4,23 @@
   "type": "commonjs",
   "keywords": [
     "services",
-    "business logic"
-  ]
+    "business logic",
+    "CRUD",
+    "CRUD service",
+    "nestjs service",
+    "nest service"
+  ],
+  "dependencies": {
+  },
+  "peerDependencies": {
+    "@softkit/typeorm": "*",
+    "@softkit/string-utils": "*",
+    "@softkit/exceptions": "*",
+    "class-transformer": "^0.5.1",
+    "typeorm": "0.3.17",
+    "nestjs-paginate": "^8.2.1",
+    "@nestjs/common": "^10.2.4",
+    "@nestjs/typeorm": "^10.0.0",
+    "typeorm-transactional": "^0.4.1"
+  }
 }

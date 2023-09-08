@@ -6,6 +6,14 @@
     "async storage",
     "cls",
     "thread local",
-    "promise context"
-  ]
+    "promise context",
+    "async hooks",
+    "nestjs"
+  ],
+  "dependencies": {
+    "nestjs-cls": "^3.5.1"
+  },
+  "peerDependencies": {
+    "fastify": "4.22.0"
+  }
 }

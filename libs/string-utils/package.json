@@ -5,5 +5,7 @@
   "keywords": [
     "string",
     "utils"
-  ]
+  ],
+  "dependencies": {
+  }
 }

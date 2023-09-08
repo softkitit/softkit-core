@@ -5,5 +5,11 @@
   "keywords": [
     "swagger",
     "setup swagger"
-  ]
+  ],
+  "peerDependencies": {
+    "@softkit/validation": "*",
+    "class-validator": "^0.14.0",
+    "@nestjs/common": "^10.2.4",
+    "@nestjs/swagger": "^7.1.10"
+  }
 }

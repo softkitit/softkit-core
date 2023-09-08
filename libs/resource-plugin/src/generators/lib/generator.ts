@@ -1,4 +1,4 @@
-import { generateFiles, joinPathFragments, Tree } from '@nx/devkit';
+import { generateFiles, joinPathFragments, Tree, updateJson } from '@nx/devkit';
 import { LibGeneratorSchema } from './schema';
 import { libraryGenerator } from '@nx/nest';
 import { paramCase, pascalCase } from 'change-case';
@@ -19,6 +19,10 @@ export async function libGenerator(tree: Tree, options: LibGeneratorSchema) {
     });
   }
 
+  if (options.publishable) {
+    updateProjectJson(tree, options);
+  }
+
   if (options.i18n) {
     await i18nGenerator(tree, {
       name: options.name,
@@ -27,6 +31,21 @@ export async function libGenerator(tree: Tree, options: LibGeneratorSchema) {
       buildable: options.buildable,
     });
   }
+}
+
+function updateProjectJson(tree: Tree, options: LibGeneratorSchema) {
+  updateJson(
+    tree,
+    joinPathFragments(options.name, 'project.json'),
+    (prjJson) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { publish, ...other } = prjJson.targets;
+
+      prjJson.targets = other;
+
+      return prjJson;
+    },
+  );
 }
 
 export default libGenerator;
