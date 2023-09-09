@@ -1,0 +1,62 @@
+# <%= pascalCase(name) -%> Http Client Library
+
+This library provides an advanced http client for the <%= name -%> application.
+
+It's auto generated using openapi-generator.
+
+## Installation
+
+```bash
+yarn add <%= scope -%><%= name -%>-client
+```
+---
+
+## Usage
+
+### Add to your .env.yml file
+
+```yaml
+<%= camelCase(name) -%>Client:
+  url: http://localhost:9999
+  serviceName: <%= name -%>
+```
+---
+
+### Update your root.config.ts, it needs to implement the appropriate config interface
+
+
+```typescript
+import { HttpClientConfig } from '@softkit/server-http-client';
+import { <%= pascalCase(name) -%>ClientConfig } from '<%= scope -%><%= name -%>-client';
+
+export default class RootConfig implements <%= pascalCase(name) -%>ClientConfig {
+
+  @Type(() => HttpClientConfig)
+  @ValidateNested()
+  public readonly <%= camelCase(name) -%>Client!: HttpClientConfig;
+
+}
+```
+
+### Import `<%= pascalCase(name) -%>ClientModule` in your main module
+
+---
+
+### That's it, api clients will be available in your DI container, you can simply inject it in constructor
+
+```typescript
+
+import { SomeApi } from '<%= scope -%><%= name -%>-client';
+
+@Injectable()
+export default class MyServiceThatNeedRolesApi {
+
+  constructor(
+    private readonly someApi: SomeApi,
+  ) {}
+
+}
+
+```
+
+
