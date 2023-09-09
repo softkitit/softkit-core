@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.0.6](https://github.com/saas-buildkit/saas-buildkit-core/compare/resource-plugin-0.0.5...resource-plugin-0.0.6) (2023-09-09)
+
+
+### Bug Fixes
+
+* **resource-plugin:** added readme generation for http-client generator ([0c8239c](https://github.com/saas-buildkit/saas-buildkit-core/commit/0c8239c59db59a49ab643d69531577f8e8f67ae0))
+
 ## [0.0.5](https://github.com/saas-buildkit/saas-buildkit-core/compare/resource-plugin-0.0.4...resource-plugin-0.0.5) (2023-09-08)
 
 
