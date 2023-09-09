@@ -20,10 +20,9 @@ export function responseBodyFormatter(
       } satisfies ErrorResponse)
     : ({
         type: 'todo implement link to docs',
-        title:
-          ctx?.translate('common.exception.BAD_REQUEST.TITLE') || 'Bad Request',
+        title: ctx?.translate('exception.BAD_REQUEST.TITLE') || 'Bad Request',
         detail:
-          ctx?.translate('common.exception.BAD_REQUEST.GENERAL_DETAIL') ||
+          ctx?.translate('exception.BAD_REQUEST.GENERAL_DETAIL') ||
           'Can not validate inbound request body',
         status: exc.getStatus(),
         instance,

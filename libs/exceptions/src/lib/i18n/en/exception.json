@@ -7,7 +7,7 @@
     "TITLE": "Not Found",
     "GENERAL_DETAIL": "Can not find the appropriate object. It doesn't exist anymore or you don't have access to it.",
     "MISSING_CONFIGURATION_FOR_FEATURE_DETAIL": "The {featureName} feature you are trying to use is not configured. Please contact your administrator. If you are an administrator, please configure {featureName} first.",
-    "OBJECT_NOT_FOUND_DETAIL": "Can not find {objectName}. It doesn't exist anymore or you don't have access to it."
+    "OBJECT_NOT_FOUND_DETAIL": "It doesn't exist anymore or you don't have access to it."
   },
   "BAD_REQUEST": {
     "TITLE": "Bad Request",

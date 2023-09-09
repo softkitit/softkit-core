@@ -316,6 +316,11 @@
         },
         "tags": [
           "Roles"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       },
       "post": {
@@ -345,6 +350,11 @@
         },
         "tags": [
           "Roles"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       }
     },
@@ -377,6 +387,11 @@
         },
         "tags": [
           "Roles"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       },
       "put": {
@@ -417,6 +432,11 @@
         },
         "tags": [
           "Roles"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       },
       "delete": {
@@ -458,6 +478,11 @@
         },
         "tags": [
           "Roles"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       }
     },
@@ -479,6 +504,11 @@
         },
         "tags": [
           "Roles"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       }
     },

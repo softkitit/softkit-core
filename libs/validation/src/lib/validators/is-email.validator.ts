@@ -28,7 +28,7 @@ export const IsEmailLocalized = ({
         ignore_max_length: true,
         ...emailValidationOptions,
       },
-      { message: i18nValidationMessage('common.validation.INVALID_EMAIL') },
+      { message: i18nValidationMessage('validation.INVALID_EMAIL') },
     ),
   ].filter((v): v is PropertyDecorator => v !== undefined);
 

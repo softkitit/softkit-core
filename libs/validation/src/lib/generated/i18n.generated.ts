@@ -15,7 +15,6 @@ export type I18nTranslations = {
         "DATE": string;
         "STRING_ENUM": string;
         "DOESNT_MATCH_FORMAT": string;
-        "MIN_INTEGER": string;
         "REGEXP": string;
         "MAX_INTEGER": string;
         "REQUIRED": string;
