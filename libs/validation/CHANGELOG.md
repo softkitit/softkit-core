@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.1.0](https://github.com/saas-buildkit/saas-buildkit-core/compare/validation-0.0.5...validation-0.1.0) (2023-09-09)
+
+
+### Features
+
+* **exceptions:** added swagger annotations for all exceptions in module ([c39b916](https://github.com/saas-buildkit/saas-buildkit-core/commit/c39b9160b7606d4c66dcb53fbb2b00beaa472959))
+
 ## [0.0.5](https://github.com/saas-buildkit/saas-buildkit-core/compare/validation-0.0.4...validation-0.0.5) (2023-09-08)
 
 
