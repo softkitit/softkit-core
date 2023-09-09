@@ -29,7 +29,11 @@ export function setupSwagger(c: SwaggerConfig, app: INestApplication) {
     fs.writeFileSync(c.docsOutputPath, JSON.stringify(document, undefined, 2));
   }
 
-  SwaggerModule.setup(c.swaggerPath, app, document);
+  SwaggerModule.setup(c.swaggerPath, app, document, {
+    swaggerOptions: {
+      persistAuthorization: true,
+    },
+  });
 
   return document;
 }

@@ -11,7 +11,7 @@ import AbstractAuthUserService from './abstract-auth-user-service';
 import { TokenService } from '@softkit/auth';
 import { hashPassword, verifyPassword } from '@softkit/crypto';
 import {
-  FailedToCreateEntityException,
+  ConflictEntityCreationException,
   GeneralForbiddenException,
   GeneralInternalServerException,
   GeneralNotFoundException,
@@ -107,7 +107,7 @@ export class AuthService {
         },
       );
 
-      throw new FailedToCreateEntityException(
+      throw new ConflictEntityCreationException(
         'User',
         'email',
         createUserDto.email,

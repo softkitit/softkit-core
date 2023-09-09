@@ -4,7 +4,7 @@ import { ApiProperty } from '@nestjs/swagger';
  * @description The error response following rfc7807
  * @link https://www.rfc-editor.org/rfc/rfc7807
  * */
-export class ErrorResponse {
+export class ErrorResponse<ADDITIONAL_DATA extends object = object> {
   @ApiProperty({
     description: 'link to the docs with more details about the error',
     required: true,
@@ -31,7 +31,7 @@ export class ErrorResponse {
     description:
       'additional data that can be used by the client to handle the error',
   })
-  data?: object;
+  data?: ADDITIONAL_DATA | ADDITIONAL_DATA[];
 
   @ApiProperty({
     description:

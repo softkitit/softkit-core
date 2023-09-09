@@ -1,8 +1,9 @@
 import { HttpStatus } from '@nestjs/common';
 import { AbstractHttpException } from './abstract-http.exception';
-import { i18nString } from '../utils';
+import { i18nString } from '../utils/i18n';
+import { ConflictEntityCreationData } from './vo/conflict-entity-creation.dto';
 
-export class FailedToCreateEntityException extends AbstractHttpException {
+export class ConflictEntityCreationException extends AbstractHttpException<ConflictEntityCreationData> {
   constructor(
     public readonly entityName: string,
     public readonly fieldName: string,

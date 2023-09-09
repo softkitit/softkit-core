@@ -164,16 +164,14 @@ export async function bootstrapBaseWebApp(
   const swaggerSetup = setupSwagger(swaggerConfig, app);
 
   if (swaggerSetup) {
-    logger.log(
-      `Swagger is listening on ${appConfig.prefix || ''}/${
-        swaggerConfig.swaggerPath
-      }`,
-    );
+    logger.log(`Swagger is listening on ${swaggerConfig.swaggerPath}`);
   } else {
     logger.log(`Swagger is disabled by config, skipping...`);
   }
 
   await app.listen(appConfig.port, '0.0.0.0');
+
+  logger.log(`App successfully started. Listening on port ${appConfig.port}`);
 
   return app;
 }

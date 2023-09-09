@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { OptimisticLockException } from '@softkit/exceptions';
 import { DataSource, EntitySubscriberInterface, UpdateEvent } from 'typeorm';
-import { toCapitalizedWords } from '@softkit/string-utils';
 
 @Injectable()
 /**
@@ -32,11 +31,7 @@ export class OptimisticLockingSubscriber implements EntitySubscriberInterface {
 
       // they should match otherwise someone has changed it before
       if (versionFromDatabase !== versionFromUpdate) {
-        throw new OptimisticLockException(
-          versionFromDatabase,
-          versionFromUpdate,
-          toCapitalizedWords(event.metadata.tableName),
-        );
+        throw new OptimisticLockException(versionFromDatabase);
       }
     }
   }

@@ -8,7 +8,7 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { plainToClass } from 'class-transformer';
 import {
   CustomUserRoleService,
@@ -35,6 +35,7 @@ import { RolesApi } from '@softkit/platform-client';
   path: 'roles',
   version: '1',
 })
+@ApiBearerAuth()
 export class RolesController {
   constructor(
     private readonly customUserRoleService: CustomUserRoleService,

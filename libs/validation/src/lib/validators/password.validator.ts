@@ -2,6 +2,7 @@ import { applyDecorators } from '@nestjs/common';
 import { Matches, ValidatorOptions } from 'class-validator';
 import { MaxLengthLocalized } from './primitives/is-max-length.validator';
 import { MinLengthLocalized } from './primitives/is-min-length.validator';
+import { i18nString } from '../utils';
 
 export interface PasswordLocalizedOptions {
   minLength?: number;
@@ -24,7 +25,7 @@ export const PasswordLocalized = ({
     MinLengthLocalized(minLength, minLengthValidationOptions),
     MaxLengthLocalized(maxLength, maxLengthValidationOptions),
     Matches(pattern, {
-      message: 'common.validation.PASSWORD_DOESNT_MATCH_CONSTRAINTS',
+      message: i18nString('validation.PASSWORD_DOESNT_MATCH_CONSTRAINTS'),
       ...passwordValidationOptions,
     }),
   );

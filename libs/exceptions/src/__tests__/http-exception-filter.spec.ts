@@ -13,7 +13,7 @@ import { Test } from '@nestjs/testing';
 import {
   AnyExceptionFilter,
   ErrorResponse,
-  FailedToCreateEntityException,
+  ConflictEntityCreationException,
   GeneralForbiddenException,
   GeneralInternalServerException,
   GeneralNotFoundException,
@@ -191,7 +191,9 @@ describe('http exception filter e2e test', () => {
     expect(errorBody.status).toBe(404);
     expect(errorBody.type).toBeDefined();
     expect(errorBody.title).toBe('Not Found');
-    expect(errorBody.detail).toContain('Can not find saml_configuration');
+    expect(errorBody.detail).toContain(
+      "It doesn't exist anymore or you don't have access to it.",
+    );
     expect(errorBody.instance).toContain('req-');
   });
 
@@ -277,7 +279,7 @@ class SimpleHttpExceptionController {
 
   @Post('optimistic-lock')
   public async optimisticLock() {
-    throw new OptimisticLockException(2, 1, 'saml_configuration');
+    throw new OptimisticLockException(2);
   }
 
   @Post('unknown-exception-thrown')
@@ -302,7 +304,7 @@ class SimpleHttpExceptionController {
 
   @Post('failed-to-create-entity-thrown')
   public async failedToCreateEntityThrown() {
-    throw new FailedToCreateEntityException(
+    throw new ConflictEntityCreationException(
       'saml_configuration_idp_metadata',
       'issuer',
       'https://idp.example.com/saml2',

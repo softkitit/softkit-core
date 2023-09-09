@@ -90,7 +90,7 @@ describe('auth e2e test', () => {
     it('signup with failing last step', async () => {
       jest
         .spyOn(app.get(ExternalApprovalService), 'createOrUpdateEntity')
-        .mockImplementation(async (entity) => {
+        .mockImplementation(async (_entity) => {
           throw new Error('unexpected error');
         });
 
@@ -269,7 +269,10 @@ describe('auth e2e test', () => {
       const signUpResponse = await app.inject({
         method: 'POST',
         url: 'api/platform/v1/auth/signup',
-        payload: successSignupDto,
+        payload: {
+          ...successSignupDto,
+          email: faker.internet.email(),
+        },
       });
 
       expect(signUpResponse.statusCode).toBe(201);

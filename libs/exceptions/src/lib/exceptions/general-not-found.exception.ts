@@ -1,6 +1,6 @@
 import { HttpStatus } from '@nestjs/common';
 import { AbstractHttpException } from './abstract-http.exception';
-import { i18nString } from '../utils';
+import { i18nString } from '../utils/i18n';
 
 export class GeneralNotFoundException extends AbstractHttpException {
   constructor(rootCause?: unknown) {

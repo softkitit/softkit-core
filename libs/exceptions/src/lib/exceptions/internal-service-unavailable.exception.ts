@@ -1,6 +1,6 @@
 import { HttpStatus } from '@nestjs/common';
 import { AbstractHttpException } from './abstract-http.exception';
-import { i18nString } from '../utils';
+import { i18nString } from '../utils/i18n';
 
 /**
  * This is a service unavailable exception that may occur when

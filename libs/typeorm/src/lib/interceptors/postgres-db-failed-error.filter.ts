@@ -33,11 +33,10 @@ export class PostgresDbQueryFailedErrorFilter implements ExceptionFilter {
           status: HttpStatus.CONFLICT,
           type: 'todo implement link to the docs, get from config',
           title:
-            i18n?.translate('common.exception.CONFLICT.TITLE') ||
-            'Conflict Error',
+            i18n?.translate('exception.CONFLICT.TITLE') || 'Conflict Error',
           detail:
             i18n
-              ?.translate('common.exception.CONFLICT.ENTITY_ALREADY_EXISTS', {
+              ?.translate('exception.CONFLICT.ENTITY_ALREADY_EXISTS', {
                 args: {
                   entityName: toCapitalizedWords(exception.driverError?.table),
                 },
@@ -52,11 +51,11 @@ export class PostgresDbQueryFailedErrorFilter implements ExceptionFilter {
           status: HttpStatus.INTERNAL_SERVER_ERROR,
           type: 'todo implement link to the docs, get from config',
           title:
-            i18n?.translate('common.exception.INTERNAL_ERROR.TITLE') ||
+            i18n?.translate('exception.INTERNAL_ERROR.TITLE') ||
             'Internal Error',
           detail:
             i18n
-              ?.translate('common.exception.INTERNAL_ERROR.GENERAL_DETAIL')
+              ?.translate('exception.INTERNAL_ERROR.GENERAL_DETAIL')
               .toString() || 'Internal Server Error',
           instance: ctx.getRequest().id,
         } satisfies ErrorResponse;
