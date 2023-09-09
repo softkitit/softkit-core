@@ -1,8 +1,8 @@
 import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing';
-import { Tree, readProjectConfiguration } from '@nx/devkit';
+import { readProjectConfiguration, Tree } from '@nx/devkit';
 
-import { httpClientGenerator } from './generator';
 import { HttpClientGeneratorSchema } from './schema';
+import httpClientGenerator from './generator';
 
 describe('http-client generator', () => {
   let tree: Tree;
@@ -16,13 +16,25 @@ describe('http-client generator', () => {
     tree = createTreeWithEmptyWorkspace();
   });
 
-  it('should run successfully', async () => {
-    await httpClientGenerator(tree, options);
+  it.each([
+    [{}],
+    [
+      {
+        importPath: 'nestjs-http-client',
+      },
+    ],
+  ])('should run successfully: %s', async (inputCase) => {
+    const updatedOptions = {
+      ...options,
+      ...inputCase,
+    };
+
+    await httpClientGenerator(tree, updatedOptions);
     const config = readProjectConfiguration(
       tree,
-      `${options.directory}-${options.name}`,
+      `${updatedOptions.directory}-${updatedOptions.name}`,
     );
     expect(config).toBeDefined();
-    expect(tree.listChanges()).toHaveLength(22);
+    expect(tree.listChanges()).toHaveLength(23);
   });
 });

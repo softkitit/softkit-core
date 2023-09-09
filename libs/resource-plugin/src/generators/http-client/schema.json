@@ -21,7 +21,13 @@
       "x-prompt": "What is base libs folder?",
       "minLength": 1,
       "default": "clients"
+    },
+    "importPath": {
+      "description": "The library name used to import it, like @myorg/my-awesome-lib. Must be a valid npm name.",
+      "type": "string",
+      "x-prompt": "What is lib importPath?",
+      "minLength": 1
     }
   },
-  "required": ["name"]
+  "required": ["name", "importPath"]
 }
