@@ -1,27 +1,21 @@
 import { faker } from '@faker-js/faker';
 import { ClsPresetSubscriber } from '../lib/subscribers/cls-preset.subscriber';
-import { Injectable } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import {
-  TypeOrmModule,
-  TypeOrmModuleOptions,
-  TypeOrmOptionsFactory,
-} from '@nestjs/typeorm';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { ClsModule, ClsService } from 'nestjs-cls';
-import { DataSource, DataSourceOptions } from 'typeorm';
-import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
-import { expectNotNullAndGet, startDb } from '@softkit/test-utils';
+import {
+  expectNotNullAndGet,
+  StartedDb,
+  startPostgres,
+} from '@softkit/test-utils';
 import { TenantUserEntity } from './app/user-tenant.entity';
 import { TenantUserRepository } from './app/user-tenant-repository.service';
 import { TenantRepository } from './app/tenant.repository';
 import { TenantEntity } from './app/tenant.entity';
 import { UserAndTenantClsStore } from './app/cls/user.cls-store';
-import {
-  addTransactionalDataSource,
-  getDataSourceByName,
-  initializeTransactionalContext,
-} from 'typeorm-transactional';
-import { getTransactionalContext } from 'typeorm-transactional/dist/common';
+
+import { setupTypeormModule } from '../lib/setup-typeorm-module';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 describe('tenant base service test', () => {
   const userId = 'doesnt matter';
@@ -30,55 +24,31 @@ describe('tenant base service test', () => {
   let tenantUserRepository: TenantUserRepository;
   let clsService: ClsService<UserAndTenantClsStore>;
   let clsPresetSubscriber: ClsPresetSubscriber<UserAndTenantClsStore>;
+  let db: StartedDb;
+
+  beforeAll(async () => {
+    db = await startPostgres({
+      runMigrations: false,
+      additionalTypeOrmModuleOptions: {
+        entities: [TenantUserEntity, TenantEntity],
+        namingStrategy: new SnakeNamingStrategy(),
+      },
+    });
+  });
+
+  afterAll(async () => {
+    await db.container.stop();
+  });
 
   beforeEach(async () => {
-    const { typeormOptions } = await startDb();
-
-    if (!getTransactionalContext()) {
-      initializeTransactionalContext();
-    }
-
-    @Injectable()
-    class TypeOrmConfigService implements TypeOrmOptionsFactory {
-      createTypeOrmOptions(): TypeOrmModuleOptions {
-        return {
-          ...typeormOptions,
-          entities: [TenantUserEntity, TenantEntity],
-          subscribers: [],
-          namingStrategy: new SnakeNamingStrategy(),
-        } as TypeOrmModuleOptions;
-      }
-    }
-
     const module = await Test.createTestingModule({
       imports: [
         TypeOrmModule.forFeature([TenantUserEntity, TenantEntity]),
-        TypeOrmModule.forRootAsync({
-          useClass: TypeOrmConfigService,
-          dataSourceFactory: async (options?: DataSourceOptions) => {
-            if (!options) {
-              throw new Error(
-                `Can not initialize data source, options are empty`,
-              );
-            }
-
-            const dataSource = new DataSource(options);
-
-            const dsInitialized = getDataSourceByName('default');
-
-            if (dsInitialized) {
-              return dsInitialized;
-            } else {
-              addTransactionalDataSource(dataSource);
-              return await dataSource.initialize();
-            }
-          },
-        }),
+        setupTypeormModule(__dirname, db.TypeOrmConfigService),
         ClsModule.forRoot({
           global: true,
         }),
       ],
-
       providers: [TenantUserRepository, ClsPresetSubscriber, TenantRepository],
     }).compile();
 

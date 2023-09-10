@@ -1,14 +1,23 @@
-import { TypeOrmModule } from '@nestjs/typeorm';
+import {
+  TypeOrmModule,
+  TypeOrmModuleOptions,
+  TypeOrmOptionsFactory,
+} from '@nestjs/typeorm';
 import { TypeOrmConfigService } from './config/typeorm-config.service';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { getDataSourceByName } from 'typeorm-transactional/dist/common';
 import { addTransactionalDataSource } from 'typeorm-transactional';
+import { Type } from '@nestjs/common';
+import * as path from 'node:path';
 
-export function setupTypeormModule() {
+export function setupTypeormModule(
+  appDir: string,
+  optionsFactory: Type<TypeOrmOptionsFactory> = TypeOrmConfigService,
+) {
   return TypeOrmModule.forRootAsync({
-    useClass: TypeOrmConfigService,
-    dataSourceFactory: async (options?: DataSourceOptions) => {
-      if (!options) {
+    useClass: optionsFactory,
+    dataSourceFactory: async (baseOptions?: DataSourceOptions) => {
+      if (!baseOptions) {
         // this will be a startup error we don't need to cover it with tests
         /* istanbul ignore next */
         throw new Error(`Can not initialize data source, options are empty`);
@@ -21,10 +30,29 @@ export function setupTypeormModule() {
         return existDatasource;
       }
 
+      const options = {
+        ...baseOptions,
+        // eslint-disable-next-line @typescript-eslint/ban-types
+        migrations: updateMigrationsPaths(baseOptions, appDir),
+      };
+
       const dataSource = new DataSource(options);
       addTransactionalDataSource(dataSource);
 
       return await dataSource.initialize();
     },
   });
+}
+
+function updateMigrationsPaths(options: TypeOrmModuleOptions, appDir: string) {
+  if (options?.migrations === undefined || options?.migrations === null) {
+    return;
+  }
+
+  if (Array.isArray(options?.migrations)) {
+    return options?.migrations?.map((m) => {
+      return typeof m === 'string' ? path.join(appDir, m) : m;
+    });
+  }
+  return options.migrations;
 }
