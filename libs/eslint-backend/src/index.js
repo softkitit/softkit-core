@@ -100,6 +100,7 @@ module.exports = {
       },
       rules: {
         'security/detect-object-injection': 'off',
+        '@typescript-eslint/no-var-requires': 'off',
         'sonarjs/no-duplicate-string': 'off',
         '@typescript-eslint/no-unsafe-assignment': 'off',
         '@typescript-eslint/no-unsafe-argument': 'off',
