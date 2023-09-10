@@ -6,13 +6,13 @@ import {
   Allow,
   IsBoolean,
 } from 'class-validator';
-import { BooleanTypeTransform } from '@softkit/validation';
+import { BooleanType } from '@softkit/validation';
 
 export class SwaggerConfig {
   @IsString()
   title!: string;
 
-  @BooleanTypeTransform
+  @BooleanType
   @IsBoolean()
   enabled = false;
 
