@@ -25,10 +25,12 @@ export class OverrideDefaultNotFoundFilter implements ExceptionFilter {
     const response = {
       // todo implement link to the docs, get from config
       type: 'todo implement link to the docs, get from config',
-      title: i18n?.translate('exception.NOT_FOUND.TITLE') || 'Not Found',
+      title:
+        i18n?.translate('exception.NOT_FOUND.TITLE') ??
+        /* istanbul ignore next */ 'Not Found',
       detail:
-        i18n?.translate('exception.NOT_FOUND.GENERAL_DETAIL').toString() ||
-        'Resource not found',
+        i18n?.translate('exception.NOT_FOUND.GENERAL_DETAIL').toString() ??
+        /* istanbul ignore next */ 'Resource not found',
       status: HttpStatus.NOT_FOUND,
       instance: ctx.getRequest().id,
     } satisfies ErrorResponse;
