@@ -1,60 +1,43 @@
 import { faker } from '@faker-js/faker';
-import { Injectable } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import {
-  TypeOrmModule,
-  TypeOrmModuleOptions,
-  TypeOrmOptionsFactory,
-} from '@nestjs/typeorm';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { ClsModule } from 'nestjs-cls';
-import { DataSource, DataSourceOptions } from 'typeorm';
 import {
-  addTransactionalDataSource,
-  initializeTransactionalContext,
-} from 'typeorm-transactional';
-import { expectNotNullAndGet, startDb } from '@softkit/test-utils';
+  expectNotNullAndGet,
+  StartedDb,
+  startPostgres,
+} from '@softkit/test-utils';
 import { ObjectNotFoundException } from '@softkit/exceptions';
 import { PAGINATED_CONFIG, UserEntity } from './app/user.entity';
 import { UserService } from './app/user.service';
 import { UserRepository } from './app/user.repository';
 import { UserDto } from './app/user.dto';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { setupTypeormModule } from '@softkit/typeorm';
 
 describe('base service tests', () => {
   let testBaseService: UserService;
+  let db: StartedDb;
 
   beforeAll(async () => {
-    const { typeormOptions } = await startDb();
+    db = await startPostgres({
+      runMigrations: false,
+      additionalTypeOrmModuleOptions: {
+        entities: [UserEntity],
+        namingStrategy: new SnakeNamingStrategy(),
+      },
+    });
+  });
 
-    @Injectable()
-    class TypeOrmConfigService implements TypeOrmOptionsFactory {
-      createTypeOrmOptions(): TypeOrmModuleOptions {
-        return {
-          ...typeormOptions,
-          entities: [UserEntity],
-        } as TypeOrmModuleOptions;
-      }
-    }
+  afterAll(async () => {
+    await db.container.stop();
+  });
 
-    initializeTransactionalContext();
-
+  beforeAll(async () => {
     const module = await Test.createTestingModule({
       imports: [
         TypeOrmModule.forFeature([UserEntity]),
-        TypeOrmModule.forRootAsync({
-          useClass: TypeOrmConfigService,
-          dataSourceFactory: async (options?: DataSourceOptions) => {
-            if (!options) {
-              throw new Error(
-                `Can not initialize data source, options are empty`,
-              );
-            }
-
-            const dataSource = new DataSource(options);
-
-            addTransactionalDataSource(dataSource);
-            return await dataSource.initialize();
-          },
-        }),
+        setupTypeormModule(__dirname, db.TypeOrmConfigService),
         ClsModule.forRoot({
           global: true,
         }),
