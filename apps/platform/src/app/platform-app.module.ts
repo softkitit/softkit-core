@@ -33,7 +33,7 @@ import { setupTypeormModule } from '@softkit/typeorm';
     setupLoggerModule(),
     setupYamlBaseConfigModule(__dirname, RootConfig),
     setupClsModule(),
-    setupTypeormModule(),
+    setupTypeormModule(__dirname),
     TypeOrmModule.forFeature(Object.values(Entities)),
     PlatformClientModule,
     HealthCheckModule,

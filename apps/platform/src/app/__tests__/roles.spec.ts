@@ -1,42 +1,43 @@
 import { faker } from '@faker-js/faker';
 import { NestFastifyApplication } from '@nestjs/platform-fastify';
 import { Test, TestingModule } from '@nestjs/testing';
-import { fileLoader } from 'nest-typed-config';
-import * as path from 'node:path';
 import { CustomUserRoleWithoutPermissionsDto } from '../controllers/roles/vo/role.dto';
 import { CustomUserRole, Tenant, User } from '../database/entities';
 import { RoleType } from '../database/entities/roles/types/default-role.enum';
 import { AuthType } from '../database/entities/users/types/auth-type.enum';
 import { UserStatus } from '../database/entities/users/types/user-status.enum';
-import { PlatformAppModule } from '../platform-app.module';
 import { UserRepository } from '../repositories';
 import { CustomUserRoleService, TenantService } from '../services';
-import { DbConfig } from '@softkit/typeorm';
 import { bootstrapBaseWebApp } from '@softkit/bootstrap';
 import { TokenService } from '@softkit/auth';
-import { startDb } from '@softkit/test-utils';
+import { StartedDb, startPostgres } from '@softkit/test-utils';
 import { Paginated } from 'nestjs-paginate';
+
+const user: Partial<User> = {
+  email: faker.internet.email(),
+  password: '12345Aa!',
+  firstName: faker.person.firstName(),
+  lastName: faker.person.lastName(),
+  authType: AuthType.LOCAL,
+  roles: [],
+  status: UserStatus.ACTIVE,
+};
 
 describe('roles e2e test', () => {
   let app: NestFastifyApplication;
   let rolesService: CustomUserRoleService;
   let accessToken: string;
   let tenant: Tenant;
-  let dbOptions: Partial<DbConfig>;
-
-  const user: Partial<User> = {
-    email: faker.internet.email(),
-    password: '12345Aa!',
-    firstName: faker.person.firstName(),
-    lastName: faker.person.lastName(),
-    authType: AuthType.LOCAL,
-    roles: [],
-    status: UserStatus.ACTIVE,
-  };
+  let db: StartedDb;
 
   beforeAll(async () => {
-    const { typeormOptions } = await startDb();
-    dbOptions = typeormOptions as Partial<DbConfig>;
+    db = await startPostgres({
+      runMigrations: true,
+    });
+  });
+
+  afterAll(async () => {
+    await db.container.stop();
   });
 
   beforeEach(async () => {
@@ -44,23 +45,11 @@ describe('roles e2e test', () => {
       provider: 'gmail' + faker.string.alphanumeric(10).toString() + '.com',
     });
 
-    const fileData = await fileLoader({
-      absolutePath: path.join(__dirname, '../assets/.env.yaml'),
-      basename: '.env.yaml',
-      ignoreEnvironmentVariableSubstitution: false,
-    })();
+    const { PlatformAppModule } = require('../platform-app.module');
 
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [PlatformAppModule],
-    })
-      .overrideProvider(DbConfig)
-      .useValue({
-        ...new DbConfig(),
-        ...fileData.db,
-        ...dbOptions,
-        migrations: [path.join(__dirname, '../database/migrations/*.ts')],
-      })
-      .compile();
+    }).compile();
 
     app = await bootstrapBaseWebApp(moduleFixture, PlatformAppModule);
 
