@@ -63,7 +63,7 @@ jobs:
         run: docker pull postgres:15.4-alpine
 
       - name: Tests coverage
-        run: npx nx affected:test --base="origin/main" --codeCoverage --parallel=false
+        run: npx nx affected:test --base="origin/main" --codeCoverage
 
       - name: Report to coveralls
         uses: coverallsapp/github-action@v2.2.0
