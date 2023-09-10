@@ -1,21 +1,35 @@
 import { startPostgres } from '../lib/start-postgres';
-import { StartedDb } from '../lib/vo';
+import { StartDbOptions, StartedDb } from '../lib/vo';
 
-describe('start db and populate the entity', () => {
-  let db: StartedDb;
+describe('start db and create configs', () => {
+  it.each([
+    {},
+    {
+      additionalTypeOrmModuleOptions: {
+        password: () => 'test',
+      },
+    },
+  ])(
+    'check that started db is working: %s',
+    async (additionalOptions: Partial<StartDbOptions>) => {
+      const db: StartedDb = await startPostgres(additionalOptions);
 
-  beforeAll(async () => {
-    db = await startPostgres();
-  });
+      try {
+        expect(db.typeormOptions).toBeDefined();
+        expect(db.typeormOptions.database).toBeDefined();
+        expect(db.container).toBeDefined();
+        expect(db.TypeOrmConfigService).toBeDefined();
 
-  afterAll(async () => {
-    await db.container.stop();
-  });
+        const typeOrmConfigService = new db.TypeOrmConfigService();
 
-  test('check that started db is working', () => {
-    expect(db.typeormOptions).toBeDefined();
-    expect(db.typeormOptions.database).toBeDefined();
-    expect(db.container).toBeDefined();
-    expect(db.TypeOrmConfigService).toBeDefined();
-  });
+        expect(typeOrmConfigService).toBeDefined();
+        const options = typeOrmConfigService.createTypeOrmOptions();
+        expect(options).toBeDefined();
+
+        expect(options).toMatchObject(db.typeormOptions);
+      } finally {
+        await db.container.stop();
+      }
+    },
+  );
 });

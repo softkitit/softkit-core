@@ -12,6 +12,7 @@ export async function setTestEnvironmentForTypeorm(
 
   process.env['TEST_DB_PORT'] = typeormOptions.port + '';
   process.env['TEST_DB_USERNAME'] = typeormOptions.username;
+
   if (password !== undefined) {
     process.env['TEST_DB_PASSWORD'] = password + '';
   }

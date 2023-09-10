@@ -30,7 +30,6 @@ export async function startPostgres(
   console.timeEnd(`start db`);
 
   const typeormOptions = {
-    ...options.additionalTypeOrmModuleOptions,
     port: pg.getPort(),
     username: pg.getUsername(),
     password: pg.getPassword(),
@@ -39,6 +38,7 @@ export async function startPostgres(
     migrationsRun: options.runMigrations,
     dropSchema: true,
     type: 'postgres',
+    ...options.additionalTypeOrmModuleOptions,
   } as TypeOrmModuleOptions & PostgresConnectionCredentialsOptions;
 
   if (options.setupTransactionsManagement && !getTransactionalContext()) {
