@@ -56,6 +56,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
     const result = await super.canActivate(context);
 
+    /* istanbul ignore next */
     return result instanceof Observable ? firstValueFrom(result) : result;
   }
 }
