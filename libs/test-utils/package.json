@@ -8,6 +8,11 @@
   ],
   "dependencies": {
     "@jest/globals": "29.6.2",
-    "@testcontainers/postgresql": "^10.2.1"
+    "@testcontainers/postgresql": "^10.2.1",
+    "@nestjs/typeorm": "^10.0.0",
+    "@nestjs/common": "^10.2.4",
+    "typeorm": "0.3.17",
+    "testcontainers": "^10.2.1",
+    "typeorm-transactional": "^0.4.1"
   }
 }
