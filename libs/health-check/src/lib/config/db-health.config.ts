@@ -1,8 +1,8 @@
 import { IsBoolean } from 'class-validator';
-import { BooleanTypeTransform } from '@softkit/validation';
+import { BooleanType } from '@softkit/validation';
 
 export class DbHealthConfig {
-  @BooleanTypeTransform
+  @BooleanType
   @IsBoolean()
   public enabled = true;
 }
