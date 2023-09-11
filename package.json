@@ -42,7 +42,7 @@
     "@testcontainers/postgresql": "^10.2.1",
     "@types/jest": "^29.5.4",
     "@types/newrelic": "^9.14.0",
-    "@types/node": "^20.5.9",
+    "@types/node": "^20.6.0",
     "@types/opossum": "^8.1.1",
     "@types/passport-jwt": "^3.0.9",
     "@types/passport-local": "^1.0.35",
