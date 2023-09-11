@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.2.0](https://github.com/saas-buildkit/saas-buildkit-core/compare/typeorm-0.1.0...typeorm-0.2.0) (2023-09-11)
+
+
+### Features
+
+* **typeorm:** added transforms for db config, to use env variables substitution. Updated tests to use new test-utils methods ([43a52dd](https://github.com/saas-buildkit/saas-buildkit-core/commit/43a52dde686598afd0e8b0f5680856c3121f754d))
+
 ## [0.1.0](https://github.com/saas-buildkit/saas-buildkit-core/compare/typeorm-0.0.5...typeorm-0.1.0) (2023-09-09)
 
 
