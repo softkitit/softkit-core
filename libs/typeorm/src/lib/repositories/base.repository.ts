@@ -63,14 +63,14 @@ export abstract class BaseRepository<
     const foundEntity = await this.findSingle(result.id);
 
     // can't imagine a situation where find won't work after successful save
-    return foundEntity === null ? result : foundEntity;
+    return foundEntity ?? /* istanbul ignore next */ result;
   }
 
   async findAllPaginated(
     query: PaginateQuery,
     config: PaginateConfig<ENTITY>,
   ): Promise<Paginated<ENTITY>> {
-    const where = this.presetWhereOptions(config.where || {});
+    const where = this.presetWhereOptions(config.where ?? {});
 
     const updatedConfig = {
       ...config,
@@ -403,9 +403,7 @@ export abstract class BaseRepository<
         id: In(criteria as unknown[]),
       } as FindOptionsWhere<ENTITY>);
     } else {
-      return this.presetDefaultWhereOptions(
-        criteria as FindOptionsWhere<ENTITY>,
-      );
+      return this.presetDefaultWhereOptions(criteria);
     }
   }
 

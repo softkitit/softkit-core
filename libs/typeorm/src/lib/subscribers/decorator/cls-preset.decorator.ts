@@ -19,9 +19,9 @@ export function ClsPreset<CLS_STORE extends TenantClsStore>(
       (c) => c.propertyName === propertyName,
     );
 
+    /* istanbul ignore next */
     if (foundProperty === undefined) {
       // I don't really know how is it possible to get there
-      /* istanbul ignore next */
       throw `Can not find a property for cls preset functionality. Trying to find ${propertyName}, available properties: [${metadataArgsStorage.columns
         .map((c) => c.propertyName)
         .join(',')}]`;
@@ -33,7 +33,7 @@ export function ClsPreset<CLS_STORE extends TenantClsStore>(
         entityName:
           foundProperty.target instanceof Function
             ? foundProperty.target.name
-            : foundProperty.target,
+            : /* istanbul ignore next */ foundProperty.target,
         clsStorageKey: options.clsPropertyFieldName as symbol,
         presetType: options.presetType || PresetType.ALL,
       });

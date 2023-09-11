@@ -17,9 +17,9 @@ export function setupTypeormModule(
   return TypeOrmModule.forRootAsync({
     useClass: optionsFactory,
     dataSourceFactory: async (baseOptions?: DataSourceOptions) => {
+      /* istanbul ignore next */
       if (!baseOptions) {
         // this will be a startup error we don't need to cover it with tests
-        /* istanbul ignore next */
         throw new Error(`Can not initialize data source, options are empty`);
       }
 
@@ -51,8 +51,12 @@ function updateMigrationsPaths(options: TypeOrmModuleOptions, appDir: string) {
 
   if (Array.isArray(options?.migrations)) {
     return options?.migrations?.map((m) => {
-      return typeof m === 'string' ? path.join(appDir, m) : m;
+      return typeof m === 'string'
+        ? path.join(appDir, m)
+        : /* istanbul ignore next */ m;
     });
   }
+  // typeorm created a MixedList type that can be an object, but it's not documented
+  /* istanbul ignore next */
   return options.migrations;
 }

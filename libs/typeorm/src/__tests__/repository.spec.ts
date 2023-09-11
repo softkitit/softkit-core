@@ -22,6 +22,7 @@ describe('start db and populate the entity', () => {
       runMigrations: false,
       additionalTypeOrmModuleOptions: {
         entities: [UserEntity],
+        migrations: ['app/migrations/*.ts'],
       },
     });
   });
