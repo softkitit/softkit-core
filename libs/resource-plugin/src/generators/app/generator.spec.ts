@@ -23,6 +23,7 @@ describe('app generator', () => {
     contactEmail: '',
     contactUrl: '',
     testsFolderName: '__tests__',
+    lintCommandName: 'lint',
   };
 
   beforeEach(() => {

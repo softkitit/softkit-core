@@ -38,6 +38,12 @@
       "default": true,
       "description": "It's indicating that this entity is tenant base repository or not, so we can choose the appropriate base repository for generation",
       "x-prompt": "Is this a tenant base repository? (y/n)"
+    },
+    "lintCommandName": {
+      "type": "string",
+      "default": "lint",
+      "description": "The name of lint nx command in project.json",
+      "x-prompt": "Linter command name in project.json"
     }
   },
   "required": ["projectName", "repositoryName", "tenantBaseRepository"]

@@ -15,6 +15,12 @@
       "x-dropdown": "projects",
       "minLength": 1
     },
+    "lintCommandName": {
+      "type": "string",
+      "default": "lint",
+      "description": "The name of lint nx command in project.json",
+      "x-prompt": "Linter command name in project.json"
+    },
     "directory": {
       "type": "string",
       "description": "Base libs folder",

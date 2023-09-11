@@ -19,6 +19,12 @@
       "description": "The directory of the new application.",
       "type": "string"
     },
+    "lintCommandName": {
+      "type": "string",
+      "default": "lint",
+      "description": "The name of lint nx command in project.json",
+      "x-prompt": "Linter command name in project.json"
+    },
     "skipFormat": {
       "description": "Skip formatting files.",
       "type": "boolean",

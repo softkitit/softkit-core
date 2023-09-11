@@ -3,6 +3,7 @@ import { LibGeneratorSchema } from './schema';
 import { libraryGenerator } from '@nx/nest';
 import { paramCase, pascalCase } from 'change-case';
 import i18nGenerator from '../i18n/generator';
+import { runLint } from '../common/run-lint';
 
 export async function libGenerator(tree: Tree, options: LibGeneratorSchema) {
   options.name = paramCase(options.name);
@@ -31,6 +32,11 @@ export async function libGenerator(tree: Tree, options: LibGeneratorSchema) {
       buildable: options.buildable,
     });
   }
+
+  if (options.lintCommandName) {
+    return /* istanbul ignore next */ () =>
+      runLint(options.name, options.lintCommandName);
+  }
 }
 
 function updateProjectJson(tree: Tree, options: LibGeneratorSchema) {
@@ -39,7 +45,7 @@ function updateProjectJson(tree: Tree, options: LibGeneratorSchema) {
     joinPathFragments(options.name, 'project.json'),
     (prjJson) => {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { publish, ...other } = prjJson.targets;
+      const { publish: _, ...other } = prjJson.targets;
 
       prjJson.targets = other;
 

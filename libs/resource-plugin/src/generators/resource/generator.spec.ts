@@ -24,6 +24,7 @@ describe('resource generator', () => {
   it('should create entity without provided group name', async () => {
     await resourceGenerator(tree, {
       ...options,
+      lintCommandName: 'lint',
       groupName: undefined,
     });
 

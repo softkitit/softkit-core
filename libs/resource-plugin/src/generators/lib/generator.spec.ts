@@ -13,6 +13,7 @@ describe('lib generator', () => {
     buildable: true,
     i18n: true,
     unitTestRunner: 'jest',
+    lintCommandName: 'lint',
   };
 
   beforeEach(() => {

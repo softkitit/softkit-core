@@ -7,6 +7,7 @@ import {
 import { RepositoryGeneratorSchema } from './schema';
 import { pascalCase, snakeCase } from 'change-case';
 import { EOL } from 'node:os';
+import { runLint } from '../common/run-lint';
 
 export async function repositoryGenerator(
   tree: Tree,
@@ -35,7 +36,11 @@ export async function repositoryGenerator(
     : '';
   const newContents = `${contents}${EOL}export * from './${exportPathForIndex}';`;
   tree.write(indexFilePath, newContents);
-  //   todo run eslint --fix
+
+  if (options.lintCommandName) {
+    return /* istanbul ignore next */ () =>
+      runLint(options.projectName, options.lintCommandName);
+  }
 }
 
 export default repositoryGenerator;

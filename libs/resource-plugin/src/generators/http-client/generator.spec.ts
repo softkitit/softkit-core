@@ -10,6 +10,7 @@ describe('http-client generator', () => {
     name: 'test',
     directory: 'clients',
     importPath: '@softkit/nestjs-http-client',
+    lintCommandName: 'lint',
   };
 
   beforeEach(() => {

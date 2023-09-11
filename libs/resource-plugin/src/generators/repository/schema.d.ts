@@ -4,4 +4,5 @@ export interface RepositoryGeneratorSchema {
   entityName: string;
   groupName?: string;
   tenantBaseRepository: boolean;
+  lintCommandName?: string;
 }

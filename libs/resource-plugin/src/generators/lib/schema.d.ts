@@ -6,5 +6,6 @@ export interface LibGeneratorSchema extends LibraryGeneratorSchema {
   config: boolean;
   languages: string[];
   i18n: boolean;
+  lintCommandName?: string;
   unitTestRunner: UnitTestRunner;
 }

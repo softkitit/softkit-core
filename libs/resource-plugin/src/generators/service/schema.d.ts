@@ -5,4 +5,5 @@ export interface ServiceGeneratorSchema {
   entityName: string;
   groupName?: string;
   tenantBaseService: boolean;
+  lintCommandName?: string;
 }

@@ -26,6 +26,12 @@
       "type": "string",
       "alias": "dir"
     },
+    "lintCommandName": {
+      "type": "string",
+      "default": "lint",
+      "description": "The name of lint nx command in project.json",
+      "x-prompt": "Linter command name in project.json"
+    },
     "linter": {
       "description": "The tool to use for running lint checks.",
       "type": "string",

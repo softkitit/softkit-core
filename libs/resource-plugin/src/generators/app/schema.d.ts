@@ -16,4 +16,5 @@ export interface AppGeneratorSchema extends ApplicationGeneratorOptions {
   contactEmail: string;
   contactUrl: string;
   testsFolderName: string;
+  lintCommandName?: string;
 }

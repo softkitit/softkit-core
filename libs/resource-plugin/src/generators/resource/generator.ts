@@ -13,12 +13,16 @@ import serviceGenerator from '../service/generator';
 import { ServiceGeneratorSchema } from '../service/schema';
 import controllerGenerator from '../controller/generator';
 import { ControllerGeneratorSchema } from '../controller/schema';
+import { runLint } from '../common/run-lint';
 
 export async function resourceGenerator(
   tree: Tree,
   options: ResourceGeneratorSchema,
 ) {
   const appRoot = readProjectConfiguration(tree, options.projectName).root;
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { lintCommandName, ...optionsWithoutLintCommand } = options;
 
   const srcFolder = joinPathFragments(__dirname, './files');
   generateFiles(tree, srcFolder, appRoot, {
@@ -44,11 +48,10 @@ export async function resourceGenerator(
     : '';
   const newContents = `${contents}${EOL}export * from './${exportPathForIndex}';`;
   tree.write(indexFilePath, newContents);
-  //   todo run eslint --fix
 
   if (options.generateRepository) {
     const repositoryOptions = {
-      ...options,
+      ...optionsWithoutLintCommand,
       tenantBaseRepository: options.tenantBaseEntity,
       repositoryName: `${options.entityName}`,
     } satisfies RepositoryGeneratorSchema;
@@ -57,7 +60,7 @@ export async function resourceGenerator(
 
   if (options.generateService) {
     const repositoryOptions = {
-      ...options,
+      ...optionsWithoutLintCommand,
       tenantBaseService: options.tenantBaseEntity,
       repositoryName: `${options.entityName}`,
       serviceName: options.entityName,
@@ -67,11 +70,16 @@ export async function resourceGenerator(
 
   if (options.generateController) {
     const repositoryOptions = {
-      ...options,
+      ...optionsWithoutLintCommand,
       serviceName: options.entityName,
       controllerName: options.entityName,
     } satisfies ControllerGeneratorSchema;
     await controllerGenerator(tree, repositoryOptions);
+  }
+
+  if (lintCommandName) {
+    return /* istanbul ignore next */ () =>
+      runLint(options.projectName, lintCommandName);
   }
 }
 
