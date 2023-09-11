@@ -1,5 +1,5 @@
 import { IsBoolean, IsNumber, IsString, Max, Min } from 'class-validator';
-import { BooleanTypeTransform } from '@softkit/validation';
+import { BooleanType } from '@softkit/validation';
 
 export class DiskHealthConfig {
   @IsString()
@@ -10,7 +10,7 @@ export class DiskHealthConfig {
   @Min(0)
   public thresholdPercent = 0.8;
 
-  @BooleanTypeTransform
+  @BooleanType
   @IsBoolean()
   public enabled = true;
 }

@@ -1,72 +1,37 @@
 import { faker } from '@faker-js/faker';
-import { Injectable } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import {
-  TypeOrmModule,
-  TypeOrmModuleOptions,
-  TypeOrmOptionsFactory,
-} from '@nestjs/typeorm';
-import { DataSource, DataSourceOptions } from 'typeorm';
-import {
-  addTransactionalDataSource,
-  getDataSourceByName,
-  initializeTransactionalContext,
-} from 'typeorm-transactional';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { OptimisticLockingSubscriber } from '../lib/subscribers/optimistic-locking.subscriber';
-import { startDb } from '@softkit/test-utils';
+import { StartedDb, startPostgres } from '@softkit/test-utils';
 import { OptimisticLockException } from '@softkit/exceptions';
-import { getTransactionalContext } from 'typeorm-transactional/dist/common';
 import { UserEntity } from './app/user.entity';
 import { UserRepository } from './app/user-repository.service';
+import { setupTypeormModule } from '../lib/setup-typeorm-module';
 
 describe('optimistic lost subscriber test', () => {
   let optimisticLockSubscriber: OptimisticLockingSubscriber;
   let testBaseRepository: UserRepository;
+  let db: StartedDb;
+
+  beforeAll(async () => {
+    db = await startPostgres({
+      runMigrations: false,
+      additionalTypeOrmModuleOptions: {
+        entities: [UserEntity],
+      },
+    });
+  });
+
+  afterAll(async () => {
+    await db.container.stop();
+  });
 
   beforeEach(async () => {
-    const { typeormOptions } = await startDb();
-
-    if (!getTransactionalContext()) {
-      initializeTransactionalContext();
-    }
-
-    @Injectable()
-    class TypeOrmConfigService implements TypeOrmOptionsFactory {
-      createTypeOrmOptions(): TypeOrmModuleOptions {
-        return {
-          ...typeormOptions,
-          entities: [UserEntity],
-          subscribers: [],
-        } as TypeOrmModuleOptions;
-      }
-    }
-
     const module = await Test.createTestingModule({
       imports: [
         TypeOrmModule.forFeature([UserEntity]),
-        TypeOrmModule.forRootAsync({
-          useClass: TypeOrmConfigService,
-          dataSourceFactory: async (options?: DataSourceOptions) => {
-            if (!options) {
-              throw new Error(
-                `Can not initialize data source, options are empty`,
-              );
-            }
-
-            const dataSource = new DataSource(options);
-
-            const dsInitialized = getDataSourceByName('default');
-
-            if (dsInitialized) {
-              return dsInitialized;
-            } else {
-              addTransactionalDataSource(dataSource);
-              return await dataSource.initialize();
-            }
-          },
-        }),
+        setupTypeormModule(__dirname, db.TypeOrmConfigService),
       ],
-
       providers: [UserRepository, OptimisticLockingSubscriber],
     }).compile();
 

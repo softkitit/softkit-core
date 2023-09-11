@@ -1,6 +1,6 @@
 import { plainToClass, TransformFnParams } from 'class-transformer';
 import { ClassConstructor } from 'class-transformer/types/interfaces';
-import { validateAndThrow } from '../validators/primitives/utils';
+import { validateAndThrow } from '../validators/dynamic';
 import { IsEnumValidatorDefinition } from '../validators';
 
 export const toObjectsArrayFromString = <T>(
@@ -13,6 +13,7 @@ export const toObjectsArrayFromString = <T>(
 ) => {
   const value = params.value;
 
+  /* istanbul ignore next */
   if (value === undefined) {
     /**
      * there is no real circumstance where this would happen, because it used for query params
@@ -22,11 +23,11 @@ export const toObjectsArrayFromString = <T>(
     return;
   }
 
+  /* istanbul ignore next */
   if (typeof value !== 'string') {
     /**
      * there is no real circumstance where this would happen, because it used for query params
      */
-    /* istanbul ignore next */
     return {};
   }
 

@@ -23,6 +23,9 @@ export class AnyExceptionFilter implements ExceptionFilter {
 
     const ctx = host.switchToHttp();
 
+    /**
+     * this is needed for healthcheck endpoint
+     * */
     if (exception instanceof ServiceUnavailableException) {
       httpAdapter.reply(ctx.getResponse(), exception.getResponse(), 503);
     }
@@ -33,16 +36,19 @@ export class AnyExceptionFilter implements ExceptionFilter {
       // todo implement link to the docs, get from config
       type: 'todo implement link to the docs, get from config',
       title:
-        i18n?.translate('exception.INTERNAL_ERROR.TITLE') ?? 'Internal Error',
+        i18n?.translate('exception.INTERNAL_ERROR.TITLE') ??
+        /* istanbul ignore next */ 'Internal Error',
       detail:
         i18n?.translate('exception.INTERNAL_ERROR.GENERAL_DETAIL').toString() ??
+        /* istanbul ignore next */
         'Internal Server Error',
       status: 500,
       instance: ctx.getRequest().id,
     } satisfies ErrorResponse;
 
     this.logger.error(
-      `Unexpected error happen, this require immediate attention ${exception}`,
+      `Unexpected error happen, this require immediate attention`,
+      exception,
     );
 
     httpAdapter.reply(ctx.getResponse(), response, response.status);

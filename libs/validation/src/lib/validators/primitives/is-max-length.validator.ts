@@ -4,14 +4,14 @@ import {
   MaxLength,
   ValidationOptions,
 } from 'class-validator';
-import { IValidatorDefinition } from '../dynamic/validator-definition.interface';
+import { IValidatorDefinition } from '../dynamic';
 import { i18n, i18nString } from '../../utils';
 
 const MESSAGE = 'validation.MAX_STRING_LENGTH';
 
 export const MaxLengthLocalized = (
   n: number,
-  validationOptions: ValidationOptions = {},
+  validationOptions?: ValidationOptions,
 ) =>
   MaxLength(n, {
     message: i18n(MESSAGE),

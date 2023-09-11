@@ -5,8 +5,8 @@ import { libraryGenerator } from '@nx/nest';
 import { constantCase, paramCase, pascalCase, camelCase } from 'change-case';
 
 async function extractScope(importPath: string) {
-  const scope = importPath.split('/').pop();
-  return scope.startsWith('@') ? { scope: `${scope}/` } : { scope: '' };
+  const scope = importPath.split('/').shift();
+  return scope.startsWith('@') ? `${scope}/` : '';
 }
 
 export async function httpClientGenerator(
@@ -32,7 +32,7 @@ export async function httpClientGenerator(
 
   generateFiles(tree, path.join(__dirname, 'files'), projectRoot, {
     ...options,
-    ...scope,
+    scope,
     camelCase,
     pascalCase,
     constantCase,

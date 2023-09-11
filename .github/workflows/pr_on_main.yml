@@ -59,11 +59,8 @@ jobs:
       - name: Run lint
         run: npx nx affected:lint --base="origin/main"
 
-#      - name: Tests coverage
-#        run: npx nx affected:test --base="origin/main" --codeCoverage --parallel=false
-#
-#      - name: Report to coveralls
-#        uses: coverallsapp/github-action@v2.2.0
-#        with:
-#          github-token: ${{ secrets.GITHUB_TOKEN }}
-#
+      - name: Pull postgres image, before running tests
+        run: docker pull postgres:15.4-alpine
+
+      - name: Tests coverage
+        run: npx nx affected:test --base="origin/main" --codeCoverage --parallel=false

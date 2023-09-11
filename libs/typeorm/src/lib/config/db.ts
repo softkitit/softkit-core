@@ -9,6 +9,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { BooleanType, IntegerType } from '@softkit/validation';
 
 class DbExtraSettings {
   @IsInt()
@@ -28,6 +29,7 @@ export class DbConfig {
   @IsInt()
   @Min(0)
   @Max(65_535)
+  @IntegerType
   port = 5432;
 
   @IsString()
@@ -40,21 +42,30 @@ export class DbConfig {
   database!: string;
 
   @IsBoolean()
+  @BooleanType
   synchronize = false;
 
   @IsBoolean()
+  @BooleanType
   migrationsRun = false;
 
+  @IsString({ each: true })
+  migrations?: string[];
+
   @IsBoolean()
+  @BooleanType
   dropSchema!: false;
 
   @IsBoolean()
+  @BooleanType
   keepConnectionAlive!: true;
 
   @IsBoolean()
+  @BooleanType
   logging!: boolean;
 
   @IsBoolean()
+  @BooleanType
   autoLoadEntities = true;
 
   @Type(/* istanbul ignore next */ () => DbExtraSettings)

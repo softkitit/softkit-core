@@ -1,18 +1,35 @@
-import { StartedPostgreSqlContainer } from '@testcontainers/postgresql';
-import { startDb } from '../lib/db';
+import { startPostgres } from '../lib/start-postgres';
+import { StartDbOptions, StartedDb } from '../lib/vo';
 
-describe('start db and populate the entity', () => {
-  let connection: { container: StartedPostgreSqlContainer };
+describe('start db and create configs', () => {
+  it.each([
+    {},
+    {
+      additionalTypeOrmModuleOptions: {
+        password: () => 'test',
+      },
+    },
+  ])(
+    'check that started db is working: %s',
+    async (additionalOptions: Partial<StartDbOptions>) => {
+      const db: StartedDb = await startPostgres(additionalOptions);
 
-  beforeAll(async () => {
-    connection = await startDb();
-  });
+      try {
+        expect(db.typeormOptions).toBeDefined();
+        expect(db.typeormOptions.database).toBeDefined();
+        expect(db.container).toBeDefined();
+        expect(db.TypeOrmConfigService).toBeDefined();
 
-  test('check that started db is working', () => {
-    const container = connection.container;
-    expect(container.getDatabase()).toBeDefined();
-    expect(container.getUsername()).toBeDefined();
-    expect(container.getPassword()).toBeDefined();
-    expect(container.getPort()).toBeDefined();
-  });
+        const typeOrmConfigService = new db.TypeOrmConfigService();
+
+        expect(typeOrmConfigService).toBeDefined();
+        const options = typeOrmConfigService.createTypeOrmOptions();
+        expect(options).toBeDefined();
+
+        expect(options).toMatchObject(db.typeormOptions);
+      } finally {
+        await db.container.stop();
+      }
+    },
+  );
 });

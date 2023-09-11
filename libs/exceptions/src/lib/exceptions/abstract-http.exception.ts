@@ -22,15 +22,11 @@ export class AbstractHttpException<ADDITIONAL_DATA extends object = object> {
     return {
       // todo  implement link to the docs, get from config
       type: 'todo implement link to the docs, get from config',
-      title: title?.toString() || this.title,
-      detail: detail?.toString() ?? this.detail,
+      title: title?.toString() ?? /* istanbul ignore next */ this.title,
+      detail: detail?.toString() ?? /* istanbul ignore next */ this.detail,
       status: this.status,
       instance: requestId,
     } satisfies ErrorResponse;
-  }
-
-  getStatus(): number {
-    return this.status;
   }
 
   getPresetHeadersValues(): Record<string, string> {

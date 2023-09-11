@@ -22,12 +22,11 @@ export async function serviceGenerator(
   });
 
   const repositoriesFolder = joinPathFragments(appRoot, 'src/app/services');
-  const groupName = options.groupName || '';
+  const serviceFileName = `${options.serviceName}.service`;
 
-  const exportPathForIndex = joinPathFragments(
-    groupName,
-    `${options.serviceName}.service`,
-  );
+  const exportPathForIndex = options.groupName
+    ? joinPathFragments(options.groupName, serviceFileName)
+    : serviceFileName;
 
   const indexFilePath = joinPathFragments(repositoriesFolder, `index.ts`);
 

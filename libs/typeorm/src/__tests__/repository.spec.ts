@@ -1,58 +1,41 @@
 import { faker } from '@faker-js/faker';
-import { Injectable } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { QueryFailedError } from 'typeorm';
+
 import {
-  TypeOrmModule,
-  TypeOrmModuleOptions,
-  TypeOrmOptionsFactory,
-} from '@nestjs/typeorm';
-import { DataSource, DataSourceOptions, QueryFailedError } from 'typeorm';
-import {
-  addTransactionalDataSource,
-  initializeTransactionalContext,
-} from 'typeorm-transactional';
-import { expectNotNullAndGet, startDb } from '@softkit/test-utils';
+  expectNotNullAndGet,
+  StartedDb,
+  startPostgres,
+} from '@softkit/test-utils';
 import { USER_PAGINATED_CONFIG, UserEntity } from './app/user.entity';
 import { UserRepository } from './app/user-repository.service';
 import { FilterOperator } from 'nestjs-paginate';
+import { setupTypeormModule } from '../lib/setup-typeorm-module';
 
 describe('start db and populate the entity', () => {
   let testBaseRepository: UserRepository;
+  let db: StartedDb;
 
   beforeAll(async () => {
-    const { typeormOptions } = await startDb();
+    db = await startPostgres({
+      runMigrations: false,
+      additionalTypeOrmModuleOptions: {
+        entities: [UserEntity],
+        migrations: ['app/migrations/*.ts'],
+      },
+    });
+  });
 
-    @Injectable()
-    class TypeOrmConfigService implements TypeOrmOptionsFactory {
-      createTypeOrmOptions(): TypeOrmModuleOptions {
-        return {
-          ...typeormOptions,
-          entities: [UserEntity],
-        } as TypeOrmModuleOptions;
-      }
-    }
+  afterAll(async () => {
+    await db.container.stop();
+  });
 
-    initializeTransactionalContext();
-
+  beforeEach(async () => {
     const module = await Test.createTestingModule({
       imports: [
         TypeOrmModule.forFeature([UserEntity]),
-        TypeOrmModule.forRootAsync({
-          useClass: TypeOrmConfigService,
-          dataSourceFactory: async (options?: DataSourceOptions) => {
-            if (!options) {
-              throw new Error(
-                `Can not initialize data source, options are empty`,
-              );
-            }
-
-            const dataSource = new DataSource(options);
-
-            addTransactionalDataSource(dataSource);
-
-            return await dataSource.initialize();
-          },
-        }),
+        setupTypeormModule(__dirname, db.TypeOrmConfigService),
       ],
       providers: [UserRepository],
     }).compile();

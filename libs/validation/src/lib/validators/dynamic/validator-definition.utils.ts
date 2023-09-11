@@ -23,9 +23,7 @@ function validationDefinitionToI18NError<T, E>(
   // it's transforming a message to format -
   // "common.validation.MAX_LENGTH|{ "constraints": [ "10" ], "args": {} }"
   const validationMessageFormatted = i18nValidationMessage(
-    overrideDefaultMessage === undefined
-      ? validatorDefinition.defaultValidationMessage
-      : overrideDefaultMessage,
+    overrideDefaultMessage ?? validatorDefinition.defaultValidationMessage,
     args,
   )({
     // this one is not really used and not passed to the message function
@@ -81,11 +79,11 @@ export function validateAndReturnError<T, E>(
   validatorDefinition: IValidatorDefinition<T, E>,
   fieldName: string,
   value: T,
-  constraint: E,
+  constraint?: E,
   overrideDefaultMessage?: Path<I18nTranslations>,
   args?: unknown,
 ) {
-  const isValid = validatorDefinition.validator(value, constraint);
+  const isValid = validatorDefinition.validator(value, constraint as E);
 
   return isValid
     ? undefined

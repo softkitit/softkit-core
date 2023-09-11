@@ -1,16 +1,10 @@
 import { TransformFnParams } from 'class-transformer';
-import { validateAndThrow } from '../validators/primitives/utils';
-import { MatchesRegexpValidatorDefinition } from '../validators/primitives/';
+import { validateAndThrow } from '../validators/dynamic';
+import { MatchesRegexpValidatorDefinition } from '../validators';
 import { i18nString } from '../utils';
 
-export const toIntegerTransformer = (
-  params: TransformFnParams,
-): number | undefined => {
+export const toInteger = (params: TransformFnParams): number | undefined => {
   const value = params.value;
-
-  if (value === undefined) {
-    return undefined;
-  }
 
   const constraint = /^-?(?!0\d)\d+$/;
 

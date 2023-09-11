@@ -4,6 +4,7 @@ import { repositoryGenerator } from './generator';
 import { RepositoryGeneratorSchema } from './schema';
 import { createTreeWithNestApplication } from '@nx/nest/src/generators/utils/testing';
 import { pascalCase } from 'change-case';
+import { EOL } from 'node:os';
 
 describe('repository generator', () => {
   let tree: Tree;
@@ -17,6 +18,22 @@ describe('repository generator', () => {
 
   beforeEach(() => {
     tree = createTreeWithNestApplication(options.projectName);
+  });
+
+  it('should create repository without provided group name', async () => {
+    await repositoryGenerator(tree, {
+      ...options,
+      groupName: undefined,
+    });
+
+    const repositoryFile = tree.listChanges().find((change) => {
+      return (
+        change.path.includes(options.repositoryName) &&
+        change.path.includes('repository')
+      );
+    });
+
+    expect(repositoryFile).toBeDefined();
   });
 
   it('should create repository and export it in index.ts file', async () => {
@@ -50,5 +67,16 @@ describe('repository generator', () => {
     expect(repositoryFile.content.toString()).toContain(
       pascalCase(options.entityName),
     );
+
+    await repositoryGenerator(tree, {
+      ...options,
+      repositoryName: 'second-repository',
+    });
+
+    const fileChange = tree.listChanges().find((change) => {
+      return change.path.includes('index.ts');
+    });
+
+    expect(fileChange.content.toString().split(EOL).length).toBe(3);
   });
 });

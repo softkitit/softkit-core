@@ -22,12 +22,11 @@ export async function repositoryGenerator(
   });
 
   const repositoriesFolder = joinPathFragments(appRoot, 'src/app/repositories');
-  const groupName = options.groupName || '';
+  const repositoryFileName = `${options.repositoryName}.repository`;
 
-  const exportPathForIndex = joinPathFragments(
-    groupName,
-    `${options.repositoryName}.repository`,
-  );
+  const exportPathForIndex = options.groupName
+    ? joinPathFragments(options.groupName, repositoryFileName)
+    : repositoryFileName;
 
   const indexFilePath = joinPathFragments(repositoriesFolder, `index.ts`);
 

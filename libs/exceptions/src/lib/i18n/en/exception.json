@@ -1,7 +1,7 @@
 {
   "SERVICE_UNAVAILABLE": {
     "TITLE": "Service Unavailable",
-    "GENERAL_DETAIL": "The service is currently unavailable. Please try again later."
+    "GENERAL_DETAIL": "The service is currently unavailable. We aware of the problem and are working to resolve it as soon as possible."
   },
   "NOT_FOUND": {
     "TITLE": "Not Found",

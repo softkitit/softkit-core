@@ -1,9 +1,4 @@
-import {
-  Controller,
-  ForbiddenException,
-  HttpStatus,
-  Post,
-} from '@nestjs/common';
+import { HttpStatus } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 import {
   FastifyAdapter,
@@ -13,56 +8,39 @@ import { Test } from '@nestjs/testing';
 import {
   AnyExceptionFilter,
   ErrorResponse,
-  ConflictEntityCreationException,
-  GeneralForbiddenException,
-  GeneralInternalServerException,
-  GeneralNotFoundException,
-  GeneralUnauthorizedException,
+  GeneralBadRequestException,
   HttpExceptionFilter,
-  MissingConfigurationForFeatureException,
-  ObjectNotFoundException,
-  OptimisticLockException,
   OverrideDefaultForbiddenExceptionFilter,
   OverrideDefaultNotFoundFilter,
 } from '../';
-import { I18nJsonLoader, I18nModule } from '@saas-buildkit/nestjs-i18n';
-import * as path from 'node:path';
+import { AppModule } from './app/app.module';
+import { I18nValidationExceptionFilter } from '@saas-buildkit/nestjs-i18n';
 
-describe('http exception filter e2e test', () => {
+describe('http exception filter', () => {
   let app: NestFastifyApplication;
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
-      imports: [
-        I18nModule.forRoot({
-          fallbackLanguage: 'en',
-          typesOutputPath: path.join(
-            __dirname,
-            '../lib/generated/i18n.generated.ts',
-          ),
-          loaders: [
-            new I18nJsonLoader({
-              path: path.join(__dirname, '../lib/i18n/'),
-            }),
-          ],
-        }),
-      ],
-      controllers: [SimpleHttpExceptionController],
+      imports: [AppModule],
     }).compile();
 
     app = module.createNestApplication(new FastifyAdapter());
     const httpAdapterHost = app.get(HttpAdapterHost);
+
     app.useGlobalFilters(
       new AnyExceptionFilter(httpAdapterHost),
       new HttpExceptionFilter(httpAdapterHost),
       new OverrideDefaultNotFoundFilter(httpAdapterHost),
       new OverrideDefaultForbiddenExceptionFilter(httpAdapterHost),
+      new I18nValidationExceptionFilter({
+        detailedErrors: true,
+      }),
     );
 
     await app.listen(0);
   });
 
-  it('not found exception filter test', async () => {
+  it('not found exception filter', async () => {
     const response = await app.inject({
       method: 'POST',
       url: '/failing-http/not-found',
@@ -78,7 +56,7 @@ describe('http exception filter e2e test', () => {
     expect(errorBody.instance).toContain('req-');
   });
 
-  it('default not found exception override filter test', async () => {
+  it('default not found exception override filter', async () => {
     const response = await app.inject({
       method: 'POST',
       url: '/failing-http/not-existing-in-any-controller',
@@ -95,7 +73,7 @@ describe('http exception filter e2e test', () => {
     expect(errorBody.instance).toContain('req-');
   });
 
-  it('default forbidden exception override filter test', async () => {
+  it('default forbidden exception override filter', async () => {
     const response = await app.inject({
       method: 'POST',
       url: '/failing-http/default-forbidden-exception',
@@ -113,7 +91,7 @@ describe('http exception filter e2e test', () => {
     expect(errorBody.instance).toContain('req-');
   });
 
-  it('general forbidden exception filter test', async () => {
+  it('general forbidden exception filter', async () => {
     const response = await app.inject({
       method: 'POST',
       url: '/failing-http/general-forbidden',
@@ -129,7 +107,7 @@ describe('http exception filter e2e test', () => {
     expect(errorBody.instance).toContain('req-');
   });
 
-  it('general unauthorized exception filter test', async () => {
+  it('general unauthorized exception filter', async () => {
     const response = await app.inject({
       method: 'POST',
       url: '/failing-http/unauthorized',
@@ -145,7 +123,7 @@ describe('http exception filter e2e test', () => {
     expect(errorBody.instance).toContain('req-');
   });
 
-  it('general internal server error exception filter test', async () => {
+  it('general internal server error exception filter', async () => {
     const response = await app.inject({
       method: 'POST',
       url: '/failing-http/custom-internal-server-error',
@@ -163,7 +141,7 @@ describe('http exception filter e2e test', () => {
     expect(errorBody.instance).toContain('req-');
   });
 
-  it('missing configuration for feature exception filter test', async () => {
+  it('missing configuration for feature exception filter', async () => {
     const response = await app.inject({
       method: 'POST',
       url: '/failing-http/missing-configuration-for-feature',
@@ -179,7 +157,7 @@ describe('http exception filter e2e test', () => {
     expect(errorBody.instance).toContain('req-');
   });
 
-  it('object not found exception filter test', async () => {
+  it('object not found exception filter', async () => {
     const response = await app.inject({
       method: 'POST',
       url: '/failing-http/object-not-found',
@@ -197,7 +175,7 @@ describe('http exception filter e2e test', () => {
     expect(errorBody.instance).toContain('req-');
   });
 
-  it('optimistic lock exception filter test', async () => {
+  it('optimistic lock exception filter', async () => {
     const response = await app.inject({
       method: 'POST',
       url: '/failing-http/optimistic-lock',
@@ -213,7 +191,7 @@ describe('http exception filter e2e test', () => {
     expect(errorBody.instance).toContain('req-');
   });
 
-  it('unknown exception thrown filter test', async () => {
+  it('unknown exception thrown filter', async () => {
     const response = await app.inject({
       method: 'POST',
       url: '/failing-http/unknown-exception-thrown',
@@ -229,7 +207,7 @@ describe('http exception filter e2e test', () => {
     expect(errorBody.instance).toContain('req-');
   });
 
-  it('failed to create entity filter test', async () => {
+  it('failed to create entity filter', async () => {
     const response = await app.inject({
       method: 'POST',
       url: '/failing-http/failed-to-create-entity-thrown',
@@ -246,68 +224,60 @@ describe('http exception filter e2e test', () => {
     );
     expect(errorBody.instance).toContain('req-');
   });
-});
 
-@Controller({
-  path: 'failing-http',
-})
-class SimpleHttpExceptionController {
-  @Post('not-found')
-  public async notFound() {
-    throw new GeneralNotFoundException();
-  }
+  it('service unavailable', async () => {
+    const response = await app.inject({
+      method: 'POST',
+      url: '/failing-http/service-unavailable',
+    });
 
-  @Post('general-forbidden')
-  public async generalForbidden() {
-    throw new GeneralForbiddenException();
-  }
+    const errorBody = JSON.parse(response.body) as ErrorResponse;
 
-  @Post('unauthorized')
-  public async unauthorized() {
-    throw new GeneralUnauthorizedException();
-  }
-
-  @Post('missing-configuration-for-feature')
-  public async missingConfigurationForFeature() {
-    throw new MissingConfigurationForFeatureException('SAML SSO');
-  }
-
-  @Post('object-not-found')
-  public async objectNotFound() {
-    throw new ObjectNotFoundException('saml_configuration');
-  }
-
-  @Post('optimistic-lock')
-  public async optimisticLock() {
-    throw new OptimisticLockException(2);
-  }
-
-  @Post('unknown-exception-thrown')
-  public async unknownExceptionThrown() {
-    throw new Error('unknown exception thrown');
-  }
-
-  @Post('unknown-exception-string-thrown')
-  public async unknownExceptionStringThrown() {
-    throw 'unknown exception thrown';
-  }
-
-  @Post('default-forbidden-exception')
-  public async defaultForbiddenException() {
-    throw new ForbiddenException();
-  }
-
-  @Post('custom-internal-server-error')
-  public async customInternalServerError() {
-    throw new GeneralInternalServerException();
-  }
-
-  @Post('failed-to-create-entity-thrown')
-  public async failedToCreateEntityThrown() {
-    throw new ConflictEntityCreationException(
-      'saml_configuration_idp_metadata',
-      'issuer',
-      'https://idp.example.com/saml2',
+    expect(response.statusCode).toBe(HttpStatus.SERVICE_UNAVAILABLE);
+    expect(errorBody.status).toBe(HttpStatus.SERVICE_UNAVAILABLE);
+    expect(errorBody.type).toBeDefined();
+    expect(errorBody.title).toBe('Service Unavailable');
+    expect(errorBody.detail).toContain(
+      'The service is currently unavailable. We aware of the problem and are working to resolve it as soon as possible.',
     );
-  }
-}
+    expect(errorBody.instance).toContain('req-');
+  });
+
+  it('bad request', async () => {
+    const response = await app.inject({
+      method: 'POST',
+      url: '/failing-http/bad-request',
+    });
+
+    const errorBody = JSON.parse(response.body);
+
+    expect(response.statusCode).toBe(HttpStatus.BAD_REQUEST);
+    expect(errorBody.message).toBe('Bad Request');
+    expect(errorBody.errors.length).toBe(1);
+
+    const generalBadRequestException = new GeneralBadRequestException(
+      errorBody.errors[0],
+    );
+
+    const errorResponse = generalBadRequestException.toErrorResponse();
+
+    expect(errorResponse.status).toBe(HttpStatus.BAD_REQUEST);
+    expect(errorResponse.type).toBeDefined();
+    expect(errorResponse.title).toBe('exception.BAD_REQUEST.TITLE');
+    expect(errorResponse.detail).toContain(
+      'exception.BAD_REQUEST.GENERAL_DETAIL',
+    );
+  });
+
+  it('healthcheck', async () => {
+    const response = await app.inject({
+      method: 'POST',
+      url: '/failing-http/healthcheck',
+    });
+
+    const errorBody = JSON.parse(response.body);
+
+    expect(response.statusCode).toBe(HttpStatus.SERVICE_UNAVAILABLE);
+    expect(errorBody.message).toBe('Service Unavailable');
+  });
+});

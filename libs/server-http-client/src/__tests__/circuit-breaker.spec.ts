@@ -292,6 +292,22 @@ describe('Circuit breaker and retry', () => {
         expect(sampleController.counters.internalServerError).toBe(4);
       },
     );
+
+    it('unknown retry type', async () => {
+      await expect(
+        createAxiosInstance(clsService, {
+          timeout: 2000,
+          url: appHost,
+          serviceName: 'sample',
+          retryConfig: {
+            ...defaultRetryConfig,
+            retryType: 'unknown' as RetryType,
+          },
+        }),
+      ).rejects.toThrow(
+        'Invalid retry type for http client, please check your config. RetryType - unknown',
+      );
+    });
   });
 
   describe('Just circuit breaker', () => {

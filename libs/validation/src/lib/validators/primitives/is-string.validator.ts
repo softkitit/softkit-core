@@ -1,4 +1,4 @@
-import { IValidatorDefinition } from '../dynamic/validator-definition.interface';
+import { IValidatorDefinition } from '../dynamic';
 import {
   IS_STRING,
   isString,
@@ -9,7 +9,7 @@ import { i18n, i18nString } from '../../utils';
 
 const MESSAGE = 'validation.STRING';
 
-export const IsStringLocalized = (validationOptions: ValidationOptions = {}) =>
+export const IsStringLocalized = (validationOptions?: ValidationOptions) =>
   IsString({ message: i18n(MESSAGE), ...validationOptions });
 
 export const IsStringValidatorDefinition = {

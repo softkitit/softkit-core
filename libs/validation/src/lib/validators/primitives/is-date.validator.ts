@@ -1,4 +1,4 @@
-import { IValidatorDefinition } from '../dynamic/validator-definition.interface';
+import { IValidatorDefinition } from '../dynamic';
 import {
   IS_DATE_STRING,
   IsDateString,

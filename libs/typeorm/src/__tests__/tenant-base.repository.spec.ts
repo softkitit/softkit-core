@@ -1,27 +1,24 @@
 import { faker } from '@faker-js/faker';
-import { Injectable } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import {
-  TypeOrmModule,
-  TypeOrmModuleOptions,
-  TypeOrmOptionsFactory,
-} from '@nestjs/typeorm';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { ClsModule, ClsService } from 'nestjs-cls';
-import { DataSource, DataSourceOptions, EntityNotFoundError } from 'typeorm';
+import { EntityNotFoundError } from 'typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
-import {
-  addTransactionalDataSource,
-  initializeTransactionalContext,
-} from 'typeorm-transactional';
+
 import { ClsPresetSubscriber } from '../lib/subscribers/cls-preset.subscriber';
 import { TenantClsStore } from '../lib/vo/tenant-base-cls-store';
-import { expectNotNullAndGet, startDb } from '@softkit/test-utils';
+import {
+  expectNotNullAndGet,
+  StartedDb,
+  startPostgres,
+} from '@softkit/test-utils';
 import { TenantRepository } from './app/tenant.repository';
 import { TenantEntity } from './app/tenant.entity';
 import { TenantUserEntity } from './app/user-tenant.entity';
 import { TenantUserRepository } from './app/user-tenant-repository.service';
 import { FilterOperator } from 'nestjs-paginate';
 import { USER_PAGINATED_CONFIG } from './app/user.entity';
+import { setupTypeormModule } from '../lib/setup-typeorm-module';
 
 describe('tenant base entity test', () => {
   let userRepository: TenantUserRepository;
@@ -29,42 +26,28 @@ describe('tenant base entity test', () => {
   let clsService: ClsService<TenantClsStore>;
   let objectToSave: Partial<TenantUserEntity>;
   let createdTenant: TenantEntity;
+  let db: StartedDb;
 
   beforeAll(async () => {
-    const { typeormOptions } = await startDb();
+    db = await startPostgres({
+      runMigrations: false,
+      additionalTypeOrmModuleOptions: {
+        entities: [TenantUserEntity, TenantEntity],
+        namingStrategy: new SnakeNamingStrategy(),
+      },
+    });
+  });
 
-    @Injectable()
-    class TypeOrmConfigService implements TypeOrmOptionsFactory {
-      createTypeOrmOptions(): TypeOrmModuleOptions {
-        return {
-          ...typeormOptions,
-          subscribers: [],
-          entities: [TenantUserEntity, TenantEntity],
-          namingStrategy: new SnakeNamingStrategy(),
-        } as TypeOrmModuleOptions;
-      }
-    }
+  afterAll(async () => {
+    await db.container.stop();
+  });
 
-    initializeTransactionalContext();
-
+  beforeEach(async () => {
     const module = await Test.createTestingModule({
       imports: [
         TypeOrmModule.forFeature([TenantUserEntity, TenantEntity]),
         ClsModule.forRoot(),
-        TypeOrmModule.forRootAsync({
-          useClass: TypeOrmConfigService,
-          dataSourceFactory: async (options?: DataSourceOptions) => {
-            if (!options) {
-              throw new Error(
-                `Can not initialize data source, options are empty`,
-              );
-            }
-
-            const dataSource = new DataSource(options);
-            addTransactionalDataSource(dataSource);
-            return await dataSource.initialize();
-          },
-        }),
+        setupTypeormModule(__dirname, db.TypeOrmConfigService),
       ],
       providers: [TenantUserRepository, TenantRepository, ClsPresetSubscriber],
     }).compile();

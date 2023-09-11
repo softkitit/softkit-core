@@ -24,12 +24,11 @@ export async function controllerGenerator(
   });
 
   const controllersFolder = joinPathFragments(appRoot, 'src/app/controllers');
-  const groupName = options.groupName || '';
 
-  const exportPathForIndex = joinPathFragments(
-    groupName,
-    `${options.controllerName}.controller`,
-  );
+  const controllerFileName = `${options.controllerName}.controller`;
+  const exportPathForIndex = options.groupName
+    ? joinPathFragments(options.groupName, controllerFileName)
+    : controllerFileName;
 
   const indexFilePath = joinPathFragments(controllersFolder, `index.ts`);
 

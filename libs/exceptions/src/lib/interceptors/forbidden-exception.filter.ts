@@ -17,8 +17,8 @@ export class OverrideDefaultForbiddenExceptionFilter
   constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
 
   catch(exception: ForbiddenException, host: ArgumentsHost): void {
-    // In ce rtain situations `httpAdapter` might not be available in the
-    // const ructor method, thus we should resolve it here.
+    // In certain situations `httpAdapter` might not be available in the
+    // constructor method, thus we should resolve it here.
     const { httpAdapter } = this.httpAdapterHost;
 
     const ctx = host.switchToHttp();
@@ -27,9 +27,12 @@ export class OverrideDefaultForbiddenExceptionFilter
     const response = {
       // todo  implement link to the docs, get from config
       type: 'todo implement link to the docs, get from config',
-      title: i18n?.translate('exception.FORBIDDEN.TITLE') || 'Forbidden',
+      title:
+        i18n?.translate('exception.FORBIDDEN.TITLE') ??
+        /* istanbul ignore next */ 'Forbidden',
       detail:
-        i18n?.translate('exception.FORBIDDEN.GENERAL_DETAIL').toString() ||
+        i18n?.translate('exception.FORBIDDEN.GENERAL_DETAIL').toString() ??
+        /* istanbul ignore next */
         'Forbidden access to the resource. Check permissions.',
       status: HttpStatus.FORBIDDEN,
       instance: ctx.getRequest().id,

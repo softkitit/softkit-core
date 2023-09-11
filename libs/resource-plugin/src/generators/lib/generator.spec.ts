@@ -40,6 +40,17 @@ describe('lib generator', () => {
     expect(config).toBeDefined();
   });
 
+  it('should generate publishable lib', async () => {
+    await libGenerator(tree, {
+      ...options,
+      publishable: true,
+    });
+    readProjectConfiguration(tree, 'test');
+
+    const fileChanges = tree.listChanges();
+    expect(fileChanges.length).toEqual(27);
+  });
+
   it('should generate lib without config', async () => {
     await libGenerator(tree, {
       ...options,

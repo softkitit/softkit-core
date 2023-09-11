@@ -15,7 +15,8 @@
     "nestjs-paginate": "^8.2.1",
     "typeorm-naming-strategies": "^4.1.0",
     "nest-typed-config": "^2.8.0",
-    "typeorm-transactional": "^0.4.1"
+    "typeorm-transactional": "^0.4.1",
+    "@softkit/validation": "*"
   },
   "peerDependencies": {
     "class-transformer": "^0.5.1",

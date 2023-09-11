@@ -1,9 +1,8 @@
 import { applyDecorators } from '@nestjs/common';
 import { ValidatorOptions } from 'class-validator';
-import { MinLocalized } from './primitives';
+import { MaxLocalized, MinLocalized } from './primitives';
 import { Transform } from 'class-transformer';
-import { MaxLengthLocalized } from './primitives/is-max-length.validator';
-import { toIntegerTransformer } from '../transforms/';
+import { toInteger } from '../transforms/';
 
 export interface IsIntegerStringCombinedOptions {
   min?: number;
@@ -23,9 +22,9 @@ export const IsIntegerStringCombinedLocalized = ({
   maxValidationOptions = {},
 }: IsIntegerStringCombinedOptions = {}) => {
   const decorators = [
-    Transform(toIntegerTransformer),
+    Transform(toInteger),
     min ? MinLocalized(min, minValidationOptions) : undefined,
-    max ? MaxLengthLocalized(max, maxValidationOptions) : undefined,
+    max ? MaxLocalized(max, maxValidationOptions) : undefined,
   ].filter((v): v is PropertyDecorator => v !== undefined);
 
   return applyDecorators(...decorators);
