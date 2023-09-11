@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.1.0](https://github.com/saas-buildkit/saas-buildkit-core/compare/resource-plugin-0.0.7...resource-plugin-0.1.0) (2023-09-11)
+
+
+### Features
+
+* **resource-plugin:** added running nx lint after each generator to simplify work with generators ([0afb48d](https://github.com/saas-buildkit/saas-buildkit-core/commit/0afb48d86b4e213774aa5dc42d6c65f90ff1edad))
+
 ## [0.0.7](https://github.com/saas-buildkit/saas-buildkit-core/compare/resource-plugin-0.0.6...resource-plugin-0.0.7) (2023-09-11)
 
 ## [0.0.6](https://github.com/saas-buildkit/saas-buildkit-core/compare/resource-plugin-0.0.5...resource-plugin-0.0.6) (2023-09-09)
