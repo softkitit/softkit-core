@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.0.6](https://github.com/saas-buildkit/saas-buildkit-core/compare/typeorm-service-0.0.5...typeorm-service-0.0.6) (2023-09-11)
+
+
+### Bug Fixes
+
+* **typeorm-service:** added new test-utils methods ([54332e5](https://github.com/saas-buildkit/saas-buildkit-core/commit/54332e56cd4cf7c65fb62ca3def0d7add1966ae6))
+
 ## [0.0.5](https://github.com/saas-buildkit/saas-buildkit-core/compare/typeorm-service-0.0.4...typeorm-service-0.0.5) (2023-09-08)
 
 
