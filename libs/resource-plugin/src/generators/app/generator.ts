@@ -4,6 +4,7 @@ import { applicationGenerator } from '@nx/nest';
 import { AppGeneratorSchema } from './schema';
 import { paramCase, pascalCase, snakeCase } from 'change-case';
 import i18nGenerator from '../i18n/generator';
+import { runLint } from '../common/run-lint';
 
 function updateProjectJson(tree: Tree, options: AppGeneratorSchema) {
   updateJson(
@@ -92,6 +93,11 @@ export async function appGenerator(tree: Tree, options: AppGeneratorSchema) {
     });
   }
   updateProjectJson(tree, options);
+
+  if (options.lintCommandName) {
+    return /* istanbul ignore next */ () =>
+      runLint(options.name, options.lintCommandName);
+  }
 }
 
 export default appGenerator;

@@ -7,6 +7,7 @@ import {
 import { ControllerGeneratorSchema } from './schema';
 import { capitalCase, paramCase, pascalCase, snakeCase } from 'change-case';
 import { EOL } from 'node:os';
+import { runLint } from '../common/run-lint';
 
 export async function controllerGenerator(
   tree: Tree,
@@ -37,7 +38,11 @@ export async function controllerGenerator(
     : '';
   const newContents = `${contents}${EOL}export * from './${exportPathForIndex}';`;
   tree.write(indexFilePath, newContents);
-  //   todo run eslint --fix
+
+  if (options.lintCommandName) {
+    return /* istanbul ignore next */ () =>
+      runLint(options.projectName, options.lintCommandName);
+  }
 }
 
 export default controllerGenerator;

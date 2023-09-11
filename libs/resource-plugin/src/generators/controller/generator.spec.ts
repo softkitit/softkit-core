@@ -25,6 +25,7 @@ describe('controller generator', () => {
     await controllerGenerator(tree, {
       ...options,
       groupName: undefined,
+      lintCommandName: 'lint',
     });
 
     const controllerFile = tree.listChanges().find((change) => {

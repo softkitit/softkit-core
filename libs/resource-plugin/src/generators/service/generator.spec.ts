@@ -24,6 +24,7 @@ describe('service generator', () => {
   it('should create service without provided group name', async () => {
     await serviceGenerator(tree, {
       ...options,
+      lintCommandName: 'lint',
       groupName: undefined,
     });
 

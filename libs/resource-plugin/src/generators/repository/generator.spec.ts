@@ -24,6 +24,7 @@ describe('repository generator', () => {
     await repositoryGenerator(tree, {
       ...options,
       groupName: undefined,
+      lintCommandName: 'lint',
     });
 
     const repositoryFile = tree.listChanges().find((change) => {

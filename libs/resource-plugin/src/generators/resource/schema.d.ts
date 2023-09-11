@@ -6,4 +6,5 @@ export interface ResourceGeneratorSchema {
   generateRepository: boolean;
   generateService: boolean;
   generateController: boolean;
+  lintCommandName?: string;
 }

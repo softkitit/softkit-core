@@ -7,12 +7,17 @@ import {
 import { ServiceGeneratorSchema } from './schema';
 import { pascalCase, snakeCase } from 'change-case';
 import { EOL } from 'node:os';
+import { runLint } from '../common/run-lint';
 
 export async function serviceGenerator(
   tree: Tree,
   options: ServiceGeneratorSchema,
 ) {
-  const appRoot = readProjectConfiguration(tree, options.projectName).root;
+  const projectConfiguration = readProjectConfiguration(
+    tree,
+    options.projectName,
+  );
+  const appRoot = projectConfiguration.root;
 
   const srcFolder = joinPathFragments(__dirname, './files');
   generateFiles(tree, srcFolder, appRoot, {
@@ -35,7 +40,11 @@ export async function serviceGenerator(
     : '';
   const newContents = `${contents}${EOL}export * from './${exportPathForIndex}';`;
   tree.write(indexFilePath, newContents);
-  //   todo run eslint --fix
+
+  if (options.lintCommandName) {
+    return /* istanbul ignore next */ () =>
+      runLint(options.projectName, options.lintCommandName);
+  }
 }
 
 export default serviceGenerator;

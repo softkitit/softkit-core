@@ -3,6 +3,7 @@ import * as path from 'node:path';
 import { HttpClientGeneratorSchema } from './schema';
 import { libraryGenerator } from '@nx/nest';
 import { constantCase, paramCase, pascalCase, camelCase } from 'change-case';
+import { runLint } from '../common/run-lint';
 
 async function extractScope(importPath: string) {
   const scope = importPath.split('/').shift();
@@ -37,6 +38,11 @@ export async function httpClientGenerator(
     pascalCase,
     constantCase,
   });
+
+  if (options.lintCommandName) {
+    return /* istanbul ignore next */ () =>
+      runLint(options.name, options.lintCommandName);
+  }
 }
 
 export default httpClientGenerator;
