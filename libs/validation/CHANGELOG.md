@@ -1,4 +1,6 @@
 Softkit Core Libraries Changelog
+## [0.1.1](https://github.com/saas-buildkit/saas-buildkit-core/compare/validation-0.1.0...validation-0.1.1) (2023-09-11)
+
 ## [0.1.0](https://github.com/saas-buildkit/saas-buildkit-core/compare/validation-0.0.5...validation-0.1.0) (2023-09-09)
 
 
