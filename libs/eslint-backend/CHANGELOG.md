@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.0.6](https://github.com/saas-buildkit/saas-buildkit-core/compare/eslint-backend-0.0.5...eslint-backend-0.0.6) (2023-09-11)
+
+
+### Bug Fixes
+
+* **eslint-backend:** turned off require rule for tests to have ability to load modules dynamically ([859ca0c](https://github.com/saas-buildkit/saas-buildkit-core/commit/859ca0c2172757ec99a949b6b824ccd07eb161de))
+
 ## [0.0.5](https://github.com/saas-buildkit/saas-buildkit-core/compare/eslint-backend-0.0.4...eslint-backend-0.0.5) (2023-09-08)
 
 
