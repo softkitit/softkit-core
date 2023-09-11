@@ -13,6 +13,11 @@ export class SampleDto {
   @IsEmailLocalized()
   email!: string;
 
+  @IsEmailLocalized({
+    trimAndLowercase: false,
+  })
+  emailWithoutTrimAndLowercase!: string;
+
   @IsStringCombinedLocalized()
   @PasswordLocalized()
   password!: string;
@@ -24,7 +29,9 @@ export class SampleDto {
   @IsStringCombinedLocalized()
   repeatedPassword!: string;
 
-  @IsStringCombinedLocalized()
+  @IsStringCombinedLocalized({
+    notEmpty: false,
+  })
   firstName!: string;
 
   @IsStringCombinedLocalized({
@@ -50,6 +57,7 @@ export class SampleDto {
 
 export const DEFAULT_SAMPLE_DTO: SampleDto = {
   email: faker.internet.email().toLowerCase(),
+  emailWithoutTrimAndLowercase: faker.internet.email().toLowerCase(),
   password: '12345Aa!',
   repeatedPassword: '12345Aa!',
   firstName: faker.person.firstName(),

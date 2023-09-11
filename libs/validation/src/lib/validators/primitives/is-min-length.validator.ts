@@ -12,7 +12,7 @@ const MESSAGE = 'validation.MIN_STRING_LENGTH';
 
 export const MinLengthLocalized = (
   n: number,
-  validationOptions: ValidationOptions = {},
+  validationOptions?: ValidationOptions,
 ) =>
   MinLength(n, {
     message: i18nValidationMessage(MESSAGE),

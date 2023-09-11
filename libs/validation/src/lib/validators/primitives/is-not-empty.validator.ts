@@ -9,9 +9,7 @@ import { i18n, i18nString } from '../../utils';
 
 const MESSAGE = 'validation.NOT_EMPTY';
 
-export const IsNotEmptyLocalized = (
-  validationOptions: ValidationOptions = {},
-) =>
+export const IsNotEmptyLocalized = (validationOptions?: ValidationOptions) =>
   IsNotEmpty({
     message: i18n(MESSAGE),
     ...validationOptions,

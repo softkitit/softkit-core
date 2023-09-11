@@ -4,7 +4,7 @@ import {
 } from '../../../index';
 import { ValidateNested } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
-import { NotEmptyArrayLocalized } from '../../../lib/validators/primitives/not-empty-array.validator';
+import { NotEmptyArrayLocalized } from '../../../lib/validators';
 
 export class SampleSort {
   @ValidateNested({

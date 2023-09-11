@@ -9,6 +9,7 @@ import { useContainer } from 'class-validator';
 import { DEFAULT_SAMPLE_DTO } from './app/vo/sample.dto';
 import { SampleModule } from './app/sample.module';
 import { DEFAULT_SAMPLE_PRIMITIVES_DTO } from './app/vo/sample-primitives.dto';
+import { DEFAULT_SAMPLE_QUERY_PARAM } from './app/vo/sample-query.dto';
 
 describe('validation e2e test', () => {
   let app: NestFastifyApplication;
@@ -231,26 +232,23 @@ describe('validation e2e test', () => {
       '100',
       '1000',
       Number.MAX_SAFE_INTEGER + '',
-    ])('query validation success: %s', async (page) => {
-      const query = {
-        page: page,
-        uuid: faker.string.uuid(),
-        bool: 'false',
-      };
+    ])('query validation failed for page: %s', async (page) => {
       const response = await app.inject({
         method: 'GET',
         url: '/sample',
-        query: query,
+        query: {
+          ...DEFAULT_SAMPLE_QUERY_PARAM,
+          page,
+        },
       });
 
       const responseBody = JSON.parse(response.body);
 
       expect(responseBody).toStrictEqual({
-        uuid: query.uuid,
-        // there is a bit strange behavior in nestjs or fastify serialization
-        // -0 will be 0 as a result of conversion, and in most cases it is ok and has nothing to do with validation
-        page: query.page === '-0' ? 0 : Number.parseInt(query.page, 10),
-        bool: false,
+        ...DEFAULT_SAMPLE_QUERY_PARAM,
+        page: page === '-0' ? 0 : Number.parseInt(page, 10),
+        bool: true,
+        size: Number.parseInt(DEFAULT_SAMPLE_QUERY_PARAM.size),
       });
       expect(response.statusCode).toBe(200);
     });
@@ -277,9 +275,8 @@ describe('validation e2e test', () => {
         method: 'GET',
         url: '/sample',
         query: {
-          uuid: faker.string.uuid(),
+          ...DEFAULT_SAMPLE_QUERY_PARAM,
           page,
-          bool: 'true',
         },
       });
 
@@ -301,9 +298,8 @@ describe('validation e2e test', () => {
         method: 'GET',
         url: '/sample',
         query: {
+          ...DEFAULT_SAMPLE_QUERY_PARAM,
           uuid,
-          page: faker.number.int(100).toString(10),
-          bool: 'true',
         },
       });
 
