@@ -1,4 +1,6 @@
 Softkit Core Libraries Changelog
+## [0.0.7](https://github.com/saas-buildkit/saas-buildkit-core/compare/resource-plugin-0.0.6...resource-plugin-0.0.7) (2023-09-11)
+
 ## [0.0.6](https://github.com/saas-buildkit/saas-buildkit-core/compare/resource-plugin-0.0.5...resource-plugin-0.0.6) (2023-09-09)
 
 
