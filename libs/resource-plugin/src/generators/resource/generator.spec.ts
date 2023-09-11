@@ -3,6 +3,7 @@ import { Tree, readProjectConfiguration } from '@nx/devkit';
 import { resourceGenerator } from './generator';
 import { ResourceGeneratorSchema } from './schema';
 import { createTreeWithNestApplication } from '@nx/nest/src/generators/utils/testing';
+import { EOL } from 'node:os';
 
 describe('resource generator', () => {
   let tree: Tree;
@@ -18,6 +19,22 @@ describe('resource generator', () => {
 
   beforeEach(() => {
     tree = createTreeWithNestApplication(options.projectName);
+  });
+
+  it('should create entity without provided group name', async () => {
+    await resourceGenerator(tree, {
+      ...options,
+      groupName: undefined,
+    });
+
+    const entityFile = tree.listChanges().find((change) => {
+      return (
+        change.path.includes(options.entityName) &&
+        change.path.includes('entity')
+      );
+    });
+
+    expect(entityFile).toBeDefined();
   });
 
   it('should creat 9 files for all embedded resources and appropriate folders', async () => {
@@ -48,5 +65,16 @@ describe('resource generator', () => {
 
     expect(entityFile.path).toContain(`/${options.groupName}/`);
     expect(entityFile).toBeDefined();
+
+    await resourceGenerator(tree, {
+      ...options,
+      entityName: 'second-entity',
+    });
+
+    const indexFile = tree.listChanges().find((change) => {
+      return change.path.includes('index.ts');
+    });
+
+    expect(indexFile.content.toString().split(EOL).length).toBe(3);
   });
 });

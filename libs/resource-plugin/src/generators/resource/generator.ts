@@ -7,7 +7,6 @@ import {
 import { EOL } from 'node:os';
 import { ResourceGeneratorSchema } from './schema';
 import { pascalCase, snakeCase } from 'change-case';
-import {} from 'node:child_process';
 import repositoryGenerator from '../repository/generator';
 import { RepositoryGeneratorSchema } from '../repository/schema';
 import serviceGenerator from '../service/generator';
@@ -32,12 +31,11 @@ export async function resourceGenerator(
     appRoot,
     'src/app/database/entities',
   );
-  const groupName = options.groupName || '';
 
-  const exportPathForIndex = joinPathFragments(
-    groupName,
-    `${options.entityName}.entity`,
-  );
+  const entityFileName = `${options.entityName}.entity`;
+  const exportPathForIndex = options.groupName
+    ? joinPathFragments(options.groupName, entityFileName)
+    : entityFileName;
 
   const indexFilePath = joinPathFragments(entitiesFolder, `index.ts`);
 

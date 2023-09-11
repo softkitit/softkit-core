@@ -4,6 +4,7 @@ import { serviceGenerator } from './generator';
 import { ServiceGeneratorSchema } from './schema';
 import { pascalCase } from 'change-case';
 import { createTreeWithNestApplication } from '@nx/nest/src/generators/utils/testing';
+import { EOL } from 'node:os';
 
 describe('service generator', () => {
   let tree: Tree;
@@ -18,6 +19,22 @@ describe('service generator', () => {
 
   beforeEach(() => {
     tree = createTreeWithNestApplication(options.projectName);
+  });
+
+  it('should create service without provided group name', async () => {
+    await serviceGenerator(tree, {
+      ...options,
+      groupName: undefined,
+    });
+
+    const serviceFile = tree.listChanges().find((change) => {
+      return (
+        change.path.includes(options.serviceName) &&
+        change.path.includes('service')
+      );
+    });
+
+    expect(serviceFile).toBeDefined();
   });
 
   it(`should create a service and update or create index.ts if it doesn't exists`, async () => {
@@ -54,5 +71,16 @@ describe('service generator', () => {
     expect(serviceFile.content.toString()).toContain(
       pascalCase(options.repositoryName),
     );
+
+    await serviceGenerator(tree, {
+      ...options,
+      serviceName: 'second-service',
+    });
+
+    const indexFile = tree.listChanges().find((change) => {
+      return change.path.includes('index.ts');
+    });
+
+    expect(indexFile.content.toString().split(EOL).length).toBe(3);
   });
 });
