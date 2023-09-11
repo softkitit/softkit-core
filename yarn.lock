@@ -4889,13 +4889,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nestjs/passport@npm:^10.0.1":
-  version: 10.0.1
-  resolution: "@nestjs/passport@npm:10.0.1"
+"@nestjs/passport@npm:^10.0.2":
+  version: 10.0.2
+  resolution: "@nestjs/passport@npm:10.0.2"
   peerDependencies:
     "@nestjs/common": ^8.0.0 || ^9.0.0 || ^10.0.0
     passport: ^0.4.0 || ^0.5.0 || ^0.6.0
-  checksum: bc7ed690ce8bb99839307d626ea8c8cf29d6fa8967f5e42e45fb3e8bc865f3973695646a0a963ef54c609685a0674b52184f1c14af38f147088986eb03d74b9d
+  checksum: d9d0c2206cc7fc1c88da2e165d901099c971be57732d7b4f28d169ae9e4637a423d992c63660026e16cb2c43d709369496c11c4b760ba98d82ce422a672a6ee9
   languageName: node
   linkType: hard
 
@@ -6467,7 +6467,7 @@ __metadata:
     "@nestjs/common": ^10.2.4
     "@nestjs/core": ^10.2.4
     "@nestjs/jwt": ^10.1.1
-    "@nestjs/passport": ^10.0.1
+    "@nestjs/passport": ^10.0.2
     "@nestjs/platform-express": ^10.2.4
     "@nestjs/platform-fastify": ^10.2.4
     "@nestjs/schematics": ^10.0.2
