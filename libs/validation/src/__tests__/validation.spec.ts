@@ -235,6 +235,7 @@ describe('validation e2e test', () => {
       const query = {
         page: page,
         uuid: faker.string.uuid(),
+        bool: 'false',
       };
       const response = await app.inject({
         method: 'GET',
@@ -249,6 +250,7 @@ describe('validation e2e test', () => {
         // there is a bit strange behavior in nestjs or fastify serialization
         // -0 will be 0 as a result of conversion, and in most cases it is ok and has nothing to do with validation
         page: query.page === '-0' ? 0 : Number.parseInt(query.page, 10),
+        bool: false,
       });
       expect(response.statusCode).toBe(200);
     });
@@ -277,6 +279,7 @@ describe('validation e2e test', () => {
         query: {
           uuid: faker.string.uuid(),
           page,
+          bool: 'true',
         },
       });
 
@@ -300,6 +303,7 @@ describe('validation e2e test', () => {
         query: {
           uuid,
           page: faker.number.int(100).toString(10),
+          bool: 'true',
         },
       });
 

@@ -79,11 +79,11 @@ export function validateAndReturnError<T, E>(
   validatorDefinition: IValidatorDefinition<T, E>,
   fieldName: string,
   value: T,
-  constraint: E,
+  constraint?: E,
   overrideDefaultMessage?: Path<I18nTranslations>,
   args?: unknown,
 ) {
-  const isValid = validatorDefinition.validator(value, constraint);
+  const isValid = validatorDefinition.validator(value, constraint as E);
 
   return isValid
     ? undefined

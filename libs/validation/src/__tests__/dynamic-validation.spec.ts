@@ -10,8 +10,6 @@ describe('dynamic validation', () => {
       IsStringValidatorDefinition,
       'number',
       1,
-      // eslint-disable-next-line unicorn/no-useless-undefined
-      undefined,
     );
 
     expect(err).toBeDefined();
@@ -26,5 +24,17 @@ describe('dynamic validation', () => {
     );
 
     expect(err).toBeUndefined();
+  });
+
+  it('empty string validator failed', () => {
+    const err = validateAndReturnError(
+      IsStringIntegerValidatorDefinition,
+      'numberString',
+      '',
+      // eslint-disable-next-line unicorn/no-useless-undefined
+      undefined,
+    );
+
+    expect(err).toBeDefined();
   });
 });

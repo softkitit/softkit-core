@@ -40,7 +40,7 @@ export class SamplePrimitivesDto {
   onlyLowercaseCharacters!: string;
 }
 
-export const DEFAULT_SAMPLE_PRIMITIVES_DTO = {
+export const DEFAULT_SAMPLE_PRIMITIVES_DTO: SamplePrimitivesDto = {
   number: faker.number.int(100),
   integer: faker.number.int(100).toString(),
   onlyLowercaseCharacters: faker.string.alpha(10).toLowerCase(),

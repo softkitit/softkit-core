@@ -48,7 +48,7 @@ export class SampleDto {
   optionalField?: string;
 }
 
-export const DEFAULT_SAMPLE_DTO = {
+export const DEFAULT_SAMPLE_DTO: SampleDto = {
   email: faker.internet.email().toLowerCase(),
   password: '12345Aa!',
   repeatedPassword: '12345Aa!',
