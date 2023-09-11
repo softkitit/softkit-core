@@ -1,6 +1,6 @@
 import { plainToClass, TransformFnParams } from 'class-transformer';
 import { ClassConstructor } from 'class-transformer/types/interfaces';
-import { validateAndThrow } from '../validators/primitives/utils';
+import { validateAndThrow } from '../validators/dynamic';
 import { IsEnumValidatorDefinition } from '../validators';
 
 export const toObjectsArrayFromString = <T>(

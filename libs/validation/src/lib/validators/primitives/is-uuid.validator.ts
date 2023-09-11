@@ -1,6 +1,6 @@
 import { IS_UUID, isUUID, IsUUID, ValidationOptions } from 'class-validator';
 import { UUIDVersion } from 'class-validator/types/decorator/string/IsUUID';
-import { IValidatorDefinition } from '../dynamic/validator-definition.interface';
+import { IValidatorDefinition } from '../dynamic';
 import { i18n, i18nString } from '../../utils';
 
 const MESSAGE = 'validation.UUID_V4';

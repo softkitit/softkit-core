@@ -6,25 +6,14 @@ import {
 } from '@nestjs/platform-fastify';
 import { Test, TestingModule } from '@nestjs/testing';
 import { useContainer } from 'class-validator';
-import { SampleDto } from './app/vo/sample.dto';
+import { DEFAULT_SAMPLE_DTO } from './app/vo/sample.dto';
 import { SampleModule } from './app/sample.module';
+import { DEFAULT_SAMPLE_PRIMITIVES_DTO } from './app/vo/sample-primitives.dto';
 
 describe('validation e2e test', () => {
   let app: NestFastifyApplication;
-  let validDto: SampleDto;
 
   beforeAll(async () => {
-    validDto = {
-      email: faker.internet.email().toLowerCase(),
-      password: '12345Aa!',
-      repeatedPassword: '12345Aa!',
-      firstName: faker.person.firstName(),
-      lastName: faker.person.lastName() + faker.string.alphanumeric(10),
-      middleName: faker.person.middleName(),
-      someCheckboxValue: faker.datatype.boolean(),
-      url: faker.internet.url(),
-    };
-
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [SampleModule],
     }).compile();
@@ -43,16 +32,16 @@ describe('validation e2e test', () => {
     await app.init();
   });
 
-  describe('validation post tests', () => {
+  describe('validation post', () => {
     it('dto validation success', async () => {
       const response = await app.inject({
         method: 'POST',
         url: '/sample',
-        payload: validDto,
+        payload: DEFAULT_SAMPLE_DTO,
       });
 
       expect(response.statusCode).toBe(201);
-      expect(JSON.parse(response.body)).toStrictEqual(validDto);
+      expect(JSON.parse(response.body)).toStrictEqual(DEFAULT_SAMPLE_DTO);
     });
 
     it.each(['fal', 'truee', '1', '0'])(
@@ -62,7 +51,7 @@ describe('validation e2e test', () => {
           method: 'POST',
           url: '/sample',
           payload: {
-            ...validDto,
+            ...DEFAULT_SAMPLE_DTO,
             someCheckboxValue: value,
           },
         });
@@ -78,7 +67,7 @@ describe('validation e2e test', () => {
           method: 'POST',
           url: '/sample',
           payload: {
-            ...validDto,
+            ...DEFAULT_SAMPLE_DTO,
             url: value,
           },
         });
@@ -95,7 +84,7 @@ describe('validation e2e test', () => {
           method: 'POST',
           url: '/sample',
           payload: {
-            ...validDto,
+            ...DEFAULT_SAMPLE_DTO,
             email: value,
           },
         });
@@ -111,7 +100,7 @@ describe('validation e2e test', () => {
           method: 'POST',
           url: '/sample',
           payload: {
-            ...validDto,
+            ...DEFAULT_SAMPLE_DTO,
             email,
           },
         });
@@ -127,7 +116,7 @@ describe('validation e2e test', () => {
           method: 'POST',
           url: '/sample',
           payload: {
-            ...validDto,
+            ...DEFAULT_SAMPLE_DTO,
             lastName,
           },
         });
@@ -143,7 +132,7 @@ describe('validation e2e test', () => {
           method: 'POST',
           url: '/sample',
           payload: {
-            ...validDto,
+            ...DEFAULT_SAMPLE_DTO,
             middleName: value,
           },
         });
@@ -159,7 +148,7 @@ describe('validation e2e test', () => {
           method: 'POST',
           url: '/sample',
           payload: {
-            ...validDto,
+            ...DEFAULT_SAMPLE_DTO,
             password,
             repeatedPassword: password,
           },
@@ -174,8 +163,8 @@ describe('validation e2e test', () => {
         method: 'POST',
         url: '/sample',
         payload: {
-          ...validDto,
-          repeatedPassword: validDto.repeatedPassword + '1',
+          ...DEFAULT_SAMPLE_DTO,
+          repeatedPassword: DEFAULT_SAMPLE_DTO.repeatedPassword + '1',
         },
       });
 
@@ -183,7 +172,53 @@ describe('validation e2e test', () => {
     });
   });
 
-  describe('validation query tests', () => {
+  describe('validation primitives', () => {
+    it('dto validation success', async () => {
+      const response = await app.inject({
+        method: 'POST',
+        url: '/sample/primitives',
+        payload: DEFAULT_SAMPLE_PRIMITIVES_DTO,
+      });
+
+      expect(response.statusCode).toBe(201);
+      expect(JSON.parse(response.body)).toStrictEqual(
+        DEFAULT_SAMPLE_PRIMITIVES_DTO,
+      );
+    });
+
+    it.each([
+      ['number', ['abs', '12,3,3,3,3', '', ' ', '     ']],
+      ['arr', [{}, 'asd', 123, true]],
+      ['object', [123, true, 'asd', []]],
+      ['json', [123, true, 'asd', '{{}}']],
+      ['date', [123, true, 'asd', '', ' ', '     ', '2020-40-40']],
+      ['integer', [true, 'asd', '', ' ', '     ', '2020-40-40', {}, []]],
+      [
+        'onlyLowercaseCharacters',
+        ['asd123', 'ASD', 'ASD123', 'ASD123asd', 'ASD123asd', 'ASD123'],
+      ],
+      ['minTen', [9, 9.9, 9.999_999_999_999_99]],
+      ['maxTen', [11, 10.1, 10.000_000_000_000_01]],
+    ])(
+      'failed validation: field - %s, values: %s',
+      async (fieldName: string, values: unknown[]) => {
+        for (const value of values) {
+          const response = await app.inject({
+            method: 'POST',
+            url: '/sample/primitives',
+            payload: {
+              ...DEFAULT_SAMPLE_PRIMITIVES_DTO,
+              [fieldName]: value,
+            },
+          });
+
+          expect(response.statusCode).toBe(400);
+        }
+      },
+    );
+  });
+
+  describe('validation query', () => {
     it.each([
       '1',
       '0',
@@ -272,7 +307,7 @@ describe('validation e2e test', () => {
     });
   });
 
-  describe('validation sort params tests', () => {
+  describe('validation sort params', () => {
     it.each([
       [['A', 'C'], ['A', 'D'], undefined],
       [['A', 'D'], undefined, undefined],

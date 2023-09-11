@@ -1,5 +1,5 @@
 import { TransformFnParams } from 'class-transformer';
-import { validateAndThrow } from '../validators/primitives/utils';
+import { validateAndThrow } from '../validators/dynamic';
 import { MatchesRegexpValidatorDefinition } from '../validators';
 import { i18nString } from '../utils';
 

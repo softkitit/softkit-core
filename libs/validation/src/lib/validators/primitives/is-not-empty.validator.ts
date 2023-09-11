@@ -4,7 +4,7 @@ import {
   IsNotEmpty,
   ValidationOptions,
 } from 'class-validator';
-import { IValidatorDefinition } from '../dynamic/validator-definition.interface';
+import { IValidatorDefinition } from '../dynamic';
 import { i18n, i18nString } from '../../utils';
 
 const MESSAGE = 'validation.NOT_EMPTY';

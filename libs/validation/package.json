@@ -13,6 +13,9 @@
     "class-transformer": "^0.5.1",
     "validator": "13.9.0"
   },
+  "devDependencies": {
+    "@faker-js/faker": "^8.0.2"
+  },
   "peerDependencies": {
     "@softkit/exceptions": "*",
     "@nestjs/common": "^10.2.4",
