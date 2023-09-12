@@ -95,7 +95,7 @@ export async function appGenerator(tree: Tree, options: AppGeneratorSchema) {
     await i18nGenerator(tree, {
       ...options,
       buildable: true,
-      baseFolder: 'apps',
+      baseFolder: 'app',
     });
   }
   updateProjectJson(tree, options, appRoot);

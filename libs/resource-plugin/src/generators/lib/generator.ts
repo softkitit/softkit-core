@@ -28,7 +28,7 @@ export async function libGenerator(tree: Tree, options: LibGeneratorSchema) {
     await i18nGenerator(tree, {
       name: options.name,
       languages: options.languages,
-      baseFolder: 'libs',
+      baseFolder: 'lib',
       buildable: options.buildable,
     });
   }
