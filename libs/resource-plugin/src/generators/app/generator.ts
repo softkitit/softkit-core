@@ -11,6 +11,7 @@ import { AppGeneratorSchema } from './schema';
 import { paramCase, pascalCase, snakeCase } from 'change-case';
 import i18nGenerator from '../i18n/generator';
 import { runLint } from '../common/run-lint';
+import { EOL } from 'node:os';
 
 function updateProjectJson(
   tree: Tree,
@@ -58,6 +59,22 @@ function updateProjectJson(
   });
 }
 
+function updateJestConfig(tree: Tree) {
+  const jestConfigFile = tree
+    .listChanges()
+    .find((c) => c.path.includes('jest.config.ts'));
+
+  const fileConfig = jestConfigFile.content.toString().split(EOL);
+
+  const newJestConfigFile = [
+    ...fileConfig.slice(0, -3),
+    `  transformIgnorePatterns: ['/node_modules/(?!nest-typed-config)'],`,
+    ...fileConfig.slice(-3),
+  ].join(EOL);
+
+  tree.write(jestConfigFile.path, newJestConfigFile);
+}
+
 export async function appGenerator(tree: Tree, options: AppGeneratorSchema) {
   options.name = paramCase(options.name);
   const srcFolder = joinPathFragments(options.name, 'src');
@@ -73,6 +90,7 @@ export async function appGenerator(tree: Tree, options: AppGeneratorSchema) {
   for (const f of allFilesInSrc) {
     tree.delete(f.path);
   }
+  updateJestConfig(tree);
 
   const generatorFolder = joinPathFragments(__dirname, './files');
   generateFiles(tree, generatorFolder, appRoot, {

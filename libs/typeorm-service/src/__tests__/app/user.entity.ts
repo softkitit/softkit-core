@@ -31,10 +31,10 @@ export const PAGINATED_CONFIG: PaginateConfig<UserEntity> = {
     lastName: [
       FilterSuffix.NOT,
       FilterOperator.EQ,
-      FilterOperator.GT,
-      FilterOperator.GTE,
       FilterOperator.IN,
       FilterOperator.NULL,
+      FilterOperator.GT,
+      FilterOperator.GTE,
       FilterOperator.LT,
       FilterOperator.LTE,
       FilterOperator.BTW,

@@ -139,12 +139,12 @@
     "contactEmail": {
         "description": "Contact person email.",
         "type": "string",
-        "default": "Unknown"
+        "default": "john.doe@example.com"
     },
     "contactUrl": {
         "description": "Contact url or website.",
         "type": "string",
-        "default": "Unknown"
+        "default": "https://example.com/"
     },
     "testsFolderName": {
         "description": "Tests folder name.",

@@ -4,7 +4,3 @@ export * from './roles/roles.controller';
 export * from './tenants/tenant-configuration.controller';
 export * from './tenants/tenants.controller';
 export * from './users/user.controller';
-export * from './users/user.controller';
-export * from './users/user.controller';
-export * from './users/user.controller';
-export * from './users/user.controller';

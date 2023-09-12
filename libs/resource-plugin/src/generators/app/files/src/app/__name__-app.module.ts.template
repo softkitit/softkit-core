@@ -1,11 +1,14 @@
 import { Module, Logger } from '@nestjs/common';
 import * as path from 'node:path';
 import * as Controllers from './controllers';
+<% if (db) { %>
 import * as Entities from './database/entities';
 import * as Repositories from './repositories';
+<% } %>
 import * as Services from './services';
 <% if (db) { %>
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { setupTypeormModule } from '@softkit/typeorm';
 <% } %>
 import <%= pascalCase(name) -%>RootConfig from './config/<%= name -%>-root.config';
 <% if (auth) { %>
@@ -31,7 +34,6 @@ import { HealthCheckModule } from '@softkit/healthcheck';
 
 @Module({
   imports: [
-
 <% if (auth) { %>
     JwtModule,
 <% } %>
@@ -46,7 +48,7 @@ import { HealthCheckModule } from '@softkit/healthcheck';
 <% } %>
 <% if (db) { %>
     TypeOrmModule.forFeature(Object.values(Entities)),
-    setupYamlBaseConfigModule(__dirname, <%= pascalCase(name) -%>RootConfig),
+    setupTypeormModule(__dirname),
 <% } %>
   ],
   controllers: Object.values(Controllers),

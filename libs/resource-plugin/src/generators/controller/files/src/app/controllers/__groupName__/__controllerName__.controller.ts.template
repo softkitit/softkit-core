@@ -8,22 +8,27 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { IdParamUUID, VersionNumberParam } from '@softkit/common-types';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { plainToClass } from 'class-transformer';
 import {
   <%= pascalCase(serviceName) -%>Service,
 } from '../../services';
 
 import {
-  <%= pascalCase(entityName) -%>Dto,
-  Create<%= pascalCase(entityName) -%>,
-  Update<%= pascalCase(entityName) -%>,
+  <%= pascalCase(entityName) -%>DTO,
+  Create<%= pascalCase(entityName) -%>DTO,
+  Update<%= pascalCase(entityName) -%>DTO,
+  <%= constantCase(entityName) -%>_PAGINATION_CONFIG
 } from './vo/<%= controllerName -%>.dto';
 
 import {
-  ApiOkResponsePaginated,
-  InfinityPaginationResultType,
-} from '@softkit/common-types';
+  Paginate,
+  Paginated,
+  PaginatedSwaggerDocs,
+  PaginateQuery,
+} from 'nestjs-paginate';
+
 import { Permissions } from '@softkit/auth';
 
 @ApiTags('<%= capitalCase(controllerName) -%>')
@@ -31,65 +36,64 @@ import { Permissions } from '@softkit/auth';
   path: '<%= paramCase(controllerName) -%>',
   version: '1',
 })
+@ApiBearerAuth()
 export class <%= pascalCase(controllerName) -%>Controller {
   constructor(
     private readonly service: <%= pascalCase(serviceName) -%>Service,
   ) {}
 
   @Get()
-  @ApiOkResponsePaginated(<%= pascalCase(entityName) -%>Dto)
-  @Permissions('<%= projectName -%>.<%= controllerName -%>.read')
-  async findAll(): Promise<
-    InfinityPaginationResultType<<%= pascalCase(entityName) -%>Dto>
-  > {
-    return this.service.findAll().then(({ data, ...other }) => {
-      const resultData = data.map((item) => {
-        return plainToClass(<%= pascalCase(entityName) -%>Dto, item);
-      });
-
-      return {
-        ...other,
-        data: resultData,
-      };
-    });
+  @PaginatedSwaggerDocs(
+    <%= pascalCase(entityName) -%>DTO,
+    <%= constantCase(entityName) -%>_PAGINATION_CONFIG,
+  )
+  async findAll(
+    @Paginate()
+    query: PaginateQuery,
+  ): Promise<Paginated<<%= pascalCase(entityName) -%>DTO>> {
+    return this.service.findAllPaginatedAndTransform(
+      query,
+      <%= constantCase(entityName) -%>_PAGINATION_CONFIG,
+      <%= pascalCase(entityName) -%>DTO,
+    );
   }
 
-  @Get()
+  @Get(':id')
   @Permissions('<%= projectName -%>.<%= controllerName -%>.read')
   async findOne(
-    @Param('id') id: string,
-  ): Promise<<%= pascalCase(entityName) -%>Dto> {
-    return this.service.findOneById(id).then((data) => {
-      return plainToClass(<%= pascalCase(entityName) -%>Dto, data);
+    @Param() param: IdParamUUID,
+  ): Promise<<%= pascalCase(entityName) -%>DTO> {
+    return this.service.findOneById(param.id).then((data) => {
+      return plainToClass(<%= pascalCase(entityName) -%>DTO, data);
     });
   }
 
   @Post()
   @Permissions('<%= projectName -%>.<%= controllerName -%>.create')
-  async create(@Body() dto: Create<%= pascalCase(entityName) -%>) {
+  async create(@Body() dto: Create<%= pascalCase(entityName) -%>DTO) {
     return this.service
       .createOrUpdateEntity(dto)
       .then((item) => {
-        return plainToClass(<%= pascalCase(entityName) -%>Dto, item);
+        return plainToClass(<%= pascalCase(entityName) -%>DTO, item);
       });
   }
 
   @Put(':id')
   @Permissions('<%= projectName -%>.<%= controllerName -%>.update')
-  async updateOne(@Param('id') id: string, @Body() dto: Update<%= pascalCase(entityName) -%>) {
+  async updateOne(@Param() param: IdParamUUID, @Body() dto: Update<%= pascalCase(entityName) -%>DTO) {
     return this.service
       .createOrUpdateEntity({
-        id,
+        id: param.id,
         ...dto,
       })
       .then((item) => {
-        return plainToClass(<%= pascalCase(entityName) -%>Dto, item);
+        return plainToClass(<%= pascalCase(entityName) -%>DTO, item);
       });
   }
 
   @Delete(':id')
   @Permissions('<%= projectName -%>.<%= controllerName -%>.delete')
-  async softDelete(@Param('id') id: string, @Query('version') version: number) {
-    return this.service.archive(id, version);
+  async softDelete(@Param() param: IdParamUUID, @Query() query: VersionNumberParam) {
+    return this.service.archive(param.id, query.version);
   }
 }

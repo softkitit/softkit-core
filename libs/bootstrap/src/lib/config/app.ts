@@ -8,9 +8,5 @@ export class AppConfig {
 
   @IsString()
   @Allow()
-  frontendUrl?: string;
-
-  @IsString()
-  @Allow()
   prefix?: string;
 }

@@ -5,7 +5,13 @@ import {
   Tree,
 } from '@nx/devkit';
 import { ControllerGeneratorSchema } from './schema';
-import { capitalCase, paramCase, pascalCase, snakeCase } from 'change-case';
+import {
+  capitalCase,
+  constantCase,
+  paramCase,
+  pascalCase,
+  snakeCase,
+} from 'change-case';
 import { EOL } from 'node:os';
 import { runLint } from '../common/run-lint';
 
@@ -22,6 +28,7 @@ export async function controllerGenerator(
     pascalCase,
     paramCase,
     capitalCase,
+    constantCase,
   });
 
   const controllersFolder = joinPathFragments(appRoot, 'src/app/controllers');
