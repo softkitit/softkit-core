@@ -1,4 +1,10 @@
-import { generateFiles, joinPathFragments, Tree, updateJson } from '@nx/devkit';
+import {
+  generateFiles,
+  joinPathFragments,
+  readProjectConfiguration,
+  Tree,
+  updateJson,
+} from '@nx/devkit';
 import { applicationGenerator } from '@nx/nest';
 
 import { AppGeneratorSchema } from './schema';
@@ -6,59 +12,59 @@ import { paramCase, pascalCase, snakeCase } from 'change-case';
 import i18nGenerator from '../i18n/generator';
 import { runLint } from '../common/run-lint';
 
-function updateProjectJson(tree: Tree, options: AppGeneratorSchema) {
-  updateJson(
-    tree,
-    joinPathFragments(options.name, 'project.json'),
-    (prjJson) => {
-      // if scripts is undefined, set it to an empty object
-      prjJson.targets.build.options.assets = [
-        ...prjJson.targets.build.options.assets,
-        {
-          glob: '**/*',
-          input: `apps/${options.name}/src/app/assets`,
-          output: 'assets',
-        },
-      ];
+function updateProjectJson(
+  tree: Tree,
+  options: AppGeneratorSchema,
+  appRoot: string,
+) {
+  updateJson(tree, joinPathFragments(appRoot, 'project.json'), (prjJson) => {
+    // if scripts is undefined, set it to an empty object
+    prjJson.targets.build.options.assets = [
+      ...prjJson.targets.build.options.assets,
+      {
+        glob: '**/*',
+        input: `apps/${options.name}/src/app/assets`,
+        output: 'assets',
+      },
+    ];
 
-      prjJson.targets['generate-client'] = {
-        executor: 'nx:run-commands',
+    prjJson.targets['generate-client'] = {
+      executor: 'nx:run-commands',
+      options: {
+        commands: [
+          `openapi-generator-cli generate -i ./apps/${options.name}/resources/openapi-docs.json -g typescript-axios -o libs/clients/${options.name}-client/src/lib/generated -c ./apps/${options.name}/resources/openapi-server-generator.config.yaml`,
+        ],
+      },
+    };
+
+    prjJson.targets.build.options.tsPlugins = [
+      ...(prjJson.targets.build.options.tsPlugins || []),
+      {
+        name: '@nestjs/swagger/plugin',
         options: {
-          commands: [
-            `openapi-generator-cli generate -i ./apps/${options.name}/resources/openapi-docs.json -g typescript-axios -o libs/clients/${options.name}-client/src/lib/generated -c ./apps/${options.name}/resources/openapi-server-generator.config.yaml`,
-          ],
+          dtoFileNameSuffix: [options.db ? '.entity.ts' : '', '.dto.ts'].filter(
+            (value) => value !== '',
+          ),
+          controllerFileNameSuffix: ['.controller.ts'],
+          classValidatorShim: true,
+          dtoKeyOfComment: 'description',
+          controllerKeyOfComment: 'description',
+          introspectComments: true,
         },
-      };
+      },
+    ];
 
-      prjJson.targets.build.options.tsPlugins = [
-        ...(prjJson.targets.build.options.tsPlugins || []),
-        {
-          name: '@nestjs/swagger/plugin',
-          options: {
-            dtoFileNameSuffix: [
-              options.db ? '.entity.ts' : '',
-              '.dto.ts',
-            ].filter((value) => value !== ''),
-            controllerFileNameSuffix: ['.controller.ts'],
-            classValidatorShim: true,
-            dtoKeyOfComment: 'description',
-            controllerKeyOfComment: 'description',
-            introspectComments: true,
-          },
-        },
-      ];
-
-      return prjJson;
-    },
-  );
+    return prjJson;
+  });
 }
 
 export async function appGenerator(tree: Tree, options: AppGeneratorSchema) {
   options.name = paramCase(options.name);
-  const appRoot = `apps/${options.name}`;
   const srcFolder = joinPathFragments(options.name, 'src');
 
   await applicationGenerator(tree, options);
+
+  const appRoot = readProjectConfiguration(tree, options.name).root;
 
   const allFilesInSrc = tree
     .listChanges()
@@ -92,7 +98,7 @@ export async function appGenerator(tree: Tree, options: AppGeneratorSchema) {
       baseFolder: 'apps',
     });
   }
-  updateProjectJson(tree, options);
+  updateProjectJson(tree, options, appRoot);
 
   if (options.lintCommandName) {
     return /* istanbul ignore next */ () =>
