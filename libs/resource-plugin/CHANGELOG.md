@@ -1,4 +1,18 @@
 Softkit Core Libraries Changelog
+## [0.2.0](https://github.com/saas-buildkit/saas-buildkit-core/compare/resource-plugin-0.1.0...resource-plugin-0.2.0) (2023-09-13)
+
+
+### Features
+
+* **resource-plugin:** fixed app generator to meet current needs and code base ([73646ff](https://github.com/saas-buildkit/saas-buildkit-core/commit/73646ff27bd03351ca744894f159b3fb6180a665))
+
+
+### Bug Fixes
+
+* **platform:** get rid of frontend url from app config because not each app needed it ([5e2369e](https://github.com/saas-buildkit/saas-buildkit-core/commit/5e2369ea919f71c9029a4ab952fe880f83699aff))
+* **resource-plugin:** fixed app and services generation ([80d3907](https://github.com/saas-buildkit/saas-buildkit-core/commit/80d3907881ca244e96aa017c8c9a3a83b2c132aa))
+* **resource-plugin:** library generator improvement after usability testing ([361d117](https://github.com/saas-buildkit/saas-buildkit-core/commit/361d1179595e2a8c110c65a294aa6236bb7b9c10))
+
 ## [0.1.0](https://github.com/saas-buildkit/saas-buildkit-core/compare/resource-plugin-0.0.7...resource-plugin-0.1.0) (2023-09-11)
 
 
