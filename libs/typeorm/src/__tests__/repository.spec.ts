@@ -25,7 +25,7 @@ describe('start db and populate the entity', () => {
         migrations: ['app/migrations/*.ts'],
       },
     });
-  });
+  }, 60_000);
 
   afterAll(async () => {
     await db.container.stop();

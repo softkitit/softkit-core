@@ -20,7 +20,7 @@ describe('optimistic lost subscriber test', () => {
         entities: [UserEntity],
       },
     });
-  });
+  }, 60_000);
 
   afterAll(async () => {
     await db.container.stop();

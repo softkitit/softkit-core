@@ -34,7 +34,7 @@ describe('tenant base service test', () => {
         namingStrategy: new SnakeNamingStrategy(),
       },
     });
-  });
+  }, 60_000);
 
   afterAll(async () => {
     await db.container.stop();
