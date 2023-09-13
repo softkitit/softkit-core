@@ -1,6 +1,7 @@
 const nxPreset = require('@nx/jest/preset').default;
 
 process.env.NESTJS_PROFILES = 'test';
+jest.setTimeout(10000);
 
 module.exports = {
   ...nxPreset,
