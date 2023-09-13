@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.1.1](https://github.com/saas-buildkit/saas-buildkit-core/compare/bootstrap-0.1.0...bootstrap-0.1.1) (2023-09-13)
+
+
+### Bug Fixes
+
+* **resource-plugin:** fixed app and services generation ([80d3907](https://github.com/saas-buildkit/saas-buildkit-core/commit/80d3907881ca244e96aa017c8c9a3a83b2c132aa))
+
 ## [0.1.0](https://github.com/saas-buildkit/saas-buildkit-core/compare/bootstrap-0.0.6...bootstrap-0.1.0) (2023-09-09)
 
 
