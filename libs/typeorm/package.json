@@ -16,7 +16,8 @@
     "typeorm-naming-strategies": "^4.1.0",
     "nest-typed-config": "^2.8.0",
     "typeorm-transactional": "^0.4.1",
-    "@softkit/validation": "*"
+    "@softkit/validation": "*",
+    "@nestjs/swagger": "^7.1.10"
   },
   "peerDependencies": {
     "class-transformer": "^0.5.1",

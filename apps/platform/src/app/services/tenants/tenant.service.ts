@@ -5,7 +5,7 @@ import { TenantsRepository } from '../../repositories';
 
 import { CustomUserRoleService } from '../roles/custom-user-role.service';
 import { BaseEntityService } from '@softkit/typeorm-service';
-import { AppConfig } from '@softkit/bootstrap';
+import { SamlConfig } from '../../config/saml.config';
 
 @Injectable()
 export class TenantService extends BaseEntityService<
@@ -15,7 +15,7 @@ export class TenantService extends BaseEntityService<
   private readonly logger = new Logger(TenantService.name);
 
   constructor(
-    private readonly appConfig: AppConfig,
+    private readonly samlConfig: SamlConfig,
     private customUserRoleService: CustomUserRoleService,
     tenantsRepository: TenantsRepository,
   ) {
@@ -54,7 +54,7 @@ export class TenantService extends BaseEntityService<
       .replaceAll(/^-|-$/g, '');
 
     // todo make this configurable, it's probably not necessary to be like this
-    const tenantUrl = `${tenantUrlPrefix}.${this.appConfig.frontendUrl}`;
+    const tenantUrl = `${tenantUrlPrefix}.${this.samlConfig.frontendUrl}`;
 
     const tenantUrlExists = await this.repository.count({
       where: {

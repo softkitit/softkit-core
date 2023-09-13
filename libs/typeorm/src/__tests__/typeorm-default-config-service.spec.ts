@@ -16,7 +16,7 @@ describe('typeorm default config', () => {
         migrations: ['app/migrations/*.ts'],
       },
     });
-  });
+  }, 60_000);
 
   afterAll(async () => {
     await db.container.stop();

@@ -53,18 +53,11 @@ export class RolesController {
     @Paginate()
     query: PaginateQuery,
   ): Promise<Paginated<CustomUserRoleWithoutPermissionsDto>> {
-    return this.customUserRoleService
-      .findAllPaginated(query, ROLES_PAGINATION_CONFIG)
-      .then(({ data, ...other }) => {
-        const resultData = data.map((item) => {
-          return plainToClass(CustomUserRoleWithoutPermissionsDto, item);
-        });
-
-        return {
-          ...other,
-          data: resultData,
-        } as Paginated<CustomUserRoleWithoutPermissionsDto>;
-      });
+    return this.customUserRoleService.findAllPaginatedAndTransform(
+      query,
+      ROLES_PAGINATION_CONFIG,
+      CustomUserRoleWithoutPermissionsDto,
+    );
   }
 
   @Get(':id')

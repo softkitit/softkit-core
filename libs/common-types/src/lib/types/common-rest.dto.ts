@@ -27,7 +27,7 @@ export class IdParamUUID {
 
 export class VersionNumberParam {
   @ApiProperty({
-    description: 'Version number of entity that you want to delete',
+    description: 'Version number of entity',
     example: '1',
     minimum: 0,
     required: true,

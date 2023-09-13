@@ -1,42 +1,43 @@
 import { NestFastifyApplication } from '@nestjs/platform-fastify';
 import { Test, TestingModule } from '@nestjs/testing';
-import * as path from 'node:path';
-import { DbConfig } from '@softkit/typeorm';
-import { startDb } from '@softkit/test-utils';
+<% if (db) { %>
+import { startPostgres, StartedDb } from '@softkit/test-utils';
+<% } %>
 import { bootstrapBaseWebApp } from '@softkit/bootstrap';
-import { <%= pascalCase(name) -%>AppModule } from '../<%= name -%>-app.module';
 
 describe('Test <%= pascalCase(name) -%>AppModule tests', () => {
   let app: NestFastifyApplication;
-  let dbOptions: Partial<DbConfig>;
+<% if (db) { %>
+  let db: StartedDb;
+<% } %>
 
   beforeAll(async () => {
-    const { typeormOptions } = await startDb(true);
-    dbOptions = typeormOptions as Partial<DbConfig>;
+<% if (db) { %>
+    db = await startPostgres({
+      runMigrations: true,
+    });
+<% } %>
+  });
+
+  afterAll(async () => {
+    await db.container.stop();
   });
 
   beforeEach(async () => {
+    const { <%= pascalCase(name) -%>AppModule } = require('../<%= name -%>-app.module');
+
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [<%= pascalCase(name) -%>AppModule],
-    })
-    <% if (db) { %>
-      .overrideProvider(DbConfig)
-      .useValue({
-        ...dbOptions,
-        migrations: [path.join(__dirname, '../database/migrations/*.ts')],
-        logging: true,
-      })
-    <% } %>
-      .compile();
+    }).compile();
     app = await bootstrapBaseWebApp(moduleFixture, <%= pascalCase(name) -%>AppModule);
   });
 
   afterEach(async () => {
-    await app.close();
     jest.clearAllMocks();
+    await app.close();
   });
 
-  describe('Test <%= name -%> app start up', () => {
+  describe('Test <%= pascalCase(name) -%> app start up', () => {
     it('app bootstrap', async () => {
       expect(app).toBeDefined();
     });

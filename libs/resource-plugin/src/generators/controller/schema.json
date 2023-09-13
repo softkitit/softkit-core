@@ -48,8 +48,7 @@
     "lintCommandName": {
       "type": "string",
       "default": "lint",
-      "description": "The name of lint nx command in project.json",
-      "x-prompt": "Linter command name in project.json"
+      "description": "The name of lint nx command in project.json"
     }
   },
   "required": ["projectName", "controllerName", "serviceName", "entityName", "groupName", "tenantBaseEntity"]

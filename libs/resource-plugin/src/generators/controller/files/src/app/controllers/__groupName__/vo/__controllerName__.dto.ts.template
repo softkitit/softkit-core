@@ -1,12 +1,13 @@
 import { OmitType } from '@nestjs/swagger';
 import { <%= pascalCase(entityName) -%> } from '../../../database/entities';
+import { FilterOperator, PaginateConfig } from 'nestjs-paginate';
 
-export class <%= pascalCase(entityName) -%>Dto extends OmitType(
+export class <%= pascalCase(entityName) -%>DTO extends OmitType(
 <%= pascalCase(entityName) -%>,
   [<% if (tenantBaseEntity) { %>'tenantId',<% } %> '__entity', 'deletedAt'] as const,
 ) {}
 
-export class Create<%= pascalCase(entityName) -%> extends OmitType(<%= pascalCase(entityName) -%>, [
+export class Create<%= pascalCase(entityName) -%>DTO extends OmitType(<%= pascalCase(entityName) -%>, [
   'id',
   '__entity',
   'deletedAt',
@@ -16,13 +17,34 @@ export class Create<%= pascalCase(entityName) -%> extends OmitType(<%= pascalCas
 <% if (tenantBaseEntity) { %>'tenantId',<% } %>
 ] as const) {}
 
-export class Update<%= pascalCase(entityName) -%> extends OmitType(<%= pascalCase(entityName) -%>, [
+export class Update<%= pascalCase(entityName) -%>DTO extends OmitType(<%= pascalCase(entityName) -%>, [
   '__entity',
+  'id',
   'deletedAt',
   'createdAt',
   'updatedAt',
+  'version',
 <% if (tenantBaseEntity) { %>'tenantId',<% } %>
 ] as const) {}
 
-
-
+export const <%= constantCase(entityName) -%>_PAGINATION_CONFIG: PaginateConfig<<%= pascalCase(entityName) -%>DTO> = {
+  defaultLimit: 50,
+  maxLimit: 100,
+  relations: [],
+  searchableColumns: [],
+  filterableColumns: {
+    id: true,
+    createdAt: [
+      FilterOperator.GT,
+      FilterOperator.GTE,
+      FilterOperator.LT,
+      FilterOperator.LTE,
+    ],
+  },
+  select: [],
+  sortableColumns: ['id', 'createdAt', 'updatedAt'],
+  defaultSortBy: [
+    ['createdAt', 'DESC'],
+    ['id', 'DESC'],
+  ],
+};

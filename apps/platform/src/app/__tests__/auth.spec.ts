@@ -38,7 +38,7 @@ describe('auth e2e test', () => {
     db = await startPostgres({
       runMigrations: true,
     });
-  });
+  }, 60_000);
 
   afterAll(async () => {
     await db.container.stop();

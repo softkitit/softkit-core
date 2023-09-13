@@ -25,7 +25,6 @@ import { PlatformClientModule } from '@softkit/platform-client';
 import { HealthCheckModule } from '@softkit/healthcheck';
 import { setupTypeormModule } from '@softkit/typeorm';
 
-/* istanbul ignore next */
 @Module({
   imports: [
     JwtModule,
