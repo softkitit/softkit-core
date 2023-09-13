@@ -10,7 +10,7 @@ import { DbConfig } from '@softkit/typeorm';
 import { HttpClientConfig } from '@softkit/server-http-client';
 import { PlatformClientConfig } from '@softkit/platform-client';
 import { HealthConfig } from '@softkit/healthcheck';
-import { PlatformAppConfig } from './platform-app.config';
+import { AppConfig } from '@softkit/bootstrap';
 
 export default class RootConfig implements PlatformClientConfig {
   @Type(() => LoggerConfig)
@@ -25,9 +25,9 @@ export default class RootConfig implements PlatformClientConfig {
   @ValidateNested()
   public readonly platformClient!: HttpClientConfig;
 
-  @Type(() => PlatformAppConfig)
+  @Type(() => AppConfig)
   @ValidateNested()
-  public readonly app!: PlatformAppConfig;
+  public readonly app!: AppConfig;
 
   @Type(() => SwaggerConfig)
   @ValidateNested()

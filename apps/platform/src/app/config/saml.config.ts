@@ -1,4 +1,4 @@
-import { IsBoolean, IsString } from 'class-validator';
+import { Allow, IsBoolean, IsString } from 'class-validator';
 
 export class SamlConfig {
   @IsString()
@@ -6,6 +6,10 @@ export class SamlConfig {
 
   @IsBoolean()
   wantAssertionsSigned!: boolean;
+
+  @IsString()
+  @Allow()
+  frontendUrl?: string;
 
   @IsString()
   callbackUrl!: string;

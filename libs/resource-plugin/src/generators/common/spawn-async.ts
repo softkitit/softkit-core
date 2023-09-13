@@ -20,9 +20,12 @@ export function spawnAsync(
     childProcess.stdout.on('data', (data) => {
       logger.info(data.toString());
     });
-    childProcess.stderr.on('data', (data) => {
-      logger.info(data.toString());
-    });
+    childProcess.stderr.on(
+      'data',
+      /* istanbul ignore next */ (data) => {
+        logger.error(data.toString());
+      },
+    );
 
     childProcess.on('close', (code) => {
       if (code === 0) {
