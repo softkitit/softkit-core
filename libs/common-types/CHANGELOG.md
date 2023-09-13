@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.0.6](https://github.com/saas-buildkit/saas-buildkit-core/compare/common-types-0.0.5...common-types-0.0.6) (2023-09-13)
+
+
+### Bug Fixes
+
+* **resource-plugin:** fixed app and services generation ([80d3907](https://github.com/saas-buildkit/saas-buildkit-core/commit/80d3907881ca244e96aa017c8c9a3a83b2c132aa))
+
 ## [0.0.5](https://github.com/saas-buildkit/saas-buildkit-core/compare/common-types-0.0.4...common-types-0.0.5) (2023-09-08)
 
 
