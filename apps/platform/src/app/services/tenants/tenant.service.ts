@@ -5,7 +5,7 @@ import { TenantsRepository } from '../../repositories';
 
 import { CustomUserRoleService } from '../roles/custom-user-role.service';
 import { BaseEntityService } from '@softkit/typeorm-service';
-import { AppConfig } from '@softkit/bootstrap';
+import { PlatformAppConfig } from '../../config/platform-app.config';
 
 @Injectable()
 export class TenantService extends BaseEntityService<
@@ -15,7 +15,7 @@ export class TenantService extends BaseEntityService<
   private readonly logger = new Logger(TenantService.name);
 
   constructor(
-    private readonly appConfig: AppConfig,
+    private readonly appConfig: PlatformAppConfig,
     private customUserRoleService: CustomUserRoleService,
     tenantsRepository: TenantsRepository,
   ) {
