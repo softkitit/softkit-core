@@ -1,4 +1,12 @@
 Softkit Core Libraries Changelog
+## [0.2.1](https://github.com/saas-buildkit/saas-buildkit-core/compare/typeorm-0.2.0...typeorm-0.2.1) (2023-09-13)
+
+
+### Bug Fixes
+
+* **resource-plugin:** fixed app and services generation ([80d3907](https://github.com/saas-buildkit/saas-buildkit-core/commit/80d3907881ca244e96aa017c8c9a3a83b2c132aa))
+* **resource-plugin:** library generator improvement after usability testing ([361d117](https://github.com/saas-buildkit/saas-buildkit-core/commit/361d1179595e2a8c110c65a294aa6236bb7b9c10))
+
 ## [0.2.0](https://github.com/saas-buildkit/saas-buildkit-core/compare/typeorm-0.1.0...typeorm-0.2.0) (2023-09-11)
 
 
