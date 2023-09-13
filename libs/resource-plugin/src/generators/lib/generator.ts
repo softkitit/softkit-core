@@ -1,4 +1,10 @@
-import { generateFiles, joinPathFragments, Tree, updateJson } from '@nx/devkit';
+import {
+  generateFiles,
+  joinPathFragments,
+  readProjectConfiguration,
+  Tree,
+  updateJson,
+} from '@nx/devkit';
 import { LibGeneratorSchema } from './schema';
 import { libraryGenerator } from '@nx/nest';
 import { paramCase, pascalCase } from 'change-case';
@@ -7,9 +13,12 @@ import { runLint } from '../common/run-lint';
 
 export async function libGenerator(tree: Tree, options: LibGeneratorSchema) {
   options.name = paramCase(options.name);
-  const libRoot = `libs/${options.name}`;
 
-  await libraryGenerator(tree, options);
+  await libraryGenerator(tree, {
+    ...options,
+  });
+
+  const libRoot = readProjectConfiguration(tree, options.name).root;
 
   if (options.config) {
     const configFolder = joinPathFragments(__dirname, './files/config');
@@ -21,7 +30,8 @@ export async function libGenerator(tree: Tree, options: LibGeneratorSchema) {
   }
 
   if (options.publishable) {
-    updateProjectJson(tree, options);
+    updateProjectJson(tree, libRoot, options.name);
+    updateEslintJson(tree, libRoot);
   }
 
   if (options.i18n) {
@@ -39,19 +49,50 @@ export async function libGenerator(tree: Tree, options: LibGeneratorSchema) {
   }
 }
 
-function updateProjectJson(tree: Tree, options: LibGeneratorSchema) {
+function updateEslintJson(tree: Tree, libRoot: string) {
   updateJson(
     tree,
-    joinPathFragments(options.name, 'project.json'),
-    (prjJson) => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { publish: _, ...other } = prjJson.targets;
+    joinPathFragments(libRoot, '.eslintrc.json'),
+    (eslintJson) => {
+      eslintJson.overrides = [
+        {
+          files: ['{package,project}.json'],
+          parser: 'jsonc-eslint-parser',
+          rules: {
+            '@nx/dependency-checks': [
+              'error',
+              {
+                buildTargets: ['build'],
+                checkMissingDependencies: true,
+                checkObsoleteDependencies: true,
+                checkVersionMismatches: true,
+                ignoredDependencies: ['tslib'],
+              },
+            ],
+          },
+        },
+        ...eslintJson.overrides,
+      ];
 
-      prjJson.targets = other;
-
-      return prjJson;
+      return eslintJson;
     },
   );
+}
+
+function updateProjectJson(tree: Tree, libRoot: string, name: string) {
+  updateJson(tree, joinPathFragments(libRoot, 'project.json'), (prjJson) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { publish: _, ...other } = prjJson.targets;
+
+    prjJson.targets = other;
+
+    prjJson.targets.lint.options.lintFilePatterns = [
+      ...prjJson.targets.lint.options.lintFilePatterns,
+      `libs/${name}/project.json`,
+    ];
+
+    return prjJson;
+  });
 }
 
 export default libGenerator;

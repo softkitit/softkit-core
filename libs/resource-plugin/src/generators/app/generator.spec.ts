@@ -53,7 +53,7 @@ describe('app generator', () => {
       {
         db: false,
       },
-      31,
+      33,
     ],
     [
       {
@@ -63,7 +63,7 @@ describe('app generator', () => {
         i18n: false,
         health: false,
       },
-      26,
+      28,
     ],
   ])(
     'without feature: %s',
@@ -89,7 +89,7 @@ describe('app generator', () => {
     expect(listChanges.length).toBe(34);
 
     const allDbFiles = listChanges.filter(
-      (c) => c.path.includes('/db/') || c.path.includes('/repositories/'),
+      (c) => c.path.includes('/database/') || c.path.includes('/repositories/'),
     );
 
     expect(allDbFiles.length).toBe(3);
