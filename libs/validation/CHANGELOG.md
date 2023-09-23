@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.1.2](https://github.com/saas-buildkit/saas-buildkit-core/compare/validation-0.1.1...validation-0.1.2) (2023-09-23)
+
+
+### Bug Fixes
+
+* **validation:** added ability to pass an integer to the toInteger transformer ([0cd113b](https://github.com/saas-buildkit/saas-buildkit-core/commit/0cd113b96fef4aa11e5783fd2ff0b5e6ba9fc2a6))
+
 ## [0.1.1](https://github.com/saas-buildkit/saas-buildkit-core/compare/validation-0.1.0...validation-0.1.1) (2023-09-11)
 
 ## [0.1.0](https://github.com/saas-buildkit/saas-buildkit-core/compare/validation-0.0.5...validation-0.1.0) (2023-09-09)
