@@ -4629,19 +4629,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@liaoliaots/nestjs-redis@npm:^9.0.5":
-  version: 9.0.5
-  resolution: "@liaoliaots/nestjs-redis@npm:9.0.5"
-  dependencies:
-    tslib: 2.4.1
-  peerDependencies:
-    "@nestjs/common": ^9.0.0
-    "@nestjs/core": ^9.0.0
-    ioredis: ^5.0.0
-  checksum: 6b292cb9dcfda862ae010b71bce3faf7fc514892b1d7142cba737d693ec390d01019b43a95c3c2d085ec873cacd41384576c8264a7b14509bb6674de3b299ebb
-  languageName: node
-  linkType: hard
-
 "@lukeed/csprng@npm:^1.0.0":
   version: 1.1.0
   resolution: "@lukeed/csprng@npm:1.1.0"
@@ -6462,7 +6449,6 @@ __metadata:
     "@fastify/helmet": ^11.0.0
     "@fastify/static": ^6.11.0
     "@jscutlery/semver": ^3.1.0
-    "@liaoliaots/nestjs-redis": ^9.0.5
     "@mdx-js/react": ^1.6.22
     "@nestjs/common": ^10.2.4
     "@nestjs/core": ^10.2.4
@@ -24404,13 +24390,6 @@ __metadata:
   version: 2.0.3
   resolution: "tslib@npm:2.0.3"
   checksum: 00fcdd1f9995c9f8eb6a4a1ad03f55bc95946321b7f55434182dddac259d4e095fedf78a84f73b6e32dd3f881d9281f09cb583123d3159ed4bdac9ad7393ef8b
-  languageName: node
-  linkType: hard
-
-"tslib@npm:2.4.1":
-  version: 2.4.1
-  resolution: "tslib@npm:2.4.1"
-  checksum: 19480d6e0313292bd6505d4efe096a6b31c70e21cf08b5febf4da62e95c265c8f571f7b36fcc3d1a17e068032f59c269fab3459d6cd3ed6949eafecf64315fca
   languageName: node
   linkType: hard
 
