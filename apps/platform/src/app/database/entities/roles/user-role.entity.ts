@@ -13,7 +13,7 @@ import { RoleType } from './types/default-role.enum';
 import { BaseTenantEntityHelper } from '@softkit/typeorm';
 
 @Entity('roles')
-export class CustomUserRole extends BaseTenantEntityHelper {
+export class UserRole extends BaseTenantEntityHelper {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 

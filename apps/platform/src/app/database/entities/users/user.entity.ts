@@ -8,7 +8,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { CustomUserRole } from '../roles/custom-user-role.entity';
+import { UserRole } from '../roles/user-role.entity';
 
 import { Tenant } from '../tenants/tenant.entity';
 import { AuthType } from './types/auth-type.enum';
@@ -26,8 +26,8 @@ export class User extends BaseEntityHelper {
   @Index({ unique: true, where: '"deleted_at" IS NOT NULL' })
   email!: string;
 
-  // havin g it nullable is useful for set password later logic
-  // and f or the case when we have external users
+  // having it nullable is useful for set password later logic
+  // and for the case when we have external users
   @Column({ nullable: true, length: 256 })
   password?: string;
 
@@ -37,13 +37,13 @@ export class User extends BaseEntityHelper {
   @Column({ type: String, nullable: false, length: 256 })
   lastName!: string;
 
-  @ManyToMany(() => CustomUserRole, { cascade: false, eager: false })
+  @ManyToMany(() => UserRole, { cascade: false, eager: false })
   @JoinTable({
     name: 'users_roles',
     joinColumn: { name: 'user_id', referencedColumnName: 'id' },
     inverseJoinColumn: { name: 'role_id', referencedColumnName: 'id' },
   })
-  roles!: CustomUserRole[];
+  roles!: UserRole[];
 
   @Column({
     type: 'enum',

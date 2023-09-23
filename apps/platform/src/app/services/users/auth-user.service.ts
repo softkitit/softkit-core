@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Transactional } from 'typeorm-transactional';
-import { CustomUserRole, User } from '../../database/entities';
+import { UserRole, User } from '../../database/entities';
 import { ApprovalType } from '../../database/entities/users/types/approval-type.enum';
 import { AuthType } from '../../database/entities/users/types/auth-type.enum';
 import { UserStatus } from '../../database/entities/users/types/user-status.enum';
@@ -32,7 +32,7 @@ export default class AuthUserService extends AbstractAuthUserService {
     firstName: string,
     lastName: string,
     authType: AuthType,
-    role: CustomUserRole,
+    role: UserRole,
   ): Promise<JwtPayload> {
     const user = await this.userService.createOrUpdateEntity({
       status: UserStatus.ACTIVE,
@@ -57,7 +57,7 @@ export default class AuthUserService extends AbstractAuthUserService {
     firstName: string,
     lastName: string,
     tenantId: string,
-    role: CustomUserRole,
+    role: UserRole,
   ) {
     const user = await this.userService.createOrUpdateEntity({
       status: UserStatus.WAITING_FOR_EMAIL_APPROVAL,

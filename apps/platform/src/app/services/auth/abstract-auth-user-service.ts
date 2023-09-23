@@ -1,4 +1,4 @@
-import { CustomUserRole, User } from '../../database/entities';
+import { UserRole, User } from '../../database/entities';
 import { AuthType } from '../../database/entities/users/types/auth-type.enum';
 import { Maybe } from '@softkit/common-types';
 import { JwtPayload } from '@softkit/auth';
@@ -15,7 +15,7 @@ export default abstract class AbstractAuthUserService {
     firstName: string,
     lastName: string,
     tenantId: string,
-    role: CustomUserRole,
+    role: UserRole,
   ): Promise<{
     payload: JwtPayload;
     approvalId: string;
@@ -30,7 +30,7 @@ export default abstract class AbstractAuthUserService {
     firstName: string,
     lastName: string,
     authType: AuthType,
-    role: CustomUserRole,
+    role: UserRole,
   ): Promise<JwtPayload>;
 
   public abstract saveRefreshToken(

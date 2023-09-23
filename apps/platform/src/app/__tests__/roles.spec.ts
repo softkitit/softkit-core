@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker';
 import { NestFastifyApplication } from '@nestjs/platform-fastify';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CustomUserRoleWithoutPermissionsDto } from '../controllers/roles/vo/role.dto';
-import { CustomUserRole, Tenant, User } from '../database/entities';
+import { UserRole, Tenant, User } from '../database/entities';
 import { RoleType } from '../database/entities/roles/types/default-role.enum';
 import { AuthType } from '../database/entities/users/types/auth-type.enum';
 import { UserStatus } from '../database/entities/users/types/user-status.enum';
@@ -92,7 +92,7 @@ describe('roles e2e test', () => {
         roleType: RoleType.ADMIN,
         tenantId: tenant.id,
         permissions: [],
-      } as any as CustomUserRole);
+      } as any as UserRole);
 
       const response = await app.inject({
         method: 'GET',
