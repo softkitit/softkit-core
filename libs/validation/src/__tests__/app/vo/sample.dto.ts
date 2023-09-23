@@ -1,4 +1,5 @@
 import {
+  IntegerType,
   IsBooleanLocalized,
   IsEmailLocalized,
   IsStringCombinedLocalized,
@@ -8,6 +9,7 @@ import {
 } from '../../../index';
 import { Optional } from '@nestjs/common';
 import { faker } from '@faker-js/faker';
+import { IsInt, Min } from 'class-validator';
 
 export class SampleDto {
   @IsEmailLocalized()
@@ -17,6 +19,11 @@ export class SampleDto {
     trimAndLowercase: false,
   })
   emailWithoutTrimAndLowercase!: string;
+
+  @IsInt()
+  @Min(18)
+  @IntegerType
+  age!: number;
 
   @IsStringCombinedLocalized()
   @PasswordLocalized()
@@ -59,6 +66,7 @@ export const DEFAULT_SAMPLE_DTO: SampleDto = {
   email: faker.internet.email().toLowerCase(),
   emailWithoutTrimAndLowercase: faker.internet.email().toLowerCase(),
   password: '12345Aa!',
+  age: 18,
   repeatedPassword: '12345Aa!',
   firstName: faker.person.firstName(),
   lastName: faker.person.lastName() + faker.string.alphanumeric(10),
