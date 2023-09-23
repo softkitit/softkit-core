@@ -5,6 +5,12 @@ process.env.NESTJS_PROFILES = 'test';
 module.exports = {
   ...nxPreset,
   testEnvironment: 'node',
+  "coveragePathIgnorePatterns": [
+    "node_modules",
+    "__tests__",
+    "jestGlobalMocks.ts",
+    ".module.ts",
+  ],
   coverageThreshold: {
     global: {
       lines: 100,
