@@ -1,0 +1,33 @@
+{
+  "name": "@softkit/redis",
+  "version": "0.0.1",
+  "keywords": [
+    "nestjs",
+    "redis",
+    "cache",
+    "cache-manager",
+    "cache-manager-redis-store",
+    "cache-manager-redis",
+    "cache-manager-redis-cluster",
+    "cache-manager-redis-multi",
+    "cache-manager-redis-sentinel",
+    "cache-manager-redis-store",
+    "cache-manager-redis-store-cluster",
+    "cache-manager-redis-store-multi",
+    "cache-manager-redis-store-sentinel"
+  ],
+  "dependencies": {
+    "@songkeys/nestjs-redis": "^10.0.0",
+    "ioredis": "^5.3.2"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^10.2.4",
+    "class-validator": "^0.14.0",
+    "@softkit/validation": "*",
+    "class-transformer": "^0.5.1",
+    "@softkit/config": "*"
+  },
+  "type": "commonjs",
+  "main": "./src/index.js",
+  "typings": "./src/index.d.ts"
+}

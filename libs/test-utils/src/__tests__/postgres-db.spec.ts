@@ -1,7 +1,7 @@
 import { startPostgres } from '../lib/start-postgres';
 import { StartDbOptions, StartedDb } from '../lib/vo';
 
-describe('start db and create configs', () => {
+describe('start postgres db and create configs', () => {
   it.each([
     {},
     {

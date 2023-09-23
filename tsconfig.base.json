@@ -72,6 +72,9 @@
       "@softkit/platform-client": [
         "libs/clients/platform-client/src/index.ts"
       ],
+      "@softkit/redis": [
+        "libs/redis/src/index.ts"
+      ],
       "@softkit/resource-plugin": [
         "libs/resource-plugin/src/index.ts"
       ],
