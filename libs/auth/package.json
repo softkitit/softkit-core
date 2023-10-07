@@ -8,7 +8,6 @@
     "@nestjs/jwt": "^10.1.1"
   },
   "peerDependencies": {
-    "@saas-buildkit/nestjs-i18n": "11.1.3",
     "nestjs-cls": "^3.5.1",
     "@softkit/exceptions": "*",
     "@softkit/typeorm": "*",
