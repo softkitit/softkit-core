@@ -8,6 +8,7 @@ import { SKIP_AUTH } from '../vo/constants';
 import { TokenService } from '../services/token.service';
 import { UserClsStore } from '../vo/user-cls-store';
 import { GeneralUnauthorizedException } from '@softkit/exceptions';
+import { IJwtPayload } from '../vo/payload';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
@@ -15,7 +16,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
   constructor(
     private tokenService: TokenService,
-    private clsService: ClsService<UserClsStore>,
+    private clsService: ClsService<UserClsStore<IJwtPayload>>,
     private reflector: Reflector,
   ) {
     super();
@@ -27,7 +28,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
    * @returns super.canActivate(context)
    */
   override async canActivate(context: ExecutionContext): Promise<boolean> {
-    // todo memoize
     const skipAuth = this.reflector.getAllAndOverride<boolean>(SKIP_AUTH, [
       context.getHandler(),
       context.getClass(),
@@ -51,7 +51,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
     const payload = await this.tokenService.verifyAccessToken(accessToken);
 
-    this.clsService.set('tenantId', payload.tenantId);
+    this.clsService.set('jwtPayload', payload);
     this.clsService.set('userId', payload.sub);
 
     const result = await super.canActivate(context);

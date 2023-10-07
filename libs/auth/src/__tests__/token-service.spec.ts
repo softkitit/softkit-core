@@ -1,20 +1,33 @@
 import { JwtService } from '@nestjs/jwt';
 import { Test } from '@nestjs/testing';
 import { AuthConfig } from '../lib/config/auth';
-import { JwtPayload } from '../lib/vo/payload';
+import {
+  JwtRefreshTokenPayload,
+  PermissionsBaseJwtPayload,
+} from '../lib/vo/payload';
 import { TokenService } from '../lib/services/token.service';
-import { AuthConfigMock } from './utils/auth-config.mock';
-import { GeneralUnauthorizedException } from '@softkit/exceptions';
+import { AuthConfigMock } from './app/config/auth-config.mock';
+import {
+  GeneralInternalServerException,
+  GeneralUnauthorizedException,
+} from '@softkit/exceptions';
+import { AbstractAccessCheckService } from '../lib/services/access-check.service';
+import { TokenAccessCheckService } from '../lib/services/token-access-check.service';
+import { PermissionCheckMode } from '../lib/decorators/permission.decorator';
 
 describe('test token service', () => {
-  let tokenService: TokenService;
+  let tokenService: TokenService<PermissionsBaseJwtPayload>;
+  let permissionCheckService: TokenAccessCheckService;
 
-  const sampleJwtPayload: JwtPayload = {
+  const jwtPayload: PermissionsBaseJwtPayload = {
     sub: 'userid',
     email: 'someemail',
-    roles: [],
     permissions: [],
-    tenantId: 'tenant',
+  };
+
+  const refreshTokenPayload: JwtRefreshTokenPayload = {
+    sub: jwtPayload.sub,
+    email: jwtPayload.email,
   };
 
   beforeAll(async () => {
@@ -27,21 +40,42 @@ describe('test token service', () => {
           useClass: AuthConfigMock,
           provide: AuthConfig,
         },
+        {
+          useClass: TokenAccessCheckService,
+          provide: AbstractAccessCheckService,
+        },
       ],
     }).compile();
 
     tokenService = module.get(TokenService);
+    permissionCheckService = module.get(AbstractAccessCheckService);
+  });
+
+  test('access check service should fail', async () => {
+    await expect(
+      permissionCheckService.checkPermissions(
+        ['any'],
+        'UNKNOWN' as PermissionCheckMode,
+        jwtPayload,
+      ),
+    ).rejects.toBeInstanceOf(GeneralInternalServerException);
   });
 
   test('generate access and refresh token', async () => {
-    const tokens = await tokenService.signTokens(sampleJwtPayload);
+    const tokens = await tokenService.signTokens(
+      jwtPayload,
+      refreshTokenPayload,
+    );
 
     expect(tokens.accessToken).toBeDefined();
     expect(tokens.refreshToken).toBeDefined();
   });
 
   test('generate and verify access token', async () => {
-    const tokens = await tokenService.signTokens(sampleJwtPayload);
+    const tokens = await tokenService.signTokens(
+      jwtPayload,
+      refreshTokenPayload,
+    );
 
     const tokenVerification = await tokenService.verifyAccessToken(
       tokens.accessToken,
@@ -65,10 +99,13 @@ describe('test token service', () => {
       return `a.u.c-${id}`;
     });
 
-    const tokens = await tokenService.signTokens({
-      ...sampleJwtPayload,
-      permissions,
-    });
+    const tokens = await tokenService.signTokens(
+      {
+        ...jwtPayload,
+        permissions,
+      },
+      refreshTokenPayload,
+    );
 
     expect(tokens.accessToken.length).toBeLessThan(7168);
   });
@@ -78,16 +115,22 @@ describe('test token service', () => {
       return `a.u.c-${id}`;
     });
 
-    const tokens = await tokenService.signTokens({
-      ...sampleJwtPayload,
-      permissions,
-    });
+    const tokens = await tokenService.signTokens(
+      {
+        ...jwtPayload,
+        permissions,
+      },
+      refreshTokenPayload,
+    );
 
     expect(tokens.accessToken.length).toBeGreaterThan(7168);
   });
 
   test('generate and verify refresh token', async () => {
-    const tokens = await tokenService.signTokens(sampleJwtPayload);
+    const tokens = await tokenService.signTokens(
+      jwtPayload,
+      refreshTokenPayload,
+    );
 
     const tokenVerification = await tokenService.verifyRefreshToken(
       tokens.refreshToken,
@@ -108,7 +151,10 @@ describe('test token service', () => {
   });
 
   test('verify access token with refresh secret', async () => {
-    const tokens = await tokenService.signTokens(sampleJwtPayload);
+    const tokens = await tokenService.signTokens(
+      jwtPayload,
+      refreshTokenPayload,
+    );
 
     await expect(
       tokenService.verifyAccessToken(tokens.refreshToken),

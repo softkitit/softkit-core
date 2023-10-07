@@ -7,6 +7,7 @@ export * from './lib/guards/jwt-auth.guard';
 export * from './lib/guards/permission.guard';
 export * from './lib/guards/refresh-jwt-auth.guard';
 export * from './lib/guards/role.guard';
+export * from './lib/services/access-check.service';
 export * from './lib/services/token.service';
 export * from './lib/strategies/jwt.strategy';
 export * from './lib/vo/constants';

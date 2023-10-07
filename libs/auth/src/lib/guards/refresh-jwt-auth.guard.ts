@@ -1,19 +1,14 @@
 import { ExecutionContext, Injectable, Logger } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ClsService } from 'nestjs-cls';
 import { ExtractJwt } from 'passport-jwt';
 import { TokenService } from '../services/token.service';
-import { UserClsStore } from '../vo/user-cls-store';
 import { GeneralUnauthorizedException } from '@softkit/exceptions';
 
 @Injectable()
 export class RefreshJwtAuthGuard extends AuthGuard('refresh-jwt') {
   private readonly logger = new Logger(RefreshJwtAuthGuard.name);
 
-  constructor(
-    private tokenService: TokenService,
-    private clsService: ClsService<UserClsStore>,
-  ) {
+  constructor(private tokenService: TokenService) {
     super();
   }
 
@@ -35,10 +30,7 @@ export class RefreshJwtAuthGuard extends AuthGuard('refresh-jwt') {
       throw new GeneralUnauthorizedException();
     }
 
-    const payload = await this.tokenService.verifyRefreshToken(refreshToken);
-
-    this.clsService.set('tenantId', payload.tenantId);
-    this.clsService.set('userId', payload.sub);
+    await this.tokenService.verifyRefreshToken(refreshToken);
 
     return true;
   }
