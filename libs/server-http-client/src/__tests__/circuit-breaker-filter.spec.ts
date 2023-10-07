@@ -10,6 +10,7 @@ import { SampleController } from './app/sample.controller';
 import { InternalProxyHttpExceptionFilter } from '../lib/interceptors/internal-proxy-http.filter';
 import { HttpAdapterHost } from '@nestjs/core';
 import { expectNotNullAndGet } from '@softkit/test-utils';
+import { IJwtPayload } from '@softkit/auth';
 
 describe('Circuit breaker and retry with filter', () => {
   let appUrl: string;
@@ -17,7 +18,7 @@ describe('Circuit breaker and retry with filter', () => {
   let axiosInstance: AxiosInstance;
   let appHost: string;
   let sampleController: SampleController;
-  let clsService: ClsService<UserRequestClsStore>;
+  let clsService: ClsService<UserRequestClsStore<IJwtPayload>>;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -33,7 +34,7 @@ describe('Circuit breaker and retry with filter', () => {
 
     sampleController = app.get(SampleController);
 
-    clsService = app.get<ClsService<UserRequestClsStore>>(ClsService);
+    clsService = app.get(ClsService);
     appUrl = await app.getUrl();
 
     const split = appUrl.split(':');

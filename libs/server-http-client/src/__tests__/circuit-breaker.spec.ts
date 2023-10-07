@@ -15,6 +15,7 @@ import { REQUEST_ID_HEADER } from '../lib/constants';
 import { InternalProxyHttpException } from '../lib/exceptions/internal-proxy-http.exception';
 import { InternalProxyHttpExceptionFilter } from '../lib/interceptors/internal-proxy-http.filter';
 import { HttpAdapterHost } from '@nestjs/core';
+import { IJwtPayload } from '@softkit/auth';
 
 const defaultRetryConfig: HttpRetryConfig = {
   retriesCount: 3,
@@ -36,7 +37,7 @@ describe('Circuit breaker and retry', () => {
   let axiosInstance: AxiosInstance;
   let appHost: string;
   let sampleController: SampleController;
-  let clsService: ClsService<UserRequestClsStore>;
+  let clsService: ClsService<UserRequestClsStore<IJwtPayload>>;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -52,7 +53,7 @@ describe('Circuit breaker and retry', () => {
 
     sampleController = app.get(SampleController);
 
-    clsService = app.get<ClsService<UserRequestClsStore>>(ClsService);
+    clsService = app.get(ClsService);
     appUrl = await app.getUrl();
 
     const split = appUrl.split(':');
@@ -202,11 +203,15 @@ describe('Circuit breaker and retry', () => {
   });
 
   it('Retry and circuit breaker with presetting auth token using cls service', async () => {
-    const clsData: UserRequestClsStore = {
+    const clsData: UserRequestClsStore<IJwtPayload> = {
       authHeader: 'Bearer authHeader',
       tenantId: 'tenantId',
       userId: 'userId',
       reqId: 'reqId',
+      jwtPayload: {
+        email: 'bla@gmail.com',
+        sub: 'userId',
+      },
     };
 
     await clsService.runWith(clsData, async () => {

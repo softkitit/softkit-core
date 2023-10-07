@@ -8,6 +8,7 @@ import axiosRetry from 'axios-retry';
 import { RetryType } from './config/vo/retry-type';
 import { InternalServiceUnavailableHttpException } from '@softkit/exceptions';
 import { InternalProxyHttpException } from './exceptions/internal-proxy-http.exception';
+import { IJwtPayload } from '@softkit/auth';
 
 function configureRetries(
   config: HttpClientConfig,
@@ -85,7 +86,9 @@ function proxyHttpException(serviceName: string) {
   };
 }
 
-export async function createAxiosInstance<T extends UserRequestClsStore>(
+export async function createAxiosInstance<
+  T extends UserRequestClsStore<IJwtPayload>,
+>(
   clsService: ClsService<T>,
   config: HttpClientConfig,
   axiosAdditionalConfig: AxiosRequestConfig = {},
