@@ -10,7 +10,7 @@ import { Type } from 'class-transformer';
 import { RedisClientConfig } from './redis-client.config';
 import { RedisCommonConfig } from './redis-common.config';
 
-export class RedisModuleConfig {
+export class RedisConfig {
   @IsBoolean()
   @BooleanType
   readyLog = true;
