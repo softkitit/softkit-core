@@ -1,4 +1,4 @@
-import { IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 export class AuthConfig {
   @IsString()
@@ -15,4 +15,16 @@ export class AuthConfig {
 
   @IsString()
   authHeaderName = 'authorization';
+
+  @IsString()
+  @IsOptional()
+  headerTenantId = 'x-tenant-id';
+
+  @IsString()
+  @IsOptional()
+  currentTenantJwtPayloadKey = 'tenantId';
+
+  @IsString()
+  @IsOptional()
+  allTenantsJwtPayloadKey = 'tenants';
 }

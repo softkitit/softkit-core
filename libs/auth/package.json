@@ -8,6 +8,7 @@
     "@nestjs/jwt": "^10.1.1"
   },
   "peerDependencies": {
+    "fastify": "4.22.0",
     "nestjs-cls": "^3.5.1",
     "@softkit/exceptions": "*",
     "@softkit/typeorm": "*",
