@@ -1,14 +1,13 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
 import { HttpClientConfig } from './config/http-client.config';
 import { ClsService } from 'nestjs-cls';
-import { UserRequestClsStore } from './vo/user-request-cls-store';
 import { REQUEST_ID_HEADER } from './constants';
 import CircuitBreaker from 'opossum';
 import axiosRetry from 'axios-retry';
 import { RetryType } from './config/vo/retry-type';
 import { InternalServiceUnavailableHttpException } from '@softkit/exceptions';
 import { InternalProxyHttpException } from './exceptions/internal-proxy-http.exception';
-import { IJwtPayload } from '@softkit/auth';
+import { IAccessTokenPayload, UserClsStore } from '@softkit/auth';
 
 function configureRetries(
   config: HttpClientConfig,
@@ -87,7 +86,7 @@ function proxyHttpException(serviceName: string) {
 }
 
 export async function createAxiosInstance<
-  T extends UserRequestClsStore<IJwtPayload>,
+  T extends UserClsStore<IAccessTokenPayload>,
 >(
   clsService: ClsService<T>,
   config: HttpClientConfig,

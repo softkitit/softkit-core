@@ -5,4 +5,3 @@ export * from './lib/config/http-retry.config';
 export * from './lib/constants';
 export * from './lib/exceptions/internal-proxy-http.exception';
 export * from './lib/interceptors/internal-proxy-http.filter';
-export * from './lib/vo/user-request-cls-store';
