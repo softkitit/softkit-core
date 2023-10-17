@@ -456,7 +456,7 @@
             "name": "version",
             "required": true,
             "in": "query",
-            "description": "Version number of entity that you want to delete",
+            "description": "Version number of entity",
             "example": "1",
             "schema": {
               "minimum": 0,
@@ -961,7 +961,27 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string"
+            "type": "object",
+            "description": "Unique identifier"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Created at date time in ISO format"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Last time updated at date time in ISO format"
+          },
+          "deletedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Deleted at date time in ISO format"
+          },
+          "version": {
+            "type": "string",
+            "description": "Entity version for optimistic lock handling"
           },
           "name": {
             "type": "string"
@@ -978,6 +998,10 @@
         },
         "required": [
           "id",
+          "createdAt",
+          "updatedAt",
+          "deletedAt",
+          "version",
           "name",
           "description",
           "permissions"
@@ -987,7 +1011,27 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string"
+            "type": "object",
+            "description": "Unique identifier"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Created at date time in ISO format"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Last time updated at date time in ISO format"
+          },
+          "deletedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Deleted at date time in ISO format"
+          },
+          "version": {
+            "type": "string",
+            "description": "Entity version for optimistic lock handling"
           },
           "name": {
             "type": "string"
@@ -1013,6 +1057,10 @@
         },
         "required": [
           "id",
+          "createdAt",
+          "updatedAt",
+          "deletedAt",
+          "version",
           "name",
           "description",
           "action",
@@ -1023,7 +1071,22 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string"
+            "type": "object",
+            "description": "Unique identifier"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Created at date time in ISO format"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Last time updated at date time in ISO format"
+          },
+          "version": {
+            "type": "string",
+            "description": "Entity version for optimistic lock handling"
           },
           "name": {
             "type": "string"
@@ -1047,6 +1110,9 @@
         },
         "required": [
           "id",
+          "createdAt",
+          "updatedAt",
+          "version",
           "name",
           "description"
         ]
@@ -1083,7 +1149,12 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string"
+            "type": "object",
+            "description": "Unique identifier"
+          },
+          "version": {
+            "type": "string",
+            "description": "Entity version for optimistic lock handling"
           },
           "name": {
             "type": "string"
@@ -1101,6 +1172,7 @@
         },
         "required": [
           "id",
+          "version",
           "name",
           "description"
         ]

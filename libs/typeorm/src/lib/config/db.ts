@@ -10,7 +10,6 @@ import {
 } from 'class-validator';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { BooleanType, IntegerType } from '@softkit/validation';
-
 class DbExtraSettings {
   @IsInt()
   max = 100;
@@ -74,4 +73,8 @@ export class DbConfig {
 
   @Allow()
   namingStrategy: SnakeNamingStrategy = new SnakeNamingStrategy();
+
+  @IsBoolean()
+  @BooleanType
+  runSeeds: boolean = false;
 }

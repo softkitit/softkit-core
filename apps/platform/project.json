@@ -6,7 +6,9 @@
   "targets": {
     "build": {
       "executor": "@nx/webpack:webpack",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "defaultConfiguration": "production",
       "options": {
         "target": "node",
@@ -18,8 +20,13 @@
           {
             "name": "@nestjs/swagger/plugin",
             "options": {
-              "dtoFileNameSuffix": [".entity.ts", ".dto.ts"],
-              "controllerFileNameSuffix": [".controller.ts"],
+              "dtoFileNameSuffix": [
+                ".entity.ts",
+                ".dto.ts"
+              ],
+              "controllerFileNameSuffix": [
+                ".controller.ts"
+              ],
               "classValidatorShim": true,
               "dtoKeyOfComment": "description",
               "controllerKeyOfComment": "description",
@@ -64,14 +71,29 @@
     },
     "lint": {
       "executor": "@nx/linter:eslint",
-      "outputs": ["{options.outputFile}"],
+      "outputs": [
+        "{options.outputFile}"
+      ],
       "options": {
-        "lintFilePatterns": ["apps/platform/**/*.ts"]
+        "lintFilePatterns": [
+          "apps/platform/**/*.ts"
+        ]
+      }
+    },
+    "seed": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "nx build platform",
+          "ts-node --project ./tsconfig.base.json -r tsconfig-paths/register ./apps/platform/src/app/seeds/initial-seed.ts"
+        ]
       }
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
       "options": {
         "jestConfig": "apps/platform/jest.config.ts",
         "passWithNoTests": true

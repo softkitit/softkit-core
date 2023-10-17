@@ -9,6 +9,8 @@ import * as Controllers from './controllers';
 import * as Entities from './database/entities';
 import * as Repositories from './repositories';
 import * as Services from './services';
+import * as Seeders from './database/seeds';
+import * as Factories from './database/factories';
 import AbstractAuthUserService from './services/auth/abstract-auth-user-service';
 import AuthUserService from './services/users/auth-user.service';
 import { setupI18NModule } from '@softkit/i18n';
@@ -23,8 +25,11 @@ import {
 } from '@softkit/auth';
 import { PlatformClientModule } from '@softkit/platform-client';
 import { HealthCheckModule } from '@softkit/healthcheck';
-import { setupTypeormModule } from '@softkit/typeorm';
-
+import {
+  setupTypeormModule,
+  TYPEORM_FACTORIES_TOKEN,
+  TYPEORM_SEEDERS_TOKEN,
+} from '@softkit/typeorm';
 @Module({
   imports: [
     JwtModule,
@@ -45,6 +50,14 @@ import { setupTypeormModule } from '@softkit/typeorm';
     JwtStrategy,
     JwtService,
     TokenService,
+    {
+      provide: TYPEORM_SEEDERS_TOKEN,
+      useValue: Object.values(Seeders),
+    },
+    {
+      provide: TYPEORM_FACTORIES_TOKEN,
+      useValue: Object.values(Factories),
+    },
     {
       provide: AbstractAuthUserService,
       useClass: AuthUserService,
