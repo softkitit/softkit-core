@@ -8,7 +8,7 @@ import { SKIP_AUTH } from '../vo/constants';
 import { TokenService } from '../services/token.service';
 import { UserClsStore } from '../vo/user-cls-store';
 import { GeneralUnauthorizedException } from '@softkit/exceptions';
-import { IJwtPayload } from '../vo/payload';
+import { IAccessTokenPayload } from '../vo/payload';
 import { AbstractTenantResolutionService } from '../multi-tenancy/abstract-tenant-resolution.service';
 
 @Injectable()
@@ -18,7 +18,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   constructor(
     private tokenService: TokenService,
     private abstractTenantResolution: AbstractTenantResolutionService,
-    private clsService: ClsService<UserClsStore<IJwtPayload>>,
+    private clsService: ClsService<UserClsStore<IAccessTokenPayload>>,
     private reflector: Reflector,
   ) {
     super();

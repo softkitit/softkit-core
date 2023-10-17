@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { SkipAuth } from '../../../lib/decorators/skip-auth.decorator';
 import { CurrentUser } from '../../../lib/decorators/current-user.decorator';
-import { IJwtPayload } from '../../../lib/vo/payload';
+import { IAccessTokenPayload } from '../../../lib/vo/payload';
 import {
   PermissionCheckMode,
   Permissions,
@@ -21,7 +21,7 @@ export class AuthController {
   }
 
   @Get('current-user')
-  async userTest(@CurrentUser() payload: IJwtPayload) {
+  async userTest(@CurrentUser() payload: IAccessTokenPayload) {
     return payload;
   }
 

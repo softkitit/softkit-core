@@ -1,14 +1,14 @@
 import { FastifyRequest } from 'fastify';
-import { IJwtPayload } from '../vo/payload';
+import { IAccessTokenPayload } from '../vo/payload';
 
 export abstract class AbstractTenantResolutionService {
   public abstract resolveTenantId(
     req: FastifyRequest,
-    jwtPayload: IJwtPayload,
+    jwtPayload: IAccessTokenPayload,
   ): Promise<string | undefined>;
 
   public abstract verifyUserBelongToTenant(
     tenantId: string,
-    jwtPayload: IJwtPayload,
+    jwtPayload: IAccessTokenPayload,
   ): Promise<boolean>;
 }

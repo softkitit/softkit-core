@@ -5,8 +5,8 @@ import {
 } from '@nestjs/platform-fastify';
 import { Test } from '@nestjs/testing';
 import {
-  IJwtPayload,
-  JwtRefreshTokenPayload,
+  IAccessTokenPayload,
+  IRefreshTokenPayload,
   PermissionsBaseJwtPayload,
 } from '../lib/vo/payload';
 import { TokenService } from '../lib/services/token.service';
@@ -22,7 +22,7 @@ describe('test auth', () => {
     permissions: [],
   };
 
-  const refreshTokenPayload: JwtRefreshTokenPayload = {
+  const refreshTokenPayload: IRefreshTokenPayload = {
     sub: emptyPermissionsPayload.sub,
     email: emptyPermissionsPayload.email,
   };
@@ -119,7 +119,7 @@ describe('test auth', () => {
 
       expect(response.statusCode).toEqual(HttpStatus.OK);
 
-      const payload = JSON.parse(response.body) as IJwtPayload & {
+      const payload = JSON.parse(response.body) as IAccessTokenPayload & {
         iat?: number;
         exp?: number;
       };

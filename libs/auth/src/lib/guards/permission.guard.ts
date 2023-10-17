@@ -8,7 +8,7 @@ import { Reflector } from '@nestjs/core';
 import { GeneralInternalServerException } from '@softkit/exceptions';
 import { AbstractAccessCheckService } from '../services/access-check.service';
 import { PermissionCheckMode } from '../decorators/permission.decorator';
-import { IJwtPayload } from '../vo/payload';
+import { IAccessTokenPayload } from '../vo/payload';
 
 @Injectable()
 export class PermissionsGuard implements CanActivate {
@@ -16,7 +16,7 @@ export class PermissionsGuard implements CanActivate {
 
   constructor(
     private reflector: Reflector,
-    private accessCheckService: AbstractAccessCheckService<IJwtPayload>,
+    private accessCheckService: AbstractAccessCheckService<IAccessTokenPayload>,
   ) {}
 
   /**

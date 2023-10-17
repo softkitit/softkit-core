@@ -6,7 +6,7 @@ import {
 import { Test } from '@nestjs/testing';
 import { TokenService } from '../lib/services/token.service';
 import {
-  JwtRefreshTokenPayload,
+  IRefreshTokenPayload,
   PermissionsBaseJwtPayload,
 } from '../lib/vo/payload';
 import { TestAppModule } from './app/app.module';
@@ -21,7 +21,7 @@ describe('test refresh auth', () => {
     permissions: [],
   };
 
-  const refreshTokenPayload: JwtRefreshTokenPayload = {
+  const refreshTokenPayload: IRefreshTokenPayload = {
     sub: jwtPayload.sub,
     email: jwtPayload.email,
   };

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { AbstractTenantResolutionService } from './abstract-tenant-resolution.service';
 import { AuthConfig } from '../config/auth';
 import { FastifyRequest } from 'fastify';
-import { IJwtPayload } from '../vo/payload';
+import { IAccessTokenPayload } from '../vo/payload';
 
 @Injectable()
 export class JwtPayloadTenantResolutionService extends AbstractTenantResolutionService {
@@ -12,7 +12,7 @@ export class JwtPayloadTenantResolutionService extends AbstractTenantResolutionS
 
   public override async resolveTenantId(
     _: FastifyRequest,
-    jwtPayload: IJwtPayload,
+    jwtPayload: IAccessTokenPayload,
   ): Promise<string | undefined> {
     return (jwtPayload as never)[this.config.currentTenantJwtPayloadKey];
   }

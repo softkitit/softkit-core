@@ -2,16 +2,16 @@ import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AuthConfig } from '../config/auth';
 import {
-  IJwtPayload,
-  JwtRefreshTokenPayload,
+  IAccessTokenPayload,
+  IRefreshTokenPayload,
   PayloadSigned,
 } from '../vo/payload';
 import { GeneralUnauthorizedException } from '@softkit/exceptions';
 
 @Injectable()
 export class TokenService<
-  ACCESS_TOKEN_TYPE extends IJwtPayload = IJwtPayload,
-  REFRESH_TOKEN_TYPE extends JwtRefreshTokenPayload = JwtRefreshTokenPayload,
+  ACCESS_TOKEN_TYPE extends IAccessTokenPayload = IAccessTokenPayload,
+  REFRESH_TOKEN_TYPE extends IRefreshTokenPayload = IRefreshTokenPayload,
 > {
   private readonly logger = new Logger(TokenService.name);
 
@@ -20,15 +20,18 @@ export class TokenService<
     private readonly jwtService: JwtService,
   ) {}
 
-  async signTokens(
-    jwtPayload: ACCESS_TOKEN_TYPE,
-    refreshPayload: REFRESH_TOKEN_TYPE,
-  ) {
-    this.logger.log(`Generating tokens for user: ${jwtPayload.email}}`);
+  async signTokens({
+    accessTokenPayload,
+    refreshTokenPayload,
+  }: {
+    accessTokenPayload: ACCESS_TOKEN_TYPE;
+    refreshTokenPayload: REFRESH_TOKEN_TYPE;
+  }) {
+    this.logger.log(`Generating tokens for user: ${accessTokenPayload.email}}`);
 
     const [accessToken, refreshToken] = await Promise.all([
-      this.signAccessToken(jwtPayload),
-      this.signRefreshToken(refreshPayload),
+      this.signAccessToken(accessTokenPayload),
+      this.signRefreshToken(refreshTokenPayload),
     ]);
 
     await this.checkTokenLength(accessToken);
@@ -54,13 +57,15 @@ export class TokenService<
     });
   }
 
-  async verifyAccessToken(token: string): Promise<IJwtPayload & PayloadSigned> {
+  async verifyAccessToken(
+    token: string,
+  ): Promise<IAccessTokenPayload & PayloadSigned> {
     return this.verifyToken(token, this.authConfig.accessTokenSecret);
   }
 
   async verifyRefreshToken(
     token: string,
-  ): Promise<JwtRefreshTokenPayload & PayloadSigned> {
+  ): Promise<IRefreshTokenPayload & PayloadSigned> {
     return this.verifyToken(token, this.authConfig.refreshTokenSecret);
   }
 

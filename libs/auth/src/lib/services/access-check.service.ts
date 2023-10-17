@@ -1,9 +1,11 @@
 import { PermissionCheckMode } from '../decorators/permission.decorator';
 import { GeneralInternalServerException } from '@softkit/exceptions';
 import { Logger } from '@nestjs/common';
-import { IJwtPayload } from '../vo/payload';
+import { IAccessTokenPayload } from '../vo/payload';
 
-export abstract class AbstractAccessCheckService<T extends IJwtPayload> {
+export abstract class AbstractAccessCheckService<
+  T extends IAccessTokenPayload,
+> {
   protected logger: Logger = new Logger(AbstractAccessCheckService.name);
 
   abstract hasEach(permissions: string[], jwtPayload: T): Promise<boolean>;

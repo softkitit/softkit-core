@@ -1,7 +1,7 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { IJwtPayload } from '../vo/payload';
+import { IAccessTokenPayload } from '../vo/payload';
 
-export const CurrentUser = createParamDecorator<IJwtPayload>(
+export const CurrentUser = createParamDecorator<IAccessTokenPayload>(
   (data: unknown, ctx: ExecutionContext) => {
     const request = ctx.switchToHttp().getRequest();
     return request.user;

@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { AuthConfig } from '../config/auth';
 import { AbstractTenantResolutionService } from './abstract-tenant-resolution.service';
 import { FastifyRequest } from 'fastify';
-import { IJwtPayload } from '../vo/payload';
+import { IAccessTokenPayload } from '../vo/payload';
 import { GeneralForbiddenException } from '@softkit/exceptions';
 
 @Injectable()
@@ -24,7 +24,7 @@ export class HeaderTenantResolutionService extends AbstractTenantResolutionServi
    * */
   override async verifyUserBelongToTenant(
     tenantId: string,
-    jwtPayload: IJwtPayload,
+    jwtPayload: IAccessTokenPayload,
   ): Promise<boolean> {
     const allTenants = (jwtPayload as never)[
       this.config.allTenantsJwtPayloadKey

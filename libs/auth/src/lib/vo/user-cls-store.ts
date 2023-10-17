@@ -1,8 +1,10 @@
 import { TenantClsStore } from '@softkit/typeorm';
-import { IJwtPayload } from './payload';
+import { IAccessTokenPayload } from './payload';
 
-export interface UserClsStore<T extends IJwtPayload> extends TenantClsStore {
+export interface UserClsStore<T extends IAccessTokenPayload>
+  extends TenantClsStore {
   jwtPayload: T;
+  reqId: string;
   userId: string;
   authHeader: string;
 }
