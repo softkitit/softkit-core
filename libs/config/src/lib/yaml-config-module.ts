@@ -27,6 +27,7 @@ export function setupYamlBaseConfigModule(
       });
     }),
   });
+
   return {
     ...dynamicModule,
     providers: [

@@ -19,6 +19,7 @@ import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
 import { initializeTransactionalContext } from 'typeorm-transactional';
 import { getTransactionalContext } from 'typeorm-transactional/dist/common';
 import { generateRandomId } from '@softkit/crypto';
+import { runSeeders } from 'typeorm-extension';
 import {
   AnyExceptionFilter,
   HttpExceptionFilter,
@@ -28,13 +29,19 @@ import {
 import { DEFAULT_VALIDATION_OPTIONS } from '@softkit/validation';
 import { AppConfig } from './config/app';
 import { setupSwagger, SwaggerConfig } from '@softkit/swagger-utils';
-import { PostgresDbQueryFailedErrorFilter } from '@softkit/typeorm';
+import {
+  DbConfig,
+  PostgresDbQueryFailedErrorFilter,
+  TYPEORM_FACTORIES_TOKEN,
+  TYPEORM_SEEDERS_TOKEN,
+} from '@softkit/typeorm';
 import { LoggingInterceptor } from '@softkit/logger';
 import { responseBodyFormatter } from '@softkit/i18n';
 import { REQUEST_ID_HEADER } from '@softkit/server-http-client';
 import { fastifyHelmet } from '@fastify/helmet';
 import { callOrUndefinedIfException } from './utils/functions';
 
+import { DataSource } from 'typeorm';
 export function buildFastifyAdapter() {
   return new FastifyAdapter({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -118,6 +125,31 @@ function setupGlobalInterceptors(app: INestApplication) {
   app.useGlobalInterceptors(new LoggerErrorInterceptor());
 }
 
+async function runDatabaseSeeders(
+  app: INestApplication,
+  logger: Logger,
+  shouldRunSeeds: boolean,
+) {
+  if (!shouldRunSeeds) {
+    return;
+  }
+
+  const ds = app.get(DataSource);
+  const seeders = app.get(TYPEORM_SEEDERS_TOKEN);
+  const factories = app.get(TYPEORM_FACTORIES_TOKEN);
+
+  if (seeders.length === 0) {
+    return logger.warn(
+      'Warning: No seeders found. Ensure you have provided seeders if you are expecting database seeding to occur.',
+    );
+  }
+
+  await runSeeders(ds, {
+    seeds: [...seeders],
+    factories: [...factories],
+  });
+}
+
 export async function bootstrapBaseWebApp(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   module: any | TestingModule,
@@ -133,7 +165,6 @@ export async function bootstrapBaseWebApp(
   }
 
   const app = await createNestWebApp(module, originalModule);
-
   const fastifyInstance: FastifyInstance = app.getHttpAdapter().getInstance();
   applyExpressCompatibilityRecommendations(fastifyInstance);
 
@@ -157,6 +188,7 @@ export async function bootstrapBaseWebApp(
   setupGlobalInterceptors(app);
 
   const appConfig = app.get(AppConfig);
+  const dbConfig = callOrUndefinedIfException(() => app.get(DbConfig))
   const swaggerConfig = callOrUndefinedIfException(() =>
     app.get(SwaggerConfig),
   );
@@ -185,6 +217,9 @@ export async function bootstrapBaseWebApp(
     );
   }
 
+  if (dbConfig instanceof  DbConfig){
+      await runDatabaseSeeders(app, logger, dbConfig.runSeeds);
+  }
   await app.listen(appConfig.port, '0.0.0.0');
 
   logger.log(`App successfully started. Listening on port ${appConfig.port}`);

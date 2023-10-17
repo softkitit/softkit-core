@@ -1,5 +1,6 @@
 export * from './lib/config/db';
 export * from './lib/config/typeorm-config.service';
+export * from './lib/constants';
 export * from './lib/entities/entity-helper';
 export * from './lib/entities/tenant-entity-helper';
 export * from './lib/interceptors/postgres-db-failed-error.filter';
