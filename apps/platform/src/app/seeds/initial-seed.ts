@@ -97,10 +97,6 @@ seed()
     logger.log('Seeding completed');
   })
   .catch((error) => {
-    if (error instanceof Error) {
-      throw new Error(`Error while seeding: ${error.message}`);
-    } else {
-      logger.error(error);
-      throw new Error('Error while seeding');
-    }
+    logger.error('Error while seeding:', error);
+    throw new Error('Error while seeding');
   });
