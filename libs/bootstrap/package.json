@@ -22,6 +22,7 @@
   },
   "peerDependencies": {
     "@softkit/crypto": "*",
+    "@softkit/config": "*",
     "@softkit/exceptions": "*",
     "@softkit/validation": "*",
     "@softkit/swagger-utils": "*",
@@ -37,6 +38,7 @@
     "@nestjs/platform-fastify": "^10.2.4",
     "@nestjs/testing": "^10.2.4",
     "@saas-buildkit/nestjs-i18n": "11.1.3",
-    "typeorm-transactional": "^0.4.1"
+    "typeorm-transactional": "^0.4.1",
+    "class-transformer": "^0.5.1"
   }
 }
