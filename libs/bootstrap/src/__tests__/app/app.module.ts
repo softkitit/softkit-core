@@ -1,8 +1,14 @@
 import { Module } from '@nestjs/common';
-import { setupYamlBaseConfigModule } from '@softkit/config';
 import { setupLoggerModule } from '@softkit/logger';
 import { Logger } from '@nestjs/common';
+import { setupYamlBaseConfigModule } from '@softkit/config';
 import { RootConfig } from './config/root.config';
+
+@Module({
+  imports: [setupLoggerModule()],
+  providers: [Logger],
+})
+export class BootstrapTestAppModule {}
 
 @Module({
   imports: [
@@ -11,4 +17,4 @@ import { RootConfig } from './config/root.config';
   ],
   providers: [Logger],
 })
-export class BootstrapTestAppModule {}
+export class TestAppModule {}

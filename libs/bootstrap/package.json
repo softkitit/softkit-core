@@ -22,7 +22,6 @@
   },
   "peerDependencies": {
     "@softkit/crypto": "*",
-    "@softkit/config": "*",
     "@softkit/exceptions": "*",
     "@softkit/validation": "*",
     "@softkit/swagger-utils": "*",
