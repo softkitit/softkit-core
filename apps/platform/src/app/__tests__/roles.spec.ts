@@ -1,34 +1,40 @@
 import { faker } from '@faker-js/faker';
 import { NestFastifyApplication } from '@nestjs/platform-fastify';
 import { Test, TestingModule } from '@nestjs/testing';
-import { CustomUserRoleWithoutPermissionsDto } from '../controllers/roles/vo/role.dto';
-import { UserRole, Tenant, User } from '../database/entities';
-import { RoleType } from '../database/entities/roles/types/default-role.enum';
-import { AuthType } from '../database/entities/users/types/auth-type.enum';
-import { UserStatus } from '../database/entities/users/types/user-status.enum';
-import { UserRepository } from '../repositories';
-import { CustomUserRoleService, TenantService } from '../services';
+import { UserRoleWithoutPermission } from '../controllers/roles/vo/role.dto';
+import { UserRole, Tenant } from '../database/entities';
+import {
+  ExternalApprovalService,
+  TenantService,
+  UserRoleService,
+} from '../services';
 import { bootstrapBaseWebApp } from '@softkit/bootstrap';
-import { TokenService } from '@softkit/auth';
 import { StartedDb, startPostgres } from '@softkit/test-utils';
 import { Paginated } from 'nestjs-paginate';
+import { AbstractSignupService } from '../services/auth/signup/signup.service.interface';
+import { TenantSignupService } from '../services/auth/signup/tenant-signup.service';
+import { ApproveSignUpRequest } from '../controllers/auth/vo/approve.dto';
+import { SignUpByEmailWithTenantCreationRequest } from '../controllers/auth/vo/sign-up.dto';
+import { SignInRequest } from '@softkit/platform-client';
+import { AuthConfig } from '@softkit/auth';
 
-const user: Partial<User> = {
+const successSignupDto: SignUpByEmailWithTenantCreationRequest = {
   email: faker.internet.email(),
   password: '12345Aa!',
+  repeatedPassword: '12345Aa!',
   firstName: faker.person.firstName(),
   lastName: faker.person.lastName(),
-  authType: AuthType.LOCAL,
-  roles: [],
-  status: UserStatus.ACTIVE,
+  companyIdentifier: faker.company.name(),
+  companyName: faker.company.name(),
 };
 
 describe('roles e2e test', () => {
   let app: NestFastifyApplication;
-  let rolesService: CustomUserRoleService;
+  let rolesService: UserRoleService;
   let accessToken: string;
   let tenant: Tenant;
   let db: StartedDb;
+  let authConfig: AuthConfig;
 
   beforeAll(async () => {
     db = await startPostgres({
@@ -41,7 +47,7 @@ describe('roles e2e test', () => {
   });
 
   beforeEach(async () => {
-    user.email = faker.internet.email({
+    successSignupDto.email = faker.internet.email({
       provider: 'gmail' + faker.string.alphanumeric(10).toString() + '.com',
     });
 
@@ -49,34 +55,56 @@ describe('roles e2e test', () => {
 
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [PlatformAppModule],
-    }).compile();
+    })
+      .overrideProvider(AbstractSignupService)
+      .useClass(TenantSignupService)
+      .compile();
 
     app = await bootstrapBaseWebApp(moduleFixture, PlatformAppModule);
 
-    rolesService = app.get(CustomUserRoleService);
-    const tokenService = app.get(TokenService);
+    rolesService = app.get(UserRoleService);
+    authConfig = app.get(AuthConfig);
+
     const tenantService = app.get(TenantService);
-    const userRepository = app.get(UserRepository);
+    const approvalService = app.get(ExternalApprovalService);
 
-    tenant = await tenantService.createOrUpdateEntity({
-      tenantName: faker.company.name(),
-      tenantUrl: faker.internet.url(),
+    const signUpResponse = await app.inject({
+      method: 'POST',
+      url: 'api/platform/v1/auth/tenant-signup',
+      payload: successSignupDto,
     });
 
-    const createdUser = await userRepository.save({
-      ...user,
-      tenantId: tenant.id,
+    const approval = await approvalService.findOne({
+      where: {
+        id: signUpResponse.json().data.approvalId,
+      },
     });
 
-    const token = await tokenService.signTokens({
-      permissions: ['platform.roles.read'],
-      sub: createdUser.id,
-      tenantId: tenant.id,
-      email: createdUser.email,
-      roles: [],
+    await app.inject({
+      method: 'POST',
+      url: 'api/platform/v1/auth/approve-signup',
+      payload: {
+        id: approval.id,
+        code: approval.code,
+      } as ApproveSignUpRequest,
     });
 
-    accessToken = token.accessToken;
+    const token = await app.inject({
+      method: 'POST',
+      url: 'api/platform/v1/auth/signin',
+      payload: {
+        email: successSignupDto.email,
+        password: successSignupDto.password,
+      } satisfies SignInRequest,
+    });
+
+    accessToken = token.json().data.accessToken;
+
+    tenant = await tenantService.findOne({
+      where: {
+        tenantFriendlyIdentifier: successSignupDto.companyIdentifier,
+      },
+    });
   });
 
   afterEach(async () => {
@@ -85,13 +113,11 @@ describe('roles e2e test', () => {
   });
 
   describe('find roles test', () => {
-    it.skip('find all roles for tenant', async () => {
+    it('find all roles for tenant', async () => {
       const role = await rolesService.createOrUpdateEntity({
         name: faker.string.alpha(20),
         description: faker.string.alpha(200),
-        roleType: RoleType.ADMIN,
         tenantId: tenant.id,
-        permissions: [],
       } as any as UserRole);
 
       const response = await app.inject({
@@ -99,23 +125,36 @@ describe('roles e2e test', () => {
         url: `api/platform/v1/roles`,
         headers: {
           Authorization: `Bearer ${accessToken}`,
+          [authConfig.headerTenantId]: tenant.id,
         },
       });
 
       expect(response.statusCode).toEqual(200);
 
-      const responseBody: Paginated<CustomUserRoleWithoutPermissionsDto> =
+      const responseBody: Paginated<UserRoleWithoutPermission> =
         response.json();
 
-      expect(responseBody.data.length).toEqual(1);
-      const dto = responseBody.data[0];
+      expect(responseBody.data.length).toEqual(4);
+      const paginationResponse =
+        responseBody.data as UserRoleWithoutPermission[];
 
-      expect(dto.id).toEqual(role.id);
-      expect(dto.name).toEqual(role.name);
-      expect(dto.description).toEqual(role.description);
-      expect(dto.version).toEqual(role.version);
-      expect(dto.createdAt).toEqual(role.createdAt.toISOString());
-      expect(dto.updatedAt).toEqual(role.updatedAt.toISOString());
+      const newlyCreatedRoles = paginationResponse.filter((p) => !!p.tenantId);
+
+      expect(newlyCreatedRoles.length).toEqual(1);
+
+      const defaultRolesWithoutTenants = paginationResponse.filter(
+        (p) => !p.tenantId,
+      );
+
+      expect(defaultRolesWithoutTenants.length).toEqual(3);
+
+      const createdRole = newlyCreatedRoles[0];
+
+      expect(createdRole.id).toEqual(role.id);
+      expect(createdRole.name).toEqual(role.name);
+      expect(createdRole.description).toEqual(role.description);
+      expect(createdRole.tenantId).toEqual(role.tenantId);
+      expect(createdRole.roleType).toBeNull();
     });
   });
 });

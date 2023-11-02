@@ -7,3 +7,4 @@ export * from './tenants/saml-configuration-base.repository';
 export * from './tenants/tenants.repository';
 export * from './users/external-approval.repository';
 export * from './users/user.repository';
+export * from './users/user-tenant-account.repository';

@@ -1,17 +1,23 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Transactional } from 'typeorm-transactional';
-import { UserRole, User } from '../../database/entities';
+import { UserProfile, UserRole } from '../../database/entities';
 import { ApprovalType } from '../../database/entities/users/types/approval-type.enum';
-import { AuthType } from '../../database/entities/users/types/auth-type.enum';
-import { UserStatus } from '../../database/entities/users/types/user-status.enum';
+import { UserProfileStatus } from '../../database/entities/users/types/user-profile-status.enum';
 
-import AbstractAuthUserService from '../auth/abstract-auth-user-service';
-import { SamlConfigurationService } from '../tenants/saml-configuration.service';
+import AbstractAuthUserService from '../auth/abstract-auth-user.service';
 import { ExternalApprovalService } from './external-approval.service';
 import { UserService } from './user.service';
-import { JwtPayload } from '@softkit/auth';
 import { generateRandomNumber } from '@softkit/crypto';
 import { Maybe } from '@softkit/common-types';
+
+import { BaseSignUpByEmailRequest } from '../../controllers/auth/vo/sign-up.dto';
+import { UserTenantAccountService } from './user-tenant-account.service';
+import { UserAccountStatus } from '../../database/entities/users/types/user-account-status.enum';
+import { AbstractTokenBuilderService, JwtTokensPayload } from '@softkit/auth';
+import {
+  AccessTokenPayload,
+  RefreshTokenPayload,
+} from '../../common/vo/token-payload';
 
 @Injectable()
 export default class AuthUserService extends AbstractAuthUserService {
@@ -19,8 +25,13 @@ export default class AuthUserService extends AbstractAuthUserService {
 
   constructor(
     private readonly userService: UserService,
+    private readonly userTenantAccount: UserTenantAccountService,
     private readonly externalApprovalService: ExternalApprovalService,
-    private readonly samlConfigService: SamlConfigurationService,
+    private readonly tokenBuilderService: AbstractTokenBuilderService<
+      UserProfile,
+      AccessTokenPayload,
+      RefreshTokenPayload
+    >,
   ) {
     super();
   }
@@ -31,73 +42,53 @@ export default class AuthUserService extends AbstractAuthUserService {
     email: string,
     firstName: string,
     lastName: string,
-    authType: AuthType,
-    role: UserRole,
-  ): Promise<JwtPayload> {
-    const user = await this.userService.createOrUpdateEntity({
-      status: UserStatus.ACTIVE,
-      email,
-      authType,
-      tenantId,
-      firstName,
-      lastName,
-      roles: [role],
-      //   cast here needed because it's the exclusive place for user creation without tenant id
-      //   probably we will have more places like this in the future
-      //   then we should consider to move this logic to the base service
-    } as User);
+    roles: UserRole[],
+    userProfileId?: string,
+  ): Promise<JwtTokensPayload> {
+    const userProfile = await (userProfileId
+      ? this.userService.createOrUpdateEntity({
+          status: UserProfileStatus.ACTIVE,
+          email,
+          firstName,
+          lastName,
+        })
+      : this.userService.findOneById(userProfileId));
 
-    return this.toJwtPayload(user);
+    await this.userTenantAccount.createOrUpdateEntity({
+      tenantId,
+      userProfileId: userProfile.id,
+      user: userProfile,
+      userStatus: UserAccountStatus.ACTIVE,
+      roles,
+    });
+
+    return this.tokenBuilderService.buildTokensPayload(userProfile);
   }
 
   @Transactional()
-  override async createUserLocal(
-    email: string,
-    hashedPassword: string,
-    firstName: string,
-    lastName: string,
-    tenantId: string,
-    role: UserRole,
-  ) {
+  override async createUserByEmail(request: BaseSignUpByEmailRequest) {
     const user = await this.userService.createOrUpdateEntity({
-      status: UserStatus.WAITING_FOR_EMAIL_APPROVAL,
-      email,
-      password: hashedPassword,
-      authType: AuthType.LOCAL,
-      firstName,
-      lastName,
-      tenantId,
-      // first created user is always an admin
-      roles: [role],
-    } as User);
+      ...request,
+      status: UserProfileStatus.WAITING_FOR_EMAIL_APPROVAL,
+    });
 
     const externalApproval =
       await this.externalApprovalService.createOrUpdateEntity({
         userId: user.id,
+        user,
         code: generateRandomNumber(6).toString(),
         approvalType: ApprovalType.REGISTRATION,
       });
 
-    // todo send email here
-
     return {
-      payload: this.toJwtPayload(user),
-      approvalId: externalApproval.id,
+      user,
+      externalApproval,
     };
   }
 
   @Transactional()
-  override async findPayloadByEmail(tenantId: string, email: string) {
-    const user = await this.userService.findOneByEmailWithRoles(
-      email,
-      tenantId,
-    );
-    return user === undefined ? undefined : this.toJwtPayload(user);
-  }
-
-  @Transactional()
-  override async findUserByEmail(email: string): Promise<Maybe<User>> {
-    const user = await this.userService.findOneByEmailWithRoles(email);
+  override async findUserByEmail(email: string): Promise<Maybe<UserProfile>> {
+    const user = await this.userService.findOneByEmail(email);
 
     if (!user) {
       return undefined;
@@ -112,15 +103,7 @@ export default class AuthUserService extends AbstractAuthUserService {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _token: string,
   ): Promise<void> {
-    // todo implement
-    this.logger.log(`saveRefreshToken not implemented yet`);
-  }
-
-  @Transactional()
-  override async findSamlConfig(
-    tenantUrl: string,
-  ): Promise<{ entryPoint: string; certificate: string } | undefined> {
-    return this.samlConfigService.findSamlConfig(tenantUrl);
+    this.logger.error(`saveRefreshToken not implemented yet`);
   }
 
   @Transactional()
@@ -144,7 +127,7 @@ export default class AuthUserService extends AbstractAuthUserService {
     if (approvalEntity.code === code) {
       await this.userService.updateUserStatus(
         approvalEntity.userId,
-        UserStatus.ACTIVE,
+        UserProfileStatus.ACTIVE,
       );
 
       return this.externalApprovalService.archive(
@@ -155,16 +138,5 @@ export default class AuthUserService extends AbstractAuthUserService {
       this.logger.log(`code ${code} is not valid, probably user typo`);
       return false;
     }
-  }
-
-  override toJwtPayload(user: User): JwtPayload {
-    return {
-      sub: user.id,
-      email: user.email,
-      roles: user.roles.map((role) => role.name),
-      // todo implement mapping
-      permissions: [],
-      tenantId: user.tenantId,
-    };
   }
 }

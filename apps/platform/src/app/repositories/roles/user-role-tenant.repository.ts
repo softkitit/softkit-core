@@ -2,16 +2,17 @@ import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { UserRole } from '../../database/entities';
-import { BaseTenantRepository, TenantClsStore } from '@softkit/typeorm';
+import { BaseRepository } from '@softkit/typeorm';
 import { ClsService } from 'nestjs-cls';
+import { ClsStore } from '../../common/vo/cls-store';
 
 @Injectable()
-export class UserRoleTenantRepository extends BaseTenantRepository<UserRole> {
+export class UserRoleTenantRepository extends BaseRepository<UserRole> {
   constructor(
     @InjectDataSource()
     ds: DataSource,
-    clsService: ClsService<TenantClsStore>,
+    private clsService: ClsService<ClsStore>,
   ) {
-    super(UserRole, ds, clsService);
+    super(UserRole, ds);
   }
 }

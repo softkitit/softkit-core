@@ -1,41 +1,74 @@
 import {
+  BeforeInsert,
+  BeforeUpdate,
   Column,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { PermissionCategory } from './permission-category.entity';
 import { BaseEntityHelper } from '@softkit/typeorm';
+import { Expose } from 'class-transformer';
+import {
+  IsStringCombinedLocalized,
+  IsUUIDLocalized,
+} from '@softkit/validation';
+import { IsOptional } from 'class-validator';
 
 @Entity('permissions')
 export class Permission extends BaseEntityHelper {
+  @BeforeUpdate()
+  @BeforeInsert()
+  public beforeChange() {
+    this.action = this.action.toUpperCase();
+  }
+
   @PrimaryGeneratedColumn('uuid')
+  @Expose()
+  @IsUUIDLocalized()
   id!: string;
 
-  @Column({ type: String, length: 512, nullable: false })
+  @Column({ type: String, length: 256, nullable: false })
+  @Expose()
+  @IsStringCombinedLocalized({
+    minLength: 1,
+    maxLength: 256,
+  })
   name!: string;
 
-  @Column({ type: String, length: 1024, nullable: false })
-  description!: string;
+  @Column({ type: String, length: 1024, nullable: true })
+  @Expose()
+  @IsOptional()
+  @IsStringCombinedLocalized({
+    minLength: 1,
+    maxLength: 1024,
+  })
+  description?: string;
 
   /**
    * action is the identifier of the permission
    * usually it is the name of the permission in lowercase
-   * e.g. admin.user.create, admin.user.read, admin.user.update, admin.user.delete
-   * ideally it should be short, up to 16-32 characters
-   * because default implementation of auth service keep the permissions in a jwt token
-   * and jwt token has a limit of 8kb (8192 characters) in size
+   * e.g. ADMIN.USER.CREATE, ADMIN.USER.READ, ADMIN.USER.UPDATE, ADMIN.USER.DELETE, ADMIN.USER.BULK_UPLOAD
    * */
-  @Column({ type: String, nullable: false, unique: true })
+  @Column({ type: String, nullable: false, length: 256 })
+  @Index({ unique: true })
+  @Expose()
+  @IsStringCombinedLocalized({
+    minLength: 1,
+    maxLength: 256,
+  })
   action!: string;
 
   @Column({ nullable: false, type: 'uuid' })
+  @Expose()
+  @IsUUIDLocalized()
   permissionCategoryId!: string;
 
   @ManyToOne(() => PermissionCategory, {
     eager: false,
   })
   @JoinColumn()
-  permissionCategory?: PermissionCategory | null;
+  permissionCategory!: PermissionCategory | null;
 }

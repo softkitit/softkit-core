@@ -1,11 +1,13 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Transactional } from 'typeorm-transactional';
-import { Tenant } from '../../database/entities';
+import { Tenant, UserProfile } from '../../database/entities';
 import { TenantsRepository } from '../../repositories';
 
-import { CustomUserRoleService } from '../roles/custom-user-role.service';
+import { UserRoleService } from '../roles/user-role.service';
 import { BaseEntityService } from '@softkit/typeorm-service';
 import { SamlConfig } from '../../config/saml.config';
+import { ConflictEntityCreationException } from '@softkit/exceptions';
+import { TenantStatus } from '../../database/entities/tenants/vo/tenant-status.enum';
 
 @Injectable()
 export class TenantService extends BaseEntityService<
@@ -16,59 +18,50 @@ export class TenantService extends BaseEntityService<
 
   constructor(
     private readonly samlConfig: SamlConfig,
-    private customUserRoleService: CustomUserRoleService,
+    private customUserRoleService: UserRoleService,
     tenantsRepository: TenantsRepository,
   ) {
     super(tenantsRepository);
   }
 
-  async findTenantIdByUrl(tenantUrl: string) {
+  async findTenantIdByIdentifier(tenantFriendlyIdentifier: string) {
     return await this.findOne({
       where: {
-        tenantUrl,
+        tenantFriendlyIdentifier,
       },
       select: ['id'],
     }).then((tenant) => tenant?.id);
   }
 
   @Transactional()
-  async setupTenant(tenantName: string) {
-    const tenantUrl = await this.generateTenantUrlPrefix(tenantName);
+  async setupTenant(
+    tenantName: string,
+    tenantFriendlyIdentifier: string,
+    owner: UserProfile,
+  ) {
+    const numberOfTenantsByIdentifier = await this.repository.count({
+      where: {
+        tenantFriendlyIdentifier,
+      },
+    });
 
-    const tenant = await this.repository.save({
+    if (numberOfTenantsByIdentifier > 0) {
+      throw new ConflictEntityCreationException(
+        'Tenant',
+        'tenantFriendlyIdentifier',
+        tenantFriendlyIdentifier,
+      );
+    }
+
+    const tenant = await this.repository.createOrUpdate({
       tenantName,
-      tenantUrl,
+      tenantFriendlyIdentifier,
+      tenantStatus: TenantStatus.ACTIVE,
+      owner,
     });
 
     this.logger.log(`Tenant ${tenantName} created with id ${tenant.id}`);
 
     return tenant;
-  }
-
-  @Transactional()
-  private async generateTenantUrlPrefix(tenantName: string) {
-    const tenantUrlPrefix = tenantName
-      .toLowerCase()
-      .replaceAll(/[^\da-z]/g, '-')
-      .replaceAll(/-+/g, '-')
-      .replaceAll(/^-|-$/g, '');
-
-    // todo make this configurable, it's probably not necessary to be like this
-    const tenantUrl = `${tenantUrlPrefix}.${this.samlConfig.frontendUrl}`;
-
-    const tenantUrlExists = await this.repository.count({
-      where: {
-        tenantUrl,
-      },
-    });
-
-    if (tenantUrlExists) {
-      this.logger.warn(
-        `This finally happened! ${tenantUrlPrefix} repeated, probably someone registered second time or someone with a similar company name`,
-      );
-      return `${tenantUrlPrefix}-${Math.floor(Date.now() / 1000)}`;
-    }
-
-    return tenantUrl;
   }
 }

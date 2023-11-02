@@ -2,22 +2,23 @@ import { Injectable, Logger } from '@nestjs/common';
 import { isEmail } from 'class-validator';
 import { Profile } from 'passport-saml';
 import { Transactional } from 'typeorm-transactional';
-import { CreateUserRequest } from '../../controllers/auth/vo/sign-up.dto';
-import { AuthType } from '../../database/entities/users/types/auth-type.enum';
-import { UserStatus } from '../../database/entities/users/types/user-status.enum';
-import { CustomUserRoleService } from '../roles/custom-user-role.service';
+import { UserRoleService } from '../roles/user-role.service';
 
-import AbstractAuthUserService from './abstract-auth-user-service';
-import { TokenService } from '@softkit/auth';
-import { hashPassword, verifyPassword } from '@softkit/crypto';
+import AbstractAuthUserService from './abstract-auth-user.service';
+import { AbstractTokenBuilderService, TokenService } from '@softkit/auth';
+import { verifyPassword } from '@softkit/crypto';
 import {
-  ConflictEntityCreationException,
   GeneralForbiddenException,
   GeneralInternalServerException,
   GeneralNotFoundException,
   GeneralUnauthorizedException,
 } from '@softkit/exceptions';
-import { TenantService } from '../tenants/tenant.service';
+import { UserProfileStatus } from '../../database/entities/users/types/user-profile-status.enum';
+import { UserProfile } from '../../database/entities';
+import {
+  AccessTokenPayload,
+  RefreshTokenPayload,
+} from '../../common/vo/token-payload';
 
 @Injectable()
 export class AuthService {
@@ -28,13 +29,17 @@ export class AuthService {
 
   constructor(
     private readonly tokenService: TokenService,
-    private readonly tenantService: TenantService,
     private readonly userAuthService: AbstractAuthUserService,
-    private readonly roleService: CustomUserRoleService,
+    private readonly roleService: UserRoleService,
+    private readonly tokenBuilderService: AbstractTokenBuilderService<
+      UserProfile,
+      AccessTokenPayload,
+      RefreshTokenPayload
+    >,
   ) {}
 
   /**
-   * @throws {Ge neralNotFoundException} if we can't approve the user email
+   * @throws {GeneralNotFoundException} if we can't approve the user email
    * (e.g. wrong code, user already approved, etc.)
    * */
   @Transactional()
@@ -59,23 +64,22 @@ export class AuthService {
     const user = await this.userAuthService.findUserByEmail(profile.email);
 
     if (user) {
-      return this.tokenService.signTokens(
-        this.userAuthService.toJwtPayload(user),
-      );
+      const payload = this.tokenBuilderService.buildTokensPayload(user);
+      return this.tokenService.signTokens(payload);
     } else {
-      const defaultRole = await this.roleService.findDefaultRole();
+      const defaultRole = await this.roleService.findDefaultUserRole();
 
       if (!defaultRole) {
         /**
          *  this should never happen, but just in case we need to react and help
          *  most likely it's some basic configuration issue, or issue after refactoring
          */
-        /* istanbul ignore n ext */
+        /* istanbul ignore next */
         this.logger.error(
           `User trying to login with SAML, but default role is not set for tenant: ${tenantId}.
           This looks like a client configuration issue we need to react and help.`,
         );
-        /* istanbul ignore n ext */
+        /* istanbul ignore next */
         throw new GeneralInternalServerException();
       }
 
@@ -84,56 +88,11 @@ export class AuthService {
         profile.email.trim().toLowerCase(),
         this.getSamlAttribute(profile, AuthService.FIRST_NAME_SAML_ATTR),
         this.getSamlAttribute(profile, AuthService.LAST_NAME_SAML_ATTR),
-        AuthType.SAML_TENANT,
-        defaultRole,
+        [defaultRole],
       );
 
       return this.tokenService.signTokens(newUserPayload);
     }
-  }
-
-  @Transactional()
-  async signUp(createUserDto: CreateUserRequest) {
-    const user = await this.userAuthService.findUserByEmail(
-      createUserDto.email,
-    );
-
-    // if user exists ju st return empty response to prevent exposing emails of registered users
-    if (user) {
-      this.logger.warn(
-        `User trying to register with same email again: ${createUserDto.email}`,
-        {
-          userId: user,
-        },
-      );
-
-      throw new ConflictEntityCreationException(
-        'User',
-        'email',
-        createUserDto.email,
-      );
-    }
-
-    const tenant = await this.tenantService.setupTenant(
-      createUserDto.companyName,
-    );
-
-    const adminRole = await this.roleService.findDefaultAdminRole();
-
-    const hashedPassword = await hashPassword(createUserDto.password);
-
-    this.logger.log(
-      `Creating a new user, with email address: ${createUserDto.email}`,
-    );
-
-    return this.userAuthService.createUserLocal(
-      createUserDto.email,
-      hashedPassword,
-      createUserDto.firstName,
-      createUserDto.lastName,
-      tenant.id,
-      adminRole,
-    );
   }
 
   /**
@@ -149,26 +108,25 @@ export class AuthService {
       !user ||
       user.password === undefined ||
       !(await verifyPassword(password, user.password)) ||
-      user.status !== UserStatus.ACTIVE
+      user.status !== UserProfileStatus.ACTIVE
     ) {
       throw new GeneralUnauthorizedException();
     }
 
-    return this.tokenService.signTokens(
-      this.userAuthService.toJwtPayload(user),
-    );
+    const payload = this.tokenBuilderService.buildTokensPayload(user);
+    return this.tokenService.signTokens(payload);
   }
 
   @Transactional()
-  async refreshTokens(userId: string) {
+  async refreshAccessToken(userId: string) {
     const user = await this.userAuthService.findUserByEmail(userId);
 
-    if (!user || user.status !== UserStatus.ACTIVE) {
+    if (!user || user.status !== UserProfileStatus.ACTIVE) {
       throw new GeneralUnauthorizedException();
     }
 
-    return this.tokenService.signTokens(
-      this.userAuthService.toJwtPayload(user),
+    return this.tokenService.signAccessToken(
+      this.tokenBuilderService.buildAccessTokenPayload(user),
     );
   }
 
