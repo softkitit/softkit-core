@@ -35,11 +35,15 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       context.getClass(),
     ]);
 
+    const request = context.switchToHttp().getRequest();
+
     if (skipAuth) {
+      const tenantId =
+        await this.abstractTenantResolution.resolveTenantId(request);
+      this.clsService.set('tenantId', tenantId);
       return true;
     }
 
-    const request = context.switchToHttp().getRequest();
     const accessToken = ExtractJwt.fromAuthHeaderAsBearerToken()(request);
 
     if (!accessToken) {

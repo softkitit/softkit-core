@@ -26,17 +26,14 @@ export class HeaderTenantResolutionService extends AbstractTenantResolutionServi
     tenantId: string,
     jwtPayload: IAccessTokenPayload,
   ): Promise<boolean> {
-    const allTenants = (jwtPayload as never)[
-      this.config.allTenantsJwtPayloadKey
-    ];
+    const allTenants = (((jwtPayload as never)['tenants'] as []) || []).map(
+      (t) => (t as never)['tenantId'],
+    );
 
-    if (
-      Array.isArray(allTenants) &&
-      (allTenants as string[]).includes(tenantId)
-    ) {
+    if ((allTenants as string[]).includes(tenantId)) {
       return true;
     } else {
-      this.logger.warn(
+      this.logger.error(
         `
         Cross tenant request detected, that is suspicious,
         and it's better to investigate it. Tenant: %s, payload: %s

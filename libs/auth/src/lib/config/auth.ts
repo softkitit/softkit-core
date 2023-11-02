@@ -19,12 +19,4 @@ export class AuthConfig {
   @IsString()
   @IsOptional()
   headerTenantId = 'x-tenant-id';
-
-  @IsString()
-  @IsOptional()
-  currentTenantJwtPayloadKey = 'tenantId';
-
-  @IsString()
-  @IsOptional()
-  allTenantsJwtPayloadKey = 'tenants';
 }
