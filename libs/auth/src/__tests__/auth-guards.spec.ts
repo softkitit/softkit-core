@@ -27,6 +27,11 @@ describe('test auth', () => {
     email: emptyPermissionsPayload.email,
   };
 
+  const payloadsToSign = {
+    accessTokenPayload: emptyPermissionsPayload,
+    refreshTokenPayload,
+  };
+
   beforeAll(async () => {
     const module = await Test.createTestingModule({
       imports: [TestAppModule],
@@ -39,10 +44,7 @@ describe('test auth', () => {
 
   describe('test skip auth controller', () => {
     test('skip auth controller test with valid token', async () => {
-      const tokens = await tokenService.signTokens(
-        emptyPermissionsPayload,
-        refreshTokenPayload,
-      );
+      const tokens = await tokenService.signTokens(payloadsToSign);
 
       const response = await app.inject({
         method: 'GET',
@@ -67,10 +69,7 @@ describe('test auth', () => {
     });
 
     test('skip auth controller and method with permission guard should fail', async () => {
-      const tokens = await tokenService.signTokens(
-        emptyPermissionsPayload,
-        refreshTokenPayload,
-      );
+      const tokens = await tokenService.signTokens(payloadsToSign);
 
       const response = await app.inject({
         method: 'GET',
@@ -86,10 +85,7 @@ describe('test auth', () => {
 
   describe('test auth controller with permissions various cases', () => {
     test('no permissions should be just authorized', async () => {
-      const tokens = await tokenService.signTokens(
-        emptyPermissionsPayload,
-        refreshTokenPayload,
-      );
+      const tokens = await tokenService.signTokens(payloadsToSign);
 
       const response = await app.inject({
         method: 'GET',
@@ -104,10 +100,7 @@ describe('test auth', () => {
     });
 
     test('get current user decorator test', async () => {
-      const tokens = await tokenService.signTokens(
-        emptyPermissionsPayload,
-        refreshTokenPayload,
-      );
+      const tokens = await tokenService.signTokens(payloadsToSign);
 
       const response = await app.inject({
         method: 'GET',
@@ -146,13 +139,13 @@ describe('test auth', () => {
     });
 
     test('first-level-any-permission method with valid permission annotation', async () => {
-      const tokens = await tokenService.signTokens(
-        {
-          ...emptyPermissionsPayload,
+      const tokens = await tokenService.signTokens({
+        ...payloadsToSign,
+        accessTokenPayload: {
+          ...payloadsToSign.accessTokenPayload,
           permissions: ['admin'],
         },
-        refreshTokenPayload,
-      );
+      });
 
       const response = await app.inject({
         method: 'GET',
@@ -167,13 +160,13 @@ describe('test auth', () => {
     });
 
     test('second-level-any-permission method with valid permission annotation', async () => {
-      const tokens = await tokenService.signTokens(
-        {
-          ...emptyPermissionsPayload,
+      const tokens = await tokenService.signTokens({
+        ...payloadsToSign,
+        accessTokenPayload: {
+          ...payloadsToSign.accessTokenPayload,
           permissions: ['admin.user'],
         },
-        refreshTokenPayload,
-      );
+      });
 
       const response = await app.inject({
         method: 'GET',
@@ -198,13 +191,13 @@ describe('test auth', () => {
     });
 
     test('exact-permission method with valid permission annotation', async () => {
-      const tokens = await tokenService.signTokens(
-        {
-          ...emptyPermissionsPayload,
+      const tokens = await tokenService.signTokens({
+        ...payloadsToSign,
+        accessTokenPayload: {
+          ...payloadsToSign.accessTokenPayload,
           permissions: ['admin.user.create'],
         },
-        refreshTokenPayload,
-      );
+      });
 
       const response = await app.inject({
         method: 'GET',
@@ -228,13 +221,13 @@ describe('test auth', () => {
     ])(
       'any-match method with valid permissions any match annotation: %s',
       async (...permissions) => {
-        const tokens = await tokenService.signTokens(
-          {
-            ...emptyPermissionsPayload,
+        const tokens = await tokenService.signTokens({
+          ...payloadsToSign,
+          accessTokenPayload: {
+            ...payloadsToSign.accessTokenPayload,
             permissions,
           },
-          refreshTokenPayload,
-        );
+        });
 
         const response = await app.inject({
           method: 'GET',
@@ -262,13 +255,13 @@ describe('test auth', () => {
     ])(
       'any-match method with invalid permission annotation: %s',
       async (permissions) => {
-        const tokens = await tokenService.signTokens(
-          {
-            ...emptyPermissionsPayload,
+        const tokens = await tokenService.signTokens({
+          ...payloadsToSign,
+          accessTokenPayload: {
+            ...payloadsToSign.accessTokenPayload,
             permissions: permissions as string[],
           },
-          refreshTokenPayload,
-        );
+        });
 
         const response = await app.inject({
           method: 'GET',
@@ -292,13 +285,13 @@ describe('test auth', () => {
         undefined,
         null,
       ])('each method with invalid permissions: %s', async (permissions) => {
-        const tokens = await tokenService.signTokens(
-          {
-            ...emptyPermissionsPayload,
+        const tokens = await tokenService.signTokens({
+          ...payloadsToSign,
+          accessTokenPayload: {
+            ...payloadsToSign.accessTokenPayload,
             permissions: permissions as string[],
           },
-          refreshTokenPayload,
-        );
+        });
 
         const response = await app.inject({
           method: 'GET',
@@ -323,13 +316,13 @@ describe('test auth', () => {
       ],
       ['admin.user.create', 'admin.user.update', 'admin.user.update'],
     ])('each method with valid permissions: %s', async (...permissions) => {
-      const tokens = await tokenService.signTokens(
-        {
-          ...emptyPermissionsPayload,
+      const tokens = await tokenService.signTokens({
+        ...payloadsToSign,
+        accessTokenPayload: {
+          ...payloadsToSign.accessTokenPayload,
           permissions,
         },
-        refreshTokenPayload,
-      );
+      });
 
       const response = await app.inject({
         method: 'GET',

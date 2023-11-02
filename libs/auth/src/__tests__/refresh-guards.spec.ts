@@ -26,6 +26,11 @@ describe('test refresh auth', () => {
     email: jwtPayload.email,
   };
 
+  const payloadsToSign = {
+    accessTokenPayload: jwtPayload,
+    refreshTokenPayload,
+  };
+
   beforeAll(async () => {
     const module = await Test.createTestingModule({
       imports: [TestAppModule],
@@ -39,12 +44,7 @@ describe('test refresh auth', () => {
 
   describe('test refresh token auth guard and strategy', () => {
     it('should accept refresh token', async () => {
-      const tokens = await tokenService.signTokens(
-        {
-          ...jwtPayload,
-        },
-        refreshTokenPayload,
-      );
+      const tokens = await tokenService.signTokens(payloadsToSign);
 
       const response = await app.inject({
         method: 'GET',
@@ -59,12 +59,7 @@ describe('test refresh auth', () => {
     });
 
     it('should reject access token with 500', async () => {
-      const tokens = await tokenService.signTokens(
-        {
-          ...jwtPayload,
-        },
-        refreshTokenPayload,
-      );
+      const tokens = await tokenService.signTokens(payloadsToSign);
 
       const response = await app.inject({
         method: 'GET',

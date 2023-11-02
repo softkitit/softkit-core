@@ -19,9 +19,11 @@ export abstract class BaseTenantRepository<
   protected override presetDefaultWhereOptions<
     T extends FindOptionsWhere<ENTITY> | undefined,
   >(currentOptions: T): T {
-    const tenantId = this.clsService.get().tenantId;
+    const clsStore = this.clsService.get();
 
-    if (!tenantId) {
+    const tenantId = clsStore?.tenantId;
+
+    if (!clsStore || !tenantId) {
       throw new GeneralInternalServerException(
         `TenantId is not set for the required tenant id repository, it's either not set in the request
         or you are trying to use the repository outside of the request scope or someone trying to cheat`,

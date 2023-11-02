@@ -30,6 +30,11 @@ describe('test token service', () => {
     email: jwtPayload.email,
   };
 
+  const payloadsToSign = {
+    accessTokenPayload: jwtPayload,
+    refreshTokenPayload,
+  };
+
   beforeAll(async () => {
     const module = await Test.createTestingModule({
       imports: [],
@@ -62,20 +67,14 @@ describe('test token service', () => {
   });
 
   test('generate access and refresh token', async () => {
-    const tokens = await tokenService.signTokens(
-      jwtPayload,
-      refreshTokenPayload,
-    );
+    const tokens = await tokenService.signTokens(payloadsToSign);
 
     expect(tokens.accessToken).toBeDefined();
     expect(tokens.refreshToken).toBeDefined();
   });
 
   test('generate and verify access token', async () => {
-    const tokens = await tokenService.signTokens(
-      jwtPayload,
-      refreshTokenPayload,
-    );
+    const tokens = await tokenService.signTokens(payloadsToSign);
 
     const tokenVerification = await tokenService.verifyAccessToken(
       tokens.accessToken,
@@ -99,13 +98,7 @@ describe('test token service', () => {
       return `a.u.c-${id}`;
     });
 
-    const tokens = await tokenService.signTokens(
-      {
-        ...jwtPayload,
-        permissions,
-      },
-      refreshTokenPayload,
-    );
+    const tokens = await tokenService.signTokens(payloadsToSign);
 
     expect(tokens.accessToken.length).toBeLessThan(7168);
   });
@@ -115,22 +108,19 @@ describe('test token service', () => {
       return `a.u.c-${id}`;
     });
 
-    const tokens = await tokenService.signTokens(
-      {
-        ...jwtPayload,
+    const tokens = await tokenService.signTokens({
+      ...payloadsToSign,
+      accessTokenPayload: {
+        ...payloadsToSign.accessTokenPayload,
         permissions,
       },
-      refreshTokenPayload,
-    );
+    });
 
     expect(tokens.accessToken.length).toBeGreaterThan(7168);
   });
 
   test('generate and verify refresh token', async () => {
-    const tokens = await tokenService.signTokens(
-      jwtPayload,
-      refreshTokenPayload,
-    );
+    const tokens = await tokenService.signTokens(payloadsToSign);
 
     const tokenVerification = await tokenService.verifyRefreshToken(
       tokens.refreshToken,
@@ -151,10 +141,7 @@ describe('test token service', () => {
   });
 
   test('verify access token with refresh secret', async () => {
-    const tokens = await tokenService.signTokens(
-      jwtPayload,
-      refreshTokenPayload,
-    );
+    const tokens = await tokenService.signTokens(payloadsToSign);
 
     await expect(
       tokenService.verifyAccessToken(tokens.refreshToken),
