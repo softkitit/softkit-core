@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.1.2](https://github.com/saas-buildkit/saas-buildkit-core/compare/exceptions-0.1.1...exceptions-0.1.2) (2023-11-04)
+
+
+### Bug Fixes
+
+* **exceptions:** added more logs for exception filter ([e556d9f](https://github.com/saas-buildkit/saas-buildkit-core/commit/e556d9fe3a49a581b8d6350f9126fbdd70d5a6c6))
+
 ## [0.1.1](https://github.com/saas-buildkit/saas-buildkit-core/compare/exceptions-0.1.0...exceptions-0.1.1) (2023-09-11)
 
 ## [0.1.0](https://github.com/saas-buildkit/saas-buildkit-core/compare/exceptions-0.0.6...exceptions-0.1.0) (2023-09-09)
