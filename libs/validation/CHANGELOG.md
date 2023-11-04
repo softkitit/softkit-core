@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.1.3](https://github.com/softkitit/softkit-core/compare/validation-0.1.2...validation-0.1.3) (2023-11-04)
+
+
+### Bug Fixes
+
+* **validation:** added trim and lowercase transformer ([ac0538e](https://github.com/softkitit/softkit-core/commit/ac0538e7efe659938e31b499e2c934de7c10ddff))
+
 ## [0.1.3](https://github.com/saas-buildkit/saas-buildkit-core/compare/validation-0.1.2...validation-0.1.3) (2023-11-04)
 
 
