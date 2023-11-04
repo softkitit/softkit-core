@@ -1,4 +1,17 @@
 Softkit Core Libraries Changelog
+## [0.3.0](https://github.com/saas-buildkit/saas-buildkit-core/compare/typeorm-0.2.1...typeorm-0.3.0) (2023-11-04)
+
+
+### Features
+
+* **typeorm:** added default exclusion lists for DTOs ([be304fb](https://github.com/saas-buildkit/saas-buildkit-core/commit/be304fbebf4015cd0edc8123b3832d17b1882361))
+
+
+### Bug Fixes
+
+* **typeorm:** added proper handling for tenant id resolution in a preset condition ([c403fb5](https://github.com/saas-buildkit/saas-buildkit-core/commit/c403fb5dc5ba6923d755bd583d5f41fb8fc31f34))
+* **typeorm:** changed default tenant entity index. Made cls service protected to have access in parent repos ([12acee5](https://github.com/saas-buildkit/saas-buildkit-core/commit/12acee550ea2156b5caed9f110b7fb562b5b8a94))
+
 ## [0.2.1](https://github.com/saas-buildkit/saas-buildkit-core/compare/typeorm-0.2.0...typeorm-0.2.1) (2023-09-13)
 
 
