@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.0.7](https://github.com/saas-buildkit/saas-buildkit-core/compare/server-http-client-0.0.6...server-http-client-0.0.7) (2023-11-04)
+
+
+### Bug Fixes
+
+* **server-http-client:** get rid of cls store type ([572ad0c](https://github.com/saas-buildkit/saas-buildkit-core/commit/572ad0c78ad979836654fd26c4a17d26608f9a73))
+
 ## [0.0.6](https://github.com/saas-buildkit/saas-buildkit-core/compare/server-http-client-0.0.5...server-http-client-0.0.6) (2023-09-11)
 
 ## [0.0.5](https://github.com/saas-buildkit/saas-buildkit-core/compare/server-http-client-0.0.4...server-http-client-0.0.5) (2023-09-08)
