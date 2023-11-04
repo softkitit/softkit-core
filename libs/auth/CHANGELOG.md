@@ -1,4 +1,19 @@
 Softkit Core Libraries Changelog
+## [0.1.0](https://github.com/softkitit/softkit-core/compare/auth-0.0.6...auth-0.1.0) (2023-11-04)
+
+
+### Features
+
+* **auth:** added tenantId resolution service ([2b01e80](https://github.com/softkitit/softkit-core/commit/2b01e803151376f5812e26c7c3b6b32e4621d802))
+* **auth:** generalized the use of auth library in terms of token building and multi tenancy ([989631b](https://github.com/softkitit/softkit-core/commit/989631b80f89b7b081f52480271776586a6e96ff))
+* **auth:** implemented permission check interface and base service for check in a token ([afbc30a](https://github.com/softkitit/softkit-core/commit/afbc30afa2fd7e2ffe8326b9437dd9a4ba6849b8))
+
+
+### Bug Fixes
+
+* **auth:** added tenant id resolution even for unauthorized endpoints ([1c422de](https://github.com/softkitit/softkit-core/commit/1c422dee518653c2fb91c6c25f1520a95408f729))
+* **auth:** excluded unnecessary dependencies. Added auth header for user clsStore ([301d672](https://github.com/softkitit/softkit-core/commit/301d6720c1e102bd6c8ba4305aa26eb06856c119))
+
 ## [0.1.0](https://github.com/saas-buildkit/saas-buildkit-core/compare/auth-0.0.6...auth-0.1.0) (2023-11-04)
 
 
