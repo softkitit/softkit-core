@@ -1,4 +1,4 @@
-import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
+import { ArgumentsHost, Catch, ExceptionFilter, Logger } from '@nestjs/common';
 import { HttpArgumentsHost } from '@nestjs/common/interfaces';
 import { HttpAdapterHost } from '@nestjs/core';
 import { I18nContext } from '@saas-buildkit/nestjs-i18n';
@@ -6,6 +6,8 @@ import { AbstractHttpException } from '../exceptions/abstract-http.exception';
 
 @Catch(AbstractHttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
+  private readonly logger: Logger = new Logger(HttpExceptionFilter.name);
+
   constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
 
   catch(exception: AbstractHttpException, host: ArgumentsHost): void {
@@ -17,6 +19,17 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const i18n = I18nContext.current(host);
 
     this.presetHeaders(exception, ctx);
+
+    if (exception.status > 499) {
+      this.logger.error(
+        'Internal server error. Require immediate attention, details: %o',
+        exception,
+      );
+    } else {
+      this.logger.debug(
+        `Error thrown - details: ${JSON.stringify(exception, undefined, 2)}`,
+      );
+    }
 
     const response = exception.toErrorResponse(ctx.getRequest().id, i18n);
 

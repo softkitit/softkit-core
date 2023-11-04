@@ -1,38 +1,33 @@
-import { OmitType, PickType } from '@nestjs/swagger';
-import { CustomUserRole } from '../../../database/entities';
+import { OmitType } from '@nestjs/swagger';
+import { UserRole } from '../../../database/entities';
 import { FilterOperator, PaginateConfig } from 'nestjs-paginate';
+import {
+  DEFAULT_CREATE_ENTITY_EXCLUDE_LIST,
+  DEFAULT_ENTITY_EXCLUDE_LIST,
+  DEFAULT_UPDATE_ENTITY_EXCLUDE_LIST,
+} from '@softkit/typeorm';
 
-export class CustomUserRoleWithoutPermissionsDto extends OmitType(
-  CustomUserRole,
-  ['tenant', 'tenantId', '__entity', 'deletedAt'] as const,
-) {}
-
-export class CreateUserRole extends OmitType(CustomUserRole, [
-  'id',
+export class UserRoleWithoutPermission extends OmitType(UserRole, [
+  ...DEFAULT_ENTITY_EXCLUDE_LIST,
+  'permissions',
   'tenant',
-  'tenantId',
-  '__entity',
-  'deletedAt',
-  'createdAt',
-  'updatedAt',
-  'version',
 ] as const) {}
 
-export class UpdateUserRole extends OmitType(CustomUserRole, [
+export class CreateUserRole extends OmitType(UserRole, [
+  ...DEFAULT_CREATE_ENTITY_EXCLUDE_LIST,
   'tenant',
   'permissions',
   'tenantId',
-  '__entity',
-  'deletedAt',
-  'createdAt',
-  'updatedAt',
 ] as const) {}
 
-export class WhereConditionsUpdateUserRole extends PickType(CustomUserRole, [
-  'createdAt',
+export class UpdateUserRole extends OmitType(UserRole, [
+  ...DEFAULT_UPDATE_ENTITY_EXCLUDE_LIST,
+  'tenant',
+  'permissions',
+  'tenantId',
 ] as const) {}
 
-export const ROLES_PAGINATION_CONFIG: PaginateConfig<CustomUserRole> = {
+export const ROLES_PAGINATION_CONFIG: PaginateConfig<UserRole> = {
   defaultLimit: 50,
   maxLimit: 100,
   searchableColumns: ['name', 'roleType'],
@@ -40,7 +35,6 @@ export const ROLES_PAGINATION_CONFIG: PaginateConfig<CustomUserRole> = {
     id: [FilterOperator.EQ, FilterOperator.IN],
     name: [FilterOperator.CONTAINS],
   },
-  select: ['id', 'name', 'createdAt', 'updatedAt', 'roleType'],
   sortableColumns: ['id', 'name', 'createdAt', 'updatedAt'],
   defaultSortBy: [
     ['createdAt', 'DESC'],

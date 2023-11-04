@@ -1,78 +1,55 @@
 import {
-  IsEmailLocalized,
   IsStringCombinedLocalized,
   MatchesWithProperty,
   PasswordLocalized,
 } from '@softkit/validation';
+import { OmitType } from '@nestjs/swagger';
+import { UserProfile } from '../../../database/entities';
+import { JwtTokensPayload } from '@softkit/auth';
+import { DEFAULT_CREATE_ENTITY_EXCLUDE_LIST } from '@softkit/typeorm';
 
-export class CreateUserRequest {
+export class BaseSignUpByEmailRequest extends OmitType(UserProfile, [
+  ...DEFAULT_CREATE_ENTITY_EXCLUDE_LIST,
+  'id',
+  'status',
+  'userTenantsAccounts',
+] as const) {
   /**
-   * User email address
-   * @example john.doe@gmail.com
-   * */
-  @IsEmailLocalized()
-  email!: string;
-
-  /**
-   * Original password
-   * */
-  @IsStringCombinedLocalized()
-  @PasswordLocalized()
-  password!: string;
-
-  /**
-   * Repeat password
+   * @description Repeat password, it's good to do validation both on backend and frontend,
+   * just in case of some issues with frontend,
+   * we won't save garbage to the database
    * */
   @PasswordLocalized()
-  @MatchesWithProperty(CreateUserRequest, (s) => s.password, {
+  @MatchesWithProperty(BaseSignUpByEmailRequest, (s) => s.password, {
     message: 'validation.REPEAT_PASSWORD_DOESNT_MATCH',
   })
   @IsStringCombinedLocalized()
   repeatedPassword!: string;
+}
 
-  @IsStringCombinedLocalized({ maxLength: 256 })
-  firstName!: string;
-
-  @IsStringCombinedLocalized({ maxLength: 256 })
-  lastName!: string;
-
-  @IsStringCombinedLocalized({ maxLength: 256 })
+export class SignUpByEmailWithTenantCreationRequest extends BaseSignUpByEmailRequest {
+  @IsStringCombinedLocalized({
+    minLength: 1,
+    maxLength: 127,
+  })
   companyName!: string;
+
+  @IsStringCombinedLocalized({
+    minLength: 1,
+    maxLength: 127,
+  })
+  companyIdentifier!: string;
 }
 
-export class SignInRequest {
-  /**
-   * User email address
-   * @example john.doe@gmail.com
-   * */
-  @IsEmailLocalized()
-  email!: string;
+export class SignUpByEmailRequest extends BaseSignUpByEmailRequest {}
 
+export class SignUpByEmailResponse {
   /**
-   * @example absD123k&
+   * id of approval entity, for future reuse
    * */
-  @IsStringCombinedLocalized()
-  @PasswordLocalized()
-  password!: string;
-}
-
-export class ApproveSignUpRequest {
-  @IsStringCombinedLocalized()
-  // todo  uuid validation
   approvalId!: string;
-
-  @IsStringCombinedLocalized({ minLength: 6, maxLength: 6 })
-  code!: string;
-}
-
-export class UserTokens {
   /**
-   * Access Token, should be used with each request. It lives for short period of time.
+   * payloads for token generation, useful in case if we want user in without verification
    * */
-  accessToken!: string;
-
-  /**
-   * Refresh Token, should be used for refreshing the access token
-   * */
-  refreshToken!: string;
+  jwtPayload!: JwtTokensPayload;
 }

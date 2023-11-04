@@ -3,11 +3,12 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import { RequestWithUser } from 'passport-saml/lib/passport-saml/types';
 import { Transactional } from 'typeorm-transactional';
 
-import AbstractAuthUserService from './abstract-auth-user-service';
 import { AuthService } from './auth.service';
 import { SamlStrategy } from './strategy/saml-strategy';
 import { SamlConfig } from '../../config/saml.config';
 import { MissingConfigurationForFeatureException } from '@softkit/exceptions';
+import { InitiateSamlLoginRequest } from '../../controllers/auth/vo/saml.dto';
+import { SamlConfigurationService } from '../tenants/saml-configuration.service';
 
 @Injectable()
 export class SamlService {
@@ -16,16 +17,22 @@ export class SamlService {
   constructor(
     private readonly authService: AuthService,
     private readonly samlConfig: SamlConfig,
-    private readonly userService: AbstractAuthUserService,
+    private readonly samlConfigService: SamlConfigurationService,
   ) {}
 
   @Transactional()
   async login(
+    request: InitiateSamlLoginRequest,
     req: FastifyRequest,
     res: FastifyReply,
     replyData?: Record<string, unknown>,
   ) {
-    const strategy = await this.createStrategyByTenantUrl(req, res, replyData);
+    const strategy = await this.createStrategy(
+      request.samlConfigurationId,
+      req,
+      res,
+      replyData,
+    );
 
     await strategy.authenticate(req as unknown as RequestWithUser, {
       samlFallback: 'login-request',
@@ -36,19 +43,34 @@ export class SamlService {
    * generate saml xml metadata for a tenant url
    * */
   @Transactional()
-  async generateMetadata(request: FastifyRequest, res: FastifyReply) {
-    const strategy = await this.createStrategyByTenantUrl(request, res);
+  async generateMetadata(
+    samlConfigurationId: string,
+    request: FastifyRequest,
+    res: FastifyReply,
+  ) {
+    const samlConfig =
+      await this.samlConfigService.findOneById(samlConfigurationId);
+    const mockStrategy = new SamlStrategy(
+      this.authService,
+      this.samlConfig,
+      request,
+      res,
+      samlConfig.entryPoint,
+      samlConfig.certificate,
+      {},
+    );
 
     // eslint-disable-next-line unicorn/no-null
-    return strategy.generateServiceProviderMetadata(null, null);
+    return mockStrategy.generateServiceProviderMetadata(null, null);
   }
 
-  private async createStrategyByTenantUrl(
+  private async createStrategy(
+    samlConfigId: string,
     req: FastifyRequest,
     res: FastifyReply,
     replyData?: Record<string, unknown>,
   ) {
-    const config = await this.userService.findSamlConfig(req.hostname);
+    const config = await this.samlConfigService.findOneById(samlConfigId);
 
     if (!config) {
       this.logger.warn(

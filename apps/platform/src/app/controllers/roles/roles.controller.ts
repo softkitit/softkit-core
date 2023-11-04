@@ -10,18 +10,15 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { plainToClass } from 'class-transformer';
-import {
-  CustomUserRoleService,
-  CustomUserRoleTenantService,
-} from '../../services';
+import { UserRoleService, UserRoleTenantService } from '../../services';
 import {
   CreateUserRole,
-  CustomUserRoleWithoutPermissionsDto,
+  UserRoleWithoutPermission,
   ROLES_PAGINATION_CONFIG,
   UpdateUserRole,
 } from './vo/role.dto';
 import { IdParamUUID, VersionNumberParam } from '@softkit/common-types';
-import { Permissions, SkipAuth } from '@softkit/auth';
+import { Permissions } from '@softkit/auth';
 import {
   Paginate,
   Paginated,
@@ -38,25 +35,21 @@ import { RolesApi } from '@softkit/platform-client';
 @ApiBearerAuth()
 export class RolesController {
   constructor(
-    private readonly customUserRoleService: CustomUserRoleService,
+    private readonly customUserRoleService: UserRoleService,
     private readonly rolesApi: RolesApi,
-    private readonly customUserRoleTenantService: CustomUserRoleTenantService,
+    private readonly customUserRoleTenantService: UserRoleTenantService,
   ) {}
 
   @Get()
-  @PaginatedSwaggerDocs(
-    CustomUserRoleWithoutPermissionsDto,
-    ROLES_PAGINATION_CONFIG,
-  )
-  @SkipAuth()
+  @PaginatedSwaggerDocs(UserRoleWithoutPermission, ROLES_PAGINATION_CONFIG)
   async findAll(
     @Paginate()
     query: PaginateQuery,
-  ): Promise<Paginated<CustomUserRoleWithoutPermissionsDto>> {
-    return this.customUserRoleService.findAllPaginatedAndTransform(
+  ): Promise<Paginated<UserRoleWithoutPermission>> {
+    return this.customUserRoleService.findAllRolesPaginatedForTenant(
       query,
       ROLES_PAGINATION_CONFIG,
-      CustomUserRoleWithoutPermissionsDto,
+      UserRoleWithoutPermission,
     );
   }
 
@@ -64,11 +57,11 @@ export class RolesController {
   @Permissions('platform.roles.read')
   async findOne(
     @Param() findOneOptions: IdParamUUID,
-  ): Promise<CustomUserRoleWithoutPermissionsDto> {
+  ): Promise<UserRoleWithoutPermission> {
     return this.customUserRoleTenantService
       .findOneById(findOneOptions.id)
       .then((data) => {
-        return plainToClass(CustomUserRoleWithoutPermissionsDto, data);
+        return plainToClass(UserRoleWithoutPermission, data);
       });
   }
 
@@ -78,7 +71,7 @@ export class RolesController {
     return this.customUserRoleTenantService
       .createOrUpdateEntity(customUserRole)
       .then((item) => {
-        return plainToClass(CustomUserRoleWithoutPermissionsDto, item);
+        return plainToClass(UserRoleWithoutPermission, item);
       });
   }
 
@@ -87,11 +80,11 @@ export class RolesController {
   async updateOne(@Param() id: IdParamUUID, @Body() role: UpdateUserRole) {
     return this.customUserRoleTenantService
       .createOrUpdateEntity({
-        id,
+        ...id,
         ...role,
       })
       .then((item) => {
-        return plainToClass(CustomUserRoleWithoutPermissionsDto, item);
+        return plainToClass(UserRoleWithoutPermission, item);
       });
   }
 
@@ -102,12 +95,5 @@ export class RolesController {
     @Query() query: VersionNumberParam,
   ) {
     return this.customUserRoleTenantService.archive(path.id, query.version);
-  }
-
-  @SkipAuth()
-  @Get('test-proxy')
-  async testProxy() {
-    const promise = await this.rolesApi.rolesControllerFindAll();
-    return promise.data;
   }
 }

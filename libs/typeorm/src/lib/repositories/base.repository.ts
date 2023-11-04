@@ -117,8 +117,6 @@ export abstract class BaseRepository<
         version,
         deletedAt: IsNull(),
       } as FindOptionsWhere<NonNullable<ENTITY>>),
-      // todo typeorm typing issue, created an issue in typeorm
-      // https://github.com/typeorm/typeorm/issues/10155
       {
         deletedAt: new Date(),
       } as unknown as QueryDeepPartialEntity<ENTITY>,

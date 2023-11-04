@@ -23,6 +23,9 @@ export function generateRandomNumber(length = 6): number {
   return Number.parseInt(nanoidOnlyNumbers(length));
 }
 
+/**
+ * todo add salt
+ * */
 export function hashPassword(password: string) {
   return argon2.hash(password);
 }

@@ -1,15 +1,13 @@
 import { RedisModule, RedisModuleOptions } from '@songkeys/nestjs-redis';
-import { RedisModuleConfig } from './config';
+import { RedisConfig } from './config';
 
 export function setupRedisModule() {
   return RedisModule.forRootAsync({
-    useFactory: async (
-      config: RedisModuleConfig,
-    ): Promise<RedisModuleOptions> => {
+    useFactory: async (config: RedisConfig): Promise<RedisModuleOptions> => {
       return {
         ...config,
       } satisfies RedisModuleOptions;
     },
-    inject: [RedisModuleConfig],
+    inject: [RedisConfig],
   });
 }

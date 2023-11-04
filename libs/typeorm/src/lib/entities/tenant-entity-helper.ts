@@ -13,6 +13,6 @@ export class BaseTenantEntityHelper extends BaseEntityHelper {
     clsPropertyFieldName: 'tenantId',
   })
   @Column({ nullable: false })
-  @Index({ where: '"deleted_at" IS NOT NULL' })
+  @Index()
   tenantId!: string;
 }

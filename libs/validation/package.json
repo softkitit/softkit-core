@@ -11,11 +11,7 @@
   "dependencies": {
     "class-validator": "^0.14.0",
     "class-transformer": "^0.5.1",
-    "validator": "13.9.0",
-    "@faker-js/faker": "^8.0.2"
-  },
-  "devDependencies": {
-    "@faker-js/faker": "^8.0.2"
+    "validator": "13.9.0"
   },
   "peerDependencies": {
     "@softkit/exceptions": "*",

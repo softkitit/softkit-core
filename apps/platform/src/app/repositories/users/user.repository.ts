@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { User } from '../../database/entities';
+import { UserProfile } from '../../database/entities';
 import { BaseRepository } from '@softkit/typeorm';
 
 @Injectable()
-export class UserRepository extends BaseRepository<User> {
+export class UserRepository extends BaseRepository<UserProfile> {
   constructor(
     @InjectDataSource()
     ds: DataSource,
   ) {
-    super(User, ds);
+    super(UserProfile, ds);
   }
 }
