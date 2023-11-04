@@ -6,9 +6,13 @@ import {
   PermissionCheckMode,
   Permissions,
 } from '../../../lib/decorators/permission.decorator';
+import { TenantClsStore } from '@softkit/typeorm';
+import { ClsService } from 'nestjs-cls';
 
 @Controller('auth')
 export class AuthController {
+  constructor(private readonly clsService: ClsService<TenantClsStore>) {}
+
   @Get('skip-auth')
   @SkipAuth()
   async skipAuth() {
@@ -55,5 +59,10 @@ export class AuthController {
   )
   async createOrUpdate() {
     return 'hello';
+  }
+
+  @Get('/cls-store')
+  async getClsStore() {
+    return this.clsService.get();
   }
 }

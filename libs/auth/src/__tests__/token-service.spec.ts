@@ -14,23 +14,22 @@ import {
 import { AbstractAccessCheckService } from '../lib/services/access-check.service';
 import { TokenAccessCheckService } from '../lib/services/token-access-check.service';
 import { PermissionCheckMode } from '../lib/decorators/permission.decorator';
+import {
+  generateEmptyPermissionsPayload,
+  generateRefreshTokenPayload,
+} from './generators/tokens-payload';
 
 describe('test token service', () => {
   let tokenService: TokenService<PermissionsBaseJwtPayload>;
   let permissionCheckService: TokenAccessCheckService;
 
-  const jwtPayload: PermissionsBaseJwtPayload = {
-    sub: 'userid',
-    email: 'someemail',
-    permissions: [],
-  };
+  const jwtPayload: PermissionsBaseJwtPayload =
+    generateEmptyPermissionsPayload();
 
-  const refreshTokenPayload: IRefreshTokenPayload = {
-    sub: jwtPayload.sub,
-    email: jwtPayload.email,
-  };
+  const refreshTokenPayload: IRefreshTokenPayload =
+    generateRefreshTokenPayload();
 
-  const payloadsToSign = {
+  const payloadToSign = {
     accessTokenPayload: jwtPayload,
     refreshTokenPayload,
   };
@@ -52,8 +51,10 @@ describe('test token service', () => {
       ],
     }).compile();
 
-    tokenService = module.get(TokenService);
-    permissionCheckService = module.get(AbstractAccessCheckService);
+    tokenService = module.get<TokenService>(TokenService);
+    permissionCheckService = module.get<TokenAccessCheckService>(
+      AbstractAccessCheckService,
+    );
   });
 
   test('access check service should fail', async () => {
@@ -67,14 +68,14 @@ describe('test token service', () => {
   });
 
   test('generate access and refresh token', async () => {
-    const tokens = await tokenService.signTokens(payloadsToSign);
+    const tokens = await tokenService.signTokens(payloadToSign);
 
     expect(tokens.accessToken).toBeDefined();
     expect(tokens.refreshToken).toBeDefined();
   });
 
   test('generate and verify access token', async () => {
-    const tokens = await tokenService.signTokens(payloadsToSign);
+    const tokens = await tokenService.signTokens(payloadToSign);
 
     const tokenVerification = await tokenService.verifyAccessToken(
       tokens.accessToken,
@@ -98,7 +99,7 @@ describe('test token service', () => {
       return `a.u.c-${id}`;
     });
 
-    const tokens = await tokenService.signTokens(payloadsToSign);
+    const tokens = await tokenService.signTokens(payloadToSign);
 
     expect(tokens.accessToken.length).toBeLessThan(7168);
   });
@@ -109,9 +110,9 @@ describe('test token service', () => {
     });
 
     const tokens = await tokenService.signTokens({
-      ...payloadsToSign,
+      ...payloadToSign,
       accessTokenPayload: {
-        ...payloadsToSign.accessTokenPayload,
+        ...payloadToSign.accessTokenPayload,
         permissions,
       },
     });
@@ -120,7 +121,7 @@ describe('test token service', () => {
   });
 
   test('generate and verify refresh token', async () => {
-    const tokens = await tokenService.signTokens(payloadsToSign);
+    const tokens = await tokenService.signTokens(payloadToSign);
 
     const tokenVerification = await tokenService.verifyRefreshToken(
       tokens.refreshToken,
@@ -141,7 +142,7 @@ describe('test token service', () => {
   });
 
   test('verify access token with refresh secret', async () => {
-    const tokens = await tokenService.signTokens(payloadsToSign);
+    const tokens = await tokenService.signTokens(payloadToSign);
 
     await expect(
       tokenService.verifyAccessToken(tokens.refreshToken),

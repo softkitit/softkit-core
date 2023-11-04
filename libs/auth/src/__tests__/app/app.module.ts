@@ -14,8 +14,8 @@ import { ClsModule } from 'nestjs-cls/dist/src/lib/cls.module';
 import { RefreshTokenAuthController } from './controllers/refresh-token-auth.controller';
 import { TokenAccessCheckService } from '../../lib/services/token-access-check.service';
 import { AbstractAccessCheckService } from '../../lib/services/access-check.service';
-import { AbstractTenantResolutionService } from '../../lib/multi-tenancy/abstract-tenant-resolution.service';
-import { JwtPayloadTenantResolutionService } from '../../lib/multi-tenancy';
+import { AbstractTenantResolutionService } from '../../lib/multi-tenancy';
+import { NoOpTenantResolutionService } from './utils/no-op-tenant-resolution-service';
 
 @Module({
   imports: [
@@ -43,7 +43,7 @@ import { JwtPayloadTenantResolutionService } from '../../lib/multi-tenancy';
       provide: AbstractAccessCheckService,
     },
     {
-      useClass: JwtPayloadTenantResolutionService,
+      useClass: NoOpTenantResolutionService,
       provide: AbstractTenantResolutionService,
     },
     {

@@ -11,24 +11,23 @@ import {
 } from '../lib/vo/payload';
 import { TokenService } from '../lib/services/token.service';
 import { TestAppModule } from './app/app.module';
+import {
+  generateEmptyPermissionsPayload,
+  generateRefreshTokenPayload,
+} from './generators/tokens-payload';
 
-describe('test auth', () => {
+describe('test auth guards', () => {
   let tokenService: TokenService<PermissionsBaseJwtPayload>;
   let app: NestFastifyApplication;
 
-  const emptyPermissionsPayload: PermissionsBaseJwtPayload = {
-    sub: 'userid',
-    email: 'someemail',
-    permissions: [],
-  };
+  const accessTokenPayload: PermissionsBaseJwtPayload =
+    generateEmptyPermissionsPayload();
 
-  const refreshTokenPayload: IRefreshTokenPayload = {
-    sub: emptyPermissionsPayload.sub,
-    email: emptyPermissionsPayload.email,
-  };
+  const refreshTokenPayload: IRefreshTokenPayload =
+    generateRefreshTokenPayload();
 
-  const payloadsToSign = {
-    accessTokenPayload: emptyPermissionsPayload,
+  const payloadToSign = {
+    accessTokenPayload,
     refreshTokenPayload,
   };
 
@@ -38,13 +37,13 @@ describe('test auth', () => {
     }).compile();
 
     app = module.createNestApplication(new FastifyAdapter());
-    tokenService = module.get(TokenService);
+    tokenService = module.get<TokenService>(TokenService);
     await app.listen(0);
   });
 
   describe('test skip auth controller', () => {
-    test('skip auth controller test with valid token', async () => {
-      const tokens = await tokenService.signTokens(payloadsToSign);
+    test('should skip token validation with proper token', async () => {
+      const tokens = await tokenService.signTokens(payloadToSign);
 
       const response = await app.inject({
         method: 'GET',
@@ -58,7 +57,7 @@ describe('test auth', () => {
       expect(response.body).toEqual('hello');
     });
 
-    test('skip auth controller test without valid token', async () => {
+    test('should skip token validation without valid token', async () => {
       const response = await app.inject({
         method: 'GET',
         url: 'skip-auth',
@@ -68,8 +67,8 @@ describe('test auth', () => {
       expect(response.body).toEqual('hello');
     });
 
-    test('skip auth controller and method with permission guard should fail', async () => {
-      const tokens = await tokenService.signTokens(payloadsToSign);
+    test('should fail if @SkipAuth used with @Permissions decorator', async () => {
+      const tokens = await tokenService.signTokens(payloadToSign);
 
       const response = await app.inject({
         method: 'GET',
@@ -85,7 +84,7 @@ describe('test auth', () => {
 
   describe('test auth controller with permissions various cases', () => {
     test('no permissions should be just authorized', async () => {
-      const tokens = await tokenService.signTokens(payloadsToSign);
+      const tokens = await tokenService.signTokens(payloadToSign);
 
       const response = await app.inject({
         method: 'GET',
@@ -100,7 +99,7 @@ describe('test auth', () => {
     });
 
     test('get current user decorator test', async () => {
-      const tokens = await tokenService.signTokens(payloadsToSign);
+      const tokens = await tokenService.signTokens(payloadToSign);
 
       const response = await app.inject({
         method: 'GET',
@@ -125,7 +124,7 @@ describe('test auth', () => {
 
       expect({
         ...payload,
-      }).toStrictEqual(emptyPermissionsPayload);
+      }).toStrictEqual(accessTokenPayload);
     });
 
     test('skip auth method annotation', async () => {
@@ -140,9 +139,9 @@ describe('test auth', () => {
 
     test('first-level-any-permission method with valid permission annotation', async () => {
       const tokens = await tokenService.signTokens({
-        ...payloadsToSign,
+        ...payloadToSign,
         accessTokenPayload: {
-          ...payloadsToSign.accessTokenPayload,
+          ...payloadToSign.accessTokenPayload,
           permissions: ['admin'],
         },
       });
@@ -161,9 +160,9 @@ describe('test auth', () => {
 
     test('second-level-any-permission method with valid permission annotation', async () => {
       const tokens = await tokenService.signTokens({
-        ...payloadsToSign,
+        ...payloadToSign,
         accessTokenPayload: {
-          ...payloadsToSign.accessTokenPayload,
+          ...payloadToSign.accessTokenPayload,
           permissions: ['admin.user'],
         },
       });
@@ -192,9 +191,9 @@ describe('test auth', () => {
 
     test('exact-permission method with valid permission annotation', async () => {
       const tokens = await tokenService.signTokens({
-        ...payloadsToSign,
+        ...payloadToSign,
         accessTokenPayload: {
-          ...payloadsToSign.accessTokenPayload,
+          ...payloadToSign.accessTokenPayload,
           permissions: ['admin.user.create'],
         },
       });
@@ -222,9 +221,9 @@ describe('test auth', () => {
       'any-match method with valid permissions any match annotation: %s',
       async (...permissions) => {
         const tokens = await tokenService.signTokens({
-          ...payloadsToSign,
+          ...payloadToSign,
           accessTokenPayload: {
-            ...payloadsToSign.accessTokenPayload,
+            ...payloadToSign.accessTokenPayload,
             permissions,
           },
         });
@@ -256,9 +255,9 @@ describe('test auth', () => {
       'any-match method with invalid permission annotation: %s',
       async (permissions) => {
         const tokens = await tokenService.signTokens({
-          ...payloadsToSign,
+          ...payloadToSign,
           accessTokenPayload: {
-            ...payloadsToSign.accessTokenPayload,
+            ...payloadToSign.accessTokenPayload,
             permissions: permissions as string[],
           },
         });
@@ -286,9 +285,9 @@ describe('test auth', () => {
         null,
       ])('each method with invalid permissions: %s', async (permissions) => {
         const tokens = await tokenService.signTokens({
-          ...payloadsToSign,
+          ...payloadToSign,
           accessTokenPayload: {
-            ...payloadsToSign.accessTokenPayload,
+            ...payloadToSign.accessTokenPayload,
             permissions: permissions as string[],
           },
         });
@@ -317,9 +316,9 @@ describe('test auth', () => {
       ['admin.user.create', 'admin.user.update', 'admin.user.update'],
     ])('each method with valid permissions: %s', async (...permissions) => {
       const tokens = await tokenService.signTokens({
-        ...payloadsToSign,
+        ...payloadToSign,
         accessTokenPayload: {
-          ...payloadsToSign.accessTokenPayload,
+          ...payloadToSign.accessTokenPayload,
           permissions,
         },
       });

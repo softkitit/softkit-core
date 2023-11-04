@@ -1,19 +1,33 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { AbstractTenantResolutionService } from './abstract-tenant-resolution.service';
 import { FastifyRequest } from 'fastify';
-import { IAccessTokenPayload } from '../vo/payload';
+import { IAccessTokenSingleTenantPayload } from '../vo/payload';
+import { GeneralInternalServerException } from '@softkit/exceptions';
 
 @Injectable()
-export class JwtPayloadTenantResolutionService extends AbstractTenantResolutionService {
-  constructor() {
-    super();
-  }
+// eslint-disable-next-line
+export class JwtPayloadTenantResolutionService extends AbstractTenantResolutionService<IAccessTokenSingleTenantPayload> {
+  private readonly logger: Logger = new Logger(
+    JwtPayloadTenantResolutionService.name,
+  );
 
   public override async resolveTenantId(
     _: FastifyRequest,
-    jwtPayload: IAccessTokenPayload,
+    jwtPayload?: IAccessTokenSingleTenantPayload,
   ): Promise<string | undefined> {
-    return (jwtPayload as never)['tenantId'];
+    // jwt payload usually undefined for not authorized users, so we don't need to resolve tenants
+    if (jwtPayload) {
+      if (!jwtPayload?.tenantId) {
+        this.logger.error(
+          `Application is configured to use jwt payload tenant resolution, but tenant id is not in the token, most likely it's some misconfiguration. Require investigation: %o`,
+          jwtPayload,
+        );
+        throw new GeneralInternalServerException();
+      }
+      return jwtPayload?.tenantId;
+    }
+
+    return undefined;
   }
 
   /**

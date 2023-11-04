@@ -2,11 +2,11 @@ import { Injectable, Logger } from '@nestjs/common';
 import { AuthConfig } from '../config/auth';
 import { AbstractTenantResolutionService } from './abstract-tenant-resolution.service';
 import { FastifyRequest } from 'fastify';
-import { IAccessTokenPayload } from '../vo/payload';
+import { IAccessTokenPayloadWithTenantsInfo } from '../vo/payload';
 import { GeneralForbiddenException } from '@softkit/exceptions';
 
 @Injectable()
-export class HeaderTenantResolutionService extends AbstractTenantResolutionService {
+export class HeaderTenantResolutionService extends AbstractTenantResolutionService<IAccessTokenPayloadWithTenantsInfo> {
   private readonly logger = new Logger(HeaderTenantResolutionService.name);
 
   constructor(private config: AuthConfig) {
@@ -24,13 +24,13 @@ export class HeaderTenantResolutionService extends AbstractTenantResolutionServi
    * */
   override async verifyUserBelongToTenant(
     tenantId: string,
-    jwtPayload: IAccessTokenPayload,
+    jwtPayload: IAccessTokenPayloadWithTenantsInfo,
   ): Promise<boolean> {
-    const allTenants = (((jwtPayload as never)['tenants'] as []) || []).map(
-      (t) => (t as never)['tenantId'],
+    const tenantInfo = (jwtPayload.tenants || []).find(
+      (t) => t.tenantId === tenantId,
     );
 
-    if ((allTenants as string[]).includes(tenantId)) {
+    if (tenantInfo) {
       return true;
     } else {
       this.logger.error(

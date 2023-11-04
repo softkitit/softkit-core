@@ -10,24 +10,23 @@ import {
   PermissionsBaseJwtPayload,
 } from '../lib/vo/payload';
 import { TestAppModule } from './app/app.module';
+import { generateRefreshTokenPayload } from './generators/tokens-payload';
 
 describe('test refresh auth', () => {
   let tokenService: TokenService;
   let app: NestFastifyApplication;
 
-  const jwtPayload: PermissionsBaseJwtPayload = {
+  const accessTokenPayload: PermissionsBaseJwtPayload = {
     sub: 'userid',
     email: 'someemail',
     permissions: [],
   };
 
-  const refreshTokenPayload: IRefreshTokenPayload = {
-    sub: jwtPayload.sub,
-    email: jwtPayload.email,
-  };
+  const refreshTokenPayload: IRefreshTokenPayload =
+    generateRefreshTokenPayload();
 
-  const payloadsToSign = {
-    accessTokenPayload: jwtPayload,
+  const payloadToSign = {
+    accessTokenPayload,
     refreshTokenPayload,
   };
 
@@ -38,13 +37,13 @@ describe('test refresh auth', () => {
 
     tokenService = module.get(TokenService);
     app = module.createNestApplication(new FastifyAdapter());
-    tokenService = module.get(TokenService);
+    tokenService = module.get<TokenService>(TokenService);
     await app.listen(0);
   });
 
   describe('test refresh token auth guard and strategy', () => {
     it('should accept refresh token', async () => {
-      const tokens = await tokenService.signTokens(payloadsToSign);
+      const tokens = await tokenService.signTokens(payloadToSign);
 
       const response = await app.inject({
         method: 'GET',
@@ -59,7 +58,7 @@ describe('test refresh auth', () => {
     });
 
     it('should reject access token with 500', async () => {
-      const tokens = await tokenService.signTokens(payloadsToSign);
+      const tokens = await tokenService.signTokens(payloadToSign);
 
       const response = await app.inject({
         method: 'GET',

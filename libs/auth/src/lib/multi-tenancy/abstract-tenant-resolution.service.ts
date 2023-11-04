@@ -1,13 +1,15 @@
 import { FastifyRequest } from 'fastify';
 import { IAccessTokenPayload } from '../vo/payload';
 
-export abstract class AbstractTenantResolutionService {
+export abstract class AbstractTenantResolutionService<
+  PAYLOAD extends IAccessTokenPayload,
+> {
   /**
    * jwt payload is optional because it can be undefined in cases where the auth is not needed
    * */
   public abstract resolveTenantId(
     req: FastifyRequest,
-    jwtPayload?: IAccessTokenPayload,
+    jwtPayload?: PAYLOAD,
   ): Promise<string | undefined>;
 
   /**
@@ -15,6 +17,6 @@ export abstract class AbstractTenantResolutionService {
    * */
   public abstract verifyUserBelongToTenant(
     tenantId: string,
-    jwtPayload: IAccessTokenPayload,
+    jwtPayload: PAYLOAD,
   ): Promise<boolean>;
 }

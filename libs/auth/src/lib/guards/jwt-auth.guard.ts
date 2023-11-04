@@ -1,4 +1,4 @@
-import { ExecutionContext, Injectable, Logger } from '@nestjs/common';
+import { ExecutionContext, Injectable, Logger, Optional } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 import { ClsService } from 'nestjs-cls';
@@ -17,9 +17,10 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
   constructor(
     private tokenService: TokenService,
-    private abstractTenantResolution: AbstractTenantResolutionService,
     private clsService: ClsService<UserClsStore<IAccessTokenPayload>>,
     private reflector: Reflector,
+    @Optional()
+    private abstractTenantResolution?: AbstractTenantResolutionService<IAccessTokenPayload>,
   ) {
     super();
   }
@@ -39,7 +40,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
     if (skipAuth) {
       const tenantId =
-        await this.abstractTenantResolution.resolveTenantId(request);
+        await this.abstractTenantResolution?.resolveTenantId(request);
       this.clsService.set('tenantId', tenantId);
       return true;
     }
@@ -55,13 +56,13 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     }
 
     const payload = await this.tokenService.verifyAccessToken(accessToken);
-    const tenantId = await this.abstractTenantResolution.resolveTenantId(
+    const tenantId = await this.abstractTenantResolution?.resolveTenantId(
       request,
       payload,
     );
 
     if (tenantId !== undefined) {
-      await this.abstractTenantResolution.verifyUserBelongToTenant(
+      await this.abstractTenantResolution?.verifyUserBelongToTenant(
         tenantId,
         payload,
       );
