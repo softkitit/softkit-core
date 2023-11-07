@@ -33,8 +33,8 @@ import { LoggingInterceptor } from '@softkit/logger';
 import { responseBodyFormatter } from '@softkit/i18n';
 import { REQUEST_ID_HEADER } from '@softkit/server-http-client';
 import { fastifyHelmet } from '@fastify/helmet';
+import { callOrUndefinedIfException } from './utils/functions';
 
-/* istanbul ignore next */
 export function buildFastifyAdapter() {
   return new FastifyAdapter({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -45,7 +45,7 @@ export function buildFastifyAdapter() {
     },
   });
 }
-/* istanbul ignore next */
+
 export function setupGlobalFilters(
   app: INestApplication,
   httpAdapterHost: HttpAdapterHost,
@@ -63,7 +63,6 @@ export function setupGlobalFilters(
   );
 }
 
-/* istanbul ignore next */
 export async function createNestWebApp(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   module: any | TestingModule,
@@ -88,7 +87,7 @@ export async function createNestWebApp(
         {},
       );
 }
-/* istanbul ignore next */
+
 export function applyExpressCompatibilityRecommendations(
   fastifyInstance: FastifyInstance,
 ) {
@@ -99,14 +98,20 @@ export function applyExpressCompatibilityRecommendations(
       // @ts-ignore
       req.socket['encrypted'] = process.env.NODE_ENV === 'production';
     })
-    .decorateReply('setHeader', function (name: string, value: unknown) {
-      this.header(name, value);
-    })
-    .decorateReply('end', function () {
-      this.send('');
-    });
+    .decorateReply(
+      'setHeader',
+      /* istanbul ignore next */ function (name: string, value: unknown) {
+        this.header(name, value);
+      },
+    )
+    .decorateReply(
+      'end',
+      /* istanbul ignore next */ function () {
+        this.send('');
+      },
+    );
 }
-/* istanbul ignore next */
+
 function setupGlobalInterceptors(app: INestApplication) {
   app.useGlobalInterceptors(new LoggingInterceptor());
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
@@ -134,7 +139,6 @@ export async function bootstrapBaseWebApp(
 
   app.register(fastifyHelmet, {});
 
-  /* istanbul ignore next */
   useContainer(app.select(originalModule || module), {
     fallbackOnErrors: true,
   });
@@ -153,7 +157,9 @@ export async function bootstrapBaseWebApp(
   setupGlobalInterceptors(app);
 
   const appConfig = app.get(AppConfig);
-  const swaggerConfig = app.get(SwaggerConfig);
+  const swaggerConfig = callOrUndefinedIfException(() =>
+    app.get(SwaggerConfig),
+  );
 
   if (appConfig.prefix) {
     app.setGlobalPrefix(appConfig.prefix);
@@ -163,12 +169,20 @@ export async function bootstrapBaseWebApp(
     type: VersioningType.URI,
   });
 
-  const swaggerSetup = setupSwagger(swaggerConfig, app);
+  if (swaggerConfig instanceof SwaggerConfig) {
+    const swaggerSetup = setupSwagger(swaggerConfig, app, appConfig.prefix);
+    const swaggerPath = `${appConfig.prefix}${swaggerConfig.swaggerPath}`;
 
-  if (swaggerSetup) {
-    logger.log(`Swagger is listening on ${swaggerConfig.swaggerPath}`);
+    if (swaggerSetup) {
+      logger.log(`Swagger is listening on ${swaggerPath}`);
+    } else {
+      logger.log(`Swagger is disabled by config, skipping...`);
+    }
   } else {
-    logger.log(`Swagger is disabled by config, skipping...`);
+    logger.debug(
+      `SwaggerConfig instance is not provided so swagger turned off by default, skipping... Details: %o`,
+      swaggerConfig,
+    );
   }
 
   await app.listen(appConfig.port, '0.0.0.0');

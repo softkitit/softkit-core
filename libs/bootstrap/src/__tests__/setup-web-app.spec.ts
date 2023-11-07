@@ -1,24 +1,21 @@
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { StartedDb, startPostgres } from '@softkit/test-utils';
 import { Test } from '@nestjs/testing';
-import { setupTypeormModule } from '@softkit/typeorm';
 import { bootstrapBaseWebApp } from '../lib/setup-web-app';
-import { NestFastifyApplication } from '@nestjs/platform-fastify';
-import { setupSwagger, SwaggerConfig } from '@softkit/swagger-utils';
+import { SwaggerConfig } from '@softkit/swagger-utils';
 import { RootConfig } from './app/config/root.config';
-import { OpenAPIObject } from '@nestjs/swagger';
+import { AppConfig } from '../lib/config/app';
+import { ModuleMetadata } from '@nestjs/common/interfaces/modules/module-metadata.interface';
+import { setupYamlBaseConfigModule } from '@softkit/config';
+import * as path from 'node:path';
 import { BootstrapTestAppModule } from './app/app.module';
-import { TestingModule } from '@nestjs/testing/testing-module';
-import * as transactionalContext from 'typeorm-transactional';
-import * as getTransactionalContext from 'typeorm-transactional/dist/common';
 
 describe('bootstrap test', () => {
-  let app: NestFastifyApplication;
-  let moduleRef: TestingModule;
   let db: StartedDb;
   let swaggerConfig: SwaggerConfig;
-  let appConfig: RootConfig;
-  let swaggerSetup: OpenAPIObject | undefined;
+  let appConfig: AppConfig;
+  let rootConfig: RootConfig;
+  let testingModuleMetadata: ModuleMetadata;
 
   beforeAll(async () => {
     db = await startPostgres({
@@ -26,6 +23,7 @@ describe('bootstrap test', () => {
       additionalTypeOrmModuleOptions: {
         namingStrategy: new SnakeNamingStrategy(),
       },
+      setupTransactionsManagement: false,
     });
   }, 60_000);
 
@@ -33,65 +31,157 @@ describe('bootstrap test', () => {
     await db.container.stop();
   });
 
-  afterEach(async () => {
-    jest.clearAllMocks();
-    app.flushLogs();
-    await app.close();
-  });
-
   beforeEach(async () => {
-    const { BootstrapTestAppModule } = require('./app/app.module');
-    moduleRef = await Test.createTestingModule({
+    const configModule = await Test.createTestingModule({
       imports: [
-        BootstrapTestAppModule,
-        setupTypeormModule(__dirname, db.TypeOrmConfigService),
+        setupYamlBaseConfigModule(path.join(__dirname, 'app'), RootConfig),
       ],
     }).compile();
 
-    app = await bootstrapBaseWebApp(moduleRef, BootstrapTestAppModule);
+    rootConfig = configModule.get(RootConfig);
+    swaggerConfig = configModule.get(SwaggerConfig);
+    appConfig = configModule.get(AppConfig);
 
-    appConfig = app.get(RootConfig);
-    swaggerConfig = app.get(SwaggerConfig);
+    const { BootstrapTestAppModule } = require('./app/app.module');
+
+    testingModuleMetadata = {
+      providers: [
+        {
+          provide: RootConfig,
+          useValue: rootConfig,
+        },
+        {
+          provide: SwaggerConfig,
+          useValue: swaggerConfig,
+        },
+        {
+          provide: AppConfig,
+          useValue: appConfig,
+        },
+      ],
+      imports: [BootstrapTestAppModule],
+    };
   });
 
-  it('should expect defined swagger config', () => {
-    expect(swaggerConfig).toBeDefined();
+  describe('swagger setup', () => {
+    it('should expect undefined swagger setup when it is disabled', async () => {
+      swaggerConfig.enabled = false;
+
+      const testingModule = await Test.createTestingModule(
+        testingModuleMetadata,
+      ).compile();
+
+      const app = await bootstrapBaseWebApp(
+        testingModule,
+        BootstrapTestAppModule,
+      );
+      const response = await app.inject({
+        method: 'GET',
+        url: swaggerConfig.swaggerPath,
+      });
+
+      expect(response.statusCode).toBe(404);
+    });
+
+    it('should expect correct swagger setup when it is enabled', async () => {
+      const testingModule = await Test.createTestingModule(
+        testingModuleMetadata,
+      ).compile();
+
+      const app = await bootstrapBaseWebApp(
+        testingModule,
+        BootstrapTestAppModule,
+      );
+
+      const adjustedSwaggerPath = `/${appConfig.prefix}${swaggerConfig.swaggerPath}`;
+
+      const response = await app.inject({
+        method: 'GET',
+        url: adjustedSwaggerPath,
+      });
+
+      expect(response.statusCode).toBe(200);
+      expect(response.body).toContain('<div id="swagger-ui"></div>');
+    });
+
+    it('should work properly without swagger config in context', async () => {
+      const testingModule = await Test.createTestingModule({
+        providers: [
+          {
+            provide: RootConfig,
+            useValue: rootConfig,
+          },
+          {
+            provide: AppConfig,
+            useValue: appConfig,
+          },
+        ],
+        imports: [BootstrapTestAppModule],
+      }).compile();
+
+      const app = await bootstrapBaseWebApp(
+        testingModule,
+        BootstrapTestAppModule,
+      );
+      const adjustedSwaggerPath = `/${appConfig.prefix}${swaggerConfig.swaggerPath}`;
+
+      const response = await app.inject({
+        method: 'GET',
+        url: adjustedSwaggerPath,
+      });
+
+      expect(response.statusCode).toBe(404);
+    });
   });
 
-  it('should expect defined app config', () => {
-    expect(appConfig).toBeDefined();
+  it('should work without prefix in app config', async () => {
+    appConfig.prefix = '';
+
+    const testingModule = await Test.createTestingModule(
+      testingModuleMetadata,
+    ).compile();
+
+    const app = await bootstrapBaseWebApp(
+      testingModule,
+      BootstrapTestAppModule,
+    );
+    expect(app).toBeDefined();
   });
 
-  it('should expect undefined swagger setup when it is disabled', async () => {
-    swaggerSetup = setupSwagger(swaggerConfig, app);
-    expect(swaggerSetup).toBeUndefined();
-  });
+  it('should create proper prefixed swagger path with prefix in app config', async () => {
+    const appPrefix = 'random';
+    appConfig.prefix = appPrefix;
 
-  it('should expect correct swagger setup when it is enabled', async () => {
-    appConfig.swaggerConfig.enabled = true;
+    const testingModule = await Test.createTestingModule(
+      testingModuleMetadata,
+    ).compile();
 
-    app = await bootstrapBaseWebApp(moduleRef, BootstrapTestAppModule);
+    const app = await bootstrapBaseWebApp(
+      testingModule,
+      BootstrapTestAppModule,
+    );
+
+    const adjustedSwaggerPath = `/${appPrefix}${swaggerConfig.swaggerPath}`;
 
     const response = await app.inject({
       method: 'GET',
-      url: swaggerConfig.swaggerPath,
+      url: adjustedSwaggerPath,
     });
 
     expect(response.statusCode).toBe(200);
     expect(response.body).toContain('<div id="swagger-ui"></div>');
   });
 
-  it('should initialize transactional context if none exists', async () => {
-    jest
-      .spyOn(getTransactionalContext, 'getTransactionalContext')
-      // eslint-disable-next-line unicorn/no-useless-undefined
-      .mockReturnValue(undefined);
-    const initializeMock = jest
-      .spyOn(transactionalContext, 'initializeTransactionalContext')
-      .mockImplementation(() => ({}) as any);
+  it('should fail starting test app without providing original module', async () => {
+    const testingModule = await Test.createTestingModule({}).compile();
 
-    app = await bootstrapBaseWebApp(moduleRef, BootstrapTestAppModule);
+    await expect(bootstrapBaseWebApp(testingModule)).rejects.toThrow(
+      'If you are using TestingModule, you must pass the original module as the second argument',
+    );
+  });
 
-    expect(initializeMock).toHaveBeenCalled();
+  it('should start test app using provided module as fallback', async () => {
+    const { TestAppModule } = require('./app/app.module');
+    await bootstrapBaseWebApp(TestAppModule);
   });
 });
