@@ -1,12 +1,18 @@
 import { setSeederFactory } from 'typeorm-extension';
-import { TenantEntity } from '../repositories/tenant.entity';
 import { faker } from '@faker-js/faker';
+import { plainToInstance } from 'class-transformer';
+import { TenantEntity } from '../repositories/tenant.entity';
+import { TenantStatus } from '../repositories/vo/tenant-status.enum';
 
 export const tenantSeederFactory = setSeederFactory(TenantEntity, () => {
-  const tenant = new TenantEntity();
-  tenant.tenantName = faker.company.name();
-  tenant.tenantUrl = faker.internet.url();
-  tenant.version = 0;
+  const plainTenant = {
+    tenantName: faker.company.name(),
+    tenantStatus: TenantStatus.ACTIVE,
+    tenantFriendlyIdentifier: '0',
+  } satisfies Pick<
+    TenantEntity,
+    'tenantName' | 'tenantStatus' | 'tenantFriendlyIdentifier'
+  >;
 
-  return tenant;
+  return plainToInstance(TenantEntity, plainTenant);
 });
