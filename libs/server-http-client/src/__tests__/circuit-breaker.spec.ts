@@ -6,7 +6,6 @@ import { RetryType } from '../lib/config/vo/retry-type';
 import { HttpCircuitBreakerConfig } from '../lib/config/http-circuit-breaker.config';
 import { createAxiosInstance } from '../lib/axios.factory';
 import { ClsModule, ClsService } from 'nestjs-cls';
-import { UserRequestClsStore } from '../lib/vo/user-request-cls-store';
 import { AxiosInstance, AxiosResponse } from 'axios';
 import clearAllMocks = jest.clearAllMocks;
 import { SampleController } from './app/sample.controller';
@@ -15,6 +14,7 @@ import { REQUEST_ID_HEADER } from '../lib/constants';
 import { InternalProxyHttpException } from '../lib/exceptions/internal-proxy-http.exception';
 import { InternalProxyHttpExceptionFilter } from '../lib/interceptors/internal-proxy-http.filter';
 import { HttpAdapterHost } from '@nestjs/core';
+import { IAccessTokenPayload, UserClsStore } from '@softkit/auth';
 
 const defaultRetryConfig: HttpRetryConfig = {
   retriesCount: 3,
@@ -36,7 +36,7 @@ describe('Circuit breaker and retry', () => {
   let axiosInstance: AxiosInstance;
   let appHost: string;
   let sampleController: SampleController;
-  let clsService: ClsService<UserRequestClsStore>;
+  let clsService: ClsService<UserClsStore<IAccessTokenPayload>>;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -52,7 +52,7 @@ describe('Circuit breaker and retry', () => {
 
     sampleController = app.get(SampleController);
 
-    clsService = app.get<ClsService<UserRequestClsStore>>(ClsService);
+    clsService = app.get(ClsService);
     appUrl = await app.getUrl();
 
     const split = appUrl.split(':');
@@ -202,11 +202,15 @@ describe('Circuit breaker and retry', () => {
   });
 
   it('Retry and circuit breaker with presetting auth token using cls service', async () => {
-    const clsData: UserRequestClsStore = {
+    const clsData: UserClsStore<IAccessTokenPayload> = {
       authHeader: 'Bearer authHeader',
       tenantId: 'tenantId',
       userId: 'userId',
       reqId: 'reqId',
+      jwtPayload: {
+        email: 'bla@gmail.com',
+        sub: 'userId',
+      },
     };
 
     await clsService.runWith(clsData, async () => {

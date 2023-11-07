@@ -1,18 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { Transactional } from 'typeorm-transactional';
-import { User } from '../../database/entities';
-import { UserStatus } from '../../database/entities/users/types/user-status.enum';
+import { UserProfile } from '../../database/entities';
+import { UserProfileStatus } from '../../database/entities/users/types/user-profile-status.enum';
 import { UserRepository } from '../../repositories';
 import { BaseEntityService } from '@softkit/typeorm-service';
 
 @Injectable()
-export class UserService extends BaseEntityService<User, UserRepository> {
+export class UserService extends BaseEntityService<
+  UserProfile,
+  UserRepository
+> {
   constructor(private readonly usersRepository: UserRepository) {
     super(usersRepository);
   }
 
   @Transactional()
-  async updateUserStatus(id: string, status: UserStatus) {
+  async updateUserStatus(id: string, status: UserProfileStatus) {
     const updateResult = await this.usersRepository.update(id, {
       status,
     });
@@ -21,10 +24,10 @@ export class UserService extends BaseEntityService<User, UserRepository> {
   }
 
   @Transactional()
-  async findOneByEmailWithRoles(email: string, tenantId?: string) {
+  async findOneByEmail(email: string, tenantId?: string) {
     return this.findOne(
       {
-        relations: ['roles'],
+        relations: ['userTenantsAccounts', 'userTenantsAccounts.roles'],
         where: {
           email: email.toLowerCase().trim(),
           ...(tenantId ? { tenantId } : {}),

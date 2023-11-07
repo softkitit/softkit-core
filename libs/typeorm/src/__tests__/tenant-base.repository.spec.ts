@@ -19,6 +19,7 @@ import { TenantUserRepository } from './app/user-tenant-repository.service';
 import { FilterOperator } from 'nestjs-paginate';
 import { USER_PAGINATED_CONFIG } from './app/user.entity';
 import { setupTypeormModule } from '../lib/setup-typeorm-module';
+import { GeneralInternalServerException } from '@softkit/exceptions';
 
 describe('tenant base entity test', () => {
   let userRepository: TenantUserRepository;
@@ -720,5 +721,31 @@ describe('tenant base entity test', () => {
         expect(successFullyFind.meta.totalItems).toBe(0);
       },
     );
+  });
+
+  it('should fail with no cls store', async () => {
+    try {
+      await userRepository.findOne({});
+    } catch (error) {
+      // eslint-disable-next-line jest/no-conditional-expect
+      expect(error).toBeInstanceOf(GeneralInternalServerException);
+      return;
+    }
+
+    expect(true).toBe(false);
+  });
+
+  it('should fail with no tenant id but empty cls store', async () => {
+    await clsService.runWith({}, async () => {
+      try {
+        await userRepository.findOne({});
+      } catch (error) {
+        // eslint-disable-next-line jest/no-conditional-expect
+        expect(error).toBeInstanceOf(GeneralInternalServerException);
+        return;
+      }
+
+      expect(true).toBe(false);
+    });
   });
 });

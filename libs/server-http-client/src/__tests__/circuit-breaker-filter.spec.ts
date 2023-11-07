@@ -3,13 +3,13 @@ import { SampleModule } from './app/sample.module';
 import { INestApplication } from '@nestjs/common';
 import { createAxiosInstance } from '../lib/axios.factory';
 import { ClsModule, ClsService } from 'nestjs-cls';
-import { UserRequestClsStore } from '../lib/vo/user-request-cls-store';
 import { AxiosInstance } from 'axios';
 import clearAllMocks = jest.clearAllMocks;
 import { SampleController } from './app/sample.controller';
 import { InternalProxyHttpExceptionFilter } from '../lib/interceptors/internal-proxy-http.filter';
 import { HttpAdapterHost } from '@nestjs/core';
 import { expectNotNullAndGet } from '@softkit/test-utils';
+import { IAccessTokenPayload, UserClsStore } from '@softkit/auth';
 
 describe('Circuit breaker and retry with filter', () => {
   let appUrl: string;
@@ -17,7 +17,7 @@ describe('Circuit breaker and retry with filter', () => {
   let axiosInstance: AxiosInstance;
   let appHost: string;
   let sampleController: SampleController;
-  let clsService: ClsService<UserRequestClsStore>;
+  let clsService: ClsService<UserClsStore<IAccessTokenPayload>>;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -33,7 +33,7 @@ describe('Circuit breaker and retry with filter', () => {
 
     sampleController = app.get(SampleController);
 
-    clsService = app.get<ClsService<UserRequestClsStore>>(ClsService);
+    clsService = app.get(ClsService);
     appUrl = await app.getUrl();
 
     const split = appUrl.split(':');

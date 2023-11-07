@@ -9,15 +9,19 @@ import * as Controllers from './controllers';
 import * as Entities from './database/entities';
 import * as Repositories from './repositories';
 import * as Services from './services';
+import AbstractAuthUserService from './services/auth/abstract-auth-user.service';
 import * as Seeders from './database/seeds';
 import * as Factories from './database/factories';
-import AbstractAuthUserService from './services/auth/abstract-auth-user-service';
 import AuthUserService from './services/users/auth-user.service';
 import { setupI18NModule } from '@softkit/i18n';
 import { setupLoggerModule } from '@softkit/logger';
 import { setupYamlBaseConfigModule } from '@softkit/config';
 import { setupClsModule } from '@softkit/async-storage';
 import {
+  AbstractAccessCheckService,
+  AbstractTenantResolutionService,
+  AbstractTokenBuilderService,
+  HeaderTenantResolutionService,
   JwtAuthGuard,
   JwtStrategy,
   PermissionsGuard,
@@ -25,11 +29,12 @@ import {
 } from '@softkit/auth';
 import { PlatformClientModule } from '@softkit/platform-client';
 import { HealthCheckModule } from '@softkit/healthcheck';
-import {
-  setupTypeormModule,
-  TYPEORM_FACTORIES_TOKEN,
-  TYPEORM_SEEDERS_TOKEN,
-} from '@softkit/typeorm';
+import { setupTypeormModule, TYPEORM_FACTORIES_TOKEN,
+  TYPEORM_SEEDERS_TOKEN, } from '@softkit/typeorm';
+import { MultiTenantTokenBuilderService } from './services/auth/token/multi-tenant-token-builder.service';
+import { AccessCheckService, SignupService } from './services';
+import { AbstractSignupService } from './services/auth/signup/signup.service.interface';
+
 @Module({
   imports: [
     JwtModule,
@@ -61,6 +66,22 @@ import {
     {
       provide: AbstractAuthUserService,
       useClass: AuthUserService,
+    },
+    {
+      provide: AbstractTokenBuilderService,
+      useClass: MultiTenantTokenBuilderService,
+    },
+    {
+      provide: AbstractTenantResolutionService,
+      useClass: HeaderTenantResolutionService,
+    },
+    {
+      provide: AbstractAccessCheckService,
+      useClass: AccessCheckService,
+    },
+    {
+      provide: AbstractSignupService,
+      useClass: SignupService,
     },
     {
       provide: APP_GUARD,

@@ -10,4 +10,5 @@ export * from './lib/setup-typeorm-module';
 export * from './lib/subscribers/cls-preset.subscriber';
 export * from './lib/subscribers/decorator/cls-preset.decorator';
 export * from './lib/subscribers/optimistic-locking.subscriber';
+export * from './lib/utils/exclusions-utils';
 export * from './lib/vo/tenant-base-cls-store';

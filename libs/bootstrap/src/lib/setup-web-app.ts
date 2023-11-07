@@ -61,6 +61,7 @@ export function setupGlobalFilters(
     new AnyExceptionFilter(httpAdapterHost),
     new OverrideDefaultNotFoundFilter(httpAdapterHost),
     new OverrideDefaultForbiddenExceptionFilter(httpAdapterHost),
+    // todo generalize
     new PostgresDbQueryFailedErrorFilter(httpAdapterHost),
     new HttpExceptionFilter(httpAdapterHost),
     new I18nValidationExceptionFilter({

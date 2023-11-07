@@ -12,6 +12,8 @@ import {
   GeneralInternalServerException,
   GeneralUnauthorizedException,
 } from '@softkit/exceptions';
+import { plainToInstance } from 'class-transformer';
+import { InitiateSamlLoginRequest } from '../../../controllers/auth/vo/saml.dto';
 
 export class SamlStrategy extends PassportStrategy(Strategy, 'saml') {
   private readonly logger = new Logger(SamlStrategy.name);
@@ -56,7 +58,9 @@ export class SamlStrategy extends PassportStrategy(Strategy, 'saml') {
       (this.request.body as any)?.RelayState,
     );
 
-    if (!relayState.tenantId || !relayState.redirectUrl) {
+    const configInfo = plainToInstance(InitiateSamlLoginRequest, relayState);
+
+    if (!configInfo.samlConfigurationId || !configInfo.redirectUrl) {
       this.logger.error(
         `Looks like user is trying to login with SAML, but there is no data in relay state. Relay state: ${JSON.stringify(
           relayState,
@@ -66,7 +70,7 @@ export class SamlStrategy extends PassportStrategy(Strategy, 'saml') {
       );
 
       const errorResponse = new GeneralUnauthorizedException(
-        new Error(`Missing required relay state data`),
+        new Error(`Missing required state data`),
       ).toErrorResponse(
         this.request.id,
         // said that I need to use it here, but I know that the service is there for sure, we have test for it

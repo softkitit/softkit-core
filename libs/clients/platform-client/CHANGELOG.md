@@ -1,4 +1,8 @@
 Softkit Core Libraries Changelog
+## [0.0.7](https://github.com/softkitit/softkit-core/compare/platform-client-0.0.6...platform-client-0.0.7) (2023-11-04)
+
+## [0.0.7](https://github.com/saas-buildkit/saas-buildkit-core/compare/platform-client-0.0.6...platform-client-0.0.7) (2023-11-04)
+
 ## [0.0.6](https://github.com/saas-buildkit/saas-buildkit-core/compare/platform-client-0.0.5...platform-client-0.0.6) (2023-09-08)
 
 

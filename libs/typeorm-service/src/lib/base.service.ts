@@ -5,11 +5,7 @@ import { AbstractBaseService } from './abstract-base.service';
 import { toCapitalizedWords } from '@softkit/string-utils';
 import { ObjectNotFoundException } from '@softkit/exceptions';
 import { PaginateConfig, Paginated, PaginateQuery } from 'nestjs-paginate';
-import {
-  ClassConstructor,
-  instanceToPlain,
-  plainToInstance,
-} from 'class-transformer';
+import { ClassConstructor, plainToInstance } from 'class-transformer';
 import { ClassTransformOptions } from 'class-transformer/types/interfaces';
 
 export class BaseEntityService<
@@ -92,7 +88,7 @@ export class BaseEntityService<
   }
 
   @Transactional()
-  override findAllPaginatedAndTransform<T>(
+  override async findAllPaginatedAndTransform<T>(
     query: PaginateQuery,
     config: PaginateConfig<ENTITY>,
     clazz: ClassConstructor<T>,
@@ -102,10 +98,7 @@ export class BaseEntityService<
     },
   ): Promise<Paginated<T>> {
     return this.repository.findAllPaginated(query, config).then((paginated) => {
-      const data = paginated.data.map((item) => {
-        const plain = instanceToPlain(item);
-        return plainToInstance(clazz, plain, options);
-      });
+      const data = plainToInstance(clazz, paginated.data, options);
       return {
         ...paginated,
         data,
@@ -114,17 +107,20 @@ export class BaseEntityService<
   }
 
   @Transactional()
-  async archive(id: ENTITY['id'], version: number): Promise<boolean> {
+  override async archive(id: ENTITY['id'], version: number): Promise<boolean> {
     return this.repository.archive(id, version);
   }
 
   @Transactional()
-  async unarchive(id: ENTITY['id'], version: number): Promise<boolean> {
+  override async unarchive(
+    id: ENTITY['id'],
+    version: number,
+  ): Promise<boolean> {
     return this.repository.unarchive(id, version);
   }
 
   @Transactional()
-  async delete(id: ENTITY['id']): Promise<boolean> {
+  override async delete(id: ENTITY['id']): Promise<boolean> {
     const deleteResult = await this.repository.delete(id);
     return deleteResult.affected === 1;
   }

@@ -1,4 +1,18 @@
 Softkit Core Libraries Changelog
+## [0.0.8](https://github.com/softkitit/softkit-core/compare/typeorm-service-0.0.7...typeorm-service-0.0.8) (2023-11-04)
+
+
+### Bug Fixes
+
+* **typeorm-service:** added proper way to handle mapping for paginated queries ([9e35185](https://github.com/softkitit/softkit-core/commit/9e35185d6216ce64e03d162fb55fb7ddaf73a4ff))
+
+## [0.0.8](https://github.com/saas-buildkit/saas-buildkit-core/compare/typeorm-service-0.0.7...typeorm-service-0.0.8) (2023-11-04)
+
+
+### Bug Fixes
+
+* **typeorm-service:** added proper way to handle mapping for paginated queries ([9e35185](https://github.com/saas-buildkit/saas-buildkit-core/commit/9e35185d6216ce64e03d162fb55fb7ddaf73a4ff))
+
 ## [0.0.7](https://github.com/saas-buildkit/saas-buildkit-core/compare/typeorm-service-0.0.6...typeorm-service-0.0.7) (2023-09-13)
 
 

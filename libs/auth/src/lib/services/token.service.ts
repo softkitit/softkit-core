@@ -1,11 +1,18 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AuthConfig } from '../config/auth';
-import { JwtPayload, JwtRefreshPayload } from '../vo/payload';
+import {
+  IAccessTokenPayload,
+  IRefreshTokenPayload,
+  PayloadSigned,
+} from '../vo/payload';
 import { GeneralUnauthorizedException } from '@softkit/exceptions';
 
 @Injectable()
-export class TokenService {
+export class TokenService<
+  ACCESS_TOKEN_TYPE extends IAccessTokenPayload = IAccessTokenPayload,
+  REFRESH_TOKEN_TYPE extends IRefreshTokenPayload = IRefreshTokenPayload,
+> {
   private readonly logger = new Logger(TokenService.name);
 
   constructor(
@@ -13,55 +20,52 @@ export class TokenService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async signTokens(jwtPayload: JwtPayload) {
-    this.logger.log(`Generating tokens for user: ${jwtPayload.email}}`);
+  async signTokens({
+    accessTokenPayload,
+    refreshTokenPayload,
+  }: {
+    accessTokenPayload: ACCESS_TOKEN_TYPE;
+    refreshTokenPayload: REFRESH_TOKEN_TYPE;
+  }) {
+    this.logger.log(`Generating tokens for user: ${accessTokenPayload.email}}`);
 
-    const [{ accessToken }, { refreshToken }] = await Promise.all([
-      this.signAccessToken(jwtPayload),
-      this.signRefreshToken({
-        sub: jwtPayload.sub,
-        tenantId: jwtPayload.tenantId,
-      }),
+    const [accessToken, refreshToken] = await Promise.all([
+      this.signAccessToken(accessTokenPayload),
+      this.signRefreshToken(refreshTokenPayload),
     ]);
 
     await this.checkTokenLength(accessToken);
     await this.checkTokenLength(refreshToken);
 
     return {
-      accessToken,
-      refreshToken,
+      accessToken: accessToken,
+      refreshToken: refreshToken,
     };
   }
 
-  private async signRefreshToken(jwtPayload: JwtRefreshPayload) {
-    return {
-      refreshToken: await this.jwtService.signAsync(jwtPayload, {
-        secret: this.authConfig.refreshTokenSecret,
-        expiresIn: this.authConfig.refreshTokenExpirationTime,
-      }),
-    };
+  private async signRefreshToken(jwtPayload: REFRESH_TOKEN_TYPE) {
+    return this.jwtService.signAsync(jwtPayload, {
+      secret: this.authConfig.refreshTokenSecret,
+      expiresIn: this.authConfig.refreshTokenExpirationTime,
+    });
   }
 
-  async signAccessToken(jwtPayload: JwtPayload) {
-    const accessToken = await this.jwtService.signAsync(jwtPayload, {
+  async signAccessToken(jwtPayload: ACCESS_TOKEN_TYPE) {
+    return this.jwtService.signAsync(jwtPayload, {
       secret: this.authConfig.accessTokenSecret,
       expiresIn: this.authConfig.accessTokenExpirationTime,
     });
-
-    return {
-      accessToken,
-    };
   }
 
   async verifyAccessToken(
     token: string,
-  ): Promise<JwtPayload & { iat: number; exp: number }> {
+  ): Promise<IAccessTokenPayload & PayloadSigned> {
     return this.verifyToken(token, this.authConfig.accessTokenSecret);
   }
 
   async verifyRefreshToken(
     token: string,
-  ): Promise<JwtRefreshPayload & { iat: number; exp: number }> {
+  ): Promise<IRefreshTokenPayload & PayloadSigned> {
     return this.verifyToken(token, this.authConfig.refreshTokenSecret);
   }
 

@@ -5,6 +5,7 @@ import { SamlConfigurationService, TenantService } from '../../services';
 
 import { SetupSamlConfiguration } from './vo/saml-configuration.dto';
 import { SimpleResponseForCreatedEntityWithMessage } from '@softkit/common-types';
+import { I18nTranslations } from '../../generated/i18n.generated';
 
 @ApiTags('Tenants')
 @Controller({
@@ -13,7 +14,7 @@ import { SimpleResponseForCreatedEntityWithMessage } from '@softkit/common-types
 })
 export class TenantsConfigurationController {
   constructor(
-    private readonly i18: I18nService,
+    private readonly i18: I18nService<I18nTranslations>,
     private readonly tenantsService: TenantService,
     private readonly samlConfigurationService: SamlConfigurationService,
   ) {}

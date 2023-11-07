@@ -1,88 +1,49 @@
-import { Controller, Get, HttpStatus } from '@nestjs/common';
-import { APP_GUARD } from '@nestjs/core';
-import { JwtService } from '@nestjs/jwt';
+import { HttpStatus } from '@nestjs/common';
 import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import { Test } from '@nestjs/testing';
-import { FastifyRequest } from 'fastify';
-import { ClsModule } from 'nestjs-cls';
-import { AuthConfig } from '../lib/config/auth';
-import { CurrentUser } from '../lib/decorators/current-user.decorator';
-import { JwtAuthGuard } from '../lib/guards/jwt-auth.guard';
-import { JwtPayload } from '../lib/vo/payload';
-import { JwtStrategy } from '../lib/strategies/jwt.strategy';
-import { PermissionsGuard } from '../lib/guards/permission.guard';
-import { Roles } from '../lib/decorators/role.decorator';
-import { Permissions } from '../lib/decorators/permission.decorator';
-import { SkipAuth } from '../lib/decorators/skip-auth.decorator';
+import {
+  IAccessTokenPayload,
+  IRefreshTokenPayload,
+  PermissionsBaseJwtPayload,
+} from '../lib/vo/payload';
 import { TokenService } from '../lib/services/token.service';
-import { RolesGuard } from '../lib/guards/role.guard';
-import { AuthConfigMock } from './utils/auth-config.mock';
+import { TestAppModule } from './app/app.module';
+import {
+  generateEmptyPermissionsPayload,
+  generateRefreshTokenPayload,
+} from './generators/tokens-payload';
 
-describe('test auth', () => {
-  let tokenService: TokenService;
+describe('test auth guards', () => {
+  let tokenService: TokenService<PermissionsBaseJwtPayload>;
   let app: NestFastifyApplication;
 
-  const emptyPermissionsPayload: JwtPayload = {
-    sub: 'userid',
-    email: 'someemail',
-    roles: [],
-    permissions: [],
-    tenantId: 'tenant',
+  const accessTokenPayload: PermissionsBaseJwtPayload =
+    generateEmptyPermissionsPayload();
+
+  const refreshTokenPayload: IRefreshTokenPayload =
+    generateRefreshTokenPayload();
+
+  const payloadToSign = {
+    accessTokenPayload,
+    refreshTokenPayload,
   };
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
-      imports: [
-        ClsModule.forRoot({
-          global: true,
-          middleware: {
-            mount: true,
-            generateId: true,
-            setup: (cls, req: FastifyRequest) => {
-              // put some additional default info in the CLS
-              // eslint-disable-next-line security/detect-object-injection
-              cls.set('requestId', req.id?.toString());
-            },
-            idGenerator: (req: FastifyRequest) => req.id.toString(),
-          },
-        }),
-      ],
-      controllers: [SkipAuthController, AuthController, AuthRolesController],
-      providers: [
-        TokenService,
-        JwtService,
-        JwtStrategy,
-        {
-          useClass: AuthConfigMock,
-          provide: AuthConfig,
-        },
-        {
-          provide: APP_GUARD,
-          useClass: JwtAuthGuard,
-        },
-        {
-          provide: APP_GUARD,
-          useClass: PermissionsGuard,
-        },
-        {
-          provide: APP_GUARD,
-          useClass: RolesGuard,
-        },
-      ],
+      imports: [TestAppModule],
     }).compile();
 
-    tokenService = module.get(TokenService);
     app = module.createNestApplication(new FastifyAdapter());
-    tokenService = module.get(TokenService);
+    tokenService = module.get<TokenService>(TokenService);
     await app.listen(0);
   });
 
   describe('test skip auth controller', () => {
-    test('skip auth controller test with valid token', async () => {
-      const tokens = await tokenService.signTokens(emptyPermissionsPayload);
+    test('should skip token validation with proper token', async () => {
+      const tokens = await tokenService.signTokens(payloadToSign);
 
       const response = await app.inject({
         method: 'GET',
@@ -96,7 +57,7 @@ describe('test auth', () => {
       expect(response.body).toEqual('hello');
     });
 
-    test('skip auth controller test without valid token', async () => {
+    test('should skip token validation without valid token', async () => {
       const response = await app.inject({
         method: 'GET',
         url: 'skip-auth',
@@ -106,8 +67,8 @@ describe('test auth', () => {
       expect(response.body).toEqual('hello');
     });
 
-    test('skip auth controller and method with permission guard should fail', async () => {
-      const tokens = await tokenService.signTokens(emptyPermissionsPayload);
+    test('should fail if @SkipAuth used with @Permissions decorator', async () => {
+      const tokens = await tokenService.signTokens(payloadToSign);
 
       const response = await app.inject({
         method: 'GET',
@@ -121,96 +82,9 @@ describe('test auth', () => {
     });
   });
 
-  describe('test auth controller with roles various cases', () => {
-    test('no roles should be just authorized', async () => {
-      const tokens = await tokenService.signTokens(emptyPermissionsPayload);
-
-      const response = await app.inject({
-        method: 'GET',
-        url: 'auth-roles/no-roles',
-        headers: {
-          authorization: `Bearer ${tokens.accessToken}`,
-        },
-      });
-
-      expect(response.statusCode).toEqual(HttpStatus.OK);
-      expect(response.body).toEqual('hello');
-    });
-
-    test('single role test', async () => {
-      const tokens = await tokenService.signTokens({
-        ...emptyPermissionsPayload,
-        roles: ['admin'],
-      });
-
-      const response = await app.inject({
-        method: 'GET',
-        url: 'auth-roles/one-role',
-        headers: {
-          authorization: `Bearer ${tokens.accessToken}`,
-        },
-      });
-
-      expect(response.statusCode).toEqual(HttpStatus.OK);
-      expect(response.body).toEqual('hello');
-    });
-
-    test('skip auth and roles decorator in use', async () => {
-      const tokens = await tokenService.signTokens({
-        ...emptyPermissionsPayload,
-        roles: ['admin'],
-      });
-
-      const response = await app.inject({
-        method: 'GET',
-        url: 'auth-roles/skip-auth',
-        headers: {
-          authorization: `Bearer ${tokens.accessToken}`,
-        },
-      });
-
-      expect(response.statusCode).toEqual(HttpStatus.INTERNAL_SERVER_ERROR);
-    });
-
-    test('no token test for roles', async () => {
-      const response = await app.inject({
-        method: 'GET',
-        url: 'auth-roles/one-role',
-      });
-
-      // without an interceptor the response is 500
-      expect(response.statusCode).toEqual(HttpStatus.INTERNAL_SERVER_ERROR);
-    });
-
-    it.each([
-      ['admin'],
-      ['plain'],
-      ['admin', 'aaa'],
-      ['plain', 'aaa'],
-      ['admin', 'plain'],
-      ['admin', 'plain', 'aaa'],
-    ])('multiple-exact-roles test with valid token: %s', async (...roles) => {
-      const tokens = await tokenService.signTokens({
-        ...emptyPermissionsPayload,
-        roles,
-      });
-
-      const response = await app.inject({
-        method: 'GET',
-        url: 'auth-roles/multiple-exact-roles',
-        headers: {
-          authorization: `Bearer ${tokens.accessToken}`,
-        },
-      });
-
-      expect(response.statusCode).toEqual(HttpStatus.OK);
-      expect(response.body).toEqual('hello');
-    });
-  });
-
   describe('test auth controller with permissions various cases', () => {
     test('no permissions should be just authorized', async () => {
-      const tokens = await tokenService.signTokens(emptyPermissionsPayload);
+      const tokens = await tokenService.signTokens(payloadToSign);
 
       const response = await app.inject({
         method: 'GET',
@@ -225,7 +99,7 @@ describe('test auth', () => {
     });
 
     test('get current user decorator test', async () => {
-      const tokens = await tokenService.signTokens(emptyPermissionsPayload);
+      const tokens = await tokenService.signTokens(payloadToSign);
 
       const response = await app.inject({
         method: 'GET',
@@ -237,7 +111,7 @@ describe('test auth', () => {
 
       expect(response.statusCode).toEqual(HttpStatus.OK);
 
-      const payload = JSON.parse(response.body) as JwtPayload & {
+      const payload = JSON.parse(response.body) as IAccessTokenPayload & {
         iat?: number;
         exp?: number;
       };
@@ -250,7 +124,7 @@ describe('test auth', () => {
 
       expect({
         ...payload,
-      }).toStrictEqual(emptyPermissionsPayload);
+      }).toStrictEqual(accessTokenPayload);
     });
 
     test('skip auth method annotation', async () => {
@@ -265,8 +139,11 @@ describe('test auth', () => {
 
     test('first-level-any-permission method with valid permission annotation', async () => {
       const tokens = await tokenService.signTokens({
-        ...emptyPermissionsPayload,
-        permissions: ['admin'],
+        ...payloadToSign,
+        accessTokenPayload: {
+          ...payloadToSign.accessTokenPayload,
+          permissions: ['admin'],
+        },
       });
 
       const response = await app.inject({
@@ -283,8 +160,11 @@ describe('test auth', () => {
 
     test('second-level-any-permission method with valid permission annotation', async () => {
       const tokens = await tokenService.signTokens({
-        ...emptyPermissionsPayload,
-        permissions: ['admin.user'],
+        ...payloadToSign,
+        accessTokenPayload: {
+          ...payloadToSign.accessTokenPayload,
+          permissions: ['admin.user'],
+        },
       });
 
       const response = await app.inject({
@@ -311,8 +191,11 @@ describe('test auth', () => {
 
     test('exact-permission method with valid permission annotation', async () => {
       const tokens = await tokenService.signTokens({
-        ...emptyPermissionsPayload,
-        permissions: ['admin.user.create'],
+        ...payloadToSign,
+        accessTokenPayload: {
+          ...payloadToSign.accessTokenPayload,
+          permissions: ['admin.user.create'],
+        },
       });
 
       const response = await app.inject({
@@ -335,16 +218,19 @@ describe('test auth', () => {
       ['admin.user.create', 'admin.user.random'],
       ['admin.user.random', 'admin.user.update'],
     ])(
-      'multiple-exact-permissions method with valid permission annotation',
+      'any-match method with valid permissions any match annotation: %s',
       async (...permissions) => {
         const tokens = await tokenService.signTokens({
-          ...emptyPermissionsPayload,
-          permissions,
+          ...payloadToSign,
+          accessTokenPayload: {
+            ...payloadToSign.accessTokenPayload,
+            permissions,
+          },
         });
 
         const response = await app.inject({
           method: 'GET',
-          url: 'auth/multiple-exact-permissions',
+          url: 'auth/any-match',
           headers: {
             authorization: `Bearer ${tokens.accessToken}`,
           },
@@ -362,17 +248,23 @@ describe('test auth', () => {
       ['admin.user.createe', 'admin.user.updatee', 'admin.user.random'],
       ['admin.user.createe', 'admin.user.randome'],
       ['admin.user.randome', 'admin.user.updatee'],
+      null,
+      undefined,
+      [],
     ])(
-      'multiple-exact-permissions method with invalid permission annotation: %s',
-      async (...permissions) => {
+      'any-match method with invalid permission annotation: %s',
+      async (permissions) => {
         const tokens = await tokenService.signTokens({
-          ...emptyPermissionsPayload,
-          permissions,
+          ...payloadToSign,
+          accessTokenPayload: {
+            ...payloadToSign.accessTokenPayload,
+            permissions: permissions as string[],
+          },
         });
 
         const response = await app.inject({
           method: 'GET',
-          url: 'auth/multiple-exact-permissions',
+          url: 'auth/any-match',
           headers: {
             authorization: `Bearer ${tokens.accessToken}`,
           },
@@ -381,89 +273,65 @@ describe('test auth', () => {
         expect(response.statusCode).toEqual(HttpStatus.FORBIDDEN);
       },
     );
-  });
 
-  describe('test refresh token auth guard and strategy', () => {
-    it.todo('implement refresh token tests');
+    describe('test permission decorator with each mode', () => {
+      it.each([
+        ['admin.user.create'],
+        ['admin.user.update'],
+        ['admin.user.create', 'admin.user.updateeeeee'],
+        ['admin.user.createeeee', 'admin.user.update'],
+        [],
+        undefined,
+        null,
+      ])('each method with invalid permissions: %s', async (permissions) => {
+        const tokens = await tokenService.signTokens({
+          ...payloadToSign,
+          accessTokenPayload: {
+            ...payloadToSign.accessTokenPayload,
+            permissions: permissions as string[],
+          },
+        });
+
+        const response = await app.inject({
+          method: 'GET',
+          url: 'auth/each-match',
+          headers: {
+            authorization: `Bearer ${tokens.accessToken}`,
+          },
+        });
+
+        expect(response.statusCode).toEqual(HttpStatus.FORBIDDEN);
+      });
+    });
+
+    it.each([
+      ['admin.user.create', 'admin.user.update'],
+      ['admin.user.create', 'admin.user.update', 'admin.user.anything.else'],
+      [
+        'admin.user.create',
+        'admin.user.update',
+        'admin.user.anything.else',
+        'admin.user.anything.bla',
+      ],
+      ['admin.user.create', 'admin.user.update', 'admin.user.update'],
+    ])('each method with valid permissions: %s', async (...permissions) => {
+      const tokens = await tokenService.signTokens({
+        ...payloadToSign,
+        accessTokenPayload: {
+          ...payloadToSign.accessTokenPayload,
+          permissions,
+        },
+      });
+
+      const response = await app.inject({
+        method: 'GET',
+        url: 'auth/each-match',
+        headers: {
+          authorization: `Bearer ${tokens.accessToken}`,
+        },
+      });
+
+      expect(response.statusCode).toEqual(HttpStatus.OK);
+    });
   });
 });
-
-@Controller('skip-auth')
-@SkipAuth()
-class SkipAuthController {
-  @Get()
-  async skipAuth() {
-    return 'hello';
-  }
-
-  @Get('secured')
-  @Permissions('allow')
-  async withPermission() {
-    return 'hello';
-  }
-}
-
-@Controller('auth')
-class AuthController {
-  @Get('skip-auth')
-  @SkipAuth()
-  async skipAuth() {
-    return 'hello';
-  }
-
-  @Get('no-permission')
-  async noPermission() {
-    return 'hello';
-  }
-
-  @Get('current-user')
-  async userTest(@CurrentUser() payload: JwtPayload) {
-    return payload;
-  }
-
-  @Get('first-level-any-permission')
-  @Permissions('admin')
-  async anyAdmin() {
-    return 'hello';
-  }
-
-  @Get('second-level-any-permission')
-  @Permissions('admin.user')
-  async inviteUser() {
-    return 'hello';
-  }
-
-  @Get('multiple-exact-permissions')
-  @Permissions('admin.user.create', 'admin.user.update')
-  async createOrUpdate() {
-    return 'hello';
-  }
-}
-
-@Controller('auth-roles')
-class AuthRolesController {
-  @Get('one-role')
-  @Roles('admin')
-  async anyAdmin() {
-    return 'hello';
-  }
-
-  @Get('multiple-exact-roles')
-  @Roles('admin', 'plain')
-  async multiplePermissions() {
-    return 'hello';
-  }
-
-  @SkipAuth()
-  @Get('skip-auth')
-  @Roles('admin', 'plain')
-  async skipAuthAndRoles() {
-    return 'hello';
-  }
-
-  @Get('no-roles')
-  @Roles()
-  async emptyList() {
-    return 'hello';
-  }
-}
