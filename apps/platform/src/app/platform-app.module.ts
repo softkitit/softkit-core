@@ -29,8 +29,11 @@ import {
 } from '@softkit/auth';
 import { PlatformClientModule } from '@softkit/platform-client';
 import { HealthCheckModule } from '@softkit/healthcheck';
-import { setupTypeormModule, TYPEORM_FACTORIES_TOKEN,
-  TYPEORM_SEEDERS_TOKEN, } from '@softkit/typeorm';
+import {
+  setupTypeormModule,
+  TYPEORM_FACTORIES_TOKEN,
+  TYPEORM_SEEDERS_TOKEN,
+} from '@softkit/typeorm';
 import { MultiTenantTokenBuilderService } from './services/auth/token/multi-tenant-token-builder.service';
 import { AccessCheckService, SignupService } from './services';
 import { AbstractSignupService } from './services/auth/signup/signup.service.interface';
