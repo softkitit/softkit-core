@@ -39,9 +39,9 @@ import { LoggingInterceptor } from '@softkit/logger';
 import { responseBodyFormatter } from '@softkit/i18n';
 import { REQUEST_ID_HEADER } from '@softkit/server-http-client';
 import { fastifyHelmet } from '@fastify/helmet';
+import { DataSource } from 'typeorm';
 import { callOrUndefinedIfException } from './utils/functions';
 
-import { DataSource } from 'typeorm';
 export function buildFastifyAdapter() {
   return new FastifyAdapter({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -134,7 +134,7 @@ async function runDatabaseSeeders(
     return;
   }
 
-  const ds = app.get(DataSource);
+  const ds = callOrUndefinedIfException(() => app.get(DataSource));
   const seeders = app.get(TYPEORM_SEEDERS_TOKEN);
   const factories = app.get(TYPEORM_FACTORIES_TOKEN);
 
@@ -144,10 +144,12 @@ async function runDatabaseSeeders(
     );
   }
 
-  await runSeeders(ds, {
-    seeds: [...seeders],
-    factories: [...factories],
-  });
+  if (ds instanceof DataSource) {
+    await runSeeders(ds, {
+      seeds: seeders,
+      factories,
+    });
+  }
 }
 
 export async function bootstrapBaseWebApp(
@@ -159,12 +161,14 @@ export async function bootstrapBaseWebApp(
   // todo wait for the pr in this package to be merged
   //  transition to use AsyncCls instead of ClsHook
   const transactionalContext = getTransactionalContext();
+
   // this is needed for tests to prevent multiple initializations
   if (!transactionalContext) {
     initializeTransactionalContext();
   }
 
   const app = await createNestWebApp(module, originalModule);
+
   const fastifyInstance: FastifyInstance = app.getHttpAdapter().getInstance();
   applyExpressCompatibilityRecommendations(fastifyInstance);
 
@@ -217,9 +221,10 @@ export async function bootstrapBaseWebApp(
     );
   }
 
-  if (dbConfig instanceof  DbConfig){
-      await runDatabaseSeeders(app, logger, dbConfig.runSeeds);
+  if (dbConfig instanceof DbConfig) {
+    await runDatabaseSeeders(app, logger, dbConfig.runSeeds);
   }
+
   await app.listen(appConfig.port, '0.0.0.0');
 
   logger.log(`App successfully started. Listening on port ${appConfig.port}`);
