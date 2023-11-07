@@ -1,11 +1,14 @@
 import { setSeederFactory } from 'typeorm-extension';
 import { Tenant } from '../entities';
+import { faker } from '@faker-js/faker';
+import { plainToInstance } from 'class-transformer';
 
 export const tenantSeederFactory = setSeederFactory(Tenant, () => {
-  const tenant = new Tenant();
-  tenant.tenantName = 'Softkit';
-  tenant.tenantUrl = 'localhost:9999';
-  tenant.version = 0;
+  const plainTenant = {
+    tenantName: faker.company.name(),
+    tenantUrl: faker.internet.url(),
+    version: 0,
+  } satisfies Pick<Tenant, 'tenantName' | 'tenantUrl' | 'version'>;
 
-  return tenant;
+  return plainToInstance(Tenant, plainTenant);
 });
