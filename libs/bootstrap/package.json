@@ -29,6 +29,7 @@
     "@softkit/logger": "*",
     "@softkit/i18n": "*",
     "@softkit/server-http-client": "*",
+    "@softkit/config": "*",
     "nestjs-pino": "^3.4.0",
     "fastify": "4.22.0",
     "class-validator": "^0.14.0",
