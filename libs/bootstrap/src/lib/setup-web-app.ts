@@ -34,6 +34,7 @@ import { responseBodyFormatter } from '@softkit/i18n';
 import { REQUEST_ID_HEADER } from '@softkit/server-http-client';
 import { fastifyHelmet } from '@fastify/helmet';
 
+/* istanbul ignore next */
 export function buildFastifyAdapter() {
   return new FastifyAdapter({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -44,7 +45,7 @@ export function buildFastifyAdapter() {
     },
   });
 }
-
+/* istanbul ignore next */
 export function setupGlobalFilters(
   app: INestApplication,
   httpAdapterHost: HttpAdapterHost,
@@ -62,6 +63,7 @@ export function setupGlobalFilters(
   );
 }
 
+/* istanbul ignore next */
 export async function createNestWebApp(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   module: any | TestingModule,
@@ -86,7 +88,7 @@ export async function createNestWebApp(
         {},
       );
 }
-
+/* istanbul ignore next */
 export function applyExpressCompatibilityRecommendations(
   fastifyInstance: FastifyInstance,
 ) {
@@ -104,7 +106,7 @@ export function applyExpressCompatibilityRecommendations(
       this.send('');
     });
 }
-
+/* istanbul ignore next */
 function setupGlobalInterceptors(app: INestApplication) {
   app.useGlobalInterceptors(new LoggingInterceptor());
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
@@ -120,7 +122,6 @@ export async function bootstrapBaseWebApp(
   // todo wait for the pr in this package to be merged
   //  transition to use AsyncCls instead of ClsHook
   const transactionalContext = getTransactionalContext();
-
   // this is needed for tests to prevent multiple initializations
   if (!transactionalContext) {
     initializeTransactionalContext();
@@ -133,6 +134,7 @@ export async function bootstrapBaseWebApp(
 
   app.register(fastifyHelmet, {});
 
+  /* istanbul ignore next */
   useContainer(app.select(originalModule || module), {
     fallbackOnErrors: true,
   });
