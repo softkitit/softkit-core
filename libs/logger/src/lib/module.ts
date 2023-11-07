@@ -91,5 +91,6 @@ export function setupLoggerModule<ClsType extends ClsStore>(
     },
     imports: [ClsModule],
     inject: [LoggerConfig, ClsService],
+    providers: [LoggerConfig],
   });
 }
