@@ -9,18 +9,32 @@ import { ModuleMetadata } from '@nestjs/common/interfaces/modules/module-metadat
 import { setupYamlBaseConfigModule } from '@softkit/config';
 import * as path from 'node:path';
 import { BootstrapTestAppModule } from './app/app.module';
+import {
+  DbConfig,
+  setupTypeormModule,
+  TYPEORM_FACTORIES_TOKEN,
+  TYPEORM_SEEDERS_TOKEN,
+} from '@softkit/typeorm';
+import { TenantRepository } from './app/repositories/tenant.repository';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { TenantEntity } from './app/repositories/tenant.entity';
+import * as Seeders from './app/seeders';
+import * as Factories from './app/factories';
 
 describe('bootstrap test', () => {
   let db: StartedDb;
+  let dbConfig: DbConfig;
   let swaggerConfig: SwaggerConfig;
   let appConfig: AppConfig;
   let rootConfig: RootConfig;
   let testingModuleMetadata: ModuleMetadata;
+  let tenantRepository: TenantRepository;
 
   beforeAll(async () => {
     db = await startPostgres({
       runMigrations: false,
       additionalTypeOrmModuleOptions: {
+        entities: [TenantEntity],
         namingStrategy: new SnakeNamingStrategy(),
       },
       setupTransactionsManagement: false,
@@ -38,9 +52,12 @@ describe('bootstrap test', () => {
       ],
     }).compile();
 
+    await configModule.init();
+
     rootConfig = configModule.get(RootConfig);
     swaggerConfig = configModule.get(SwaggerConfig);
     appConfig = configModule.get(AppConfig);
+    dbConfig = configModule.get(DbConfig);
 
     const { BootstrapTestAppModule } = require('./app/app.module');
 
@@ -58,8 +75,25 @@ describe('bootstrap test', () => {
           provide: AppConfig,
           useValue: appConfig,
         },
+        {
+          provide: DbConfig,
+          useValue: dbConfig,
+        },
+        {
+          provide: TYPEORM_SEEDERS_TOKEN,
+          useValue: Object.values(Seeders),
+        },
+        {
+          provide: TYPEORM_FACTORIES_TOKEN,
+          useValue: Object.values(Factories),
+        },
+        TenantRepository,
       ],
-      imports: [BootstrapTestAppModule],
+      imports: [
+        BootstrapTestAppModule,
+        TypeOrmModule.forFeature([TenantEntity]),
+        setupTypeormModule(__dirname, db.TypeOrmConfigService),
+      ],
     };
   });
 
@@ -114,6 +148,10 @@ describe('bootstrap test', () => {
           {
             provide: AppConfig,
             useValue: appConfig,
+          },
+          {
+            provide: DbConfig,
+            useValue: dbConfig,
           },
         ],
         imports: [BootstrapTestAppModule],
@@ -183,5 +221,42 @@ describe('bootstrap test', () => {
   it('should start test app using provided module as fallback', async () => {
     const { TestAppModule } = require('./app/app.module');
     await bootstrapBaseWebApp(TestAppModule);
+  });
+
+  it('should seed database', async () => {
+    dbConfig.runSeeds = true;
+
+    const testingModule = await Test.createTestingModule(
+      testingModuleMetadata,
+    ).compile();
+
+    tenantRepository = testingModule.get(TenantRepository);
+
+    await bootstrapBaseWebApp(testingModule, BootstrapTestAppModule);
+    const tenantsCount = await tenantRepository.count();
+    expect(tenantsCount).toBe(1);
+  });
+
+  it('should not seed database in case we do not have seeders', async () => {
+    dbConfig.runSeeds = true;
+
+    const testingModule = await Test.createTestingModule({
+      ...testingModuleMetadata,
+      providers: [
+        ...(testingModuleMetadata.providers || []),
+        {
+          provide: TYPEORM_SEEDERS_TOKEN,
+          useValue: [],
+        },
+        {
+          provide: TYPEORM_FACTORIES_TOKEN,
+          useValue: [],
+        },
+      ],
+    }).compile();
+
+    tenantRepository = testingModule.get(TenantRepository);
+
+    await bootstrapBaseWebApp(testingModule, BootstrapTestAppModule);
   });
 });
