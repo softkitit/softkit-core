@@ -1,4 +1,10 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Index,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Permission } from './permission.entity';
 import { BaseEntityHelper } from '@softkit/typeorm';
 import { Expose } from 'class-transformer';
@@ -16,6 +22,7 @@ export class PermissionCategory extends BaseEntityHelper {
 
   @Column({ type: String, length: 512, nullable: false })
   @Expose()
+  @Index({ unique: true })
   @IsStringCombinedLocalized({
     minLength: 1,
     maxLength: 512,

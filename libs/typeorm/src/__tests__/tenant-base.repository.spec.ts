@@ -48,7 +48,9 @@ describe('tenant base entity test', () => {
       imports: [
         TypeOrmModule.forFeature([TenantUserEntity, TenantEntity]),
         ClsModule.forRoot(),
-        setupTypeormModule(__dirname, db.TypeOrmConfigService),
+        setupTypeormModule({
+          optionsFactory: db.TypeOrmConfigService,
+        }),
       ],
       providers: [TenantUserRepository, TenantRepository, ClsPresetSubscriber],
     }).compile();

@@ -7,6 +7,7 @@ import RootConfig from './config/root.config';
 
 import * as Controllers from './controllers';
 import * as Entities from './database/entities';
+import * as Migrations from './database/migrations';
 import * as Repositories from './repositories';
 import * as Services from './services';
 import AbstractAuthUserService from './services/auth/abstract-auth-user.service';
@@ -45,7 +46,9 @@ import { AbstractSignupService } from './services/auth/signup/signup.service.int
     setupLoggerModule(),
     setupYamlBaseConfigModule(__dirname, RootConfig),
     setupClsModule(),
-    setupTypeormModule(__dirname),
+    setupTypeormModule({
+      migrations: Migrations,
+    }),
     TypeOrmModule.forFeature(Object.values(Entities)),
     PlatformClientModule,
     HealthCheckModule,

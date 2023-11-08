@@ -9,6 +9,7 @@ module.exports = {
     "node_modules",
     "__tests__",
     "jestGlobalMocks.ts",
+    "migrations",
     ".module.ts",
   ],
   coverageThreshold: {
