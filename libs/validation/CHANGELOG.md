@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.2.0](https://github.com/softkitit/softkit-core/compare/validation-0.1.3...validation-0.2.0) (2023-11-08)
+
+
+### Features
+
+* **validation:** added trim transformer ([37f500c](https://github.com/softkitit/softkit-core/commit/37f500c1d9b0404ca8f6a281b60dad381562ec0d))
+
 ## [0.1.3](https://github.com/softkitit/softkit-core/compare/validation-0.1.2...validation-0.1.3) (2023-11-04)
 
 
