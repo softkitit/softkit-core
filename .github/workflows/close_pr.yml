@@ -35,7 +35,7 @@ jobs:
           git config --local user.name "GitHub Auto Release"
           git remote set-url origin "https://vsamofal:${PERSONAL_GITHUB_TOKEN}@github.com/softkitit/softkit-core/"
           git remote -v
-          npx nx affected --target version --noVerify --push --skipRootChangelog true --base=last-release --changelogHeader "Softkit Core Libraries Changelog" --skipCommitTypes=docs,ci,test --parallel=false
+          npx nx affected --target version --noVerify --push --skipRootChangelog true --base=last-release --changelogHeader "Softkit Core Libraries Changelog" --skipCommitTypes=docs,ci --parallel=false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
