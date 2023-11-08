@@ -20,6 +20,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TenantEntity } from './app/repositories/tenant.entity';
 import * as Seeders from './app/seeders';
 import * as Factories from './app/factories';
+import { UserProfile } from './app/repositories/user-profile.entity';
 
 describe('bootstrap test', () => {
   let db: StartedDb;
@@ -34,7 +35,7 @@ describe('bootstrap test', () => {
     db = await startPostgres({
       runMigrations: false,
       additionalTypeOrmModuleOptions: {
-        entities: [TenantEntity],
+        entities: [TenantEntity, UserProfile],
         namingStrategy: new SnakeNamingStrategy(),
       },
       setupTransactionsManagement: false,
