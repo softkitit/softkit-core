@@ -6,10 +6,11 @@ import {
 } from '@nestjs/platform-fastify';
 import { Test, TestingModule } from '@nestjs/testing';
 import { useContainer } from 'class-validator';
-import { DEFAULT_SAMPLE_DTO } from './app/vo/sample.dto';
+import { DEFAULT_SAMPLE_DTO, SampleDto } from './app/vo/sample.dto';
 import { SampleModule } from './app/sample.module';
 import { DEFAULT_SAMPLE_PRIMITIVES_DTO } from './app/vo/sample-primitives.dto';
 import { DEFAULT_SAMPLE_QUERY_PARAM } from './app/vo/sample-query.dto';
+import { plainToClass } from 'class-transformer';
 
 describe('validation e2e test', () => {
   let app: NestFastifyApplication;
@@ -43,6 +44,19 @@ describe('validation e2e test', () => {
 
       expect(response.statusCode).toBe(201);
       expect(JSON.parse(response.body)).toStrictEqual(DEFAULT_SAMPLE_DTO);
+    });
+
+    it.each([
+      { input: '  test   ', expected: 'test' },
+      { input: 'test    ', expected: 'test' },
+      { input: '   test', expected: 'test' },
+      { input: '  test  ', expected: 'test' },
+    ])('should trim spaces from %s', ({ input, expected }) => {
+      const payload = { trimField: input };
+
+      const transformedPayload = plainToClass(SampleDto, payload);
+
+      expect(transformedPayload.trimField).toBe(expected);
     });
 
     it.each(['fal', 'truee', '1', '0'])(
