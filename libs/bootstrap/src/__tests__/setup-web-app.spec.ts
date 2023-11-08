@@ -93,7 +93,7 @@ describe('bootstrap test', () => {
       imports: [
         BootstrapTestAppModule,
         TypeOrmModule.forFeature([TenantEntity]),
-        setupTypeormModule(__dirname, db.TypeOrmConfigService),
+        setupTypeormModule({ optionsFactory: db.TypeOrmConfigService }),
       ],
     };
   });
