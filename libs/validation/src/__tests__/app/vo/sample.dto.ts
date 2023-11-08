@@ -6,10 +6,12 @@ import {
   IsUrlLocalized,
   MatchesWithProperty,
   PasswordLocalized,
+  trimTransformer,
 } from '../../../index';
 import { Optional } from '@nestjs/common';
 import { faker } from '@faker-js/faker';
 import { IsInt, Min } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 export class SampleDto {
   @IsEmailLocalized()
@@ -19,6 +21,11 @@ export class SampleDto {
     trimAndLowercase: false,
   })
   emailWithoutTrimAndLowercase!: string;
+
+  @Transform((value) => {
+    return trimTransformer(value);
+  })
+  trimField!: string;
 
   @IsInt()
   @Min(18)
@@ -65,6 +72,7 @@ export class SampleDto {
 export const DEFAULT_SAMPLE_DTO: SampleDto = {
   email: faker.internet.email().toLowerCase(),
   emailWithoutTrimAndLowercase: faker.internet.email().toLowerCase(),
+  trimField: faker.string.sample(),
   password: '12345Aa!',
   age: 18,
   repeatedPassword: '12345Aa!',
