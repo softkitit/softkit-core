@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.3.1](https://github.com/softkitit/softkit-core/compare/typeorm-0.3.0...typeorm-0.3.1) (2023-11-08)
+
+
+### Bug Fixes
+
+* **typeorm:** added ability to pass a list of migration functions/classes instead of files ([7286382](https://github.com/softkitit/softkit-core/commit/7286382283ed16f5ed677ab259ae12f7995765c5))
+
 ## [0.3.0](https://github.com/softkitit/softkit-core/compare/typeorm-0.2.1...typeorm-0.3.0) (2023-11-04)
 
 
