@@ -37,7 +37,9 @@ describe('base service tests', () => {
     const module = await Test.createTestingModule({
       imports: [
         TypeOrmModule.forFeature([UserEntity]),
-        setupTypeormModule(__dirname, db.TypeOrmConfigService),
+        setupTypeormModule({
+          optionsFactory: db.TypeOrmConfigService,
+        }),
         ClsModule.forRoot({
           global: true,
         }),
