@@ -10,7 +10,53 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateUserRequest"
+                "$ref": "#/components/schemas/SignUpByEmailRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          },
+          "409": {
+            "description": "Appears when user with such email already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrorResponse"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "type": "number",
+                          "default": 409
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/platform/v1/auth/tenant-signup": {
+      "post": {
+        "operationId": "AuthController_signUpWithTenantCreation",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignUpByEmailWithTenantCreationRequest"
               }
             }
           }
@@ -50,6 +96,8 @@
     "/api/platform/v1/auth/approve-signup": {
       "post": {
         "operationId": "AuthController_approveSignup",
+        "summary": "",
+        "description": "or you can respond with some message and let user to login\n    default behavior is to force user to login and make sure his password is correct",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -96,26 +144,19 @@
       }
     },
     "/api/platform/v1/auth/sso/saml/login": {
-      "get": {
+      "post": {
         "operationId": "AuthController_samlLogin",
-        "parameters": [
-          {
-            "name": "redirectUrl",
-            "required": true,
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "tenantId",
-            "required": true,
-            "in": "query",
-            "schema": {
-              "type": "string"
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InitiateSamlLoginRequest"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": ""
@@ -143,7 +184,24 @@
     "/api/platform/v1/auth/saml/sso/metadata": {
       "get": {
         "operationId": "SamlController_samlMetadata",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "samlConfigurationId",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tenantId",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": ""
@@ -229,15 +287,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "select",
-            "required": false,
-            "in": "query",
-            "description": "List of fields to select.\n      <p>\n             <b>Example: </b> id,name,createdAt,updatedAt,roleType\n          </p>\n      <p>\n             <b>Default Value: </b> By default all fields returns. If you want to select only some fields, provide them in query param\n          </p>\n      ",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -255,7 +304,7 @@
                         "data": {
                           "type": "array",
                           "items": {
-                            "$ref": "#/components/schemas/CustomUserRoleWithoutPermissionsDto"
+                            "$ref": "#/components/schemas/UserRoleWithoutPermission"
                           }
                         },
                         "meta": {
@@ -263,14 +312,7 @@
                             "select": {
                               "type": "array",
                               "items": {
-                                "type": "string",
-                                "enum": [
-                                  "id",
-                                  "name",
-                                  "createdAt",
-                                  "updatedAt",
-                                  "roleType"
-                                ]
+                                "type": "string"
                               }
                             },
                             "filter": {
@@ -342,7 +384,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CustomUserRoleWithoutPermissionsDto"
+                  "$ref": "#/components/schemas/UserRoleWithoutPermission"
                 }
               }
             }
@@ -379,7 +421,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CustomUserRoleWithoutPermissionsDto"
+                  "$ref": "#/components/schemas/UserRoleWithoutPermission"
                 }
               }
             }
@@ -424,7 +466,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CustomUserRoleWithoutPermissionsDto"
+                  "$ref": "#/components/schemas/UserRoleWithoutPermission"
                 }
               }
             }
@@ -456,7 +498,7 @@
             "name": "version",
             "required": true,
             "in": "query",
-            "description": "Version number of entity that you want to delete",
+            "description": "Version number of entity",
             "example": "1",
             "schema": {
               "minimum": 0,
@@ -471,32 +513,6 @@
               "application/json": {
                 "schema": {
                   "type": "boolean"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "Roles"
-        ],
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
-    "/api/platform/v1/roles/test-proxy": {
-      "get": {
-        "operationId": "RolesController_testProxy",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
                 }
               }
             }
@@ -761,53 +777,81 @@
           "instance"
         ]
       },
-      "CreateUserRequest": {
+      "SignUpByEmailRequest": {
         "type": "object",
         "properties": {
-          "email": {
-            "type": "string",
-            "description": "User email address",
-            "example": "john.doe@gmail.com"
-          },
-          "password": {
-            "type": "string",
-            "description": "Original password"
-          },
           "repeatedPassword": {
             "type": "string",
-            "description": "Repeat password"
+            "description": "just in case of some issues with frontend,\nwe won't save garbage to the database"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
           },
           "firstName": {
             "type": "string"
           },
           "lastName": {
             "type": "string"
-          },
+          }
+        },
+        "required": [
+          "repeatedPassword",
+          "email",
+          "firstName",
+          "lastName"
+        ]
+      },
+      "SignUpByEmailWithTenantCreationRequest": {
+        "type": "object",
+        "properties": {
           "companyName": {
+            "type": "string"
+          },
+          "companyIdentifier": {
+            "type": "string"
+          },
+          "repeatedPassword": {
+            "type": "string",
+            "description": "just in case of some issues with frontend,\nwe won't save garbage to the database"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
             "type": "string"
           }
         },
         "required": [
-          "email",
-          "password",
+          "companyName",
+          "companyIdentifier",
           "repeatedPassword",
+          "email",
           "firstName",
-          "lastName",
-          "companyName"
+          "lastName"
         ]
       },
       "ApproveSignUpRequest": {
         "type": "object",
         "properties": {
-          "approvalId": {
-            "type": "string"
+          "id": {
+            "type": "object",
+            "description": "Unique identifier"
           },
           "code": {
             "type": "string"
           }
         },
         "required": [
-          "approvalId",
+          "id",
           "code"
         ]
       },
@@ -815,18 +859,29 @@
         "type": "object",
         "properties": {
           "email": {
-            "type": "string",
-            "description": "User email address",
-            "example": "john.doe@gmail.com"
+            "type": "string"
           },
           "password": {
-            "type": "string",
-            "example": "absD123k&"
+            "type": "string"
           }
         },
         "required": [
-          "email",
-          "password"
+          "email"
+        ]
+      },
+      "InitiateSamlLoginRequest": {
+        "type": "object",
+        "properties": {
+          "redirectUrl": {
+            "type": "string"
+          },
+          "samlConfigurationId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "redirectUrl",
+          "samlConfigurationId"
         ]
       },
       "PaginatedMetaDocumented": {
@@ -957,73 +1012,31 @@
           "links"
         ]
       },
-      "PermissionCategory": {
+      "UserRoleWithoutPermission": {
         "type": "object",
         "properties": {
           "id": {
-            "type": "string"
+            "type": "object",
+            "description": "Unique identifier"
           },
-          "name": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "permissions": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Permission"
-            }
-          }
-        },
-        "required": [
-          "id",
-          "name",
-          "description",
-          "permissions"
-        ]
-      },
-      "Permission": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "action": {
+          "createdAt": {
+            "format": "date-time",
             "type": "string",
-            "description": "action is the identifier of the permission\nusually it is the name of the permission in lowercase\ne.g. admin.user.create, admin.user.read, admin.user.update, admin.user.delete\nideally it should be short, up to 16-32 characters\nbecause default implementation of auth service keep the permissions in a jwt token\nand jwt token has a limit of 8kb (8192 characters) in size"
+            "description": "Created at date time in ISO format"
           },
-          "permissionCategoryId": {
-            "type": "string"
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Last time updated at date time in ISO format"
           },
-          "permissionCategory": {
-            "nullable": true,
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/PermissionCategory"
-              }
-            ]
-          }
-        },
-        "required": [
-          "id",
-          "name",
-          "description",
-          "action",
-          "permissionCategoryId"
-        ]
-      },
-      "CustomUserRoleWithoutPermissionsDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
+          "deletedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Deleted at date time in ISO format"
+          },
+          "version": {
+            "type": "string",
+            "description": "Entity version for optimistic lock handling"
           },
           "name": {
             "type": "string"
@@ -1033,20 +1046,22 @@
           },
           "roleType": {
             "enum": [
+              "SUPER_ADMIN",
               "ADMIN",
               "REGULAR_USER"
             ],
             "type": "string"
           },
-          "permissions": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Permission"
-            }
+          "tenantId": {
+            "type": "string"
           }
         },
         "required": [
           "id",
+          "createdAt",
+          "updatedAt",
+          "deletedAt",
+          "version",
           "name",
           "description"
         ]
@@ -1063,15 +1078,10 @@
           "roleType": {
             "type": "string",
             "enum": [
+              "SUPER_ADMIN",
               "ADMIN",
               "REGULAR_USER"
             ]
-          },
-          "permissions": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Permission"
-            }
           }
         },
         "required": [
@@ -1082,8 +1092,9 @@
       "UpdateUserRole": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string"
+          "version": {
+            "type": "string",
+            "description": "Entity version for optimistic lock handling"
           },
           "name": {
             "type": "string"
@@ -1094,13 +1105,14 @@
           "roleType": {
             "type": "string",
             "enum": [
+              "SUPER_ADMIN",
               "ADMIN",
               "REGULAR_USER"
             ]
           }
         },
         "required": [
-          "id",
+          "version",
           "name",
           "description"
         ]
