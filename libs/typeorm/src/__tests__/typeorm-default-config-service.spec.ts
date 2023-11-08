@@ -39,7 +39,7 @@ describe('typeorm default config', () => {
     class GlobalConfigModule {}
 
     const module = await Test.createTestingModule({
-      imports: [setupTypeormModule(__dirname), GlobalConfigModule],
+      imports: [setupTypeormModule(), GlobalConfigModule],
     }).compile();
 
     dbConfig = module.get(DbConfig);

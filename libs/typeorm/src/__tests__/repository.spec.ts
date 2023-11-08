@@ -35,7 +35,9 @@ describe('start db and populate the entity', () => {
     const module = await Test.createTestingModule({
       imports: [
         TypeOrmModule.forFeature([UserEntity]),
-        setupTypeormModule(__dirname, db.TypeOrmConfigService),
+        setupTypeormModule({
+          optionsFactory: db.TypeOrmConfigService,
+        }),
       ],
       providers: [UserRepository],
     }).compile();

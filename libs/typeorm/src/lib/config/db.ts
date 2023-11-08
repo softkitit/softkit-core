@@ -49,9 +49,6 @@ export class DbConfig {
   @BooleanType
   migrationsRun = false;
 
-  @IsString({ each: true })
-  migrations?: string[];
-
   @IsBoolean()
   @BooleanType
   dropSchema!: false;
