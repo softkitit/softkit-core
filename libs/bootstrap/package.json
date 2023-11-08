@@ -39,7 +39,6 @@
     "@fastify/helmet": "^11.0.0",
     "typeorm-transactional": "^0.4.1",
     "typeorm-extension": "^3.1.0",
-    "typeorm": "0.3.17",
-    "class-transformer": "^0.5.1"
+    "typeorm": "0.3.17"
   }
 }
