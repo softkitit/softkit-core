@@ -150,6 +150,10 @@ async function runDatabaseSeeders(
       seeds: seeders,
       factories,
     });
+  } else {
+    logger.warn(
+      'Seems like run seeds is enabled, but there is no data source provided, this seems like a mistake. Please review or disable seed run',
+    );
   }
 }
 
