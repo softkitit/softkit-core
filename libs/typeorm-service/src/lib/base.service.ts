@@ -5,8 +5,9 @@ import { AbstractBaseService } from './abstract-base.service';
 import { toCapitalizedWords } from '@softkit/string-utils';
 import { ObjectNotFoundException } from '@softkit/exceptions';
 import { PaginateConfig, Paginated, PaginateQuery } from 'nestjs-paginate';
-import { ClassConstructor, plainToInstance } from 'class-transformer';
+import { ClassConstructor } from 'class-transformer';
 import { ClassTransformOptions } from 'class-transformer/types/interfaces';
+import { map } from '@softkit/validation';
 
 export class BaseEntityService<
   ENTITY extends BaseEntityHelper,
@@ -93,12 +94,10 @@ export class BaseEntityService<
     config: PaginateConfig<ENTITY>,
     clazz: ClassConstructor<T>,
     // eslint-disable-next-line unicorn/no-object-as-default-parameter
-    options: ClassTransformOptions = {
-      excludeExtraneousValues: true,
-    },
+    options?: ClassTransformOptions,
   ): Promise<Paginated<T>> {
     return this.repository.findAllPaginated(query, config).then((paginated) => {
-      const data = plainToInstance(clazz, paginated.data, options);
+      const data = map(paginated.data, clazz, options);
       return {
         ...paginated,
         data,
