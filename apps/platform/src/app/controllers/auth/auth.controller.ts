@@ -32,10 +32,10 @@ import { SignInRequest } from './vo/sign-in.dto';
 import { AbstractSignupService } from '../../services/auth/signup/signup.service.interface';
 import { InitiateSamlLoginRequest } from './vo/saml.dto';
 import { decodeBase64StringObjectFromUrl } from '@softkit/string-utils';
-import { plainToInstance } from 'class-transformer';
 import { ClsService } from 'nestjs-cls';
 import { ClsStore } from '../../common/vo/cls-store';
 import { validate } from 'class-validator';
+import { map } from '@softkit/validation';
 
 @ApiTags('Auth')
 @Controller({
@@ -151,13 +151,7 @@ export class AuthController {
 
     this.clsService.set('tenantId', relayState.tenantId as string);
 
-    const initiateRequest = plainToInstance(
-      InitiateSamlLoginRequest,
-      relayState,
-      {
-        excludeExtraneousValues: true,
-      },
-    );
+    const initiateRequest = map(relayState, InitiateSamlLoginRequest);
 
     const validationErrors = await validate(initiateRequest);
 

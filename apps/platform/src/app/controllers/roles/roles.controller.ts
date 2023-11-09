@@ -9,7 +9,6 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { plainToClass } from 'class-transformer';
 import { UserRoleService, UserRoleTenantService } from '../../services';
 import {
   CreateUserRole,
@@ -26,6 +25,7 @@ import {
   PaginateQuery,
 } from 'nestjs-paginate';
 import { RolesApi } from '@softkit/platform-client';
+import { map } from '@softkit/validation';
 
 @ApiTags('Roles')
 @Controller({
@@ -61,7 +61,7 @@ export class RolesController {
     return this.customUserRoleTenantService
       .findOneById(findOneOptions.id)
       .then((data) => {
-        return plainToClass(UserRoleWithoutPermission, data);
+        return map(data, UserRoleWithoutPermission);
       });
   }
 
@@ -71,7 +71,7 @@ export class RolesController {
     return this.customUserRoleTenantService
       .createOrUpdateEntity(customUserRole)
       .then((item) => {
-        return plainToClass(UserRoleWithoutPermission, item);
+        return map(item, UserRoleWithoutPermission);
       });
   }
 
@@ -84,7 +84,7 @@ export class RolesController {
         ...role,
       })
       .then((item) => {
-        return plainToClass(UserRoleWithoutPermission, item);
+        return map(item, UserRoleWithoutPermission);
       });
   }
 
