@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.3.1](https://github.com/softkitit/softkit-core/compare/validation-0.3.0...validation-0.3.1) (2023-11-09)
+
+
+### Bug Fixes
+
+* **validation:** correct typo in filename ([5958583](https://github.com/softkitit/softkit-core/commit/5958583f571127197bca08104b733e581859a5e7))
+
 ## [0.3.0](https://github.com/softkitit/softkit-core/compare/validation-0.2.0...validation-0.3.0) (2023-11-09)
 
 
