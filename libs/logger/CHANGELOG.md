@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.0.6](https://github.com/softkitit/softkit-core/compare/logger-0.0.5...logger-0.0.6) (2023-11-09)
+
+
+### Bug Fixes
+
+* **logger:** include LoggerConfig in module providers ([b4f38d2](https://github.com/softkitit/softkit-core/commit/b4f38d240db39fbdcad433b4f3ef93c6bb839669))
+
 ## [0.0.5](https://github.com/saas-buildkit/saas-buildkit-core/compare/logger-0.0.4...logger-0.0.5) (2023-09-08)
 
 
