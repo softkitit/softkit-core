@@ -5,7 +5,7 @@ import { TenantStatus } from '../entities/tenants/vo/tenant-status.enum';
 import { isMeta } from './utils/functions';
 import { faker } from '@faker-js/faker';
 import { DEFAULT_CREATE_ENTITY_EXCLUDE_LIST } from '@softkit/typeorm';
-import { OmittedEntity } from './vo/entity-omit.type';
+import { ExcludeKeys } from '@softkit/common-types';
 
 export const tenantFactory = setSeederFactory(Tenant, (_, meta) => {
   const plainTenant = {
@@ -13,7 +13,7 @@ export const tenantFactory = setSeederFactory(Tenant, (_, meta) => {
     tenantStatus: TenantStatus.ACTIVE,
     tenantFriendlyIdentifier: faker.company.name(),
     ownerId: '',
-  } satisfies OmittedEntity<Tenant, typeof DEFAULT_CREATE_ENTITY_EXCLUDE_LIST>;
+  } satisfies ExcludeKeys<Tenant, typeof DEFAULT_CREATE_ENTITY_EXCLUDE_LIST>;
 
   if (isMeta(meta)) {
     plainTenant.ownerId = meta.ownerId;
