@@ -1,7 +1,8 @@
-import { plainToClass, TransformFnParams } from 'class-transformer';
+import { TransformFnParams } from 'class-transformer';
 import { ClassConstructor } from 'class-transformer/types/interfaces';
 import { validateAndThrow } from '../validators/dynamic';
 import { IsEnumValidatorDefinition } from '../validators';
+import { map } from '../mapping';
 
 export const toObjectsArrayFromString = <T>(
   params: TransformFnParams,
@@ -17,7 +18,7 @@ export const toObjectsArrayFromString = <T>(
   if (value === undefined) {
     /**
      * there is no real circumstance where this would happen, because it used for query params
-     * and it there is not query params class-validator not invoking this
+     * and if there is no query params class-validator not invoking this
      */
     /* istanbul ignore next */
     return;
@@ -54,6 +55,6 @@ export const toObjectsArrayFromString = <T>(
       // unknown is used here because we can extend this in future to do a conversion
       {} as Record<keyof T, unknown>,
     );
-    return plainToClass(constr, record);
+    return map(record, constr);
   });
 };

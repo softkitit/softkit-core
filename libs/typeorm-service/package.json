@@ -10,8 +10,8 @@
     "nestjs service",
     "nest service"
   ],
-  "dependencies": {},
   "peerDependencies": {
+    "@softkit/validation": "*",
     "@softkit/typeorm": "*",
     "@softkit/string-utils": "*",
     "@softkit/exceptions": "*",

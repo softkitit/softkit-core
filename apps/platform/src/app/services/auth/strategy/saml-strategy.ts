@@ -12,8 +12,8 @@ import {
   GeneralInternalServerException,
   GeneralUnauthorizedException,
 } from '@softkit/exceptions';
-import { plainToInstance } from 'class-transformer';
 import { InitiateSamlLoginRequest } from '../../../controllers/auth/vo/saml.dto';
+import { map } from '@softkit/validation';
 
 export class SamlStrategy extends PassportStrategy(Strategy, 'saml') {
   private readonly logger = new Logger(SamlStrategy.name);
@@ -58,7 +58,7 @@ export class SamlStrategy extends PassportStrategy(Strategy, 'saml') {
       (this.request.body as any)?.RelayState,
     );
 
-    const configInfo = plainToInstance(InitiateSamlLoginRequest, relayState);
+    const configInfo = map(relayState, InitiateSamlLoginRequest);
 
     if (!configInfo.samlConfigurationId || !configInfo.redirectUrl) {
       this.logger.error(

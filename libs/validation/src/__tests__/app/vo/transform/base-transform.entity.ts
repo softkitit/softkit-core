@@ -32,3 +32,23 @@ export class BaseTransformEntity {
   @Exclude()
   password?: string;
 }
+
+export const BASE_TRANSFORM_ENTITY: BaseTransformEntity = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  tenantId: 'tenantId',
+  number: 1,
+  bool: true,
+  child: {
+    id: 'id',
+    name: 'name',
+  },
+  childArr: [
+    {
+      id: 'id',
+      name: 'name',
+    },
+  ],
+  password: 'password',
+};
