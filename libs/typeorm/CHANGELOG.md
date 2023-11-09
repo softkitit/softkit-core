@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.4.0](https://github.com/softkitit/softkit-core/compare/typeorm-0.3.1...typeorm-0.4.0) (2023-11-09)
+
+
+### Features
+
+* **typeorm:** add runSeeds flag for enabling database seeders and tokens ([41010d8](https://github.com/softkitit/softkit-core/commit/41010d8d96c9a7dfba5615e666d3ba2c33b2d05a))
+
 ## [0.3.1](https://github.com/softkitit/softkit-core/compare/typeorm-0.3.0...typeorm-0.3.1) (2023-11-08)
 
 
