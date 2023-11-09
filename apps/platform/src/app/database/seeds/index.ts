@@ -1,1 +1,1 @@
-export * from './tenant.seeder';
+export * from './initial.seeder';

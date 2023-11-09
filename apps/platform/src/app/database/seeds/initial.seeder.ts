@@ -1,8 +1,11 @@
 import { Seeder, SeederFactoryManager } from 'typeorm-extension';
 import { DataSource } from 'typeorm';
 import { Tenant, UserProfile } from '../entities';
+import { Logger } from '@nestjs/common';
 
-export class TenantSeeder implements Seeder {
+export class InitialSeeder implements Seeder {
+  private readonly logger = new Logger(InitialSeeder.name);
+
   public async run(
     dataSource: DataSource,
     factoryManager: SeederFactoryManager,
@@ -14,13 +17,19 @@ export class TenantSeeder implements Seeder {
     const userProfileCount = await userProfileRepository.count();
 
     if (count === 0 && userProfileCount === 0) {
+      this.logger.log(
+        'No tenants or user profiles found. Creating new ones...',
+      );
+
       const userProfileFactory = factoryManager.get(UserProfile);
       const owner = await userProfileFactory.save();
+      this.logger.log(`User profile created with ID: ${owner.id}`);
 
       const tenantFactory = factoryManager.get(Tenant);
       tenantFactory.setMeta({ ownerId: owner.id });
 
-      await tenantFactory.save();
+      const tenant = await tenantFactory.save();
+      this.logger.log(`Tenant created with ID: ${tenant.id}`);
     }
   }
 }
