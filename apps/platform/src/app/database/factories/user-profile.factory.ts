@@ -2,26 +2,22 @@ import { setSeederFactory } from 'typeorm-extension';
 import { UserProfile } from '../entities';
 import { plainToInstance } from 'class-transformer';
 import { UserProfileStatus } from '../entities/users/types/user-profile-status.enum';
-import { PickType } from '@nestjs/swagger';
-import { faker } from '@faker-js/faker';
+import { OmittedEntity } from './vo/entity-omit.type';
+import { DEFAULT_CREATE_ENTITY_EXCLUDE_LIST } from '@softkit/typeorm';
 
-class UserProfileFactory extends PickType(UserProfile, [
-  'email',
-  'firstName',
-  'lastName',
-  'status',
-]) {
-  constructor() {
-    super();
-    this.email = faker.internet.email();
-    this.firstName = faker.person.firstName();
-    this.lastName = faker.person.lastName();
-    this.status = UserProfileStatus.ACTIVE;
-  }
-}
+export const userProfileFactory = setSeederFactory(
+  UserProfile,
+  async (faker) => {
+    const plainUserProfile = {
+      email: faker.internet.email(),
+      firstName: faker.person.firstName(),
+      lastName: faker.person.lastName(),
+      status: UserProfileStatus.ACTIVE,
+    } satisfies OmittedEntity<
+      UserProfile,
+      typeof DEFAULT_CREATE_ENTITY_EXCLUDE_LIST
+    >;
 
-export const userProfileFactory = setSeederFactory(UserProfile, async () => {
-  const plainUserProfile = new UserProfileFactory();
-
-  return plainToInstance(UserProfile, plainUserProfile);
-});
+    return plainToInstance(UserProfile, plainUserProfile);
+  },
+);
