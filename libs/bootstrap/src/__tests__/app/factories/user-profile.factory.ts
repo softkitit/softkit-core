@@ -4,7 +4,7 @@ import { UserProfileStatus } from '../repositories/vo/user-profile-status.enum';
 import { UserProfile } from '../repositories/user-profile.entity';
 import { faker } from '@faker-js/faker';
 import { DEFAULT_CREATE_ENTITY_EXCLUDE_LIST } from '@softkit/typeorm';
-import { OmittedEntity } from './vo/entity-omit.type';
+import { ExcludeKeys } from '@softkit/common-types';
 
 export const userProfileFactory = setSeederFactory(UserProfile, async () => {
   const plainUserProfile = {
@@ -12,7 +12,7 @@ export const userProfileFactory = setSeederFactory(UserProfile, async () => {
     firstName: faker.person.firstName(),
     lastName: faker.person.lastName(),
     status: UserProfileStatus.ACTIVE,
-  } satisfies OmittedEntity<
+  } satisfies ExcludeKeys<
     UserProfile,
     typeof DEFAULT_CREATE_ENTITY_EXCLUDE_LIST
   >;
