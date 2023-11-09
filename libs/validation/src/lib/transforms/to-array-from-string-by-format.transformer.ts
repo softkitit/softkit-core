@@ -1,7 +1,8 @@
-import { plainToClass, TransformFnParams } from 'class-transformer';
+import { TransformFnParams } from 'class-transformer';
 import { ClassConstructor } from 'class-transformer/types/interfaces';
 import { validateAndThrow } from '../validators/dynamic';
 import { IsEnumValidatorDefinition } from '../validators';
+import { map } from '../mapping';
 
 export const toObjectsArrayFromString = <T>(
   params: TransformFnParams,
@@ -54,6 +55,6 @@ export const toObjectsArrayFromString = <T>(
       // unknown is used here because we can extend this in future to do a conversion
       {} as Record<keyof T, unknown>,
     );
-    return plainToClass(constr, record);
+    return map(record, constr);
   });
 };
