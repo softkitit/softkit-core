@@ -11,6 +11,8 @@ import * as Migrations from './database/migrations';
 import * as Repositories from './repositories';
 import * as Services from './services';
 import AbstractAuthUserService from './services/auth/abstract-auth-user.service';
+import * as Seeders from './database/seeds';
+import * as Factories from './database/factories';
 import AuthUserService from './services/users/auth-user.service';
 import { setupI18NModule } from '@softkit/i18n';
 import { setupLoggerModule } from '@softkit/logger';
@@ -28,7 +30,11 @@ import {
 } from '@softkit/auth';
 import { PlatformClientModule } from '@softkit/platform-client';
 import { HealthCheckModule } from '@softkit/healthcheck';
-import { setupTypeormModule } from '@softkit/typeorm';
+import {
+  setupTypeormModule,
+  TYPEORM_FACTORIES_TOKEN,
+  TYPEORM_SEEDERS_TOKEN,
+} from '@softkit/typeorm';
 import { MultiTenantTokenBuilderService } from './services/auth/token/multi-tenant-token-builder.service';
 import { AccessCheckService, SignupService } from './services';
 import { AbstractSignupService } from './services/auth/signup/signup.service.interface';
@@ -55,6 +61,14 @@ import { AbstractSignupService } from './services/auth/signup/signup.service.int
     JwtStrategy,
     JwtService,
     TokenService,
+    {
+      provide: TYPEORM_SEEDERS_TOKEN,
+      useValue: Object.values(Seeders),
+    },
+    {
+      provide: TYPEORM_FACTORIES_TOKEN,
+      useValue: Object.values(Factories),
+    },
     {
       provide: AbstractAuthUserService,
       useClass: AuthUserService,

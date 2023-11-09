@@ -24,6 +24,18 @@ yarn add @softkit/swagger-utils
 const swaggerSetup = setupSwagger(swaggerConfig, app);
 ```
 
+### Ensuring Correct Swagger Path Configuration
+The `setupSwagger` function facilitates the accurate configuration of the swagger path, accommodating optional API route prefixes. When an `appPrefix` is provided, the function concatenates it with the swagger path, ensuring the Swagger UI reflects your API's prefixed route structure.
+
+Without an `appPrefix`, the Swagger UI defaults to the standard swagger path.
+
+Example usage with an API prefix 'api/app':
+
+```typescript
+const appPrefix = 'api/app'; 
+const swaggerSetup = setupSwagger(swaggerConfig, app, appPrefix);
+```
+
 ### Default configuration in your root config class
 
 ```typescript
@@ -41,7 +53,7 @@ export class RootConfig {
 ```yaml
 swagger:
   title: 'some useful name'
-  swaggerPath: /api/app/swagger
+  swaggerPath: /swagger
   enabled: true
   docsOutputPath: apps/app/resources/openapi-docs.json
   description: 'some useful description'

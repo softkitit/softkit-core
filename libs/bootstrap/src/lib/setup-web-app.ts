@@ -19,6 +19,7 @@ import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
 import { initializeTransactionalContext } from 'typeorm-transactional';
 import { getTransactionalContext } from 'typeorm-transactional/dist/common';
 import { generateRandomId } from '@softkit/crypto';
+import { runSeeders } from 'typeorm-extension';
 import {
   AnyExceptionFilter,
   HttpExceptionFilter,
@@ -28,11 +29,18 @@ import {
 import { DEFAULT_VALIDATION_OPTIONS } from '@softkit/validation';
 import { AppConfig } from './config/app';
 import { setupSwagger, SwaggerConfig } from '@softkit/swagger-utils';
-import { PostgresDbQueryFailedErrorFilter } from '@softkit/typeorm';
+import {
+  DbConfig,
+  PostgresDbQueryFailedErrorFilter,
+  TYPEORM_FACTORIES_TOKEN,
+  TYPEORM_SEEDERS_TOKEN,
+} from '@softkit/typeorm';
 import { LoggingInterceptor } from '@softkit/logger';
 import { responseBodyFormatter } from '@softkit/i18n';
 import { REQUEST_ID_HEADER } from '@softkit/server-http-client';
 import { fastifyHelmet } from '@fastify/helmet';
+import { DataSource } from 'typeorm';
+import { callOrUndefinedIfException } from './utils/functions';
 
 export function buildFastifyAdapter() {
   return new FastifyAdapter({
@@ -98,18 +106,55 @@ export function applyExpressCompatibilityRecommendations(
       // @ts-ignore
       req.socket['encrypted'] = process.env.NODE_ENV === 'production';
     })
-    .decorateReply('setHeader', function (name: string, value: unknown) {
-      this.header(name, value);
-    })
-    .decorateReply('end', function () {
-      this.send('');
-    });
+    .decorateReply(
+      'setHeader',
+      /* istanbul ignore next */ function (name: string, value: unknown) {
+        this.header(name, value);
+      },
+    )
+    .decorateReply(
+      'end',
+      /* istanbul ignore next */ function () {
+        this.send('');
+      },
+    );
 }
 
 function setupGlobalInterceptors(app: INestApplication) {
   app.useGlobalInterceptors(new LoggingInterceptor());
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
   app.useGlobalInterceptors(new LoggerErrorInterceptor());
+}
+
+async function runDatabaseSeeders(
+  app: INestApplication,
+  logger: Logger,
+  shouldRunSeeds: boolean,
+) {
+  if (!shouldRunSeeds) {
+    return;
+  }
+
+  const ds = callOrUndefinedIfException(() => app.get(DataSource));
+  const seeders = app.get(TYPEORM_SEEDERS_TOKEN);
+  const factories = app.get(TYPEORM_FACTORIES_TOKEN);
+
+  if (seeders.length === 0) {
+    return logger.warn(
+      'Warning: No seeders found. Ensure you have provided seeders if you are expecting database seeding to occur.',
+    );
+  }
+
+  if (ds instanceof DataSource) {
+    await runSeeders(ds, {
+      seeds: seeders,
+      factories,
+    });
+  } else {
+    logger.warn(
+      'Seems like run seeds is enabled, but there is no data source provided, this seems like a mistake. Please review or disable seed run',
+    );
+  }
 }
 
 export async function bootstrapBaseWebApp(
@@ -152,7 +197,10 @@ export async function bootstrapBaseWebApp(
   setupGlobalInterceptors(app);
 
   const appConfig = app.get(AppConfig);
-  const swaggerConfig = app.get(SwaggerConfig);
+  const dbConfig = callOrUndefinedIfException(() => app.get(DbConfig));
+  const swaggerConfig = callOrUndefinedIfException(() =>
+    app.get(SwaggerConfig),
+  );
 
   if (appConfig.prefix) {
     app.setGlobalPrefix(appConfig.prefix);
@@ -162,12 +210,24 @@ export async function bootstrapBaseWebApp(
     type: VersioningType.URI,
   });
 
-  const swaggerSetup = setupSwagger(swaggerConfig, app);
+  if (swaggerConfig instanceof SwaggerConfig) {
+    const swaggerSetup = setupSwagger(swaggerConfig, app, appConfig.prefix);
+    const swaggerPath = `${appConfig.prefix}${swaggerConfig.swaggerPath}`;
 
-  if (swaggerSetup) {
-    logger.log(`Swagger is listening on ${swaggerConfig.swaggerPath}`);
+    if (swaggerSetup) {
+      logger.log(`Swagger is listening on ${swaggerPath}`);
+    } else {
+      logger.log(`Swagger is disabled by config, skipping...`);
+    }
   } else {
-    logger.log(`Swagger is disabled by config, skipping...`);
+    logger.debug(
+      `SwaggerConfig instance is not provided so swagger turned off by default, skipping... Details: %o`,
+      swaggerConfig,
+    );
+  }
+
+  if (dbConfig instanceof DbConfig) {
+    await runDatabaseSeeders(app, logger, dbConfig.runSeeds);
   }
 
   await app.listen(appConfig.port, '0.0.0.0');

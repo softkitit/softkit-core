@@ -18,7 +18,6 @@
     "nestjs main startup"
   ],
   "dependencies": {
-    "@fastify/helmet": "^11.0.0"
   },
   "peerDependencies": {
     "@softkit/crypto": "*",
@@ -37,6 +36,9 @@
     "@nestjs/platform-fastify": "^10.2.4",
     "@nestjs/testing": "^10.2.4",
     "@saas-buildkit/nestjs-i18n": "11.1.3",
-    "typeorm-transactional": "^0.4.1"
+    "@fastify/helmet": "^11.0.0",
+    "typeorm-transactional": "^0.4.1",
+    "typeorm-extension": "^3.1.0",
+    "typeorm": "0.3.17"
   }
 }

@@ -3,7 +3,7 @@
 .docker-data/
 
 # compiled output
-./dist
+dist
 tmp
 /out-tsc
 
@@ -35,6 +35,9 @@ node_modules
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+# local env files
+.env
 
 # misc
 /.sass-cache

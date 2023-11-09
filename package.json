@@ -12,7 +12,7 @@
     "migration:generate": "sh -c 'export MIGRATION_APP_NAME=${0}; yarn run typeorm --dataSource=libs/typeorm/src/lib/migration/migration-data-source.ts migration:generate apps/${0}/src/app/database/migrations/${1}'",
     "migration:create-empty": "yarn run typeorm migration:create apps/${0}/src/app/database/migrations/${1}",
     "prebuild": "rimraf dist",
-    "test:all": "nx affected:test --all --codeCoverage --skip-nx-cache",
+    "test:all": "nx affected:test --all --codeCoverage --skip-nx-cache --parallel=false",
     "prepare": "husky install"
   },
   "packageManager": "yarn@3.6.3",
@@ -137,6 +137,7 @@
     "rxjs": "^7.8.1",
     "tslib": "^2.6.2",
     "typeorm": "0.3.17",
+    "typeorm-extension": "^3.1.0",
     "typeorm-naming-strategies": "^4.1.0",
     "typeorm-transactional": "^0.4.1"
   },

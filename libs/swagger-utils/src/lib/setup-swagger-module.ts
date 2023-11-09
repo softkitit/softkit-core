@@ -7,7 +7,11 @@ import * as fs from 'node:fs';
 /**
  * we can have a multiple swagger setups also, one public and private for example
  * */
-export function setupSwagger(c: SwaggerConfig, app: INestApplication) {
+export function setupSwagger(
+  c: SwaggerConfig,
+  app: INestApplication,
+  appPrefix?: string,
+) {
   if (!c.enabled) {
     return;
   }
@@ -29,7 +33,11 @@ export function setupSwagger(c: SwaggerConfig, app: INestApplication) {
     fs.writeFileSync(c.docsOutputPath, JSON.stringify(document, undefined, 2));
   }
 
-  SwaggerModule.setup(c.swaggerPath, app, document, {
+  const swaggerPath = appPrefix
+    ? `/${appPrefix}/${c.swaggerPath}`.replaceAll('//', '/')
+    : c.swaggerPath;
+
+  SwaggerModule.setup(swaggerPath, app, document, {
     swaggerOptions: {
       persistAuthorization: true,
     },
