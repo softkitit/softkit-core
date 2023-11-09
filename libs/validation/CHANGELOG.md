@@ -1,4 +1,16 @@
 Softkit Core Libraries Changelog
+## [0.3.0](https://github.com/softkitit/softkit-core/compare/validation-0.2.0...validation-0.3.0) (2023-11-09)
+
+
+### Features
+
+* **validation:** implemented base mapping function to reuse everywhere with proper default parameters to cover common needs ([023ec32](https://github.com/softkitit/softkit-core/commit/023ec329e0544c919bb91ed7ee19b22a26470325))
+
+
+### Bug Fixes
+
+* **validation:** replace plainToInstance with new map function ([337ad3d](https://github.com/softkitit/softkit-core/commit/337ad3d37e5a916fc87f287e7cc6177af93de3ac))
+
 ## [0.2.0](https://github.com/softkitit/softkit-core/compare/validation-0.1.3...validation-0.2.0) (2023-11-08)
 
 
