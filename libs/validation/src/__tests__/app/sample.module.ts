@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { SampleController } from './sample.controller';
 import { I18nJsonLoader, I18nModule } from '@saas-buildkit/nestjs-i18n';
 import * as path from 'node:path';
+import { MappingController } from './mapping.controller';
 
 @Module({
   imports: [
@@ -14,6 +15,6 @@ import * as path from 'node:path';
       ],
     }),
   ],
-  controllers: [SampleController],
+  controllers: [SampleController, MappingController],
 })
 export class SampleModule {}
