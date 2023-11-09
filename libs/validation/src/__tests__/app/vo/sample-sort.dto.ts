@@ -3,7 +3,7 @@ import {
   toObjectsArrayFromString,
 } from '../../../index';
 import { ValidateNested } from 'class-validator';
-import { Transform, Type } from 'class-transformer';
+import { Expose, Transform, Type } from 'class-transformer';
 import { NotEmptyArrayLocalized } from '../../../lib/validators';
 
 export class SampleSort {
@@ -26,8 +26,10 @@ export class SampleSort {
 
 export class SortParams {
   @IsStringEnumLocalized(['A', 'B'])
+  @Expose()
   direction!: string;
 
   @IsStringEnumLocalized(['C', 'D'])
+  @Expose()
   sortValue!: string;
 }

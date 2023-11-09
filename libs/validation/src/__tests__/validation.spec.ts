@@ -333,7 +333,7 @@ describe('validation e2e test', () => {
       ],
       [['B', 'C'], ['A', 'D'], undefined],
     ])(
-      'sort params validation success: %s & %s & %s',
+      'should pass sort params validation: %s & %s & %s',
       async (firstPair, secondPair, thirdPair) => {
         const pairsWithValues = [firstPair, secondPair, thirdPair].filter(
           (pair): pair is string[] => !!pair,
@@ -391,7 +391,7 @@ describe('validation e2e test', () => {
         ',',
       ],
     ])(
-      'sort params validation fail: %s, item separator: %s, items separator: %s',
+      'should not pass params validation: %s, item separator: %s, items separator: %s',
       async (sortParams, itemSeparator, itemsSeparator) => {
         const response = await app.inject({
           method: 'GET',

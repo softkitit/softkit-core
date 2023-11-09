@@ -18,7 +18,7 @@ export const toObjectsArrayFromString = <T>(
   if (value === undefined) {
     /**
      * there is no real circumstance where this would happen, because it used for query params
-     * and it there is not query params class-validator not invoking this
+     * and if there is no query params class-validator not invoking this
      */
     /* istanbul ignore next */
     return;
