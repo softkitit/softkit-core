@@ -88,13 +88,8 @@ describe('bootstrap test', () => {
           provide: TYPEORM_FACTORIES_TOKEN,
           useValue: Object.values(Factories),
         },
-        TenantRepository,
       ],
-      imports: [
-        BootstrapTestAppModule,
-        TypeOrmModule.forFeature([TenantEntity]),
-        setupTypeormModule({ optionsFactory: db.TypeOrmConfigService }),
-      ],
+      imports: [BootstrapTestAppModule],
     };
   });
 
@@ -227,9 +222,15 @@ describe('bootstrap test', () => {
   it('should seed database', async () => {
     dbConfig.runSeeds = true;
 
-    const testingModule = await Test.createTestingModule(
-      testingModuleMetadata,
-    ).compile();
+    const testingModule = await Test.createTestingModule({
+      ...testingModuleMetadata,
+      imports: [
+        ...(testingModuleMetadata.imports || []),
+        TypeOrmModule.forFeature([TenantEntity]),
+        setupTypeormModule({ optionsFactory: db.TypeOrmConfigService }),
+      ],
+      providers: [...(testingModuleMetadata.providers || []), TenantRepository],
+    }).compile();
 
     tenantRepository = testingModule.get(TenantRepository);
 
@@ -243,6 +244,11 @@ describe('bootstrap test', () => {
 
     const testingModule = await Test.createTestingModule({
       ...testingModuleMetadata,
+      imports: [
+        ...(testingModuleMetadata.imports || []),
+        TypeOrmModule.forFeature([TenantEntity]),
+        setupTypeormModule({ optionsFactory: db.TypeOrmConfigService }),
+      ],
       providers: [
         ...(testingModuleMetadata.providers || []),
         {
@@ -253,10 +259,21 @@ describe('bootstrap test', () => {
           provide: TYPEORM_FACTORIES_TOKEN,
           useValue: [],
         },
+        TenantRepository,
       ],
     }).compile();
 
     tenantRepository = testingModule.get(TenantRepository);
+
+    await bootstrapBaseWebApp(testingModule, BootstrapTestAppModule);
+  });
+
+  it('should throw warn when we do not provide datasource', async () => {
+    dbConfig.runSeeds = true;
+
+    const testingModule = await Test.createTestingModule(
+      testingModuleMetadata,
+    ).compile();
 
     await bootstrapBaseWebApp(testingModule, BootstrapTestAppModule);
   });
