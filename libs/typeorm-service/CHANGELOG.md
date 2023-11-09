@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.0.10](https://github.com/softkitit/softkit-core/compare/typeorm-service-0.0.9...typeorm-service-0.0.10) (2023-11-09)
+
+
+### Bug Fixes
+
+* **typeorm-service:** replaced paginate with transform mapping function to use a new unified mapper ([d133c24](https://github.com/softkitit/softkit-core/commit/d133c24e59e392a091d139467f057f1875842e8a))
+
 ## [0.0.9](https://github.com/softkitit/softkit-core/compare/typeorm-service-0.0.8...typeorm-service-0.0.9) (2023-11-08)
 
 ## [0.0.8](https://github.com/softkitit/softkit-core/compare/typeorm-service-0.0.7...typeorm-service-0.0.8) (2023-11-04)
