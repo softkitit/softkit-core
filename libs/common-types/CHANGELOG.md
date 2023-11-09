@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.1.0](https://github.com/softkitit/softkit-core/compare/common-types-0.0.6...common-types-0.1.0) (2023-11-09)
+
+
+### Features
+
+* **common-types:** add new typings for object key exclusion utility ([baed5d4](https://github.com/softkitit/softkit-core/commit/baed5d470187f6f6f3ae7a3d23bfc2287b325f74))
+
 ## [0.0.6](https://github.com/saas-buildkit/saas-buildkit-core/compare/common-types-0.0.5...common-types-0.0.6) (2023-09-13)
 
 
