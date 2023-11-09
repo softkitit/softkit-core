@@ -1,6 +1,6 @@
 {
   "name": "@softkit/bootstrap",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "type": "commonjs",
   "keywords": [
     "bootstrap",
@@ -17,8 +17,7 @@
     "nestjs main boot",
     "nestjs main startup"
   ],
-  "dependencies": {
-  },
+  "dependencies": {},
   "peerDependencies": {
     "@softkit/crypto": "*",
     "@softkit/exceptions": "*",

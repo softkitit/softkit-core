@@ -1,4 +1,19 @@
 Softkit Core Libraries Changelog
+## [0.2.0](https://github.com/softkitit/softkit-core/compare/bootstrap-0.1.2...bootstrap-0.2.0) (2023-11-09)
+
+
+### Features
+
+* **bootstrap:** implement seeding functionality using seeders and factories from tokens ([f5292e5](https://github.com/softkitit/softkit-core/commit/f5292e588fc4d264a07d43367acb5a5c0153f8d2))
+
+
+### Bug Fixes
+
+* **bootstrap:** add entity omit type for handling compile errors with seeding process ([a8d8b11](https://github.com/softkitit/softkit-core/commit/a8d8b11716d672d4d47e0f9dbf7f61f526c90deb))
+* **bootstrap:** replace old key exclusion utility with new typings ([98517fb](https://github.com/softkitit/softkit-core/commit/98517fbd3f05da7d169fd055c99b5f81eea3108b))
+* **bootstrap:** update database factories with correct tenant fields ([e9f0c80](https://github.com/softkitit/softkit-core/commit/e9f0c802e2b3efaf2b6c53141b1d26b27601a7f2))
+* remove unnecessary fields from .yaml configuration and enhance seeding process ([5c41a23](https://github.com/softkitit/softkit-core/commit/5c41a23ee260cedcab52928ecd5155c30df4d863))
+
 ## [0.1.2](https://github.com/softkitit/softkit-core/compare/bootstrap-0.1.1...bootstrap-0.1.2) (2023-11-04)
 
 
