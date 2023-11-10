@@ -109,7 +109,7 @@
     "@songkeys/nestjs-redis": "^10.0.0",
     "@swc/helpers": "~0.5.2",
     "argon2": "^0.31.1",
-    "axios": "^1.5.0",
+    "axios": "^1.6.0",
     "axios-retry": "^3.7.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
