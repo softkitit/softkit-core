@@ -4,8 +4,6 @@ import { HealthController } from './health.controller';
 
 @Module({
   controllers: [HealthController],
-  providers: [],
   imports: [TerminusModule],
-  exports: [],
 })
 export class HealthCheckModule {}
