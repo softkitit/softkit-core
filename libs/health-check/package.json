@@ -1,5 +1,5 @@
 {
-  "name": "@softkit/healthcheck",
+  "name": "@softkit/health-check",
   "version": "0.0.5",
   "type": "commonjs",
   "keywords": [
