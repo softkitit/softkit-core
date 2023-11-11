@@ -1,4 +1,4 @@
-import { instanceToPlain } from 'class-transformer';
+import { Expose, instanceToPlain } from 'class-transformer';
 import {
   AfterLoad,
   BaseEntity,
@@ -8,6 +8,7 @@ import {
   VersionColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
+import { IsNumberLocalized } from '@softkit/validation';
 
 export abstract class EntityHelper extends BaseEntity {
   __entity?: string;
@@ -26,12 +27,14 @@ export abstract class BaseEntityHelper extends EntityHelper {
   @ApiProperty({
     description: 'Unique identifier',
   })
+  @Expose()
   id!: string | number;
 
   @ApiProperty({
     type: Date,
     description: 'Created at date time in ISO format',
   })
+  @Expose()
   @CreateDateColumn()
   createdAt!: Date;
 
@@ -39,6 +42,7 @@ export abstract class BaseEntityHelper extends EntityHelper {
     type: Date,
     description: 'Last time updated at date time in ISO format',
   })
+  @Expose()
   @UpdateDateColumn()
   updatedAt!: Date;
 
@@ -46,6 +50,7 @@ export abstract class BaseEntityHelper extends EntityHelper {
     type: Date,
     description: 'Deleted at date time in ISO format',
   })
+  @Expose()
   @DeleteDateColumn()
   deletedAt?: Date;
 
@@ -54,5 +59,7 @@ export abstract class BaseEntityHelper extends EntityHelper {
     description: 'Entity version for optimistic lock handling',
   })
   @VersionColumn()
+  @IsNumberLocalized()
+  @Expose()
   version!: number;
 }
