@@ -8,9 +8,7 @@
   },
   "scripts": {
     "typeorm": "ts-node --project ./tsconfig.base.json -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
-    "migration:run": "sh -c 'export MIGRATION_APP_NAME=${0}; yarn run typeorm --dataSource=libs/typeorm/src/lib/migration/migration-data-source.ts migration:run'",
     "migration:generate": "sh -c 'export MIGRATION_APP_NAME=${0}; yarn run typeorm --dataSource=libs/typeorm/src/lib/migration/migration-data-source.ts migration:generate apps/${0}/src/app/database/migrations/${1}'",
-    "migration:create-empty": "yarn run typeorm migration:create apps/${0}/src/app/database/migrations/${1}",
     "prebuild": "rimraf dist",
     "test:all": "nx affected:test --all --codeCoverage --skip-nx-cache --parallel=false",
     "prepare": "husky install"
@@ -69,6 +67,7 @@
     "jest": "^29.6.4",
     "jest-environment-jsdom": "^29.6.4",
     "jest-environment-node": "^29.6.4",
+    "jest-extended": "^4.0.2",
     "ngx-deploy-npm": "^7.0.1",
     "nx": "16.8.1",
     "nx-cloud": "16.4.0",
@@ -143,5 +142,6 @@
   },
   "nx": {
     "includedScripts": []
-  }
+  },
+  "generators": "./generators.json"
 }
