@@ -3,13 +3,15 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Post,
   Put,
   Query,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { UserRoleService, UserRoleTenantService } from '../../services';
+import { UserRoleService } from '../../services';
 import {
   CreateUserRole,
   UserRoleWithoutPermission,
@@ -24,7 +26,6 @@ import {
   PaginatedSwaggerDocs,
   PaginateQuery,
 } from 'nestjs-paginate';
-import { RolesApi } from '@softkit/platform-client';
 import { map } from '@softkit/validation';
 
 @ApiTags('Roles')
@@ -34,19 +35,16 @@ import { map } from '@softkit/validation';
 })
 @ApiBearerAuth()
 export class RolesController {
-  constructor(
-    private readonly customUserRoleService: UserRoleService,
-    private readonly rolesApi: RolesApi,
-    private readonly customUserRoleTenantService: UserRoleTenantService,
-  ) {}
+  constructor(private readonly userRoleService: UserRoleService) {}
 
   @Get()
+  @Permissions('platform.roles.read')
   @PaginatedSwaggerDocs(UserRoleWithoutPermission, ROLES_PAGINATION_CONFIG)
   async findAll(
     @Paginate()
     query: PaginateQuery,
   ): Promise<Paginated<UserRoleWithoutPermission>> {
-    return this.customUserRoleService.findAllRolesPaginatedForTenant(
+    return this.userRoleService.findAllRolesPaginatedForTenant(
       query,
       ROLES_PAGINATION_CONFIG,
       UserRoleWithoutPermission,
@@ -58,8 +56,8 @@ export class RolesController {
   async findOne(
     @Param() findOneOptions: IdParamUUID,
   ): Promise<UserRoleWithoutPermission> {
-    return this.customUserRoleTenantService
-      .findOneById(findOneOptions.id)
+    return this.userRoleService
+      .findOneForTenant(findOneOptions.id)
       .then((data) => {
         return map(data, UserRoleWithoutPermission);
       });
@@ -68,7 +66,7 @@ export class RolesController {
   @Post()
   @Permissions('platform.roles.create')
   async create(@Body() customUserRole: CreateUserRole) {
-    return this.customUserRoleTenantService
+    return this.userRoleService
       .createOrUpdateEntity(customUserRole)
       .then((item) => {
         return map(item, UserRoleWithoutPermission);
@@ -77,11 +75,17 @@ export class RolesController {
 
   @Put(':id')
   @Permissions('platform.roles.update')
-  async updateOne(@Param() id: IdParamUUID, @Body() role: UpdateUserRole) {
-    return this.customUserRoleTenantService
+  async updateOne(
+    @Param() id: IdParamUUID,
+    @Body() role: UpdateUserRole,
+  ): Promise<UserRoleWithoutPermission> {
+    return this.userRoleService
       .createOrUpdateEntity({
         ...id,
         ...role,
+      })
+      .then((item) => {
+        return this.userRoleService.findOneById(item.id);
       })
       .then((item) => {
         return map(item, UserRoleWithoutPermission);
@@ -89,11 +93,12 @@ export class RolesController {
   }
 
   @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
   @Permissions('platform.roles.delete')
   async softDelete(
     @Param() path: IdParamUUID,
     @Query() query: VersionNumberParam,
   ) {
-    return this.customUserRoleTenantService.archive(path.id, query.version);
+    await this.userRoleService.archiveOneForTenant(path.id, query.version);
   }
 }

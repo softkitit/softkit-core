@@ -15,6 +15,7 @@ export class UserRoleWithoutPermission extends OmitType(UserRole, [
 
 export class CreateUserRole extends OmitType(UserRole, [
   ...DEFAULT_CREATE_ENTITY_EXCLUDE_LIST,
+  'roleType',
   'tenant',
   'permissions',
   'tenantId',
@@ -22,7 +23,7 @@ export class CreateUserRole extends OmitType(UserRole, [
 
 export class UpdateUserRole extends OmitType(UserRole, [
   ...DEFAULT_UPDATE_ENTITY_EXCLUDE_LIST,
-  'tenant',
+  'roleType',
   'permissions',
   'tenantId',
 ] as const) {}

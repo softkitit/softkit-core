@@ -56,7 +56,7 @@ export class UserProfile extends BaseEntityHelper {
   @IsStringEnumLocalized(UserProfileStatus)
   status!: UserProfileStatus;
 
-  @OneToMany(() => UserTenantAccount, (tenantUser) => tenantUser.user, {
+  @OneToMany(() => UserTenantAccount, (tenantUser) => tenantUser.userProfile, {
     eager: false,
   })
   userTenantsAccounts?: UserTenantAccount[];

@@ -13,14 +13,9 @@ import { StartedDb, startPostgres } from '@softkit/test-utils';
 import { bootstrapBaseWebApp } from '@softkit/bootstrap';
 import { SignInRequest } from '../controllers/auth/vo/sign-in.dto';
 import { ApproveSignUpRequest } from '../controllers/auth/vo/approve.dto';
+import { successSignupDto } from './generators/signup';
 
-const successSignupDto: BaseSignUpByEmailRequest = {
-  email: faker.internet.email(),
-  password: '12345Aa!',
-  repeatedPassword: '12345Aa!',
-  firstName: faker.person.firstName(),
-  lastName: faker.person.lastName(),
-};
+const singUpDto: BaseSignUpByEmailRequest = successSignupDto();
 
 describe('auth e2e test', () => {
   let app: NestFastifyApplication;
@@ -38,7 +33,7 @@ describe('auth e2e test', () => {
   });
 
   beforeEach(async () => {
-    successSignupDto.email = faker.internet.email({
+    singUpDto.email = faker.internet.email({
       provider: 'gmail' + faker.string.alphanumeric(10).toString() + '.com',
     });
 
@@ -62,7 +57,7 @@ describe('auth e2e test', () => {
       const response = await app.inject({
         method: 'POST',
         url: 'api/platform/v1/auth/signup',
-        payload: successSignupDto,
+        payload: singUpDto,
       });
 
       expect(response.statusCode).toBe(201);
@@ -92,7 +87,7 @@ describe('auth e2e test', () => {
         const response = await app.inject({
           method: 'POST',
           url: 'api/platform/v1/auth/signup',
-          payload: successSignupDto,
+          payload: singUpDto,
         });
 
         // counts of all of these entities should remain the same after failed signup
@@ -114,13 +109,13 @@ describe('auth e2e test', () => {
       await app.inject({
         method: 'POST',
         url: 'api/platform/v1/auth/signup',
-        payload: successSignupDto,
+        payload: singUpDto,
       });
 
       const response = await app.inject({
         method: 'POST',
         url: 'api/platform/v1/auth/signup',
-        payload: successSignupDto,
+        payload: singUpDto,
       });
 
       expect(response.statusCode).toBe(HttpStatus.CONFLICT);
@@ -129,35 +124,35 @@ describe('auth e2e test', () => {
     it.each([
       {
         requestBody: {
-          ...successSignupDto,
+          ...singUpDto,
           email: 'invalid email',
         },
         invalidFields: ['email'],
       },
       {
         requestBody: {
-          ...successSignupDto,
+          ...singUpDto,
           email: null,
         },
         invalidFields: ['email'],
       },
       {
         requestBody: {
-          ...successSignupDto,
+          ...singUpDto,
           password: '123123123',
         },
         invalidFields: ['password', 'repeatedPassword'],
       },
       {
         requestBody: {
-          ...successSignupDto,
+          ...singUpDto,
           repeatedPassword: '123123123&Aa',
         },
         invalidFields: ['repeatedPassword'],
       },
       {
         requestBody: {
-          ...successSignupDto,
+          ...singUpDto,
           firstName: faker.string.alphanumeric(320),
         },
         invalidFields: ['firstName'],
@@ -209,7 +204,7 @@ describe('auth e2e test', () => {
       const signUpResponse = await app.inject({
         method: 'POST',
         url: 'api/platform/v1/auth/signup',
-        payload: successSignupDto,
+        payload: singUpDto,
       });
 
       expect(signUpResponse.statusCode).toBe(201);
@@ -232,8 +227,8 @@ describe('auth e2e test', () => {
         method: 'POST',
         url: 'api/platform/v1/auth/signin',
         payload: {
-          email: successSignupDto.email,
-          password: successSignupDto.password,
+          email: singUpDto.email,
+          password: singUpDto.password,
         },
       });
 
@@ -253,7 +248,7 @@ describe('auth e2e test', () => {
         method: 'POST',
         url: 'api/platform/v1/auth/signup',
         payload: {
-          ...successSignupDto,
+          ...singUpDto,
           email: faker.internet.email(),
         },
       });
@@ -293,7 +288,7 @@ describe('auth e2e test', () => {
       const signUpResponse = await app.inject({
         method: 'POST',
         url: 'api/platform/v1/auth/signup',
-        payload: successSignupDto,
+        payload: singUpDto,
       });
 
       expect(signUpResponse.statusCode).toBe(201);

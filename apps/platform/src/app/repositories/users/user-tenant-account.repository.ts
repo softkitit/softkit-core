@@ -18,14 +18,14 @@ export class UserTenantAccountRepository extends BaseRepository<UserTenantAccoun
     super(UserTenantAccount, ds, clsService);
   }
 
-  public hasAnyPermission(
+  public async hasAnyPermission(
     tenantId: string,
     userProfileId: string,
     permissions: string[],
   ): Promise<boolean> {
     return (
       this.getBaseUserTenantAccountSelectQueryBuilder(tenantId, userProfileId)
-        .andWhere('UPPER(permission.name) IN (:permissions)', {
+        .andWhere('LOWER(permission.action) IN (:...permissions)', {
           permissions,
         })
         .limit(1)
@@ -47,7 +47,7 @@ export class UserTenantAccountRepository extends BaseRepository<UserTenantAccoun
 
     for (const permission of permissions) {
       queryBuilder = queryBuilder.andWhere(
-        'UPPER(permission.name) = :permission',
+        'LOWER(permission.action) = :permission',
         {
           permission,
         },
@@ -69,7 +69,7 @@ export class UserTenantAccountRepository extends BaseRepository<UserTenantAccoun
     return this.createQueryBuilder('user')
       .innerJoin('user.roles', 'role')
       .innerJoin('role.permissions', 'permission')
-      .where('user.id = :userProfileId', { userProfileId })
+      .where('user.userProfileId = :userProfileId', { userProfileId })
       .andWhere('user.tenantId = :tenantId', { tenantId });
   }
 }

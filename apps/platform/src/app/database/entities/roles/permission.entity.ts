@@ -22,7 +22,7 @@ export class Permission extends BaseEntityHelper {
   @BeforeUpdate()
   @BeforeInsert()
   public beforeChange() {
-    this.action = this.action.toUpperCase();
+    this.action = this.action.toLowerCase();
   }
 
   @PrimaryGeneratedColumn('uuid')

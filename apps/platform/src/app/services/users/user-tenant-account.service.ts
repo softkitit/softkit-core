@@ -17,7 +17,9 @@ export class UserTenantAccountService extends BaseService<
     userProfileId: string,
     permissions: string[],
   ): Promise<boolean> {
-    const normalizedPermissions = permissions.map((p) => p.toUpperCase());
+    const normalizedPermissions = permissions.map((p) =>
+      p.toLowerCase().trim(),
+    );
 
     return this.repository.hasAnyPermission(
       tenantId,
@@ -31,7 +33,9 @@ export class UserTenantAccountService extends BaseService<
     userProfileId: string,
     permissions: string[],
   ): Promise<boolean> {
-    const normalizedPermissions = permissions.map((p) => p.toUpperCase());
+    const normalizedPermissions = permissions.map((p) =>
+      p.toLowerCase().trim(),
+    );
 
     return this.repository.hasEachPermission(
       tenantId,

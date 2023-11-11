@@ -8,16 +8,9 @@ import { bootstrapBaseWebApp } from '@softkit/bootstrap';
 import { ApproveSignUpRequest } from '../controllers/auth/vo/approve.dto';
 import { AbstractSignupService } from '../services/auth/signup/signup.service.interface';
 import { TenantSignupService } from '../services/auth/signup/tenant-signup.service';
+import { successSignupDto } from './generators/signup';
 
-const successSignupDto: SignUpByEmailWithTenantCreationRequest = {
-  email: faker.internet.email(),
-  password: '12345Aa!',
-  repeatedPassword: '12345Aa!',
-  firstName: faker.person.firstName(),
-  lastName: faker.person.lastName(),
-  companyIdentifier: faker.company.name(),
-  companyName: faker.company.name(),
-};
+const signUpDto: SignUpByEmailWithTenantCreationRequest = successSignupDto();
 
 describe('tenant auth e2e test', () => {
   let app: NestFastifyApplication;
@@ -36,7 +29,7 @@ describe('tenant auth e2e test', () => {
   });
 
   beforeEach(async () => {
-    successSignupDto.email = faker.internet.email({
+    signUpDto.email = faker.internet.email({
       provider: 'gmail' + faker.string.alphanumeric(10).toString() + '.com',
     });
 
@@ -65,7 +58,7 @@ describe('tenant auth e2e test', () => {
       const response = await app.inject({
         method: 'POST',
         url: 'api/platform/v1/auth/tenant-signup',
-        payload: successSignupDto,
+        payload: signUpDto,
       });
 
       expect(response.statusCode).toBe(201);
@@ -73,7 +66,7 @@ describe('tenant auth e2e test', () => {
 
       const tenant = await tenantService.findOne({
         where: {
-          tenantFriendlyIdentifier: successSignupDto.companyIdentifier,
+          tenantFriendlyIdentifier: signUpDto.companyIdentifier,
         },
       });
 
@@ -86,7 +79,7 @@ describe('tenant auth e2e test', () => {
       const signUpResponse = await app.inject({
         method: 'POST',
         url: 'api/platform/v1/auth/tenant-signup',
-        payload: successSignupDto,
+        payload: signUpDto,
       });
 
       expect(signUpResponse.statusCode).toBe(201);
@@ -109,8 +102,8 @@ describe('tenant auth e2e test', () => {
         method: 'POST',
         url: 'api/platform/v1/auth/signin',
         payload: {
-          email: successSignupDto.email,
-          password: successSignupDto.password,
+          email: signUpDto.email,
+          password: signUpDto.password,
         },
       });
 

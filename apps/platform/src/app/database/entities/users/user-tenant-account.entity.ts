@@ -56,7 +56,7 @@ export class UserTenantAccount extends BaseEntity {
     eager: false,
     cascade: false,
   })
-  user?: UserProfile;
+  userProfile?: UserProfile;
 
   @ManyToOne(() => Tenant, (tenant) => tenant.tenantUsersAccount, {
     eager: false,

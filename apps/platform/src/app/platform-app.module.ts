@@ -31,6 +31,8 @@ import {
 import { PlatformClientModule } from '@softkit/platform-client';
 import { HealthCheckModule } from '@softkit/healthcheck';
 import {
+  ClsPresetSubscriber,
+  OptimisticLockingSubscriber,
   setupTypeormModule,
   TYPEORM_FACTORIES_TOKEN,
   TYPEORM_SEEDERS_TOKEN,
@@ -57,6 +59,8 @@ import { AbstractSignupService } from './services/auth/signup/signup.service.int
   providers: [
     ...Object.values(Services),
     ...Object.values(Repositories),
+    OptimisticLockingSubscriber,
+    ClsPresetSubscriber,
     Logger,
     JwtStrategy,
     JwtService,
