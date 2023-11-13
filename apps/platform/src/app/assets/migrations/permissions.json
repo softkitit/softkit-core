@@ -1,7 +1,7 @@
 [
   {
     "categoryName": "Roles",
-    "categoryDescription": "Roles management permissions",
+    "categoryDescription": "Roles management",
     "permissions": [
       {
         "name": "Add new roles",
