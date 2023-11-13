@@ -38,8 +38,9 @@ import {
   TYPEORM_SEEDERS_TOKEN,
 } from '@softkit/typeorm';
 import { MultiTenantTokenBuilderService } from './services/auth/token/multi-tenant-token-builder.service';
-import { AccessCheckService, SignupService } from './services';
+import { AccessCheckService } from './services';
 import { AbstractSignupService } from './services/auth/signup/signup.service.interface';
+import { TenantSignupService } from './services/auth/signup/tenant-signup.service';
 
 @Module({
   imports: [
@@ -91,7 +92,7 @@ import { AbstractSignupService } from './services/auth/signup/signup.service.int
     },
     {
       provide: AbstractSignupService,
-      useClass: SignupService,
+      useClass: TenantSignupService,
     },
     {
       provide: APP_GUARD,

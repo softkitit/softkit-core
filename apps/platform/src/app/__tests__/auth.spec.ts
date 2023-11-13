@@ -6,6 +6,7 @@ import { wrapInTransaction } from 'typeorm-transactional';
 import { BaseSignUpByEmailRequest } from '../controllers/auth/vo/sign-up.dto';
 import {
   ExternalApprovalService,
+  SignupService,
   TenantService,
   UserService,
 } from '../services';
@@ -14,6 +15,7 @@ import { bootstrapBaseWebApp } from '@softkit/bootstrap';
 import { SignInRequest } from '../controllers/auth/vo/sign-in.dto';
 import { ApproveSignUpRequest } from '../controllers/auth/vo/approve.dto';
 import { successSignupDto } from './generators/signup';
+import { AbstractSignupService } from '../services/auth/signup/signup.service.interface';
 
 const signUpDto: BaseSignUpByEmailRequest = successSignupDto();
 
@@ -41,7 +43,10 @@ describe('auth e2e test', () => {
 
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [PlatformAppModule],
-    }).compile();
+    })
+      .overrideProvider(AbstractSignupService)
+      .useClass(SignupService)
+      .compile();
     app = await bootstrapBaseWebApp(moduleFixture, PlatformAppModule);
 
     approvalService = app.get(ExternalApprovalService);
