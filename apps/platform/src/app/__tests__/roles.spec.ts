@@ -1,4 +1,3 @@
-import { faker } from '@faker-js/faker';
 import { NestFastifyApplication } from '@nestjs/platform-fastify';
 import { Test, TestingModule } from '@nestjs/testing';
 import {
@@ -6,24 +5,15 @@ import {
   UserRoleWithoutPermission,
 } from '../controllers/roles/vo/role.dto';
 import { Tenant, UserRole } from '../database/entities';
-import {
-  ExternalApprovalService,
-  TenantService,
-  UserRoleService,
-} from '../services';
+import { UserRoleService } from '../services';
 import { bootstrapBaseWebApp } from '@softkit/bootstrap';
 import { StartedDb, startPostgres } from '@softkit/test-utils';
 import { Paginated } from 'nestjs-paginate';
 import { AbstractSignupService } from '../services/auth/signup/signup.service.interface';
 import { TenantSignupService } from '../services/auth/signup/tenant-signup.service';
-import { ApproveSignUpRequest } from '../controllers/auth/vo/approve.dto';
-import { SignUpByEmailWithTenantCreationRequest } from '../controllers/auth/vo/sign-up.dto';
 import { AuthConfig } from '@softkit/auth';
-import { successSignupDto } from './generators/signup';
 import { createRole } from './generators/role';
-import { SignInRequest } from '../controllers/auth/vo/sign-in.dto';
-
-const singUpDto: SignUpByEmailWithTenantCreationRequest = successSignupDto();
+import { registerTenant } from './generators/user';
 
 function verifyEntity(
   responseBody: UserRoleWithoutPermission,
@@ -47,7 +37,7 @@ describe('roles e2e test', () => {
   let app: NestFastifyApplication;
   let service: UserRoleService;
   let accessToken: string;
-  let tenant: Tenant;
+  let currentTenant: Tenant;
   let db: StartedDb;
   let authConfig: AuthConfig;
 
@@ -62,10 +52,6 @@ describe('roles e2e test', () => {
   });
 
   beforeEach(async () => {
-    singUpDto.email = faker.internet.email({
-      provider: 'gmail' + faker.string.alphanumeric(10).toString() + '.com',
-    });
-
     const { PlatformAppModule } = require('../platform-app.module');
 
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -80,48 +66,10 @@ describe('roles e2e test', () => {
     service = app.get<UserRoleService>(UserRoleService);
     authConfig = app.get<AuthConfig>(AuthConfig);
 
-    const tenantService = app.get<TenantService>(TenantService);
-    const approvalService = app.get<ExternalApprovalService>(
-      ExternalApprovalService,
-    );
+    const { tenant, adminAccessToken } = await registerTenant(app);
 
-    const signUpResponse = await app.inject({
-      method: 'POST',
-      url: 'api/platform/v1/auth/tenant-signup',
-      payload: singUpDto,
-    });
-
-    const approval = await approvalService.findOne({
-      where: {
-        id: signUpResponse.json().data.approvalId,
-      },
-    });
-
-    await app.inject({
-      method: 'POST',
-      url: 'api/platform/v1/auth/approve-signup',
-      payload: {
-        id: approval.id,
-        code: approval.code,
-      } as ApproveSignUpRequest,
-    });
-
-    const token = await app.inject({
-      method: 'POST',
-      url: 'api/platform/v1/auth/signin',
-      payload: {
-        email: singUpDto.email,
-        password: singUpDto.password,
-      } satisfies SignInRequest,
-    });
-
-    accessToken = token.json().data.accessToken;
-
-    tenant = await tenantService.findOne({
-      where: {
-        tenantFriendlyIdentifier: singUpDto.companyIdentifier,
-      },
-    });
+    accessToken = adminAccessToken;
+    currentTenant = tenant;
   });
 
   afterEach(async () => {
@@ -132,7 +80,7 @@ describe('roles e2e test', () => {
   it('should find all roles, GET api/platform/v1/roles', async () => {
     const role = await service.createOrUpdateEntity({
       ...createRole(),
-      tenantId: tenant.id,
+      tenantId: currentTenant.id,
     } as any as UserRole);
 
     const response = await app.inject({
@@ -140,7 +88,7 @@ describe('roles e2e test', () => {
       url: `api/platform/v1/roles`,
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        [authConfig.headerTenantId]: tenant.id,
+        [authConfig.headerTenantId]: currentTenant.id,
       },
     });
 
@@ -180,7 +128,7 @@ describe('roles e2e test', () => {
       payload: role,
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        [authConfig.headerTenantId]: tenant.id,
+        [authConfig.headerTenantId]: currentTenant.id,
       },
     });
     const responseBody = response.json<UserRoleWithoutPermission>();
@@ -198,7 +146,7 @@ describe('roles e2e test', () => {
       payload: role,
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        [authConfig.headerTenantId]: tenant.id,
+        [authConfig.headerTenantId]: currentTenant.id,
       },
     });
     const createResponseBody = createResponse.json<UserRoleWithoutPermission>();
@@ -211,7 +159,7 @@ describe('roles e2e test', () => {
       url: `api/platform/v1/roles/${createResponseBody.id}`,
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        [authConfig.headerTenantId]: tenant.id,
+        [authConfig.headerTenantId]: currentTenant.id,
       },
     });
 
@@ -231,7 +179,7 @@ describe('roles e2e test', () => {
       payload: role,
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        [authConfig.headerTenantId]: tenant.id,
+        [authConfig.headerTenantId]: currentTenant.id,
       },
     });
     const createResponseBody = createResponse.json<UserRoleWithoutPermission>();
@@ -252,7 +200,7 @@ describe('roles e2e test', () => {
       },
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        [authConfig.headerTenantId]: tenant.id,
+        [authConfig.headerTenantId]: currentTenant.id,
       },
     });
 
@@ -272,7 +220,7 @@ describe('roles e2e test', () => {
       payload: role,
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        [authConfig.headerTenantId]: tenant.id,
+        [authConfig.headerTenantId]: currentTenant.id,
       },
     });
     const createResponseBody = createResponse.json<UserRoleWithoutPermission>();
@@ -285,7 +233,7 @@ describe('roles e2e test', () => {
       url: `api/platform/v1/roles/${createResponseBody.id}`,
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        [authConfig.headerTenantId]: tenant.id,
+        [authConfig.headerTenantId]: currentTenant.id,
       },
     });
 
@@ -300,7 +248,7 @@ describe('roles e2e test', () => {
       url: `api/platform/v1/roles/${createResponseBody.id}?version=${createResponseBody.version}`,
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        [authConfig.headerTenantId]: tenant.id,
+        [authConfig.headerTenantId]: currentTenant.id,
       },
     });
 
@@ -312,7 +260,7 @@ describe('roles e2e test', () => {
       payload: role,
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        [authConfig.headerTenantId]: tenant.id,
+        [authConfig.headerTenantId]: currentTenant.id,
       },
     });
 

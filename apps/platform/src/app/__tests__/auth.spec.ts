@@ -15,7 +15,7 @@ import { SignInRequest } from '../controllers/auth/vo/sign-in.dto';
 import { ApproveSignUpRequest } from '../controllers/auth/vo/approve.dto';
 import { successSignupDto } from './generators/signup';
 
-const singUpDto: BaseSignUpByEmailRequest = successSignupDto();
+const signUpDto: BaseSignUpByEmailRequest = successSignupDto();
 
 describe('auth e2e test', () => {
   let app: NestFastifyApplication;
@@ -33,7 +33,7 @@ describe('auth e2e test', () => {
   });
 
   beforeEach(async () => {
-    singUpDto.email = faker.internet.email({
+    signUpDto.email = faker.internet.email({
       provider: 'gmail' + faker.string.alphanumeric(10).toString() + '.com',
     });
 
@@ -57,7 +57,7 @@ describe('auth e2e test', () => {
       const response = await app.inject({
         method: 'POST',
         url: 'api/platform/v1/auth/signup',
-        payload: singUpDto,
+        payload: signUpDto,
       });
 
       expect(response.statusCode).toBe(201);
@@ -87,7 +87,7 @@ describe('auth e2e test', () => {
         const response = await app.inject({
           method: 'POST',
           url: 'api/platform/v1/auth/signup',
-          payload: singUpDto,
+          payload: signUpDto,
         });
 
         // counts of all of these entities should remain the same after failed signup
@@ -109,13 +109,13 @@ describe('auth e2e test', () => {
       await app.inject({
         method: 'POST',
         url: 'api/platform/v1/auth/signup',
-        payload: singUpDto,
+        payload: signUpDto,
       });
 
       const response = await app.inject({
         method: 'POST',
         url: 'api/platform/v1/auth/signup',
-        payload: singUpDto,
+        payload: signUpDto,
       });
 
       expect(response.statusCode).toBe(HttpStatus.CONFLICT);
@@ -124,35 +124,35 @@ describe('auth e2e test', () => {
     it.each([
       {
         requestBody: {
-          ...singUpDto,
+          ...signUpDto,
           email: 'invalid email',
         },
         invalidFields: ['email'],
       },
       {
         requestBody: {
-          ...singUpDto,
+          ...signUpDto,
           email: null,
         },
         invalidFields: ['email'],
       },
       {
         requestBody: {
-          ...singUpDto,
+          ...signUpDto,
           password: '123123123',
         },
         invalidFields: ['password', 'repeatedPassword'],
       },
       {
         requestBody: {
-          ...singUpDto,
+          ...signUpDto,
           repeatedPassword: '123123123&Aa',
         },
         invalidFields: ['repeatedPassword'],
       },
       {
         requestBody: {
-          ...singUpDto,
+          ...signUpDto,
           firstName: faker.string.alphanumeric(320),
         },
         invalidFields: ['firstName'],
@@ -204,7 +204,7 @@ describe('auth e2e test', () => {
       const signUpResponse = await app.inject({
         method: 'POST',
         url: 'api/platform/v1/auth/signup',
-        payload: singUpDto,
+        payload: signUpDto,
       });
 
       expect(signUpResponse.statusCode).toBe(201);
@@ -227,8 +227,8 @@ describe('auth e2e test', () => {
         method: 'POST',
         url: 'api/platform/v1/auth/signin',
         payload: {
-          email: singUpDto.email,
-          password: singUpDto.password,
+          email: signUpDto.email,
+          password: signUpDto.password,
         },
       });
 
@@ -248,7 +248,7 @@ describe('auth e2e test', () => {
         method: 'POST',
         url: 'api/platform/v1/auth/signup',
         payload: {
-          ...singUpDto,
+          ...signUpDto,
           email: faker.internet.email(),
         },
       });
@@ -288,7 +288,7 @@ describe('auth e2e test', () => {
       const signUpResponse = await app.inject({
         method: 'POST',
         url: 'api/platform/v1/auth/signup',
-        payload: singUpDto,
+        payload: signUpDto,
       });
 
       expect(signUpResponse.statusCode).toBe(201);
