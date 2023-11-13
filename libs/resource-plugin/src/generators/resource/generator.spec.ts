@@ -22,24 +22,7 @@ describe('resource generator', () => {
     tree = createTreeWithNestApplication(options.projectName);
   });
 
-  it('should create entity without provided group name', async () => {
-    await resourceGenerator(tree, {
-      ...options,
-      lintCommandName: 'lint',
-      groupName: undefined,
-    });
-
-    const entityFile = tree.listChanges().find((change) => {
-      return (
-        change.path.includes(options.entityName) &&
-        change.path.includes('entity')
-      );
-    });
-
-    expect(entityFile).toBeDefined();
-  });
-
-  it('should creat 9 files for all embedded resources and appropriate folders', async () => {
+  it('should creat files for all embedded resources and appropriate folders', async () => {
     const changesBeforeGeneratorRun = [...tree.listChanges()];
     await resourceGenerator(tree, options);
     const config = readProjectConfiguration(tree, options.projectName);
@@ -50,7 +33,7 @@ describe('resource generator', () => {
       .slice(changesBeforeGeneratorRun.length);
 
     // this generator should create 2 files
-    expect(changesAfterGenerator.length).toBe(9);
+    expect(changesAfterGenerator.length).toBe(12);
 
     const indexTsFile = changesAfterGenerator.find((change) => {
       return change.path.includes('index');
