@@ -23,6 +23,7 @@ export class ClsPresetSubscriber<ClsStoreType extends TenantClsStore>
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   beforeInsert(event: InsertEvent<any>): Promise<any> | void {
+    /* istanbul ignore next */
     if (event.entity === undefined) {
       return;
     }

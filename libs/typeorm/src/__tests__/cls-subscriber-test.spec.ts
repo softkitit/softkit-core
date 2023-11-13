@@ -275,6 +275,12 @@ describe('tenant base service test', () => {
       },
     );
   });
+
+  test('should fail on loading not base entity with cls-preset decorator', async () => {
+    await expect(() => import('./app/not-an-entity.entity')).rejects.toThrow(
+      TypeError,
+    );
+  });
 });
 
 function checkAllTestFieldsPresent(
