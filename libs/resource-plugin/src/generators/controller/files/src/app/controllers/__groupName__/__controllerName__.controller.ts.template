@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Post,
   Put,
@@ -10,15 +12,15 @@ import {
 } from '@nestjs/common';
 import { IdParamUUID, VersionNumberParam } from '@softkit/common-types';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { plainToClass } from 'class-transformer';
+import { Permissions } from '@softkit/auth';
 import {
   <%= pascalCase(serviceName) -%>Service,
 } from '../../services';
 
 import {
   <%= pascalCase(entityName) -%>DTO,
-  Create<%= pascalCase(entityName) -%>DTO,
-  Update<%= pascalCase(entityName) -%>DTO,
+  Create<%= pascalCase(entityName) -%>Request,
+  Update<%= pascalCase(entityName) -%>Request,
   <%= constantCase(entityName) -%>_PAGINATION_CONFIG
 } from './vo/<%= controllerName -%>.dto';
 
@@ -28,8 +30,7 @@ import {
   PaginatedSwaggerDocs,
   PaginateQuery,
 } from 'nestjs-paginate';
-
-import { Permissions } from '@softkit/auth';
+import { map } from '@softkit/validation';
 
 @ApiTags('<%= capitalCase(controllerName) -%>')
 @Controller({
@@ -47,6 +48,7 @@ export class <%= pascalCase(controllerName) -%>Controller {
     <%= pascalCase(entityName) -%>DTO,
     <%= constantCase(entityName) -%>_PAGINATION_CONFIG,
   )
+  @Permissions('<%= projectName -%>.<%= controllerName -%>.read')
   async findAll(
     @Paginate()
     query: PaginateQuery,
@@ -64,34 +66,38 @@ export class <%= pascalCase(controllerName) -%>Controller {
     @Param() param: IdParamUUID,
   ): Promise<<%= pascalCase(entityName) -%>DTO> {
     return this.service.findOneById(param.id).then((data) => {
-      return plainToClass(<%= pascalCase(entityName) -%>DTO, data);
+      return map(data, <%= pascalCase(entityName) -%>DTO);
     });
   }
 
   @Post()
   @Permissions('<%= projectName -%>.<%= controllerName -%>.create')
-  async create(@Body() dto: Create<%= pascalCase(entityName) -%>DTO) {
+  async create(@Body() dto: Create<%= pascalCase(entityName) -%>Request): Promise<<%= pascalCase(entityName) -%>DTO> {
     return this.service
       .createOrUpdateEntity(dto)
       .then((item) => {
-        return plainToClass(<%= pascalCase(entityName) -%>DTO, item);
+        return map(item, <%= pascalCase(entityName) -%>DTO);
       });
   }
 
   @Put(':id')
   @Permissions('<%= projectName -%>.<%= controllerName -%>.update')
-  async updateOne(@Param() param: IdParamUUID, @Body() dto: Update<%= pascalCase(entityName) -%>DTO) {
+  async updateOne(@Param() param: IdParamUUID, @Body() dto: Update<%= pascalCase(entityName) -%>Request): Promise<<%= pascalCase(entityName) -%>DTO> {
     return this.service
       .createOrUpdateEntity({
         id: param.id,
         ...dto,
       })
       .then((item) => {
-        return plainToClass(<%= pascalCase(entityName) -%>DTO, item);
+        return this.service.findOneById(item.id);
+      })
+      .then((item) => {
+        return map(item, <%= pascalCase(entityName) -%>DTO);
       });
   }
 
   @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
   @Permissions('<%= projectName -%>.<%= controllerName -%>.delete')
   async softDelete(@Param() param: IdParamUUID, @Query() query: VersionNumberParam) {
     return this.service.archive(param.id, query.version);

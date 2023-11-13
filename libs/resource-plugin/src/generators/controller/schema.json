@@ -21,6 +21,12 @@
       "x-prompt": "What is controller name? (lowercase) e.g. user-group",
       "minLength": 1
     },
+    "basePath": {
+      "type": "string",
+      "description": "App base path name",
+      "x-prompt": "What is app base path name?  e.g. api/platform",
+      "minLength": 1
+    },
     "serviceName": {
       "type": "string",
       "description": "Service name, usually match with entity name and controller name. It's default service that will be injected to controller.",

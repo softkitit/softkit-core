@@ -1,0 +1,8 @@
+import {
+  Create<%= pascalCase(entityName) -%>Request,
+} from '../../controllers/<%= groupName -%>/vo/<%= controllerName -%>.dto';
+
+export function create<%= pascalCase(entityName) -%>(): Create<%= pascalCase(entityName) -%>Request {
+  return {
+  };
+}

@@ -13,6 +13,7 @@ describe('controller generator', () => {
     serviceName: 'test-service',
     controllerName: 'test-controller',
     entityName: 'test-entity',
+    basePath: 'api/test-project',
     tenantBaseEntity: true,
     groupName: 'test',
   };

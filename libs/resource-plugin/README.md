@@ -23,6 +23,14 @@ yarn add @softkit/resource-plugin
 
 ### Development 
 
+#### Add new generator
+
 ```bash
 nx generate @nx/plugin:generator ${GENERATOR_NAME} --project=resource-plugin
+```
+
+#### Test generator
+
+```bash
+nx generate @softkit/resource-plugin ${GENERATOR_NAME} --project=resource-plugin
 ```

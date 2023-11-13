@@ -11,6 +11,7 @@ describe('resource generator', () => {
     projectName: 'test-project',
     entityName: 'test-entity',
     groupName: 'test-group',
+    basePath: 'api/platform',
     tenantBaseEntity: true,
     generateRepository: true,
     generateService: true,
