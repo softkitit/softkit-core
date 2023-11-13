@@ -20,5 +20,5 @@ describe('start redis and create configs', () => {
       const stoppedTestContainer = await container.stop();
       expect(stoppedTestContainer).toBeDefined();
     }
-  });
+  }, 60_000);
 });
