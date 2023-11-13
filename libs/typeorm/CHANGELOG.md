@@ -1,4 +1,12 @@
 Softkit Core Libraries Changelog
+## [0.4.1](https://github.com/softkitit/softkit-core/compare/typeorm-0.4.0...typeorm-0.4.1) (2023-11-13)
+
+
+### Bug Fixes
+
+* **typeorm:** added expose tenant id for the default base tenant entity ([df626b1](https://github.com/softkitit/softkit-core/commit/df626b1db086b34678ed2c4524d10266e0cc3187))
+* **typeorm:** fixed DEFAULT_UPDATE lists, fixes for the cls subscriber, extended DbConfig to include more options ([ef28526](https://github.com/softkitit/softkit-core/commit/ef285265cd0f2c7e2a69ba8f1868d629317da503))
+
 ## [0.4.0](https://github.com/softkitit/softkit-core/compare/typeorm-0.3.1...typeorm-0.4.0) (2023-11-09)
 
 
