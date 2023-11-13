@@ -1,0 +1,229 @@
+import { NestFastifyApplication } from '@nestjs/platform-fastify';
+import { Test, TestingModule } from '@nestjs/testing';
+import {
+  <%= pascalCase(entityName) -%>DTO,
+  Update<%= pascalCase(entityName) -%>Request,
+} from '../controllers/<%= groupName -%>/vo/<%= controllerName -%>.dto';
+import {
+  <%= pascalCase(entityName) -%>Service,
+} from '../services';
+import { bootstrapBaseWebApp } from '@softkit/bootstrap';
+import { StartedDb, startPostgres } from '@softkit/test-utils';
+import { Paginated } from 'nestjs-paginate';
+import { create<%= pascalCase(entityName) -%> } from './generators/<%= controllerName -%>';
+import { registerTenant } from './generators/user';
+import { AuthConfig } from '@softkit/auth';
+
+function verifyEntity(
+  responseBody: <%= pascalCase(entityName) -%>DTO,
+  expected: Partial<<%= pascalCase(entityName) -%>DTO>,
+  excludedFields: string[] = [],
+) {
+  const keys = Object.keys(expected).filter((k) => !excludedFields.includes(k));
+
+  for (const key of keys) {
+    expect(expected[key]).toEqual(responseBody[key]);
+  }
+
+  expect(responseBody.createdAt).not.toBeNil();
+  expect(responseBody.updatedAt).not.toBeNil();
+  expect(responseBody.id).not.toBeNil();
+  expect(responseBody.version).toBeGreaterThanOrEqual(1);
+  <% if (tenantBaseEntity) { %>expect(responseBody.tenantId).not.toBeNil();<% } %>
+}
+
+
+describe('<%= controllerName -%> e2e test', () => {
+  let app: NestFastifyApplication;
+  let service: <%= pascalCase(entityName) -%>Service;
+  let authConfig: AuthConfig;
+  let defaultHeaders: Record<string, string>;
+  let db: StartedDb;
+  const baseControllerUrl = `<%= basePath -%>/v1/<%= paramCase(controllerName) -%>`;
+
+  beforeAll(async () => {
+    db = await startPostgres({
+      runMigrations: true,
+    });
+  }, 60_000);
+
+  afterAll(async () => {
+    await db.container.stop();
+  });
+
+  beforeEach(async () => {
+    const { <%= pascalCase(projectName) -%>AppModule } = require('../<%= projectName -%>-app.module');
+
+    const moduleFixture: TestingModule = await Test.createTestingModule({
+      imports: [<%= pascalCase(projectName) -%>AppModule],
+    })
+      .compile();
+
+    app = await bootstrapBaseWebApp(moduleFixture, <%= pascalCase(projectName) -%>AppModule);
+
+    service = app.get(<%= pascalCase(entityName) -%>Service);
+    authConfig = app.get(AuthConfig);
+
+    const { tenant, adminAccessToken } = await registerTenant(app);
+
+    defaultHeaders = {
+      Authorization: `Bearer ${adminAccessToken}`,
+      <% if (tenantBaseEntity) { %>[authConfig.headerTenantId]: tenant.id,<% } %>
+    };
+  });
+
+  afterEach(async () => {
+    await app.flushLogs();
+    await app.close();
+  });
+
+  it('find all <%= entityName -%>, GET ', async () => {
+    const entitiesToCreate = 10;
+
+    const allCreated = await Promise.all(
+      [...Array.from({ length: entitiesToCreate }).keys()].map(() => {
+        return app.inject({
+          method: 'POST',
+          url: baseControllerUrl,
+          payload: create<%= pascalCase(entityName) -%>(),
+          headers: defaultHeaders,
+        });
+      }),
+    );
+
+    const response = await app.inject({
+      method: 'GET',
+      url: baseControllerUrl,
+      headers: defaultHeaders,
+    });
+
+    expect(response.statusCode).toEqual(200);
+
+    const responseBody: Paginated<<%= pascalCase(entityName) -%>DTO> = response.json();
+
+    expect(responseBody.data.length).toEqual(entitiesToCreate);
+    expect(allCreated.length).toEqual(entitiesToCreate);
+  });
+
+  it(`should create one, POST: ${baseControllerUrl}`, async () => {
+    const <%= camelCase(entityName) -%> = create<%= pascalCase(entityName) -%>();
+
+    const response = await app.inject({
+      method: 'POST',
+      url: baseControllerUrl,
+      payload: <%= camelCase(entityName) -%>,
+      headers: defaultHeaders,
+    });
+    const responseBody = response.json<<%= pascalCase(entityName) -%>DTO>();
+
+    expect(response.statusCode).toEqual(201);
+    verifyEntity(responseBody, <%= camelCase(entityName) -%>);
+  });
+
+  it(`should find one by id, GET: ${baseControllerUrl}/:id`, async () => {
+    const <%= camelCase(entityName) -%> = create<%= pascalCase(entityName) -%>();
+
+    const createResponse = await app.inject({
+      method: 'POST',
+      url: baseControllerUrl,
+      payload: <%= camelCase(entityName) -%>,
+      headers: defaultHeaders,
+    });
+    const createResponseBody = createResponse.json<<%= pascalCase(entityName) -%>DTO>();
+
+    expect(createResponse.statusCode).toEqual(201);
+    verifyEntity(createResponseBody, <%= camelCase(entityName) -%>);
+
+    const findResponse = await app.inject({
+      method: 'GET',
+      url: `${baseControllerUrl}/${createResponseBody.id}`,
+      headers: defaultHeaders,
+    });
+
+    expect(findResponse.statusCode).toEqual(200);
+
+    const findResponseBody = findResponse.json<<%= pascalCase(entityName) -%>DTO>();
+
+    expect(findResponseBody).toStrictEqual(createResponseBody);
+  });
+
+  it(`should update one, PUT: ${baseControllerUrl}/:id`, async () => {
+    const <%= camelCase(entityName) -%> = create<%= pascalCase(entityName) -%>();
+
+    const createResponse = await app.inject({
+      method: 'POST',
+      url: baseControllerUrl,
+      payload: <%= camelCase(entityName) -%>,
+      headers: defaultHeaders,
+    });
+    const createResponseBody = createResponse.json<<%= pascalCase(entityName) -%>DTO>();
+
+    expect(createResponse.statusCode).toEqual(201);
+    verifyEntity(createResponseBody, <%= camelCase(entityName) -%>);
+
+    const dataToUpdate: Update<%= pascalCase(entityName) -%>Request = {
+      ...create<%= pascalCase(entityName) -%>(),
+      version: createResponseBody.version,
+    };
+
+    const updateResponse = await app.inject({
+      method: 'PUT',
+      url: `${baseControllerUrl}/${createResponseBody.id}`,
+      payload: {
+        ...dataToUpdate,
+      },
+      headers: defaultHeaders,
+    });
+
+    expect(updateResponse.statusCode).toEqual(200);
+
+    const updateResponseBody = updateResponse.json<<%= pascalCase(entityName) -%>DTO>();
+
+    verifyEntity(updateResponseBody, dataToUpdate, ['version']);
+  });
+
+  it(`should archive one, DELETE: ${baseControllerUrl}/:id`, async () => {
+    const <%= camelCase(entityName) -%> = create<%= pascalCase(entityName) -%>();
+
+    const createResponse = await app.inject({
+      method: 'POST',
+      url: baseControllerUrl,
+      payload: <%= camelCase(entityName) -%>,
+      headers: defaultHeaders,
+    });
+    const createResponseBody = createResponse.json<<%= pascalCase(entityName) -%>DTO>();
+
+    expect(createResponse.statusCode).toEqual(201);
+    verifyEntity(createResponseBody, <%= camelCase(entityName) -%>);
+
+    const findResponse = await app.inject({
+      method: 'GET',
+      url: `${baseControllerUrl}/${createResponseBody.id}`,
+      headers: defaultHeaders,
+    });
+
+    expect(findResponse.statusCode).toEqual(200);
+
+    const findResponseBody = findResponse.json<<%= pascalCase(entityName) -%>DTO>();
+
+    expect(findResponseBody).toStrictEqual(createResponseBody);
+
+    const deleteResponse = await app.inject({
+      method: 'DELETE',
+      url: `${baseControllerUrl}/${createResponseBody.id}?version=${createResponseBody.version}`,
+      headers: defaultHeaders,
+    });
+
+    expect(deleteResponse.statusCode).toEqual(204);
+
+    const findResponseAfterDelete = await app.inject({
+      method: 'GET',
+      url: `${baseControllerUrl}/${createResponseBody.id}`,
+      headers: defaultHeaders,
+    });
+
+    expect(findResponseAfterDelete.statusCode).toEqual(404);
+  });
+
+
+});

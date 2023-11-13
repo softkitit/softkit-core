@@ -60,7 +60,7 @@ export class TenantSignupService extends AbstractSignupService<SignUpByEmailWith
 
     const hashedPassword = await hashPassword(createUserDto.password);
 
-    const { user, externalApproval } =
+    const { user: userProfile, externalApproval } =
       await this.userAuthService.createUserByEmail({
         ...createUserDto,
         password: hashedPassword,
@@ -69,7 +69,7 @@ export class TenantSignupService extends AbstractSignupService<SignUpByEmailWith
     const tenant = await this.tenantService.setupTenant(
       createUserDto.companyName,
       createUserDto.companyIdentifier,
-      user,
+      userProfile,
     );
 
     const adminRole = await this.roleService.findDefaultAdminRole();
@@ -80,8 +80,8 @@ export class TenantSignupService extends AbstractSignupService<SignUpByEmailWith
 
     await this.userTenantAccountService.createOrUpdateEntity({
       tenantId: tenant.id,
-      userProfileId: user.id,
-      user,
+      userProfileId: userProfile.id,
+      userProfile,
       roles: [adminRole],
       userStatus: UserAccountStatus.ACTIVE,
     });
@@ -89,7 +89,7 @@ export class TenantSignupService extends AbstractSignupService<SignUpByEmailWith
     const userUpdated = await this.userService.findOne({
       relations: ['userTenantsAccounts', 'userTenantsAccounts.roles'],
       where: {
-        id: user.id,
+        id: userProfile.id,
       },
     });
 

@@ -31,5 +31,6 @@ describe('start postgres db and create configs', () => {
         await db.container.stop();
       }
     },
+    60_000,
   );
 });

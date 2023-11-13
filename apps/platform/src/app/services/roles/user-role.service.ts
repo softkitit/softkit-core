@@ -22,6 +22,36 @@ export class UserRoleService extends BaseEntityService<
     super(repository);
   }
 
+  public async archiveOneForTenant(
+    id: string,
+    version: number,
+  ): Promise<boolean> {
+    return this.repository
+      .update(
+        {
+          id,
+          version,
+          deletedAt: IsNull(),
+          tenantId: this.clsService.get().tenantId,
+        },
+        {
+          deletedAt: new Date(),
+        },
+      )
+      .then((result) => result.affected === 1);
+  }
+
+  public async findOneForTenant(id: string) {
+    return this.findOne({
+      where: [
+        {
+          id,
+          tenantId: this.clsService.get().tenantId,
+        },
+      ],
+    });
+  }
+
   async findAllRolesPaginatedForTenant<T>(
     query: PaginateQuery,
     config: PaginateConfig<UserRole>,
@@ -47,21 +77,19 @@ export class UserRoleService extends BaseEntityService<
 
   @Transactional()
   async findDefaultUserRole() {
-    return await this.repository.findOne({
-      where: {
-        roleType: RoleType.REGULAR_USER,
-        tenantId: IsNull(),
-      },
-      cache: true,
-    });
+    return this.findDefaultRoleByType(RoleType.REGULAR_USER);
   }
 
   @Transactional()
   async findDefaultAdminRole() {
-    return await this.repository.findOne({
+    return this.findDefaultRoleByType(RoleType.ADMIN);
+  }
+
+  private findDefaultRoleByType(roleType: RoleType) {
+    return this.repository.findOne({
       where: [
         {
-          roleType: RoleType.ADMIN,
+          roleType,
           tenantId: IsNull(),
         },
       ],

@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   IsUUIDLocalized,
   IsIntegerStringCombinedLocalized,
+  IsNotEmptyLocalized,
 } from '@softkit/validation';
 
 export class SimpleResponseForCreatedEntityWithMessage<ID> {
@@ -32,6 +33,7 @@ export class VersionNumberParam {
     minimum: 0,
     required: true,
   })
+  @IsNotEmptyLocalized()
   @IsIntegerStringCombinedLocalized({
     min: 0,
   })

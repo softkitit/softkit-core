@@ -26,4 +26,4 @@ export const DEFAULT_UPDATE_ENTITY_EXCLUDE_LIST = [
   'createdAt',
   'updatedAt',
   'deletedAt',
-] as Array<keyof BaseEntityHelper>;
+] as Array<keyof EntityHelper | 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>;

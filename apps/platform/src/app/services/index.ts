@@ -6,7 +6,6 @@ export * from './roles/access-check.service';
 export * from './roles/permission.service';
 export * from './roles/permission-category.service';
 export * from './roles/user-role.service';
-export * from './roles/user-role-tenant.service';
 export * from './tenants/saml-configuration.service';
 export * from './tenants/tenant.service';
 export * from './users/external-approval.service';

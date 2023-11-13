@@ -57,7 +57,7 @@ export default class AuthUserService extends AbstractAuthUserService {
     await this.userTenantAccount.createOrUpdateEntity({
       tenantId,
       userProfileId: userProfile.id,
-      user: userProfile,
+      userProfile,
       userStatus: UserAccountStatus.ACTIVE,
       roles,
     });

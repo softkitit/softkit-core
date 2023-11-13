@@ -17,8 +17,14 @@
     },
     "entityName": {
       "type": "string",
-      "description": "Entity that you want to generate e.g. 'saml-tenant-configuration'",
-      "x-prompt": "What is entity name for generation? entity names should be with dashes, e.g. saml-tenant-configuration",
+      "description": "Entity that you want to generate e.g. 'user-profile'",
+      "x-prompt": "What is entity name for generation? entity names should be with dashes, e.g. user-profile",
+      "minLength": 1
+    },
+    "basePath": {
+      "type": "string",
+      "description": "App base path name",
+      "x-prompt": "What is app base path name?  e.g. api/platform",
       "minLength": 1
     },
     "groupName": {

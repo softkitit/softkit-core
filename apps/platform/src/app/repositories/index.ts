@@ -1,7 +1,6 @@
 export * from './roles/permission.repository';
 export * from './roles/permission-category.repository';
 export * from './roles/user-role.repository';
-export * from './roles/user-role-tenant.repository';
 export * from './tenants/saml-configuration.repository';
 export * from './tenants/saml-configuration-base.repository';
 export * from './tenants/tenants.repository';

@@ -1,13 +1,16 @@
+import type { Config } from 'jest';
+
 export default {
   displayName: 'platform',
   preset: '../../jest.preset.js',
   testEnvironment: 'node',
+  setupFilesAfterEnv: ['../../jest.setup.js'],
   transformIgnorePatterns: ['/node_modules/(?!nest-typed-config)'],
   coverageThreshold: {
     global: {
-      lines: 80,
-      statements: 80,
-      functions: 80,
+      lines: 90,
+      statements: 90,
+      functions: 90,
       branches: 70,
     },
   },
@@ -16,4 +19,4 @@ export default {
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory: '../../coverage/apps/platform',
-};
+} satisfies Config;

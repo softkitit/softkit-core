@@ -1,11 +1,14 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class Initial1687682172341 implements MigrationInterface {
-  name = 'Initial1687682172341';
+export class Initial1687682172340 implements MigrationInterface {
+  name = 'Initial1687682172340';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
       `CREATE TABLE "permission_categories" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "deleted_at" TIMESTAMP, "version" integer NOT NULL, "id" uuid NOT NULL DEFAULT uuid_generate_v4(), "name" character varying(512) NOT NULL, "description" character varying(1024) NOT NULL, CONSTRAINT "PK_74d37787e3657c0a4f38501fd8c" PRIMARY KEY ("id"))`,
+    );
+    await queryRunner.query(
+      `CREATE UNIQUE INDEX "IDX_8e1185e3ede34595b0d87a6381" ON "permission_categories" ("name") `,
     );
     await queryRunner.query(
       `CREATE TABLE "permissions" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "deleted_at" TIMESTAMP, "version" integer NOT NULL, "id" uuid NOT NULL DEFAULT uuid_generate_v4(), "name" character varying(256) NOT NULL, "description" character varying(1024), "action" character varying(256) NOT NULL, "permission_category_id" uuid NOT NULL, CONSTRAINT "PK_920331560282b8bd21bb02290df" PRIMARY KEY ("id"))`,
@@ -23,7 +26,7 @@ export class Initial1687682172341 implements MigrationInterface {
       `CREATE UNIQUE INDEX "IDX_e336cc51b61c40b1b1731308aa" ON "user_profile" ("email") `,
     );
     await queryRunner.query(
-      `CREATE TABLE "user_tenant_accounts" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "deleted_at" TIMESTAMP, "version" integer NOT NULL, "tenant_id" uuid NOT NULL, "id" uuid NOT NULL DEFAULT uuid_generate_v4(), "user_profile_id" character varying NOT NULL, "user_status" character varying NOT NULL, "user_id" uuid, CONSTRAINT "PK_ba29257b63d1705c8d2f68f6d55" PRIMARY KEY ("id"))`,
+      `CREATE TABLE "user_tenant_accounts" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "deleted_at" TIMESTAMP, "version" integer NOT NULL, "tenant_id" uuid NOT NULL, "id" uuid NOT NULL DEFAULT uuid_generate_v4(), "user_profile_id" uuid NOT NULL, "user_status" character varying NOT NULL, CONSTRAINT "PK_ba29257b63d1705c8d2f68f6d55" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
       `CREATE INDEX "IDX_05ef03c706ad4c8736cbc22f79" ON "user_tenant_accounts" ("tenant_id") `,
@@ -50,7 +53,7 @@ export class Initial1687682172341 implements MigrationInterface {
       `CREATE UNIQUE INDEX "IDX_79416a2533919e6524528215f6" ON "tenants" ("tenant_friendly_identifier") `,
     );
     await queryRunner.query(
-      `CREATE TYPE "public"."roles_role_type_enum" AS ENUM('ADMIN', 'REGULAR_USER', 'SUPER_ADMIN')`,
+      `CREATE TYPE "public"."roles_role_type_enum" AS ENUM('SUPER_ADMIN', 'ADMIN', 'REGULAR_USER')`,
     );
     await queryRunner.query(
       `CREATE TABLE "roles" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "deleted_at" TIMESTAMP, "version" integer NOT NULL, "id" uuid NOT NULL DEFAULT uuid_generate_v4(), "name" character varying(512) NOT NULL, "description" character varying(1024) NOT NULL, "role_type" "public"."roles_role_type_enum", "tenant_id" uuid, CONSTRAINT "PK_c1433d71a4838793a49dcad46ab" PRIMARY KEY ("id"))`,
@@ -86,7 +89,7 @@ export class Initial1687682172341 implements MigrationInterface {
       `ALTER TABLE "permissions" ADD CONSTRAINT "FK_7e41ca1f8d46cafff6d16388cec" FOREIGN KEY ("permission_category_id") REFERENCES "permission_categories"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
     );
     await queryRunner.query(
-      `ALTER TABLE "user_tenant_accounts" ADD CONSTRAINT "FK_4fafe8a809ebc52839ff46f7355" FOREIGN KEY ("user_id") REFERENCES "user_profile"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
+      `ALTER TABLE "user_tenant_accounts" ADD CONSTRAINT "FK_011a34a9a84be37d40234c111cc" FOREIGN KEY ("user_profile_id") REFERENCES "user_profile"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
     );
     await queryRunner.query(
       `ALTER TABLE "user_tenant_accounts" ADD CONSTRAINT "FK_05ef03c706ad4c8736cbc22f793" FOREIGN KEY ("tenant_id") REFERENCES "tenants"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
@@ -146,7 +149,7 @@ export class Initial1687682172341 implements MigrationInterface {
       `ALTER TABLE "user_tenant_accounts" DROP CONSTRAINT "FK_05ef03c706ad4c8736cbc22f793"`,
     );
     await queryRunner.query(
-      `ALTER TABLE "user_tenant_accounts" DROP CONSTRAINT "FK_4fafe8a809ebc52839ff46f7355"`,
+      `ALTER TABLE "user_tenant_accounts" DROP CONSTRAINT "FK_011a34a9a84be37d40234c111cc"`,
     );
     await queryRunner.query(
       `ALTER TABLE "permissions" DROP CONSTRAINT "FK_7e41ca1f8d46cafff6d16388cec"`,
@@ -202,6 +205,9 @@ export class Initial1687682172341 implements MigrationInterface {
       `DROP INDEX "public"."IDX_1c1e0637ecf1f6401beb9a68ab"`,
     );
     await queryRunner.query(`DROP TABLE "permissions"`);
+    await queryRunner.query(
+      `DROP INDEX "public"."IDX_8e1185e3ede34595b0d87a6381"`,
+    );
     await queryRunner.query(`DROP TABLE "permission_categories"`);
   }
 }

@@ -3,6 +3,7 @@ import { Column, Index } from 'typeorm';
 import { ClsPreset } from '../subscribers/decorator/cls-preset.decorator';
 import { TenantClsStore } from '../vo/tenant-base-cls-store';
 import { ApiProperty } from '@nestjs/swagger';
+import { Expose } from 'class-transformer';
 
 export class BaseTenantEntityHelper extends BaseEntityHelper {
   @ApiProperty({
@@ -14,5 +15,6 @@ export class BaseTenantEntityHelper extends BaseEntityHelper {
   })
   @Column({ nullable: false })
   @Index()
+  @Expose()
   tenantId!: string;
 }

@@ -1,29 +1,23 @@
 import { OmitType } from '@nestjs/swagger';
 import { <%= pascalCase(entityName) -%> } from '../../../database/entities';
 import { FilterOperator, PaginateConfig } from 'nestjs-paginate';
+import {
+  DEFAULT_CREATE_ENTITY_EXCLUDE_LIST,
+  DEFAULT_ENTITY_EXCLUDE_LIST,
+  DEFAULT_UPDATE_ENTITY_EXCLUDE_LIST,
+} from '@softkit/typeorm';
 
-export class <%= pascalCase(entityName) -%>DTO extends OmitType(
-<%= pascalCase(entityName) -%>,
-  [<% if (tenantBaseEntity) { %>'tenantId',<% } %> '__entity', 'deletedAt'] as const,
-) {}
+export class <%= pascalCase(entityName) -%>DTO extends OmitType(<%= pascalCase(entityName) -%>, [
+  ...DEFAULT_ENTITY_EXCLUDE_LIST,
+] as const) {}
 
-export class Create<%= pascalCase(entityName) -%>DTO extends OmitType(<%= pascalCase(entityName) -%>, [
-  'id',
-  '__entity',
-  'deletedAt',
-  'createdAt',
-  'updatedAt',
-  'version',
+export class Create<%= pascalCase(entityName) -%>Request extends OmitType(<%= pascalCase(entityName) -%>, [
+  ...DEFAULT_CREATE_ENTITY_EXCLUDE_LIST,
 <% if (tenantBaseEntity) { %>'tenantId',<% } %>
 ] as const) {}
 
-export class Update<%= pascalCase(entityName) -%>DTO extends OmitType(<%= pascalCase(entityName) -%>, [
-  '__entity',
-  'id',
-  'deletedAt',
-  'createdAt',
-  'updatedAt',
-  'version',
+export class Update<%= pascalCase(entityName) -%>Request extends OmitType(<%= pascalCase(entityName) -%>, [
+  ...DEFAULT_UPDATE_ENTITY_EXCLUDE_LIST,
 <% if (tenantBaseEntity) { %>'tenantId',<% } %>
 ] as const) {}
 

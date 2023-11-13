@@ -10,7 +10,7 @@ import {
 import { Tenant } from '../tenants/tenant.entity';
 import { Permission } from './permission.entity';
 import { RoleType } from './types/default-role.enum';
-import { BaseEntityHelper } from '@softkit/typeorm';
+import { BaseEntityHelper, ClsPreset, TenantClsStore } from '@softkit/typeorm';
 import { Expose } from 'class-transformer';
 import {
   IsStringCombinedLocalized,
@@ -64,6 +64,9 @@ export class UserRole extends BaseEntityHelper {
   @Expose()
   @IsOptional()
   @IsUUIDLocalized()
+  @ClsPreset<TenantClsStore>({
+    clsPropertyFieldName: 'tenantId',
+  })
   tenantId?: string;
 
   /**

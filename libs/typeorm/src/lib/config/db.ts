@@ -10,6 +10,7 @@ import {
 } from 'class-validator';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { BooleanType, IntegerType } from '@softkit/validation';
+
 class DbExtraSettings {
   @IsInt()
   max = 100;
@@ -21,6 +22,9 @@ class DbExtraSettings {
 export class DbConfig {
   @IsString()
   type!: string;
+
+  @IsString()
+  applicationName!: string;
 
   @IsString()
   host = 'localhost';
@@ -43,6 +47,10 @@ export class DbConfig {
   @IsBoolean()
   @BooleanType
   synchronize = false;
+
+  @IsBoolean()
+  @BooleanType
+  logNotifications: boolean = true;
 
   @IsBoolean()
   @BooleanType
