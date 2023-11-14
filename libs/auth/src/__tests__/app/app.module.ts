@@ -7,7 +7,7 @@ import { AuthConfigMock } from './config/auth-config.mock';
 import { AuthConfig } from '../../lib/config/auth';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from '../../lib/guards/jwt-auth.guard';
-import { PermissionsGuard } from '../../lib/guards/permission.guard';
+import { AccessGuard } from '../../lib/guards/access.guard';
 import { SkipAuthController } from './controllers/skip-auth.controller';
 import { AuthController } from './controllers/auth.controller';
 import { ClsModule } from 'nestjs-cls/dist/src/lib/cls.module';
@@ -16,6 +16,7 @@ import { TokenAccessCheckService } from '../../lib/services/token-access-check.s
 import { AbstractAccessCheckService } from '../../lib/services/access-check.service';
 import { AbstractTenantResolutionService } from '../../lib/multi-tenancy';
 import { NoOpTenantResolutionService } from './utils/no-op-tenant-resolution-service';
+import { RolesController } from './controllers/roles.controller';
 
 @Module({
   imports: [
@@ -33,7 +34,12 @@ import { NoOpTenantResolutionService } from './utils/no-op-tenant-resolution-ser
       },
     }),
   ],
-  controllers: [SkipAuthController, AuthController, RefreshTokenAuthController],
+  controllers: [
+    SkipAuthController,
+    AuthController,
+    RefreshTokenAuthController,
+    RolesController,
+  ],
   providers: [
     TokenService,
     JwtService,
@@ -56,7 +62,7 @@ import { NoOpTenantResolutionService } from './utils/no-op-tenant-resolution-ser
     },
     {
       provide: APP_GUARD,
-      useClass: PermissionsGuard,
+      useClass: AccessGuard,
     },
   ],
 })

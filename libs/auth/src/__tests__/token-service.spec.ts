@@ -60,9 +60,9 @@ describe('test token service', () => {
   test('access check service should fail', async () => {
     await expect(
       permissionCheckService.checkPermissions(
-        ['any'],
         'UNKNOWN' as PermissionCheckMode,
         jwtPayload,
+        ['any'],
       ),
     ).rejects.toBeInstanceOf(GeneralInternalServerException);
   });

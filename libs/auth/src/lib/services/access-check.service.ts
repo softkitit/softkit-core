@@ -13,10 +13,14 @@ export abstract class AbstractAccessCheckService<
   abstract hasAny(permissions: string[], jwtPayload: T): Promise<boolean>;
 
   public async checkPermissions(
-    permissions: string[],
     checkMode: PermissionCheckMode,
     jwtPayload: T,
+    permissions?: string[],
   ) {
+    if (permissions === undefined || permissions.length === 0) {
+      return false;
+    }
+
     switch (checkMode) {
       case PermissionCheckMode.ANY: {
         return this.hasAny(permissions, jwtPayload);

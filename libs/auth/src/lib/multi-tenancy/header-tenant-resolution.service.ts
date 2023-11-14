@@ -6,7 +6,9 @@ import { IAccessTokenPayloadWithTenantsInfo } from '../vo/payload';
 import { GeneralForbiddenException } from '@softkit/exceptions';
 
 @Injectable()
-export class HeaderTenantResolutionService extends AbstractTenantResolutionService<IAccessTokenPayloadWithTenantsInfo> {
+export class HeaderTenantResolutionService extends AbstractTenantResolutionService<
+  IAccessTokenPayloadWithTenantsInfo<unknown>
+> {
   private readonly logger = new Logger(HeaderTenantResolutionService.name);
 
   constructor(private config: AuthConfig) {
@@ -24,7 +26,7 @@ export class HeaderTenantResolutionService extends AbstractTenantResolutionServi
    * */
   override async verifyUserBelongToTenant(
     tenantId: string,
-    jwtPayload: IAccessTokenPayloadWithTenantsInfo,
+    jwtPayload: IAccessTokenPayloadWithTenantsInfo<unknown>,
   ): Promise<boolean> {
     const tenantInfo = (jwtPayload.tenants || []).find(
       (t) => t.tenantId === tenantId,
