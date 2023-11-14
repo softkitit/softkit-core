@@ -1,4 +1,15 @@
 Softkit Core Libraries Changelog
+## [1.0.0](https://github.com/softkitit/softkit-core/compare/auth-0.1.0...auth-1.0.0) (2023-11-14)
+
+
+### ⚠ BREAKING CHANGES
+
+* **auth:** implemented roles decorator and handler for the decorator in access guard
+
+### Features
+
+* **auth:** implemented roles decorator and handler for the decorator in access guard ([a94600f](https://github.com/softkitit/softkit-core/commit/a94600fb8f0199e2d9bc3ed8cf9014f233ef126d))
+
 ## [0.1.0](https://github.com/softkitit/softkit-core/compare/auth-0.0.6...auth-0.1.0) (2023-11-04)
 
 
