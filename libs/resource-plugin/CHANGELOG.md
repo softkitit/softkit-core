@@ -1,4 +1,16 @@
 Softkit Core Libraries Changelog
+## [0.3.0](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.2.0...resource-plugin-0.3.0) (2023-11-13)
+
+
+### Features
+
+* **resource-plugin:** updated resource generation logic, to include new mapping and tests generation ([8b321d9](https://github.com/softkitit/softkit-core/commit/8b321d9e5fcdc76a16d727f64354457ef30b763c))
+
+
+### Bug Fixes
+
+* **resource-plugin:** fixed tests for new logic ([9909a95](https://github.com/softkitit/softkit-core/commit/9909a959f69838f4324d1acf43f4dedbea6292cb))
+
 ## [0.2.0](https://github.com/saas-buildkit/saas-buildkit-core/compare/resource-plugin-0.1.0...resource-plugin-0.2.0) (2023-09-13)
 
 

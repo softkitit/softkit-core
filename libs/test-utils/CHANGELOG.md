@@ -1,4 +1,6 @@
 Softkit Core Libraries Changelog
+## [0.1.1](https://github.com/softkitit/softkit-core/compare/test-utils-0.1.0...test-utils-0.1.1) (2023-11-13)
+
 ## [0.1.0](https://github.com/saas-buildkit/saas-buildkit-core/compare/test-utils-0.0.5...test-utils-0.1.0) (2023-09-11)
 
 

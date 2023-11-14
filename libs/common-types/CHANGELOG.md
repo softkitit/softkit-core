@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.1.1](https://github.com/softkitit/softkit-core/compare/common-types-0.1.0...common-types-0.1.1) (2023-11-13)
+
+
+### Bug Fixes
+
+* **common-types:** added is not empty validator for version number param ([01f0710](https://github.com/softkitit/softkit-core/commit/01f07101dda663efa5ad61193ea7c152faeae9ac))
+
 ## [0.1.0](https://github.com/softkitit/softkit-core/compare/common-types-0.0.6...common-types-0.1.0) (2023-11-09)
 
 
