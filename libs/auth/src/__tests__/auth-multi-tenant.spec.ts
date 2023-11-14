@@ -92,9 +92,9 @@ describe('test auth with multi tenant environment', () => {
 
     it('should successfully resolve tenant for secured endpoint', async () => {
       const tenantId = faker.string.uuid();
-      const multiTenantPayload: IAccessTokenPayloadWithTenantsInfo = {
+      const multiTenantPayload: IAccessTokenPayloadWithTenantsInfo<unknown> = {
         ...accessTokenPayload,
-        tenants: [{ tenantId }],
+        tenants: [{ tenantId, roles: [] }],
       };
 
       const tokens = await tokenService.signTokens({

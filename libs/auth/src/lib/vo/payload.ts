@@ -7,9 +7,9 @@ export interface PermissionsBaseJwtPayload extends IAccessTokenPayload {
   permissions: string[];
 }
 
-export interface IAccessTokenPayloadWithTenantsInfo
+export interface IAccessTokenPayloadWithTenantsInfo<T>
   extends IAccessTokenPayload {
-  tenants: TenantInfo[];
+  tenants: TenantInfo<T>[];
 }
 
 export interface IAccessTokenSingleTenantPayload extends IAccessTokenPayload {
@@ -18,8 +18,14 @@ export interface IAccessTokenSingleTenantPayload extends IAccessTokenPayload {
 
 export interface IRefreshTokenPayload extends IAccessTokenPayload {}
 
-export interface TenantInfo {
+export interface TenantInfo<T> {
   tenantId: string;
+  roles: RoleInfo<T>[];
+}
+
+export interface RoleInfo<T> {
+  roleId: string;
+  roleType: T;
 }
 
 export interface PayloadSigned {
