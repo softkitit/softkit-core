@@ -8,14 +8,12 @@
     "class-validator",
     "rest-api-validation"
   ],
-  "dependencies": {
+  "peerDependencies": {
     "class-validator": "^0.14.0",
     "class-transformer": "^0.5.1",
-    "validator": "13.9.0"
-  },
-  "peerDependencies": {
+    "validator": "^13.9.0",
     "@softkit/exceptions": "*",
     "@nestjs/common": "^10.2.4",
-    "@saas-buildkit/nestjs-i18n": "11.1.3"
+    "@saas-buildkit/nestjs-i18n": "^11.1.3"
   }
 }
