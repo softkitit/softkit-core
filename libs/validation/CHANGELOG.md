@@ -1,4 +1,6 @@
 Softkit Core Libraries Changelog
+## [0.3.2](https://github.com/softkitit/softkit-core/compare/validation-0.3.1...validation-0.3.2) (2023-11-15)
+
 ## [0.3.1](https://github.com/softkitit/softkit-core/compare/validation-0.3.0...validation-0.3.1) (2023-11-09)
 
 
