@@ -8,7 +8,6 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
-import { TestingModule } from '@nestjs/testing/testing-module';
 import { useContainer } from 'class-validator';
 import { FastifyInstance } from 'fastify/types/instance';
 import {
@@ -41,6 +40,7 @@ import { REQUEST_ID_HEADER } from '@softkit/server-http-client';
 import { fastifyHelmet } from '@fastify/helmet';
 import { DataSource } from 'typeorm';
 import { callOrUndefinedIfException } from './utils/functions';
+import type { TestingModule } from '@nestjs/testing';
 
 export function buildFastifyAdapter() {
   return new FastifyAdapter({
@@ -77,7 +77,7 @@ export async function createNestWebApp(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   originalModule?: any,
 ) {
-  const isTestingModule = module instanceof TestingModule;
+  const isTestingModule = module?.constructor?.name === 'TestingModule';
 
   if (isTestingModule && originalModule === undefined) {
     throw new Error(
@@ -86,7 +86,7 @@ export async function createNestWebApp(
   }
 
   return isTestingModule
-    ? module.createNestApplication<NestFastifyApplication>(
+    ? (module as TestingModule).createNestApplication<NestFastifyApplication>(
         buildFastifyAdapter(),
       )
     : await NestFactory.create<NestFastifyApplication>(

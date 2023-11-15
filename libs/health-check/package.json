@@ -21,12 +21,10 @@
     "health-check",
     "health-checks"
   ],
-  "dependencies": {
-    "@nestjs/terminus": "^10.0.1"
-  },
   "peerDependencies": {
     "@softkit/validation": "*",
     "@softkit/auth": "*",
+    "@nestjs/terminus": "^10.0.1",
     "class-validator": "^0.14.0",
     "class-transformer": "^0.5.1",
     "@nestjs/common": "^10.2.4",
