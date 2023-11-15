@@ -1,6 +1,6 @@
 {
   "name": "@softkit/eslint-backend",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "type": "commonjs",
   "keywords": [
     "eslint",
