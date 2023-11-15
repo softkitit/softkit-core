@@ -1,6 +1,6 @@
 {
   "name": "@softkit/typeorm",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "type": "commonjs",
   "keywords": [
     "typeorm",
@@ -9,8 +9,7 @@
     "subscribers",
     "cls auto preset"
   ],
-  "dependencies": {
-  },
+  "dependencies": {},
   "peerDependencies": {
     "nestjs-paginate": "^8.2.1",
     "typeorm-naming-strategies": "^4.1.0",
