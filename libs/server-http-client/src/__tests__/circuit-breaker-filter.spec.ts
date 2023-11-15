@@ -10,6 +10,7 @@ import { InternalProxyHttpExceptionFilter } from '../lib/interceptors/internal-p
 import { HttpAdapterHost } from '@nestjs/core';
 import { expectNotNullAndGet } from '@softkit/test-utils';
 import { IAccessTokenPayload, UserClsStore } from '@softkit/auth';
+import { FastifyAdapter } from '@nestjs/platform-fastify';
 
 describe('Circuit breaker and retry with filter', () => {
   let appUrl: string;
@@ -24,7 +25,7 @@ describe('Circuit breaker and retry with filter', () => {
       imports: [ClsModule, SampleModule],
     }).compile();
 
-    app = module.createNestApplication();
+    app = module.createNestApplication(new FastifyAdapter());
     const httpAdapterHost = app.get(HttpAdapterHost);
     app.useGlobalFilters(new InternalProxyHttpExceptionFilter(httpAdapterHost));
 
