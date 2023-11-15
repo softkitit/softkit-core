@@ -16,12 +16,10 @@
     "cache-manager-redis-store-multi",
     "cache-manager-redis-store-sentinel"
   ],
-  "dependencies": {
-    "@songkeys/nestjs-redis": "^10.0.0",
-    "ioredis": "^5.3.2"
-  },
   "peerDependencies": {
     "class-validator": "^0.14.0",
+    "@songkeys/nestjs-redis": "~10.0.0",
+    "ioredis": "~5.3.2",
     "@softkit/validation": "*",
     "class-transformer": "^0.5.1"
   },
