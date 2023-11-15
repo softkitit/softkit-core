@@ -2,12 +2,10 @@
   "name": "@softkit/auth",
   "version": "0.1.0",
   "type": "commonjs",
-  "dependencies": {
+  "peerDependencies": {
     "@nestjs/passport": "^10.0.1",
     "passport-jwt": "^4.0.1",
-    "@nestjs/jwt": "^10.1.1"
-  },
-  "peerDependencies": {
+    "@nestjs/jwt": "^10.1.1",
     "fastify": "4.22.0",
     "nestjs-cls": "^3.5.1",
     "@softkit/exceptions": "*",
