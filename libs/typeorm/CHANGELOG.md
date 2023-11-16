@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.4.3](https://github.com/softkitit/softkit-core/compare/typeorm-0.4.2...typeorm-0.4.3) (2023-11-16)
+
+
+### Bug Fixes
+
+* **typeorm:** updated the migration data source config to exclude the index.ts to fix the reverting migrations ([ee2ee52](https://github.com/softkitit/softkit-core/commit/ee2ee524aa9f618bd56970298cdc0106e211415e))
+
 ## [0.4.2](https://github.com/softkitit/softkit-core/compare/typeorm-0.4.1...typeorm-0.4.2) (2023-11-15)
 
 ## [0.4.1](https://github.com/softkitit/softkit-core/compare/typeorm-0.4.0...typeorm-0.4.1) (2023-11-13)
