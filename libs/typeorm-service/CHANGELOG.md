@@ -1,4 +1,12 @@
 Softkit Core Libraries Changelog
+## [0.0.12](https://github.com/softkitit/softkit-core/compare/typeorm-service-0.0.11...typeorm-service-0.0.12) (2023-11-19)
+
+
+### Bug Fixes
+
+* **typeorm-service:** added proper types for create or update function. Implemented partial update with proper types ([b6c05c8](https://github.com/softkitit/softkit-core/commit/b6c05c80628779098b12b319d91fdcfbf714f50c))
+* **typeorm-service:** added proper types for create or update function. Implemented partial update with proper types ([5e2f4cc](https://github.com/softkitit/softkit-core/commit/5e2f4cc01f43399988243425d64a1ed72b8e5c47))
+
 ## [0.0.11](https://github.com/softkitit/softkit-core/compare/typeorm-service-0.0.10...typeorm-service-0.0.11) (2023-11-15)
 
 ## [0.0.10](https://github.com/softkitit/softkit-core/compare/typeorm-service-0.0.9...typeorm-service-0.0.10) (2023-11-09)
