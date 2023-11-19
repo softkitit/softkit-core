@@ -2,7 +2,10 @@ import { Type } from 'class-transformer';
 import {
   Allow,
   IsBoolean,
+  IsEnum,
   IsInt,
+  IsNumber,
+  IsOptional,
   IsString,
   Max,
   Min,
@@ -10,6 +13,7 @@ import {
 } from 'class-validator';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { BooleanType, IntegerType } from '@softkit/validation';
+import { NamingStrategyInterface } from 'typeorm/naming-strategy/NamingStrategyInterface';
 
 class DbExtraSettings {
   @IsInt()
@@ -77,9 +81,38 @@ export class DbConfig {
   extra: DbExtraSettings = new DbExtraSettings();
 
   @Allow()
-  namingStrategy: SnakeNamingStrategy = new SnakeNamingStrategy();
+  namingStrategy: NamingStrategyInterface = new SnakeNamingStrategy();
 
   @IsBoolean()
   @BooleanType
   runSeeds: boolean = false;
+
+  @IsBoolean()
+  @BooleanType
+  verboseRetryLog: boolean = false;
+
+  @IsString()
+  @IsOptional()
+  migrationsTableName?: string;
+
+  @IsEnum(['all', 'none', 'each'])
+  @IsOptional()
+  migrationsTransactionMode?: 'all' | 'none' | 'each';
+
+  @IsString()
+  @IsOptional()
+  metadataTableName?: string;
+
+  @IsEnum(['advanced-console', 'simple-console', 'file', 'debug'])
+  @IsOptional()
+  logger?: 'advanced-console' | 'simple-console' | 'file' | 'debug';
+
+  @IsOptional()
+  @IsNumber()
+  maxQueryExecutionTime?: number = 5000;
+
+  @IsOptional()
+  @Min(1)
+  @IsNumber()
+  poolSize?: number = 30;
 }

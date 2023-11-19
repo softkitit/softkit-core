@@ -1,4 +1,4 @@
-import { FindOneOptions, FindOptionsOrder } from 'typeorm';
+import { DeepPartial, FindOneOptions, FindOptionsOrder } from 'typeorm';
 import { BaseEntityHelper } from '@softkit/typeorm';
 import { PaginateConfig, Paginated, PaginateQuery } from 'nestjs-paginate';
 import { ClassConstructor } from 'class-transformer';
@@ -10,10 +10,21 @@ export abstract class AbstractBaseService<
 > {
   abstract createOrUpdateEntity(
     entity: // update type
-    | Omit<ENTITY, keyof Omit<EXCLUDE_FIELDS_FOR_SAVE_TYPE, 'version'>>
-      // insert type
-      | Omit<ENTITY, keyof EXCLUDE_FIELDS_FOR_SAVE_TYPE | 'id' | 'version'>,
+    | (Omit<ENTITY, keyof EXCLUDE_FIELDS_FOR_SAVE_TYPE> & {
+          id?: never;
+          version?: never;
+        })
+      | (Omit<ENTITY, keyof EXCLUDE_FIELDS_FOR_SAVE_TYPE> &
+          Pick<ENTITY, 'id' | 'version'>),
   ): Promise<ENTITY>;
+
+  abstract partialUpdate(
+    id: ENTITY['id'],
+    entity: // update type
+    DeepPartial<ENTITY>,
+  ): Promise<
+    DeepPartial<ENTITY> & Pick<ENTITY, 'id' | 'updatedAt' | 'version'>
+  >;
 
   abstract findAll(
     page: number,
@@ -23,9 +34,12 @@ export abstract class AbstractBaseService<
 
   abstract createOrUpdateEntities(
     entity: // update type
-    | Omit<ENTITY, keyof Omit<EXCLUDE_FIELDS_FOR_SAVE_TYPE, 'version'>>[]
-      // insert type
-      | Omit<ENTITY, keyof EXCLUDE_FIELDS_FOR_SAVE_TYPE | 'id' | 'version'>[],
+    | (Omit<ENTITY, keyof EXCLUDE_FIELDS_FOR_SAVE_TYPE> & {
+          id?: never;
+          version?: never;
+        })[]
+      | (Omit<ENTITY, keyof EXCLUDE_FIELDS_FOR_SAVE_TYPE> &
+          Pick<ENTITY, 'id' | 'version'>)[],
   ): Promise<ENTITY[]>;
 
   abstract findOneById(

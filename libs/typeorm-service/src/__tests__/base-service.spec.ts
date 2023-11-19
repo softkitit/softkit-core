@@ -77,6 +77,7 @@ describe('base service tests', () => {
     const dataToUpdate = {
       ...objectToSave,
       id: savedEntity.id,
+      version: 0,
       firstName: 'updated first name',
     };
 
@@ -87,9 +88,55 @@ describe('base service tests', () => {
     expect(updatedEntity.firstName).toBe(dataToUpdate.firstName);
     expect(savedEntity.updatedAt).not.toBe(updatedEntity.updatedAt);
 
-    const allEntities = await testBaseService.findAll();
+    const foundEntity = await testBaseService.findAll();
+    expect(foundEntity.length).toBeGreaterThanOrEqual(1);
+  });
 
-    expect(allEntities.length).toBeGreaterThan(1);
+  test('should update successfully all fields', async () => {
+    const objectToSave = {
+      password: faker.hacker.verb(),
+      firstName: faker.person.firstName(),
+      lastName: faker.person.lastName(),
+    };
+
+    const savedEntity =
+      await testBaseService.createOrUpdateEntity(objectToSave);
+
+    const updatedEntity = await testBaseService.createOrUpdateEntity({
+      id: savedEntity.id,
+      firstName: 'updated',
+      lastName: 'updated',
+      password: 'updated',
+      version: savedEntity.version,
+    });
+
+    expect(updatedEntity.id).toBe(savedEntity.id);
+    expect(updatedEntity.firstName).toBe('updated');
+    expect(updatedEntity.lastName).toBe('updated');
+    expect(updatedEntity.password).toBe('updated');
+    expect(savedEntity.updatedAt).not.toBe(updatedEntity.updatedAt);
+  });
+
+  test('should partial update just name', async () => {
+    const objectToSave = {
+      password: faker.hacker.verb(),
+      firstName: faker.person.firstName(),
+      lastName: faker.person.lastName(),
+    };
+
+    const savedEntity =
+      await testBaseService.createOrUpdateEntity(objectToSave);
+
+    const updatedEntity = await testBaseService.partialUpdate(savedEntity.id, {
+      firstName: 'updated',
+    });
+
+    expect(updatedEntity.id).toBe(savedEntity.id);
+    expect(updatedEntity.firstName).toBe('updated');
+    expect(updatedEntity.lastName).toBeUndefined();
+    expect(updatedEntity.password).toBeNull();
+    expect(savedEntity.updatedAt).not.toBe(updatedEntity.updatedAt);
+    expect(updatedEntity.version).toBe(2);
   });
 
   test('archive test', async () => {
@@ -168,6 +215,7 @@ describe('base service tests', () => {
     const dataToUpdate = {
       ...objectToSave,
       id: savedEntity.id,
+      version: savedEntity.version,
       firstName: 'updated first name',
     };
 
