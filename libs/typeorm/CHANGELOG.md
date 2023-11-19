@@ -1,4 +1,12 @@
 Softkit Core Libraries Changelog
+## [0.4.4](https://github.com/softkitit/softkit-core/compare/typeorm-0.4.3...typeorm-0.4.4) (2023-11-19)
+
+
+### Bug Fixes
+
+* **typeorm:** added more properties to DBConfig ([84d55d1](https://github.com/softkitit/softkit-core/commit/84d55d1f609ddce0e58bf226b879e958e5d42801))
+* **typeorm:** added nest-typed-config to deps for migrations ([d0bca70](https://github.com/softkitit/softkit-core/commit/d0bca70799ee983d475f4a73f696529a0e6bd79f))
+
 ## [0.4.3](https://github.com/softkitit/softkit-core/compare/typeorm-0.4.2...typeorm-0.4.3) (2023-11-16)
 
 
