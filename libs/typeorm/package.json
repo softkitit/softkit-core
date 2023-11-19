@@ -11,6 +11,7 @@
   ],
   "dependencies": {},
   "peerDependencies": {
+    "nest-typed-config": "^2.9.1",
     "nestjs-paginate": "^8.2.1",
     "typeorm-naming-strategies": "^4.1.0",
     "typeorm-transactional": "^0.4.1",
