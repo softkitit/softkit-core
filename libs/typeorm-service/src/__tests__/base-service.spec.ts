@@ -87,6 +87,9 @@ describe('base service tests', () => {
     expect(updatedEntity.id).toBe(savedEntity.id);
     expect(updatedEntity.firstName).toBe(dataToUpdate.firstName);
     expect(savedEntity.updatedAt).not.toBe(updatedEntity.updatedAt);
+
+    const foundEntity = await testBaseService.findAll();
+    expect(foundEntity.length).toBeGreaterThanOrEqual(1);
   });
 
   test('should update successfully all fields', async () => {
