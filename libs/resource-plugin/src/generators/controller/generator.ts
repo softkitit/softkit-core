@@ -99,8 +99,8 @@ export async function controllerGenerator(
   generatePermissions(appRoot, tree, options);
 
   if (options.lintCommandName) {
-    return /* istanbul ignore next */ () =>
-      runLint(options.projectName, options.lintCommandName);
+    /* istanbul ignore next */
+    return () => runLint(options.projectName, options.lintCommandName);
   }
 }
 
