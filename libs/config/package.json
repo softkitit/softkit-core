@@ -1,16 +1,14 @@
 {
   "name": "@softkit/config",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "commonjs",
   "keywords": [
     "application configuration",
     "config",
     "external config"
   ],
-  "dependencies": {
-    "nest-typed-config": "^2.8.0"
-  },
   "peerDependencies": {
+    "nest-typed-config": "^2.9.1",
     "class-transformer": "^0.5.1"
   }
 }

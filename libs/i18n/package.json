@@ -1,15 +1,13 @@
 {
   "name": "@softkit/i18n",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "commonjs",
   "keywords": [
     "i18n",
     "localization"
   ],
-  "dependencies": {
-    "@saas-buildkit/nestjs-i18n": "11.1.3"
-  },
   "peerDependencies": {
+    "@saas-buildkit/nestjs-i18n": "11.1.3",
     "@softkit/exceptions": "*",
     "class-validator": "^0.14.0",
     "@nestjs/common": "^10.2.4"

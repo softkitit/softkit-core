@@ -15,6 +15,7 @@ import { InternalProxyHttpException } from '../lib/exceptions/internal-proxy-htt
 import { InternalProxyHttpExceptionFilter } from '../lib/interceptors/internal-proxy-http.filter';
 import { HttpAdapterHost } from '@nestjs/core';
 import { IAccessTokenPayload, UserClsStore } from '@softkit/auth';
+import { FastifyAdapter } from '@nestjs/platform-fastify';
 
 const defaultRetryConfig: HttpRetryConfig = {
   retriesCount: 3,
@@ -43,7 +44,7 @@ describe('Circuit breaker and retry', () => {
       imports: [ClsModule, SampleModule],
     }).compile();
 
-    app = module.createNestApplication();
+    app = module.createNestApplication(new FastifyAdapter());
     const httpAdapterHost = app.get(HttpAdapterHost);
     app.useGlobalFilters(new InternalProxyHttpExceptionFilter(httpAdapterHost));
 

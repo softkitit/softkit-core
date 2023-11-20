@@ -1,4 +1,6 @@
 Softkit Core Libraries Changelog
+## [0.0.8](https://github.com/softkitit/softkit-core/compare/server-http-client-0.0.7...server-http-client-0.0.8) (2023-11-15)
+
 ## [0.0.7](https://github.com/softkitit/softkit-core/compare/server-http-client-0.0.6...server-http-client-0.0.7) (2023-11-04)
 
 

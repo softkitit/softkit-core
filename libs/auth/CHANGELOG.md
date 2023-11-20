@@ -1,4 +1,6 @@
 Softkit Core Libraries Changelog
+## [1.0.1](https://github.com/softkitit/softkit-core/compare/auth-1.0.0...auth-1.0.1) (2023-11-15)
+
 ## [1.0.0](https://github.com/softkitit/softkit-core/compare/auth-0.1.0...auth-1.0.0) (2023-11-14)
 
 

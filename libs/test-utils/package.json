@@ -1,18 +1,20 @@
 {
   "name": "@softkit/test-utils",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "type": "commonjs",
   "keywords": [
     "test",
     "utils"
   ],
   "dependencies": {
-    "@jest/globals": "29.6.2",
+    "testcontainers": "^10.2.1"
+  },
+  "peerDependencies": {
+    "@jest/globals": "^29.6.2",
     "@testcontainers/postgresql": "^10.2.1",
     "@nestjs/typeorm": "^10.0.0",
     "@nestjs/common": "^10.2.4",
-    "typeorm": "0.3.17",
-    "testcontainers": "^10.2.1",
+    "typeorm": "~0.3.17",
     "typeorm-transactional": "^0.4.1"
   }
 }

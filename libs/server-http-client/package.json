@@ -1,15 +1,15 @@
 {
   "name": "@softkit/server-http-client",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "type": "commonjs",
   "dependencies": {
     "opossum": "^8.1.0",
-    "axios-retry": "^3.7.0",
-    "axios": "^1.5.0"
+    "axios-retry": "^3.7.0"
   },
   "peerDependencies": {
     "@softkit/exceptions": "*",
-    "fastify": "4.22.0",
+    "axios": "^1.5.0",
+    "fastify": "^4.22.0",
     "@softkit/auth": "*",
     "@nestjs/common": "^10.2.4",
     "nestjs-cls": "^3.5.1",

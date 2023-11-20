@@ -1,6 +1,6 @@
 {
   "name": "@softkit/async-storage",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "type": "commonjs",
   "keywords": [
     "async storage",
@@ -10,10 +10,8 @@
     "async hooks",
     "nestjs"
   ],
-  "dependencies": {
-    "nestjs-cls": "^3.5.1"
-  },
   "peerDependencies": {
+    "nestjs-cls": "^3.5.1",
     "fastify": "4.22.0"
   }
 }

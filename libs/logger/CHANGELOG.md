@@ -1,4 +1,6 @@
 Softkit Core Libraries Changelog
+## [0.0.7](https://github.com/softkitit/softkit-core/compare/logger-0.0.6...logger-0.0.7) (2023-11-15)
+
 ## [0.0.6](https://github.com/softkitit/softkit-core/compare/logger-0.0.5...logger-0.0.6) (2023-11-09)
 
 
