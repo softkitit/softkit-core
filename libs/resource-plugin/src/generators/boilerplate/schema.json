@@ -7,10 +7,6 @@
     "appFolder": {
       "type": "string",
       "description": "The folder name where the boilerplate will be created",
-      "$default": {
-        "$source": "argv",
-        "index": 0
-      },
       "x-prompt": "What folder name would you like to use for the boilerplate?"
     },
     "companyName": {
@@ -32,7 +28,7 @@
     }
   },
   "required": [
-    "name",
+    "appFolder",
     "companyName"
   ]
 }
