@@ -1,4 +1,17 @@
 Softkit Core Libraries Changelog
+## [0.4.0](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.3.2...resource-plugin-0.4.0) (2023-11-20)
+
+
+### Features
+
+* **resource-plugin:** implement boilerplate generator ([2d00837](https://github.com/softkitit/softkit-core/commit/2d008372f6aaa15332d5b41dd4a775414ca79c3e))
+
+
+### Bug Fixes
+
+* make appFolder a required field instead of name and remove its default value ([6d0e53c](https://github.com/softkitit/softkit-core/commit/6d0e53c12c4811a8ed48215bbc6db5f696550bd9))
+* typo in boilerplate export ([b680a1d](https://github.com/softkitit/softkit-core/commit/b680a1d1b33680c9727e91096ff43f5147c3ff3c))
+
 ## [0.3.2](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.3.1...resource-plugin-0.3.2) (2023-11-19)
 
 
