@@ -1,4 +1,4 @@
-import { ClsModule, ClsService, ClsStore } from 'nestjs-cls';
+import { ClsService, ClsStore } from 'nestjs-cls';
 import { LoggerModule } from 'nestjs-pino';
 import { IncomingMessage, ServerResponse } from 'node:http';
 
@@ -8,13 +8,13 @@ export function setupLoggerModule<ClsType extends ClsStore>(
   customProps: (
     req: IncomingMessage,
     res: ServerResponse<IncomingMessage>,
-    clsService: ClsService<ClsType>,
+    clsService?: ClsService<ClsType>,
   ) => Record<string, string> = () => ({}),
 ) {
   return LoggerModule.forRootAsync({
     useFactory: async (
       loggerConfig: LoggerConfig,
-      clsService: ClsService<ClsType>,
+      clsService?: ClsService<ClsType>,
     ) => {
       return {
         renameContext: 'class',
@@ -89,8 +89,7 @@ export function setupLoggerModule<ClsType extends ClsStore>(
         },
       };
     },
-    imports: [ClsModule],
-    inject: [LoggerConfig, ClsService],
+    inject: [LoggerConfig, { token: ClsService, optional: true }],
     providers: [LoggerConfig],
   });
 }
