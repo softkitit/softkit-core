@@ -3,7 +3,7 @@ export interface ServiceGeneratorSchema {
   serviceName: string;
   repositoryName: string;
   entityName: string;
-  groupName?: string;
+  groupName: string;
   tenantBaseService: boolean;
   lintCommandName?: string;
 }

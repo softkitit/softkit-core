@@ -84,9 +84,10 @@ export async function controllerGenerator(
   const controllersFolder = joinPathFragments(appRoot, 'src/app/controllers');
 
   const controllerFileName = `${options.controllerName}.controller`;
-  const exportPathForIndex = options.groupName
-    ? joinPathFragments(options.groupName, controllerFileName)
-    : controllerFileName;
+  const exportPathForIndex = joinPathFragments(
+    options.groupName,
+    controllerFileName,
+  );
 
   const indexFilePath = joinPathFragments(controllersFolder, `index.ts`);
 
@@ -98,8 +99,7 @@ export async function controllerGenerator(
 
   generatePermissions(appRoot, tree, options);
 
-  if (options.lintCommandName) {
-    /* istanbul ignore next */
+  /* istanbul ignore next */ if (options.lintCommandName) {
     return () => runLint(options.projectName, options.lintCommandName);
   }
 }

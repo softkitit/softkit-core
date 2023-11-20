@@ -29,9 +29,10 @@ export async function serviceGenerator(
   const repositoriesFolder = joinPathFragments(appRoot, 'src/app/services');
   const serviceFileName = `${options.serviceName}.service`;
 
-  const exportPathForIndex = options.groupName
-    ? joinPathFragments(options.groupName, serviceFileName)
-    : serviceFileName;
+  const exportPathForIndex = joinPathFragments(
+    options.groupName,
+    serviceFileName,
+  );
 
   const indexFilePath = joinPathFragments(repositoriesFolder, `index.ts`);
 
@@ -41,9 +42,8 @@ export async function serviceGenerator(
   const newContents = `${contents}${EOL}export * from './${exportPathForIndex}';`;
   tree.write(indexFilePath, newContents);
 
-  if (options.lintCommandName) {
-    return /* istanbul ignore next */ () =>
-      runLint(options.projectName, options.lintCommandName);
+  /* istanbul ignore next */ if (options.lintCommandName) {
+    return () => runLint(options.projectName, options.lintCommandName);
   }
 }
 

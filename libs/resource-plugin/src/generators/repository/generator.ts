@@ -25,9 +25,10 @@ export async function repositoryGenerator(
   const repositoriesFolder = joinPathFragments(appRoot, 'src/app/repositories');
   const repositoryFileName = `${options.repositoryName}.repository`;
 
-  const exportPathForIndex = options.groupName
-    ? joinPathFragments(options.groupName, repositoryFileName)
-    : repositoryFileName;
+  const exportPathForIndex = joinPathFragments(
+    options.groupName,
+    repositoryFileName,
+  );
 
   const indexFilePath = joinPathFragments(repositoriesFolder, `index.ts`);
 
@@ -37,9 +38,8 @@ export async function repositoryGenerator(
   const newContents = `${contents}${EOL}export * from './${exportPathForIndex}';`;
   tree.write(indexFilePath, newContents);
 
-  if (options.lintCommandName) {
-    return /* istanbul ignore next */ () =>
-      runLint(options.projectName, options.lintCommandName);
+  /* istanbul ignore next */ if (options.lintCommandName) {
+    return () => runLint(options.projectName, options.lintCommandName);
   }
 }
 
