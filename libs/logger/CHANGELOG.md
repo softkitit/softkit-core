@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.0.8](https://github.com/softkitit/softkit-core/compare/logger-0.0.7...logger-0.0.8) (2023-11-20)
+
+
+### Bug Fixes
+
+* remove ClsModule from logger module and make ClsService an optional parameter ([ebef9d1](https://github.com/softkitit/softkit-core/commit/ebef9d1660dc156cc246a9d6cbf0a13a1a10e575))
+
 ## [0.0.7](https://github.com/softkitit/softkit-core/compare/logger-0.0.6...logger-0.0.7) (2023-11-15)
 
 ## [0.0.6](https://github.com/softkitit/softkit-core/compare/logger-0.0.5...logger-0.0.6) (2023-11-09)
