@@ -20,23 +20,6 @@ describe('repository generator', () => {
     tree = createTreeWithNestApplication(options.projectName);
   });
 
-  it('should create repository without provided group name', async () => {
-    await repositoryGenerator(tree, {
-      ...options,
-      groupName: undefined,
-      lintCommandName: 'lint',
-    });
-
-    const repositoryFile = tree.listChanges().find((change) => {
-      return (
-        change.path.includes(options.repositoryName) &&
-        change.path.includes('repository')
-      );
-    });
-
-    expect(repositoryFile).toBeDefined();
-  });
-
   it('should create repository and export it in index.ts file', async () => {
     const changesBeforeGeneratorRun = [...tree.listChanges()];
     await repositoryGenerator(tree, options);

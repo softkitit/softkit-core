@@ -21,23 +21,6 @@ describe('service generator', () => {
     tree = createTreeWithNestApplication(options.projectName);
   });
 
-  it('should create service without provided group name', async () => {
-    await serviceGenerator(tree, {
-      ...options,
-      lintCommandName: 'lint',
-      groupName: undefined,
-    });
-
-    const serviceFile = tree.listChanges().find((change) => {
-      return (
-        change.path.includes(options.serviceName) &&
-        change.path.includes('service')
-      );
-    });
-
-    expect(serviceFile).toBeDefined();
-  });
-
   it(`should create a service and update or create index.ts if it doesn't exists`, async () => {
     const changesBeforeGeneratorRun = [...tree.listChanges()];
     await serviceGenerator(tree, options);

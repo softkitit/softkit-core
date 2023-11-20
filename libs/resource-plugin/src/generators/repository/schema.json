@@ -45,5 +45,5 @@
       "description": "The name of lint nx command in project.json"
     }
   },
-  "required": ["projectName", "repositoryName", "tenantBaseRepository"]
+  "required": ["projectName", "repositoryName", "tenantBaseRepository", "groupName"]
 }

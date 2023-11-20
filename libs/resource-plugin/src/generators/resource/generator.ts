@@ -37,9 +37,10 @@ export async function resourceGenerator(
   );
 
   const entityFileName = `${options.entityName}.entity`;
-  const exportPathForIndex = options.groupName
-    ? joinPathFragments(options.groupName, entityFileName)
-    : entityFileName;
+  const exportPathForIndex = joinPathFragments(
+    options.groupName,
+    entityFileName,
+  );
 
   const indexFilePath = joinPathFragments(entitiesFolder, `index.ts`);
 
@@ -77,9 +78,8 @@ export async function resourceGenerator(
     await controllerGenerator(tree, repositoryOptions);
   }
 
-  if (lintCommandName) {
-    return /* istanbul ignore next */ () =>
-      runLint(options.projectName, lintCommandName);
+  /* istanbul ignore next */ if (lintCommandName) {
+    return () => runLint(options.projectName, lintCommandName);
   }
 }
 

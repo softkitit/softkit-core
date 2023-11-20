@@ -1,4 +1,9 @@
-import { Tree, readProjectConfiguration } from '@nx/devkit';
+import {
+  Tree,
+  readProjectConfiguration,
+  writeJson,
+  joinPathFragments,
+} from '@nx/devkit';
 
 import { controllerGenerator } from './generator';
 import { ControllerGeneratorSchema } from './schema';
@@ -16,6 +21,36 @@ describe('controller generator', () => {
     basePath: 'api/test-project',
     tenantBaseEntity: true,
     groupName: 'test',
+  };
+  const newPermissionsCategory = {
+    categoryName: 'test2',
+    categoryDescription: 'Test31 management',
+    permissions: [
+      {
+        name: 'Create Test',
+        description: 'Create Test',
+        action: 'test-project.test.create',
+        roles: ['SUPER_ADMIN', 'ADMIN'],
+      },
+      {
+        name: 'Read Test',
+        description: 'Read Test',
+        action: 'test-project.test.read',
+        roles: ['SUPER_ADMIN', 'ADMIN'],
+      },
+      {
+        name: 'Update Test',
+        description: 'Update Test',
+        action: 'test-project.test.update',
+        roles: ['SUPER_ADMIN', 'ADMIN'],
+      },
+      {
+        name: 'Delete Test',
+        description: 'Delete Test',
+        action: 'test-project.test.delete',
+        roles: ['SUPER_ADMIN', 'ADMIN'],
+      },
+    ],
   };
 
   beforeEach(() => {
@@ -88,5 +123,19 @@ describe('controller generator', () => {
     const indexFileContent = changesAfterSecondGenerator.content.toString();
 
     expect(indexFileContent.split(EOL).length).toBe(3);
+
+    // generate third controller with existing permission
+    options.groupName = '';
+    const permissionsFile = joinPathFragments(
+      options.projectName,
+      'src/app/assets/migrations/permissions.json',
+    );
+
+    writeJson(tree, permissionsFile, [newPermissionsCategory]);
+
+    await controllerGenerator(tree, {
+      ...options,
+      controllerName: 'third-controller',
+    });
   });
 });
