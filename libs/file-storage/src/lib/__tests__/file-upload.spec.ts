@@ -213,19 +213,14 @@ describe('file upload e2e test', () => {
     // 7mb file
     const fileContent = faker.string.alpha(7 * 1024 * 1024);
 
-    const chunkSize = 6 * 1024 * 1024;
-    const startMultipart = await fileService.startMultiPartUpload(
-      bucketName,
-      {
-        originalFileName: 'test.txt',
-        fileSize: fileContent.length,
-      },
-      chunkSize,
-    );
+    const startMultipart = await fileService.startMultiPartUpload(bucketName, {
+      originalFileName: 'test.txt',
+      fileSize: fileContent.length,
+    });
 
     expect(startMultipart.partCount).toBe(2);
 
-    const chunkedFile = splitToNChunks(fileContent, chunkSize);
+    const chunkedFile = splitToNChunks(fileContent, 5 * 1024 * 1024);
 
     for (const [i, element] of chunkedFile.entries()) {
       const fileContentBlob = new Blob([element]);

@@ -14,7 +14,7 @@ export abstract class AbstractFileService {
   abstract startMultiPartUpload(
     bucket: string,
     file: Required<FileDefinition>,
-    partSize: number,
+    partSize?: number,
     folder?: string,
   ): Promise<StartMultipartUploadInfo>;
 

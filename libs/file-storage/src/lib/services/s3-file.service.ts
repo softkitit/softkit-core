@@ -43,7 +43,7 @@ export class S3FileService extends AbstractFileService {
   override async startMultiPartUpload(
     bucket: string,
     file: Required<FileDefinition>,
-    partSize: number = 10 * 1024 * 1024,
+    partSize: number = 5 * 1024 * 1024,
     folder?: string,
     options?: Partial<CreateMultipartUploadCommandInput>,
   ): Promise<StartMultipartUploadInfo> {
