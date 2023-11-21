@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.2.0](https://github.com/softkitit/softkit-core/compare/test-utils-0.1.2...test-utils-0.2.0) (2023-11-21)
+
+
+### Features
+
+* **test-utils:** added localstack start test container for integration tests ([30f0a04](https://github.com/softkitit/softkit-core/commit/30f0a0403622bcb5049e44f1f7d2c1cce1b670f8))
+
 ## [0.1.2](https://github.com/softkitit/softkit-core/compare/test-utils-0.1.1...test-utils-0.1.2) (2023-11-15)
 
 ## [0.1.1](https://github.com/softkitit/softkit-core/compare/test-utils-0.1.0...test-utils-0.1.1) (2023-11-13)
