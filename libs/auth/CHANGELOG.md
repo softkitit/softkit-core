@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [1.0.2](https://github.com/softkitit/softkit-core/compare/auth-1.0.1...auth-1.0.2) (2023-11-21)
+
+
+### Bug Fixes
+
+* **auth:** made role type optional in jwt payload to support custom roles ([04b5b40](https://github.com/softkitit/softkit-core/commit/04b5b40f7cdd65017c5e107f33b2cc051ec370ad))
+
 ## [1.0.1](https://github.com/softkitit/softkit-core/compare/auth-1.0.0...auth-1.0.1) (2023-11-15)
 
 ## [1.0.0](https://github.com/softkitit/softkit-core/compare/auth-0.1.0...auth-1.0.0) (2023-11-14)
