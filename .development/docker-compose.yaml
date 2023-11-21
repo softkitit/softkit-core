@@ -22,7 +22,7 @@ services:
       - DEBUG=${DEBUG-}
       - DOCKER_HOST=unix:///var/run/docker.sock
     volumes:
-      - "${LOCALSTACK_VOLUME_DIR:-./docker-data/localstack}:/var/lib/localstack"
+      - "${LOCALSTACK_VOLUME_DIR:-./.docker-data/localstack}:/var/lib/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
   cache:
     image: redis/redis-stack:7.2.0-v2
