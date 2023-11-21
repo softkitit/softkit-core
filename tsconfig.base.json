@@ -44,6 +44,9 @@
       "@softkit/exceptions": [
         "libs/exceptions/src/index.ts"
       ],
+      "@softkit/file-storage": [
+        "libs/file-storage/src/index.ts"
+      ],
       "@softkit/healthcheck": [
         "libs/health-check/src/index.ts"
       ],

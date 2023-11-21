@@ -1,0 +1,2 @@
+export const S3_CLIENT_TOKEN = Symbol('SK_S3_CLIENT_TOKEN');
+export const S3_SERVICE_CONFIG_TOKEN = Symbol('SK_S3_SERVICE_CONFIG');
