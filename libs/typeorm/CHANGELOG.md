@@ -1,4 +1,12 @@
 Softkit Core Libraries Changelog
+## [0.4.5](https://github.com/softkitit/softkit-core/compare/typeorm-0.4.4...typeorm-0.4.5) (2023-11-21)
+
+
+### Bug Fixes
+
+* **typeorm:** added back nest-typed-config ([14b9cc4](https://github.com/softkitit/softkit-core/commit/14b9cc44c38e344c6b6a6e64b624ddbe69a3194c))
+* **typeorm:** removed unnecessary dependency on nest-typed-config ([508db00](https://github.com/softkitit/softkit-core/commit/508db0082333aa97218ea9e2df3d0d9d8a1f9786))
+
 ## [0.4.4](https://github.com/softkitit/softkit-core/compare/typeorm-0.4.3...typeorm-0.4.4) (2023-11-19)
 
 
