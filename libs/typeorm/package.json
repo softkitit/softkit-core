@@ -9,7 +9,6 @@
     "subscribers",
     "cls auto preset"
   ],
-  "dependencies": {},
   "peerDependencies": {
     "nest-typed-config": "^2.9.1",
     "nestjs-paginate": "^8.2.1",

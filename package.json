@@ -79,6 +79,10 @@
     "verdaccio": "^5.26.2"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.454.0",
+    "@aws-sdk/credential-provider-node": "^3.451.0",
+    "@aws-sdk/s3-presigned-post": "^3.454.0",
+    "@aws-sdk/s3-request-presigner": "^3.454.0",
     "@docusaurus/core": "2.4.1",
     "@docusaurus/plugin-ideal-image": "^2.4.1",
     "@docusaurus/plugin-sitemap": "^2.4.1",
