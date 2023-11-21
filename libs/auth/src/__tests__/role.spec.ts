@@ -153,6 +153,7 @@ describe('role e2e tests', () => {
       [[RoleType.NOT_USED]],
       [[RoleType.NOT_USED, RoleType.NOT_USED]],
       [[]],
+      [[null as unknown as RoleType]],
     ])(
       'should throw forbidden on wrong roles: %s',
       async (roles: RoleType[]) => {

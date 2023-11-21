@@ -102,7 +102,7 @@ export class AccessGuard implements CanActivate {
     }
 
     return tenantInfo.roles.some((r) =>
-      acceptableRoles.includes(r.roleType as string),
+      r.roleType ? acceptableRoles.includes(r.roleType?.toString()) : false,
     );
   }
 }

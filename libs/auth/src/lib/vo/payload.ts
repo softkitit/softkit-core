@@ -25,7 +25,7 @@ export interface TenantInfo<T> {
 
 export interface RoleInfo<T> {
   roleId: string;
-  roleType: T;
+  roleType?: T;
 }
 
 export interface PayloadSigned {
