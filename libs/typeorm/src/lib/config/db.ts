@@ -20,6 +20,7 @@ class DbExtraSettings {
   max = 100;
 
   @IsBoolean()
+  @BooleanType
   ssl = false;
 }
 
