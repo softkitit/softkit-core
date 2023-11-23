@@ -1,14 +1,15 @@
 import { applyDecorators } from '@nestjs/common';
-import { IsEmail, ValidatorOptions } from 'class-validator';
+import { IsEmail, ValidationOptions, ValidatorOptions } from 'class-validator';
 import { TrimAndLowercase } from '../transforms/';
 import { MaxLengthLocalized } from './primitives/is-max-length.validator';
 import { i18nValidationMessage } from '@saas-buildkit/nestjs-i18n';
+import { IsEmailOptions } from 'validator/lib/isEmail';
 
 export interface IsEmailLocalizedOptions {
   maxLength?: number;
   trimAndLowercase?: boolean;
   maxLengthValidationOptions?: ValidatorOptions;
-  emailValidationOptions?: ValidatorOptions;
+  emailValidationOptions?: IsEmailOptions & ValidationOptions;
 }
 
 export const IsEmailLocalized = ({
