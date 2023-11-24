@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.4.7](https://github.com/softkitit/softkit-core/compare/typeorm-0.4.6...typeorm-0.4.7) (2023-11-24)
+
+
+### Bug Fixes
+
+* **typeorm:** updated the data source config ([90ce4b6](https://github.com/softkitit/softkit-core/commit/90ce4b6a97475f7066d91d9ca41d0e8bcadea6a4))
+
 ## [0.4.6](https://github.com/softkitit/softkit-core/compare/typeorm-0.4.5...typeorm-0.4.6) (2023-11-22)
 
 
