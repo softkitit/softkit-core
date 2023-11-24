@@ -1,0 +1,85 @@
+{
+  "name": "scheduled-jobs",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/scheduled-jobs/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/libs/scheduled-jobs",
+        "tsConfig": "libs/scheduled-jobs/tsconfig.lib.json",
+        "packageJson": "libs/scheduled-jobs/package.json",
+        "main": "libs/scheduled-jobs/src/index.ts",
+        "assets": [
+          "libs/scheduled-jobs/*.md",
+          {
+            "glob": "**/*",
+            "input": "libs/scheduled-jobs/src/lib/i18n/",
+            "output": "i18n"
+          }
+        ]
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "libs/scheduled-jobs/**/*.ts",
+          "libs/scheduled-jobs/package.json",
+          "libs/scheduled-jobs/project.json"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
+      "options": {
+        "jestConfig": "libs/scheduled-jobs/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    },
+    "version": {
+      "executor": "@jscutlery/semver:version",
+      "dependsOn": [
+        "build"
+      ],
+      "options": {
+        "postTargets": [
+          "resource-plugin:npm",
+          "resource-plugin:github"
+        ],
+        "preset": "conventional"
+      }
+    },
+    "github": {
+      "executor": "@jscutlery/semver:github",
+      "options": {
+        "tag": "${tag}",
+        "notes": "${notes}"
+      }
+    },
+    "npm": {
+      "executor": "ngx-deploy-npm:deploy",
+      "options": {
+        "access": "public",
+        "dryRun": false
+      }
+    }
+  },
+  "tags": []
+}
