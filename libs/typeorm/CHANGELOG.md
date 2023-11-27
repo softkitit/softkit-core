@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.4.9](https://github.com/softkitit/softkit-core/compare/typeorm-0.4.8...typeorm-0.4.9) (2023-11-27)
+
+
+### Bug Fixes
+
+* **typeorm:** fixed a path to configs ([5ebafe3](https://github.com/softkitit/softkit-core/commit/5ebafe3387f06e050d3373d0495ec76206c4d1f3))
+
 ## [0.4.8](https://github.com/softkitit/softkit-core/compare/typeorm-0.4.7...typeorm-0.4.8) (2023-11-27)
 
 
