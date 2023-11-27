@@ -9,6 +9,12 @@ import { setupYamlBaseConfigModule } from '@softkit/config';
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
 
+const sourceDir = path.join(
+  process.cwd(),
+  // todo figure out how to improve it using nx
+  `apps/${process.env['MIGRATION_APP_NAME']}/src`,
+);
+
 class RootConfig {
   @Type(() => DbConfig)
   @ValidateNested()
@@ -16,7 +22,7 @@ class RootConfig {
 }
 
 @Module({
-  imports: [setupYamlBaseConfigModule(__dirname, RootConfig)],
+  imports: [setupYamlBaseConfigModule(`${sourceDir}/app`, RootConfig)],
 })
 class DatabaseMigrationModule {}
 
@@ -30,12 +36,6 @@ async function bootstrap() {
 
   return app.get(RootConfig).db;
 }
-
-const sourceDir = path.join(
-  process.cwd(),
-  // todo figure out how to improve it using nx
-  `apps/${process.env['MIGRATION_APP_NAME']}/src`,
-);
 
 const appDir = path.join(sourceDir, 'app');
 
