@@ -4,7 +4,7 @@ import { Test } from '@nestjs/testing';
 import { bootstrapBaseWebApp } from '../lib/setup-web-app';
 import { SwaggerConfig } from '@softkit/swagger-utils';
 import { RootConfig } from './app/config/root.config';
-import { AppConfig } from '../lib/config/app';
+import { AppConfig } from '../lib/config/app.config';
 import { ModuleMetadata } from '@nestjs/common/interfaces/modules/module-metadata.interface';
 import { setupYamlBaseConfigModule } from '@softkit/config';
 import * as path from 'node:path';
