@@ -26,7 +26,7 @@ import {
   OverrideDefaultNotFoundFilter,
 } from '@softkit/exceptions';
 import { DEFAULT_VALIDATION_OPTIONS } from '@softkit/validation';
-import { AppConfig } from './config/app';
+import { AppConfig } from './config/app.config';
 import { setupSwagger, SwaggerConfig } from '@softkit/swagger-utils';
 import {
   DbConfig,
@@ -201,6 +201,7 @@ export async function bootstrapBaseWebApp(
   const swaggerConfig = callOrUndefinedIfException(() =>
     app.get(SwaggerConfig),
   );
+  app.enableCors(appConfig.cors);
 
   if (appConfig.prefix) {
     app.setGlobalPrefix(appConfig.prefix);
