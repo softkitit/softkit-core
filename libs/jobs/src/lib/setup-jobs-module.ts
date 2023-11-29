@@ -1,8 +1,8 @@
 import { DynamicModule } from '@nestjs/common';
 import { BullModule } from '@nestjs/bullmq';
-import { ScheduledJobsConfig } from './config/scheduled-jobs.config';
+import { JobsConfig } from './config/jobs.config';
 
-export function setupScheduledJobsModule(): DynamicModule[] {
+export function setupJobsModule(): DynamicModule[] {
   return [
     BullModule.forRootAsync({
       useFactory: () => ({
@@ -10,7 +10,7 @@ export function setupScheduledJobsModule(): DynamicModule[] {
           removeOnComplete: 1000,
         },
       }),
-      inject: [ScheduledJobsConfig],
+      inject: [JobsConfig],
     }),
   ];
 }

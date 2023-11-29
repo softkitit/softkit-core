@@ -65,8 +65,8 @@
       "@softkit/resource-plugin": [
         "libs/resource-plugin/src/index.ts"
       ],
-      "@softkit/scheduled-jobs": [
-        "libs/scheduled-jobs/src/index.ts"
+      "@softkit/jobs": [
+        "libs/jobs/src/index.ts"
       ],
       "@softkit/server-http-client": [
         "libs/server-http-client/src/index.ts"

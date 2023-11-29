@@ -1,7 +1,7 @@
 {
-  "name": "scheduled-jobs",
+  "name": "jobs",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/scheduled-jobs/src",
+  "sourceRoot": "libs/jobs/src",
   "projectType": "library",
   "targets": {
     "build": {
@@ -10,15 +10,15 @@
         "{options.outputPath}"
       ],
       "options": {
-        "outputPath": "dist/libs/scheduled-jobs",
-        "tsConfig": "libs/scheduled-jobs/tsconfig.lib.json",
-        "packageJson": "libs/scheduled-jobs/package.json",
-        "main": "libs/scheduled-jobs/src/index.ts",
+        "outputPath": "dist/libs/jobs",
+        "tsConfig": "libs/jobs/tsconfig.lib.json",
+        "packageJson": "libs/jobs/package.json",
+        "main": "libs/jobs/src/index.ts",
         "assets": [
-          "libs/scheduled-jobs/*.md",
+          "libs/jobs/*.md",
           {
             "glob": "**/*",
-            "input": "libs/scheduled-jobs/src/lib/i18n/",
+            "input": "libs/jobs/src/lib/i18n/",
             "output": "i18n"
           }
         ]
@@ -31,9 +31,9 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "libs/scheduled-jobs/**/*.ts",
-          "libs/scheduled-jobs/package.json",
-          "libs/scheduled-jobs/project.json"
+          "libs/jobs/**/*.ts",
+          "libs/jobs/package.json",
+          "libs/jobs/project.json"
         ]
       }
     },
@@ -43,7 +43,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "libs/scheduled-jobs/jest.config.ts",
+        "jestConfig": "libs/jobs/jest.config.ts",
         "passWithNoTests": true
       },
       "configurations": {

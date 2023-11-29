@@ -2,7 +2,7 @@
 
 import { Path } from '@saas-buildkit/nestjs-i18n';
 export type I18nTranslations = {
-  'scheduled-jobs': {
+  jobs: {
     WILL_BE_REMOVED_AFTER_FIRST_GENERATION_PRESENT_ONLY_FOR_LINTER: string;
   };
 };
