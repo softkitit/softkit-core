@@ -18,6 +18,14 @@ export class SampleDto {
   email!: string;
 
   @IsEmailLocalized({
+    emailValidationOptions: { each: true },
+    maxLengthValidationOptions: {
+      each: true,
+    },
+  })
+  emailArray!: string[];
+
+  @IsEmailLocalized({
     trimAndLowercase: false,
   })
   emailWithoutTrimAndLowercase!: string;
@@ -71,6 +79,10 @@ export class SampleDto {
 
 export const DEFAULT_SAMPLE_DTO: SampleDto = {
   email: faker.internet.email().toLowerCase(),
+  emailArray: [
+    faker.internet.email().toLowerCase(),
+    faker.internet.email().toLowerCase(),
+  ],
   emailWithoutTrimAndLowercase: faker.internet.email().toLowerCase(),
   trimField: faker.string.sample(),
   password: '12345Aa!',
