@@ -281,6 +281,9 @@ describe('tenant base service test', () => {
       TypeError,
     );
   });
+
+  // todo insert multiple entities with hierarchy
+  test('.', () => {});
 });
 
 function checkAllTestFieldsPresent(
