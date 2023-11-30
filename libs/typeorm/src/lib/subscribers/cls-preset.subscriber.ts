@@ -37,6 +37,11 @@ export class ClsPresetSubscriber<ClsStoreType extends TenantClsStore>
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   beforeUpdate(event: UpdateEvent<any>) {
+    /* istanbul ignore next */
+    if (event.entity === undefined) {
+      return;
+    }
+
     return this.handleEntityChangeEvent(
       event.metadata.inheritanceTree,
       event.entity,
