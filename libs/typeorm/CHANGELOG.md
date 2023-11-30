@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.4.10](https://github.com/softkitit/softkit-core/compare/typeorm-0.4.9...typeorm-0.4.10) (2023-11-30)
+
+
+### Bug Fixes
+
+* **typeorm:** updated the cls preset subscriber, added skip if an entity does not exist to the before update method ([9cce2e0](https://github.com/softkitit/softkit-core/commit/9cce2e0eb19fcf0b9419e0b6ccdb82ef710586b2))
+
 ## [0.4.9](https://github.com/softkitit/softkit-core/compare/typeorm-0.4.8...typeorm-0.4.9) (2023-11-27)
 
 
