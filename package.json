@@ -11,6 +11,7 @@
     "migration:generate": "sh -c 'export MIGRATION_APP_NAME=${0}; yarn run typeorm --dataSource=libs/typeorm/src/lib/migration/migration-data-source.ts migration:generate apps/${0}/src/app/database/migrations/${1}'",
     "prebuild": "rimraf dist",
     "test:all": "nx affected:test --all --codeCoverage --skip-nx-cache --parallel=false",
+    "docs": "typedoc --tsconfig tsconfig.typedoc.json",
     "prepare": "husky install"
   },
   "packageManager": "yarn@3.6.3",
@@ -75,6 +76,7 @@
     "ts-loader": "^9.4.4",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.2.0",
+    "typedoc": "^0.25.4",
     "typescript": "5.2.2",
     "verdaccio": "^5.26.2"
   },

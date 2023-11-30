@@ -7484,6 +7484,215 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@softkit/async-storage@workspace:libs/async-storage":
+  version: 0.0.0-use.local
+  resolution: "@softkit/async-storage@workspace:libs/async-storage"
+  peerDependencies:
+    fastify: 4.22.0
+    nestjs-cls: ^3.5.1
+  languageName: unknown
+  linkType: soft
+
+"@softkit/auth@workspace:libs/auth":
+  version: 0.0.0-use.local
+  resolution: "@softkit/auth@workspace:libs/auth"
+  peerDependencies:
+    "@nestjs/common": ^10.2.4
+    "@nestjs/core": ^10.2.4
+    "@nestjs/jwt": ^10.1.1
+    "@nestjs/passport": ^10.0.1
+    "@softkit/exceptions": "*"
+    "@softkit/typeorm": "*"
+    class-validator: ^0.14.0
+    fastify: 4.22.0
+    nestjs-cls: ^3.5.1
+    passport-jwt: ^4.0.1
+    rxjs: ^7.8.1
+  languageName: unknown
+  linkType: soft
+
+"@softkit/bootstrap@workspace:libs/bootstrap":
+  version: 0.0.0-use.local
+  resolution: "@softkit/bootstrap@workspace:libs/bootstrap"
+  peerDependencies:
+    "@fastify/helmet": ^11.0.0
+    "@nestjs/common": ^10.2.4
+    "@nestjs/core": ^10.2.4
+    "@nestjs/platform-fastify": ^10.2.4
+    "@nestjs/testing": ^10.2.4
+    "@saas-buildkit/nestjs-i18n": 11.1.3
+    "@softkit/crypto": "*"
+    "@softkit/exceptions": "*"
+    "@softkit/i18n": "*"
+    "@softkit/logger": "*"
+    "@softkit/server-http-client": "*"
+    "@softkit/swagger-utils": "*"
+    "@softkit/typeorm": "*"
+    "@softkit/validation": "*"
+    class-transformer: ^0.5.1
+    class-validator: ^0.14.0
+    fastify: 4.22.0
+    nestjs-pino: ^3.4.0
+    typeorm: ~0.3.17
+    typeorm-extension: ^3.1.0
+    typeorm-transactional: ^0.4.1
+  languageName: unknown
+  linkType: soft
+
+"@softkit/common-types@workspace:libs/common-types":
+  version: 0.0.0-use.local
+  resolution: "@softkit/common-types@workspace:libs/common-types"
+  languageName: unknown
+  linkType: soft
+
+"@softkit/config@workspace:libs/config":
+  version: 0.0.0-use.local
+  resolution: "@softkit/config@workspace:libs/config"
+  peerDependencies:
+    class-transformer: ^0.5.1
+    nest-typed-config: ^2.9.1
+  languageName: unknown
+  linkType: soft
+
+"@softkit/crypto@workspace:libs/crypto":
+  version: 0.0.0-use.local
+  resolution: "@softkit/crypto@workspace:libs/crypto"
+  dependencies:
+    argon2: ^0.31.1
+    nanoid: ^3.3.6
+  languageName: unknown
+  linkType: soft
+
+"@softkit/eslint-backend@workspace:libs/eslint-backend":
+  version: 0.0.0-use.local
+  resolution: "@softkit/eslint-backend@workspace:libs/eslint-backend"
+  dependencies:
+    "@typescript-eslint/eslint-plugin": ^6.6.0
+    "@typescript-eslint/parser": ^6.2.1
+    eslint-config-prettier: 9.0.0
+    eslint-plugin-jest: ^27.2.3
+    eslint-plugin-prettier: ^5.0.0
+    eslint-plugin-promise: ^6.1.1
+    eslint-plugin-security: ^1.7.1
+    eslint-plugin-simple-import-sort: ^10.0.0
+    eslint-plugin-sonarjs: ^0.21.0
+    eslint-plugin-unicorn: ^48.0.0
+    eslint-plugin-unused-imports: ^3.0.0
+  peerDependencies:
+    "@nx/eslint-plugin": 16.8.1
+    eslint: ^8.45.0
+  languageName: unknown
+  linkType: soft
+
+"@softkit/exceptions@workspace:libs/exceptions":
+  version: 0.0.0-use.local
+  resolution: "@softkit/exceptions@workspace:libs/exceptions"
+  peerDependencies:
+    "@nestjs/common": ^10.2.4
+    "@nestjs/core": ^10.2.4
+    "@nestjs/swagger": ^7.1.10
+    "@saas-buildkit/nestjs-i18n": 11.1.3
+  languageName: unknown
+  linkType: soft
+
+"@softkit/file-storage@workspace:libs/file-storage":
+  version: 0.0.0-use.local
+  resolution: "@softkit/file-storage@workspace:libs/file-storage"
+  peerDependencies:
+    "@aws-sdk/client-s3": ^3.454.0
+    "@aws-sdk/credential-provider-node": 3.451.0
+    "@aws-sdk/s3-presigned-post": ^3.454.0
+    "@aws-sdk/s3-request-presigner": ^3.454.0
+    "@nestjs/common": ^10.2.4
+    "@nestjs/swagger": ^7.1.10
+    "@saas-buildkit/nestjs-i18n": 11.1.3
+    "@softkit/crypto": "*"
+    "@softkit/validation": "*"
+    class-transformer: ^0.5.1
+  languageName: unknown
+  linkType: soft
+
+"@softkit/health-check@workspace:libs/health-check":
+  version: 0.0.0-use.local
+  resolution: "@softkit/health-check@workspace:libs/health-check"
+  peerDependencies:
+    "@nestjs/common": ^10.2.4
+    "@nestjs/swagger": ^7.1.10
+    "@nestjs/terminus": ^10.0.1
+    "@softkit/auth": "*"
+    "@softkit/validation": "*"
+    class-transformer: ^0.5.1
+    class-validator: ^0.14.0
+  languageName: unknown
+  linkType: soft
+
+"@softkit/i18n@workspace:libs/i18n":
+  version: 0.0.0-use.local
+  resolution: "@softkit/i18n@workspace:libs/i18n"
+  peerDependencies:
+    "@nestjs/common": ^10.2.4
+    "@saas-buildkit/nestjs-i18n": 11.1.3
+    "@softkit/exceptions": "*"
+    class-validator: ^0.14.0
+  languageName: unknown
+  linkType: soft
+
+"@softkit/logger@workspace:libs/logger":
+  version: 0.0.0-use.local
+  resolution: "@softkit/logger@workspace:libs/logger"
+  peerDependencies:
+    "@nestjs/common": ^10.2.4
+    class-validator: ^0.14.0
+    nestjs-cls: ^3.5.1
+    nestjs-pino: ^3.4.0
+    rxjs: ^7.8.1
+  languageName: unknown
+  linkType: soft
+
+"@softkit/redis@workspace:libs/redis":
+  version: 0.0.0-use.local
+  resolution: "@softkit/redis@workspace:libs/redis"
+  peerDependencies:
+    "@softkit/validation": "*"
+    "@songkeys/nestjs-redis": ~10.0.0
+    class-transformer: ^0.5.1
+    class-validator: ^0.14.0
+    ioredis: ~5.3.2
+  languageName: unknown
+  linkType: soft
+
+"@softkit/resource-plugin@workspace:libs/resource-plugin":
+  version: 0.0.0-use.local
+  resolution: "@softkit/resource-plugin@workspace:libs/resource-plugin"
+  dependencies:
+    change-case: ^4.1.2
+  peerDependencies:
+    "@nx/devkit": 16.8.1
+    "@nx/js": 16.8.1
+    "@nx/nest": 16.8.1
+    nx: 16.8.1
+  languageName: unknown
+  linkType: soft
+
+"@softkit/server-http-client@workspace:libs/server-http-client":
+  version: 0.0.0-use.local
+  resolution: "@softkit/server-http-client@workspace:libs/server-http-client"
+  dependencies:
+    axios-retry: ^3.7.0
+    opossum: ^8.1.0
+  peerDependencies:
+    "@nestjs/common": ^10.2.4
+    "@nestjs/core": ^10.2.4
+    "@softkit/auth": "*"
+    "@softkit/exceptions": "*"
+    axios: ^1.5.0
+    class-transformer: ^0.5.1
+    class-validator: ^0.14.0
+    fastify: ^4.22.0
+    nestjs-cls: ^3.5.1
+  languageName: unknown
+  linkType: soft
+
 "@softkit/source@workspace:.":
   version: 0.0.0-use.local
   resolution: "@softkit/source@workspace:."
@@ -7600,12 +7809,97 @@ __metadata:
     ts-patch: ^3.0.2
     tsconfig-paths: ^4.2.0
     tslib: ^2.6.2
+    typedoc: ^0.25.4
     typeorm: 0.3.17
     typeorm-extension: ^3.1.0
     typeorm-naming-strategies: ^4.1.0
     typeorm-transactional: ^0.4.1
     typescript: 5.2.2
     verdaccio: ^5.26.2
+  languageName: unknown
+  linkType: soft
+
+"@softkit/string-utils@workspace:libs/string-utils":
+  version: 0.0.0-use.local
+  resolution: "@softkit/string-utils@workspace:libs/string-utils"
+  languageName: unknown
+  linkType: soft
+
+"@softkit/swagger-utils@workspace:libs/swagger-utils":
+  version: 0.0.0-use.local
+  resolution: "@softkit/swagger-utils@workspace:libs/swagger-utils"
+  peerDependencies:
+    "@nestjs/common": ^10.2.4
+    "@nestjs/swagger": ^7.1.10
+    "@softkit/validation": "*"
+    class-validator: ^0.14.0
+  languageName: unknown
+  linkType: soft
+
+"@softkit/test-utils@workspace:libs/test-utils":
+  version: 0.0.0-use.local
+  resolution: "@softkit/test-utils@workspace:libs/test-utils"
+  dependencies:
+    testcontainers: ^10.2.1
+  peerDependencies:
+    "@jest/globals": ^29.6.2
+    "@nestjs/common": ^10.2.4
+    "@nestjs/typeorm": ^10.0.0
+    "@testcontainers/postgresql": ^10.2.1
+    typeorm: ~0.3.17
+    typeorm-transactional: ^0.4.1
+  languageName: unknown
+  linkType: soft
+
+"@softkit/typeorm-service@workspace:libs/typeorm-service":
+  version: 0.0.0-use.local
+  resolution: "@softkit/typeorm-service@workspace:libs/typeorm-service"
+  peerDependencies:
+    "@softkit/exceptions": "*"
+    "@softkit/string-utils": "*"
+    "@softkit/typeorm": "*"
+    "@softkit/validation": "*"
+    class-transformer: ^0.5.1
+    nestjs-paginate: ^8.2.1
+    typeorm: ~0.3.17
+    typeorm-transactional: ^0.4.1
+  languageName: unknown
+  linkType: soft
+
+"@softkit/typeorm@workspace:libs/typeorm":
+  version: 0.0.0-use.local
+  resolution: "@softkit/typeorm@workspace:libs/typeorm"
+  peerDependencies:
+    "@nestjs/common": ^10.0.0
+    "@nestjs/core": ^10.0.0
+    "@nestjs/swagger": ^7.1.10
+    "@nestjs/typeorm": ^10.0.0
+    "@saas-buildkit/nestjs-i18n": ^11.1.3
+    "@softkit/config": "*"
+    "@softkit/exceptions": "*"
+    "@softkit/string-utils": "*"
+    "@softkit/validation": "*"
+    class-transformer: ^0.5.1
+    class-validator: ^0.14.0
+    nestjs-cls: ^3.5.1
+    nestjs-paginate: ^8.2.1
+    reflect-metadata: ^0.1.13
+    typeorm: ~0.3.17
+    typeorm-naming-strategies: ^4.1.0
+    typeorm-transactional: ^0.4.1
+  languageName: unknown
+  linkType: soft
+
+"@softkit/validation@workspace:libs/validation":
+  version: 0.0.0-use.local
+  resolution: "@softkit/validation@workspace:libs/validation"
+  peerDependencies:
+    "@nestjs/common": ^10.2.4
+    "@saas-buildkit/nestjs-i18n": ^11.1.3
+    "@softkit/exceptions": "*"
+    class-transformer: ^0.5.1
+    class-validator: ^0.14.0
+    validator: ^13.9.0
   languageName: unknown
   linkType: soft
 
@@ -8571,6 +8865,31 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@typescript-eslint/eslint-plugin@npm:^6.6.0":
+  version: 6.13.1
+  resolution: "@typescript-eslint/eslint-plugin@npm:6.13.1"
+  dependencies:
+    "@eslint-community/regexpp": ^4.5.1
+    "@typescript-eslint/scope-manager": 6.13.1
+    "@typescript-eslint/type-utils": 6.13.1
+    "@typescript-eslint/utils": 6.13.1
+    "@typescript-eslint/visitor-keys": 6.13.1
+    debug: ^4.3.4
+    graphemer: ^1.4.0
+    ignore: ^5.2.4
+    natural-compare: ^1.4.0
+    semver: ^7.5.4
+    ts-api-utils: ^1.0.1
+  peerDependencies:
+    "@typescript-eslint/parser": ^6.0.0 || ^6.0.0-alpha
+    eslint: ^7.0.0 || ^8.0.0
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 568093d76c200a8502047d74f29300110a59b9f2a5cbf995a6cbe419c803a7ec22220e9592a884401d2dde72c79346b4cc0ee393e7b422924ad4a8a2040af3b0
+  languageName: node
+  linkType: hard
+
 "@typescript-eslint/parser@npm:6.6.0":
   version: 6.6.0
   resolution: "@typescript-eslint/parser@npm:6.6.0"
@@ -8589,6 +8908,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@typescript-eslint/parser@npm:^6.2.1":
+  version: 6.13.1
+  resolution: "@typescript-eslint/parser@npm:6.13.1"
+  dependencies:
+    "@typescript-eslint/scope-manager": 6.13.1
+    "@typescript-eslint/types": 6.13.1
+    "@typescript-eslint/typescript-estree": 6.13.1
+    "@typescript-eslint/visitor-keys": 6.13.1
+    debug: ^4.3.4
+  peerDependencies:
+    eslint: ^7.0.0 || ^8.0.0
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 58b7fef6f2d02c8f4737f9908a8d335a20bee20dba648233a69f28e7b39237791d2b9fbb818e628dcc053ddf16507b161ace7f1139e093d72365f1270c426de3
+  languageName: node
+  linkType: hard
+
 "@typescript-eslint/scope-manager@npm:5.62.0":
   version: 5.62.0
   resolution: "@typescript-eslint/scope-manager@npm:5.62.0"
@@ -8599,6 +8936,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@typescript-eslint/scope-manager@npm:6.13.1":
+  version: 6.13.1
+  resolution: "@typescript-eslint/scope-manager@npm:6.13.1"
+  dependencies:
+    "@typescript-eslint/types": 6.13.1
+    "@typescript-eslint/visitor-keys": 6.13.1
+  checksum: 109a213f82719e10f8c6a0168f2e105dc1369c7e0c075c1f30af137030fc866a3a585a77ff78a9a3538afc213061c8aedbb4462a91f26cbd90eefbab8b89ea10
+  languageName: node
+  linkType: hard
+
 "@typescript-eslint/scope-manager@npm:6.6.0":
   version: 6.6.0
   resolution: "@typescript-eslint/scope-manager@npm:6.6.0"
@@ -8606,6 +8953,23 @@ __metadata:
     "@typescript-eslint/types": 6.6.0
     "@typescript-eslint/visitor-keys": 6.6.0
   checksum: 18b552fee98894c4f35e9f3d71a276f266ad4e2d7c6b9bb32a9b25caa36cc3768928676972b4e78308098ad53fa8dc6626a82810f17d51c667ce959da3ac11bc
+  languageName: node
+  linkType: hard
+
+"@typescript-eslint/type-utils@npm:6.13.1":
+  version: 6.13.1
+  resolution: "@typescript-eslint/type-utils@npm:6.13.1"
+  dependencies:
+    "@typescript-eslint/typescript-estree": 6.13.1
+    "@typescript-eslint/utils": 6.13.1
+    debug: ^4.3.4
+    ts-api-utils: ^1.0.1
+  peerDependencies:
+    eslint: ^7.0.0 || ^8.0.0
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: e39d28dd2f3b47a26b4f6aa2c7a301bdd769ce9148d734be93441a813c3d1111eba1d655677355bba5519f3d4dbe93e4ff4e46830216b0302df0070bf7a80057
   languageName: node
   linkType: hard
 
@@ -8650,6 +9014,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@typescript-eslint/types@npm:6.13.1":
+  version: 6.13.1
+  resolution: "@typescript-eslint/types@npm:6.13.1"
+  checksum: bb1d52f1646bab9acd3ec874567ffbaaaf7fe4a5f79845bdacbfea46d15698e58d45797da05b08c23f9496a17229b7f2c1363d000fd89ce4e79874fd57ba1d4a
+  languageName: node
+  linkType: hard
+
 "@typescript-eslint/types@npm:6.6.0":
   version: 6.6.0
   resolution: "@typescript-eslint/types@npm:6.6.0"
@@ -8672,6 +9043,24 @@ __metadata:
     typescript:
       optional: true
   checksum: 3624520abb5807ed8f57b1197e61c7b1ed770c56dfcaca66372d584ff50175225798bccb701f7ef129d62c5989070e1ee3a0aa2d84e56d9524dcf011a2bb1a52
+  languageName: node
+  linkType: hard
+
+"@typescript-eslint/typescript-estree@npm:6.13.1":
+  version: 6.13.1
+  resolution: "@typescript-eslint/typescript-estree@npm:6.13.1"
+  dependencies:
+    "@typescript-eslint/types": 6.13.1
+    "@typescript-eslint/visitor-keys": 6.13.1
+    debug: ^4.3.4
+    globby: ^11.1.0
+    is-glob: ^4.0.3
+    semver: ^7.5.4
+    ts-api-utils: ^1.0.1
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 09aa0f5cbd60e84df4f58f3d479be352549600b24dbefe75c686ea89252526c52c1c06ce1ae56c0405dd7337002e741c2ba02b71fb1caa3b94a740a70fcc8699
   languageName: node
   linkType: hard
 
@@ -8711,6 +9100,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@typescript-eslint/utils@npm:6.13.1":
+  version: 6.13.1
+  resolution: "@typescript-eslint/utils@npm:6.13.1"
+  dependencies:
+    "@eslint-community/eslint-utils": ^4.4.0
+    "@types/json-schema": ^7.0.12
+    "@types/semver": ^7.5.0
+    "@typescript-eslint/scope-manager": 6.13.1
+    "@typescript-eslint/types": 6.13.1
+    "@typescript-eslint/typescript-estree": 6.13.1
+    semver: ^7.5.4
+  peerDependencies:
+    eslint: ^7.0.0 || ^8.0.0
+  checksum: 14f64840869c8755af4d287cfc74abc424dc139559e87ca1a8b0e850f4fa56311d99dfb61a43dd4433eae5914be12b4b3390e55de1f236dce6701830d17e31c9
+  languageName: node
+  linkType: hard
+
 "@typescript-eslint/utils@npm:6.6.0":
   version: 6.6.0
   resolution: "@typescript-eslint/utils@npm:6.6.0"
@@ -8735,6 +9141,16 @@ __metadata:
     "@typescript-eslint/types": 5.62.0
     eslint-visitor-keys: ^3.3.0
   checksum: 976b05d103fe8335bef5c93ad3f76d781e3ce50329c0243ee0f00c0fcfb186c81df50e64bfdd34970148113f8ade90887f53e3c4938183afba830b4ba8e30a35
+  languageName: node
+  linkType: hard
+
+"@typescript-eslint/visitor-keys@npm:6.13.1":
+  version: 6.13.1
+  resolution: "@typescript-eslint/visitor-keys@npm:6.13.1"
+  dependencies:
+    "@typescript-eslint/types": 6.13.1
+    eslint-visitor-keys: ^3.4.1
+  checksum: d15d362203a2fe995ea62a59d5b44c15c8fb1fb30ff59dd1542a980f75b3b62035303dfb781d83709921613f6ac8cc5bf57b70f6e20d820aec8b7911f07152e9
   languageName: node
   linkType: hard
 
@@ -9442,6 +9858,13 @@ __metadata:
   version: 6.0.1
   resolution: "ansi-regex@npm:6.0.1"
   checksum: 1ff8b7667cded1de4fa2c9ae283e979fc87036864317da86a2e546725f96406746411d0d85e87a2d12fa5abd715d90006de7fa4fa0477c92321ad3b4c7d4e169
+  languageName: node
+  linkType: hard
+
+"ansi-sequence-parser@npm:^1.1.0":
+  version: 1.1.1
+  resolution: "ansi-sequence-parser@npm:1.1.1"
+  checksum: ead5b15c596e8e85ca02951a844366c6776769dcc9fd1bd3a0db11bb21364554822c6a439877fb599e7e1ffa0b5f039f1e5501423950457f3dcb2f480c30b188
   languageName: node
   linkType: hard
 
@@ -13353,7 +13776,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-unicorn@npm:^48.0.1":
+"eslint-plugin-unicorn@npm:^48.0.0, eslint-plugin-unicorn@npm:^48.0.1":
   version: 48.0.1
   resolution: "eslint-plugin-unicorn@npm:48.0.1"
   dependencies:
@@ -17504,7 +17927,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsonc-parser@npm:3.2.0":
+"jsonc-parser@npm:3.2.0, jsonc-parser@npm:^3.2.0":
   version: 3.2.0
   resolution: "jsonc-parser@npm:3.2.0"
   checksum: 946dd9a5f326b745aa326d48a7257e3f4a4b62c5e98ec8e49fa2bdd8d96cef7e6febf1399f5c7016114fd1f68a1c62c6138826d5d90bc650448e3cf0951c53c7
@@ -18232,6 +18655,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lunr@npm:^2.3.9":
+  version: 2.3.9
+  resolution: "lunr@npm:2.3.9"
+  checksum: 176719e24fcce7d3cf1baccce9dd5633cd8bdc1f41ebe6a180112e5ee99d80373fe2454f5d4624d437e5a8319698ca6837b9950566e15d2cae5f2a543a3db4b8
+  languageName: node
+  linkType: hard
+
 "magic-string@npm:0.30.0":
   version: 0.30.0
   resolution: "magic-string@npm:0.30.0"
@@ -18326,6 +18756,15 @@ __metadata:
   version: 1.0.4
   resolution: "markdown-escapes@npm:1.0.4"
   checksum: 6833a93d72d3f70a500658872312c6fa8015c20cc835a85ae6901fa232683fbc6ed7118ebe920fea7c80039a560f339c026597d96eee0e9de602a36921804997
+  languageName: node
+  linkType: hard
+
+"marked@npm:^4.3.0":
+  version: 4.3.0
+  resolution: "marked@npm:4.3.0"
+  bin:
+    marked: bin/marked.js
+  checksum: 0db6817893952c3ec710eb9ceafb8468bf5ae38cb0f92b7b083baa13d70b19774674be04db5b817681fa7c5c6a088f61300815e4dd75a59696f4716ad69f6260
   languageName: node
   linkType: hard
 
@@ -18635,7 +19074,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimatch@npm:^9.0.1":
+"minimatch@npm:^9.0.1, minimatch@npm:^9.0.3":
   version: 9.0.3
   resolution: "minimatch@npm:9.0.3"
   dependencies:
@@ -23144,6 +23583,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"shiki@npm:^0.14.1":
+  version: 0.14.5
+  resolution: "shiki@npm:0.14.5"
+  dependencies:
+    ansi-sequence-parser: ^1.1.0
+    jsonc-parser: ^3.2.0
+    vscode-oniguruma: ^1.7.0
+    vscode-textmate: ^8.0.0
+  checksum: 41d847817cfc9bb6d8bf190316896698d250303656546446659cc02caed8dcc171b10cd113bb5da82425b51d0032e87aafcdc36c3dd61dadc123170b438da736
+  languageName: node
+  linkType: hard
+
 "shimmer@npm:^1.2.0":
   version: 1.2.1
   resolution: "shimmer@npm:1.2.1"
@@ -24841,6 +25292,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"typedoc@npm:^0.25.4":
+  version: 0.25.4
+  resolution: "typedoc@npm:0.25.4"
+  dependencies:
+    lunr: ^2.3.9
+    marked: ^4.3.0
+    minimatch: ^9.0.3
+    shiki: ^0.14.1
+  peerDependencies:
+    typescript: 4.6.x || 4.7.x || 4.8.x || 4.9.x || 5.0.x || 5.1.x || 5.2.x || 5.3.x
+  bin:
+    typedoc: bin/typedoc
+  checksum: 6d441baa277c0db4d577db2932a7af316d175415841e2faf2e68e3eda6ad60356c54f56374f89c5233d7bd5c057b0337455e5d484d8463e1445e67c37a6d94eb
+  languageName: node
+  linkType: hard
+
 "typeorm-extension@npm:^3.1.0":
   version: 3.1.0
   resolution: "typeorm-extension@npm:3.1.0"
@@ -25661,6 +26128,20 @@ __metadata:
   version: 1.0.11
   resolution: "vscode-languageserver-textdocument@npm:1.0.11"
   checksum: ea7cdc9d4ffaae5952071fa11d17d714215a76444e6936c9359f94b9ba3222a52a55edb5bd5928bd3e9712b900a9f175bb3565ec1c8923234fe3bd327584bafb
+  languageName: node
+  linkType: hard
+
+"vscode-oniguruma@npm:^1.7.0":
+  version: 1.7.0
+  resolution: "vscode-oniguruma@npm:1.7.0"
+  checksum: 53519d91d90593e6fb080260892e87d447e9b200c4964d766772b5053f5699066539d92100f77f1302c91e8fc5d9c772fbe40fe4c90f3d411a96d5a9b1e63f42
+  languageName: node
+  linkType: hard
+
+"vscode-textmate@npm:^8.0.0":
+  version: 8.0.0
+  resolution: "vscode-textmate@npm:8.0.0"
+  checksum: 127780dfea89559d70b8326df6ec344cfd701312dd7f3f591a718693812b7852c30b6715e3cfc8b3200a4e2515b4c96f0843c0eacc0a3020969b5de262c2a4bb
   languageName: node
   linkType: hard
 

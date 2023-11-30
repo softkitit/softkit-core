@@ -1,0 +1,14 @@
+{
+  "entryPoints": ["libs/**/src/index.ts"],
+  "out": "./docs",
+  "name": "Softkit Documentation",
+  "exclude": [
+  "**/__tests__/**",
+  "**/*.spec.ts",
+  "**/*.test.ts",
+  "jest.config.ts"
+  ],
+  "excludePrivate": true,
+  "extends": ["./typedoc.base.json"],
+  "logLevel": "Verbose"
+}
