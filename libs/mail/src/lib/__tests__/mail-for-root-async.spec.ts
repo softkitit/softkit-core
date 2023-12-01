@@ -1,7 +1,8 @@
-import { Test } from '@nestjs/testing';
+import { Test, TestingModule } from '@nestjs/testing';
 import { MailgunMailModule } from '../mail.module';
-import { Injectable, Module } from '@nestjs/common';
-import { MailgunMockConfig } from './app/config/config.mock';
+import { Global, Injectable, Module } from '@nestjs/common';
+import { AbstractMailService } from '../services';
+import { MAILGUN_CLIENT_TOKEN } from '../constants';
 
 @Injectable()
 class Config {
@@ -16,16 +17,17 @@ class Config {
   providers: [Config],
   exports: [Config],
 })
+@Global()
 class ConfigModule {}
 
 describe('forRootAsync', () => {
-  let mockConfig: MailgunMockConfig;
+  let module: TestingModule;
 
   beforeEach(async () => {
-    const moduleRef = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       imports: [
+        ConfigModule,
         MailgunMailModule.forRootAsync({
-          imports: [ConfigModule],
           useFactory: async (config: Config) => {
             return config;
           },
@@ -33,12 +35,10 @@ describe('forRootAsync', () => {
         }),
       ],
     }).compile();
-
-    mockConfig = moduleRef.get<Config>(Config);
   });
 
   it('should initialize mailgun config correctly with async configuration', () => {
-    expect(mockConfig).toBeDefined();
-    expect(mockConfig).toBeInstanceOf(Config);
+    expect(module.get(AbstractMailService)).toBeDefined();
+    expect(module.get(MAILGUN_CLIENT_TOKEN)).toBeDefined();
   });
 });

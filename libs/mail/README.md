@@ -15,6 +15,12 @@ The Mailgun Mail Module is a comprehensive solution for integrating Mailgun's em
 yarn add @softkit/mail
 ```
 
+### For mailgun install mailgun.js
+
+```bash
+yarn add mailgun.js@^9.3.0
+```
+
 ## Usage
 
 ### Import MailgunMailModule
@@ -77,6 +83,13 @@ mailgun:
   defaultBccList:
     - 'first@gmail.com'
     - 'second@gmail.com'
+```
+
+
+## Using native mailgun client (available in DI) in case if you need some customizations
+
+```typescript
+   @Inject(MAILGUN_CLIENT_TOKEN) private mailgun: IMailgunClient
 ```
 
 ## Enhancing Your Application with a Custom Typed Email Service

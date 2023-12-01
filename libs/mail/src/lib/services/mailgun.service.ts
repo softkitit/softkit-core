@@ -1,46 +1,59 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { AbstractMailService } from './abstract-mail.service';
 import { IMailgunClient } from 'mailgun.js/Interfaces/MailgunClient';
-import { MAILGUN_CLIENT_TOKEN } from '../constants';
-import { EmailDataType, SendEmailResult } from './vo';
+import { MAILGUN_CLIENT_TOKEN, MAILGUN_CONFIG_TOKEN } from '../constants';
+import {
+  EmailDataType,
+  MessageContentDto,
+  SendEmailDto,
+  SendEmailResult,
+} from './vo';
 import { MailgunConfig } from '../config';
-import { GeneralBadRequestException } from '@softkit/exceptions';
+import { GeneralInternalServerException } from '@softkit/exceptions';
+import { AtLeastOneKeyPresent } from 'mailgun.js';
 
 @Injectable()
 export class MailgunService extends AbstractMailService<string> {
   constructor(
     @Inject(MAILGUN_CLIENT_TOKEN) private mailgun: IMailgunClient,
-    private config: MailgunConfig,
+    @Inject(MAILGUN_CONFIG_TOKEN) private config: MailgunConfig,
   ) {
     super();
   }
 
   override async sendEmail(emailData: EmailDataType) {
-    this.verifyMessageContent(emailData);
     const fromAddress = emailData.from ?? this.config.defaultFromEmail;
     const bcc = emailData.bcc ?? this.config.defaultBccList;
 
-    return this.mailgun.messages.create(this.config.domain, {
-      from: fromAddress,
-      bcc,
-      name: emailData.userFullName,
-      attachment: emailData.attachment,
-      cc: emailData.cc,
-      html: emailData.html,
-      message: emailData.message,
-      subject: emailData.subject,
-      text: emailData.text,
-      template: '',
-      ...emailData,
-    });
+    const { attachment, cc, html, subject, text, ...rest } = emailData;
+
+    if (html || text) {
+      const content = (
+        html ? { html } : { text }
+      ) as AtLeastOneKeyPresent<MessageContentDto>;
+
+      return this.mailgun.messages.create(this.config.domain, {
+        from: fromAddress,
+        bcc,
+        name: emailData.userFullName,
+        attachment,
+        cc,
+        subject,
+        ...content,
+        ...rest,
+      });
+    } else {
+      throw new GeneralInternalServerException(
+        `Looks like a developer mistake either html or text must be provided. Take a look now.`,
+      );
+    }
   }
 
   override async sendTemplateEmail(
     templateId: string,
-    emailData: EmailDataType,
+    emailData: SendEmailDto,
     emailTemplateParams?: object,
   ): Promise<SendEmailResult> {
-    this.verifyMessageContent(emailData, templateId);
     const templateVariables: { [key: string]: unknown } = {};
 
     if (emailTemplateParams) {
@@ -58,53 +71,20 @@ export class MailgunService extends AbstractMailService<string> {
     }
 
     const fromAddress = emailData.from ?? this.config.defaultFromEmail;
+    const bcc = emailData.bcc ?? this.config.defaultBccList;
 
-    return await this.mailgun.messages.create(this.config.domain, {
+    const { attachment, cc, subject, ...rest } = emailData;
+
+    return this.mailgun.messages.create(this.config.domain, {
       from: fromAddress,
       name: emailData.userFullName,
-      attachment: emailData.attachment,
-      cc: emailData.cc,
-      html: emailData.html,
-      message: emailData.message,
-      subject: emailData.subject,
-      text: emailData.text,
+      attachment,
+      cc,
+      bcc,
+      subject,
       template: templateId,
-      ...emailData,
+      ...rest,
       ...templateVariables,
     });
-  }
-
-  private verifyMessageContent(
-    emailData: EmailDataType,
-    templateId?: string,
-  ): void {
-    const errors = [];
-
-    if (!emailData.text && !emailData.html) {
-      errors.push({
-        property: 'content',
-        constraints: {
-          isNotEmpty:
-            'Either "text" or "HTML" content must be provided for the email.',
-        },
-      });
-    }
-
-    if (emailData.html && templateId) {
-      errors.push({
-        property: 'templateHtmlConflict',
-        constraints: {
-          isInvalid:
-            'Only one of the parameters ‘html’ or ‘template’ is allowed.',
-        },
-      });
-    }
-
-    if (errors.length > 0) {
-      throw new GeneralBadRequestException(
-        errors,
-        'Validation failed for the email data',
-      );
-    }
   }
 }

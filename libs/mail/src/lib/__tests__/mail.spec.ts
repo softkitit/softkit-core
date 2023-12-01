@@ -1,11 +1,9 @@
 import { Test } from '@nestjs/testing';
 import { AbstractMailService, AttachmentFile, SendEmailDto } from '../services';
 import { MAILGUN_CLIENT_TOKEN } from '../constants';
-import { MailgunConfig } from '../config';
-import { MailgunMockConfig } from './app/config/config.mock';
 import { MailService } from './app/mail/custom-mail.service';
 import { EmailTypes } from './app/mail/types/email.types';
-import { GeneralBadRequestException } from '@softkit/exceptions';
+import { GeneralInternalServerException } from '@softkit/exceptions';
 import { plainToClass } from 'class-transformer';
 import { validate } from 'class-validator';
 
@@ -33,8 +31,6 @@ describe('mail e2e test', () => {
     })
       .overrideProvider(MAILGUN_CLIENT_TOKEN)
       .useValue(mockMailgunClient)
-      .overrideProvider(MailgunConfig)
-      .useClass(MailgunMockConfig)
       .compile();
 
     mailService = module.get<AbstractMailService<string>>(AbstractMailService);
@@ -151,26 +147,15 @@ describe('mail e2e test', () => {
       'o:testmode': 'yes',
     };
 
-    await expect(
-      mailService.sendTemplateEmail('test', payload),
-    ).rejects.toThrow(GeneralBadRequestException);
-    expect(sendEmailSpy).not.toHaveBeenCalled();
-  });
-
-  it('should fail if both html and template fields are provided', async () => {
-    const payload = {
-      from: 'Excited User <mailgun@sandboxea47440175b84daf8586d18c5d5e1f0a.mailgun.org>',
-      subject: 'TEST',
-      to: 'example@gmail.com',
-      'o:testmode': 'yes',
-      html: '<p>Test HTML content</p>',
-    };
-
-    await expect(
-      mailService.sendTemplateEmail('test', payload),
-    ).rejects.toThrow(GeneralBadRequestException);
-
-    expect(sendEmailSpy).not.toHaveBeenCalled();
+    try {
+      await mailService.sendEmail(payload);
+      throw new Error(
+        'should not be here, seems like sendEmail method did not throw an error',
+      );
+    } catch (error) {
+      // eslint-disable-next-line jest/no-conditional-expect
+      expect(error).toBeInstanceOf(GeneralInternalServerException);
+    }
   });
 
   it('should send template email with template params and return status 200', async () => {
