@@ -1,4 +1,14 @@
 Softkit Core Libraries Changelog
+## [0.3.3](https://github.com/softkitit/softkit-core/compare/validation-0.3.2...validation-0.3.3) (2023-12-01)
+
+
+### Bug Fixes
+
+* **validation:** add support for string array in trimAndLowerCaseTransformer ([53f4447](https://github.com/softkitit/softkit-core/commit/53f444788757e87c6c9903f758e0264c089a7eb0))
+* **validation:** export maxLengthLocalized decorator ([35984d6](https://github.com/softkitit/softkit-core/commit/35984d674c6fa584704dfc3b07ce8e0d7ea2a942))
+* **validation:** update IsEmailLocalized to separate IsEmail and emailValidation options ([ac92f54](https://github.com/softkitit/softkit-core/commit/ac92f54f00ca09af654a6bc9377d19900dff7a8e))
+* **validation:** update type definitions in is-email-validator ([d288756](https://github.com/softkitit/softkit-core/commit/d2887560404e4815e26cc9d8b93b645f9acad3a7))
+
 ## [0.3.2](https://github.com/softkitit/softkit-core/compare/validation-0.3.1...validation-0.3.2) (2023-11-15)
 
 ## [0.3.1](https://github.com/softkitit/softkit-core/compare/validation-0.3.0...validation-0.3.1) (2023-11-09)
