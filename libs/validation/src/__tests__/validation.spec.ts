@@ -108,6 +108,34 @@ describe('validation e2e test', () => {
       },
     );
 
+    it.each([
+      {
+        emailArray: [faker.internet.email(), faker.internet.email()],
+        expectedStatus: 201,
+      },
+
+      {
+        emailArray: [faker.internet.email(), 'invalidEmail'],
+        expectedStatus: 400,
+      },
+
+      { emailArray: [], expectedStatus: 201 },
+    ])(
+      'should validate email array: %s',
+      async ({ emailArray, expectedStatus }) => {
+        const response = await app.inject({
+          method: 'POST',
+          url: '/sample',
+          payload: {
+            ...DEFAULT_SAMPLE_DTO,
+            emailArray,
+          },
+        });
+
+        expect(response.statusCode).toBe(expectedStatus);
+      },
+    );
+
     it.each(['invalidEmail', 'invalidEmail@', 'invalidEmail@.com'])(
       'email validation fail: %s',
       async (email) => {

@@ -5,6 +5,7 @@ export * from './is-boolean.validator';
 export * from './is-date.validator';
 export * from './is-json.validator';
 export * from './is-max.validator';
+export * from './is-max-length.validator';
 export * from './is-min.validator';
 export * from './is-not-empty.validator';
 export * from './is-number.validator';
