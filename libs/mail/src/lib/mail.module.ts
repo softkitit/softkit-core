@@ -35,16 +35,19 @@ export class MailgunMailModule {
     global: boolean = true,
   ): DynamicModule {
     const defaultProvidersAndExports = this.createDefaultProvidersAndExports();
+    const asyncConfigProvider = this.createAsyncProvider(options);
 
-    const asyncConfigProvider = MailgunMailModule.createAsyncProviders(options);
-
-    if (defaultProvidersAndExports.providers) {
-      defaultProvidersAndExports.providers.push(asyncConfigProvider);
-    }
+    const providers = [
+      asyncConfigProvider,
+      ...(defaultProvidersAndExports.providers || []),
+    ];
 
     return {
       global,
-      ...defaultProvidersAndExports,
+      module: MailgunMailModule,
+      imports: options.imports || [],
+      providers,
+      exports: [...(defaultProvidersAndExports.exports || [])],
     };
   }
 
@@ -65,15 +68,15 @@ export class MailgunMailModule {
           inject: [MAILGUN_CONFIG_TOKEN],
         },
       ],
-      exports: [AbstractMailService, MAILGUN_CLIENT_TOKEN, MailgunConfig],
+      exports: [AbstractMailService, MailgunConfig],
     };
   }
 
-  private static createAsyncProviders = (
+  private static createAsyncProvider = (
     options: MailgunAsyncOptions,
   ): Provider => {
     return {
-      provide: MAILGUN_CLIENT_TOKEN,
+      provide: MAILGUN_CONFIG_TOKEN,
       useFactory: options.useFactory,
       inject: options.inject,
     };
