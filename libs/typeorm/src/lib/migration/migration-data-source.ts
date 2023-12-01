@@ -1,9 +1,13 @@
-import { fileLoader } from 'nest-typed-config';
+import { Module } from '@nestjs/common';
 
 import * as path from 'node:path';
 import 'reflect-metadata';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { DbConfig } from '../config/db';
+import { NestFactory } from '@nestjs/core';
+import { setupYamlBaseConfigModule } from '@softkit/config';
+import { Type } from 'class-transformer';
+import { ValidateNested } from 'class-validator';
 
 const sourceDir = path.join(
   process.cwd(),
@@ -11,19 +15,36 @@ const sourceDir = path.join(
   `apps/${process.env['MIGRATION_APP_NAME']}/src`,
 );
 
+class RootConfig {
+  @Type(() => DbConfig)
+  @ValidateNested()
+  public readonly db!: DbConfig;
+}
+
+@Module({
+  imports: [setupYamlBaseConfigModule(`${sourceDir}/app`, RootConfig)],
+})
+class DatabaseMigrationModule {}
+
+async function bootstrap() {
+  const app = await NestFactory.createApplicationContext(
+    DatabaseMigrationModule,
+    {
+      logger: ['warn', 'error', 'fatal', 'verbose'],
+    },
+  );
+
+  return app.get(RootConfig).db;
+}
+
 const appDir = path.join(sourceDir, 'app');
 
-const { db } = fileLoader({
-  absolutePath: path.join(appDir, 'assets/.env.yaml'),
-  ignoreEnvironmentVariableSubstitution: false,
-})() as { db: DbConfig };
-
-// populate default values for missing properties from DbConfig file
-const defaultConfig = new DbConfig();
-
-export const AppDataSource = new DataSource({
-  ...defaultConfig,
-  ...(db as DbConfig),
-  entities: [path.join(appDir, 'database/entities/**/*{.ts,.js}')],
-  migrations: [path.join(appDir, 'database/migrations/**/!(*index){.ts,.js}')],
-} as DataSourceOptions);
+export const AppDataSource = bootstrap().then((db) => {
+  return new DataSource({
+    ...(db as DbConfig),
+    entities: [path.join(appDir, 'database/entities/**/*{.ts,.js}')],
+    migrations: [
+      path.join(appDir, 'database/migrations/**/!(*index){.ts,.js}'),
+    ],
+  } as DataSourceOptions);
+});

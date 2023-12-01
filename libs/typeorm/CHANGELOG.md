@@ -1,4 +1,40 @@
 Softkit Core Libraries Changelog
+## [0.4.10](https://github.com/softkitit/softkit-core/compare/typeorm-0.4.9...typeorm-0.4.10) (2023-11-30)
+
+
+### Bug Fixes
+
+* **typeorm:** updated the cls preset subscriber, added skip if an entity does not exist to the before update method ([9cce2e0](https://github.com/softkitit/softkit-core/commit/9cce2e0eb19fcf0b9419e0b6ccdb82ef710586b2))
+
+## [0.4.9](https://github.com/softkitit/softkit-core/compare/typeorm-0.4.8...typeorm-0.4.9) (2023-11-27)
+
+
+### Bug Fixes
+
+* **typeorm:** fixed a path to configs ([5ebafe3](https://github.com/softkitit/softkit-core/commit/5ebafe3387f06e050d3373d0495ec76206c4d1f3))
+
+## [0.4.8](https://github.com/softkitit/softkit-core/compare/typeorm-0.4.7...typeorm-0.4.8) (2023-11-27)
+
+
+### Bug Fixes
+
+* **typeorm:** updated the migration data source ([77207f5](https://github.com/softkitit/softkit-core/commit/77207f56d20e7c078927b61de5c61c4ff9990251))
+* **typeorm:** updated the migration data source ([2411e3c](https://github.com/softkitit/softkit-core/commit/2411e3ccea62755c3d5585df2240f3cbcd817801))
+
+## [0.4.7](https://github.com/softkitit/softkit-core/compare/typeorm-0.4.6...typeorm-0.4.7) (2023-11-24)
+
+
+### Bug Fixes
+
+* **typeorm:** updated the data source config ([90ce4b6](https://github.com/softkitit/softkit-core/commit/90ce4b6a97475f7066d91d9ca41d0e8bcadea6a4))
+
+## [0.4.6](https://github.com/softkitit/softkit-core/compare/typeorm-0.4.5...typeorm-0.4.6) (2023-11-22)
+
+
+### Bug Fixes
+
+* **typeorm:** updated the db extra settings ([2636d91](https://github.com/softkitit/softkit-core/commit/2636d913d29a7d4ae756f64ee10b73edbfd83ec2))
+
 ## [0.4.5](https://github.com/softkitit/softkit-core/compare/typeorm-0.4.4...typeorm-0.4.5) (2023-11-21)
 
 

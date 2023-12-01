@@ -1,0 +1,29 @@
+{
+  "name": "@softkit/mail",
+  "version": "0.2.0",
+  "type": "commonjs",
+  "keywords": [
+    "email",
+    "smtp",
+    "mailer",
+    "handlebars",
+    "template",
+    "email-template",
+    "nodemailer",
+    "node.js email",
+    "nestjs",
+    "automated emails",
+    "mail-sender"
+  ],
+  "dependencies": {
+    "form-data": "^4.0.0"
+  },
+  "peerDependencies": {
+    "mailgun.js": "^9.3.0",
+    "@nestjs/common": "^10.2.4",
+    "class-validator": "^0.14.0",
+    "class-transformer": "^0.5.1",
+    "@softkit/exceptions": "*",
+    "@softkit/validation": "*"
+  }
+}

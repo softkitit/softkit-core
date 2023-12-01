@@ -15,12 +15,33 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { BooleanType, IntegerType } from '@softkit/validation';
 import { NamingStrategyInterface } from 'typeorm/naming-strategy/NamingStrategyInterface';
 
+class DbSSLExtraConfig {
+  @IsBoolean()
+  @BooleanType
+  @IsOptional()
+  rejectUnauthorized?: boolean;
+
+  @IsString()
+  @IsOptional()
+  ca?: string;
+
+  @IsString()
+  @IsOptional()
+  key?: string;
+
+  @IsString()
+  @IsOptional()
+  cert?: string;
+}
+
 class DbExtraSettings {
   @IsInt()
   max = 100;
 
-  @IsBoolean()
-  ssl = false;
+  @Type(/* istanbul ignore next */ () => DbSSLExtraConfig)
+  @ValidateNested()
+  @IsOptional()
+  ssl?: DbSSLExtraConfig;
 }
 
 export class DbConfig {
@@ -67,6 +88,10 @@ export class DbConfig {
   @IsBoolean()
   @BooleanType
   keepConnectionAlive!: true;
+
+  @IsBoolean()
+  @BooleanType
+  ssl: boolean = false;
 
   @IsBoolean()
   @BooleanType

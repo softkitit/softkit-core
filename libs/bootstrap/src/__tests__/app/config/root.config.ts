@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { AppConfig } from '../../../lib/config/app';
+import { AppConfig } from '../../../lib/config/app.config';
 import { ValidateNested } from 'class-validator';
 import { SwaggerConfig } from '@softkit/swagger-utils';
 import { DbConfig } from '@softkit/typeorm';

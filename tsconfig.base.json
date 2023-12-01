@@ -56,6 +56,9 @@
       "@softkit/logger": [
         "libs/logger/src/index.ts"
       ],
+      "@softkit/mail": [
+        "libs/mail/src/index.ts"
+      ],
       "@softkit/platform-client": [
         "libs/clients/platform-client/src/index.ts"
       ],

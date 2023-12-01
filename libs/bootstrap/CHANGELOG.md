@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.2.3](https://github.com/softkitit/softkit-core/compare/bootstrap-0.2.2...bootstrap-0.2.3) (2023-11-28)
+
+
+### Bug Fixes
+
+* **bootstrap:** added cors configs ([e787fda](https://github.com/softkitit/softkit-core/commit/e787fda43d5396337fcaf1f3d5888f0a26bcaf4e))
+
 ## [0.2.2](https://github.com/softkitit/softkit-core/compare/bootstrap-0.2.1...bootstrap-0.2.2) (2023-11-15)
 
 ## [0.2.1](https://github.com/softkitit/softkit-core/compare/bootstrap-0.2.0...bootstrap-0.2.1) (2023-11-13)
