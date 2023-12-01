@@ -9,12 +9,4 @@ export class MessageContentDto {
   @IsStringLocalized()
   @IsOptional()
   html?: string;
-
-  @IsStringLocalized()
-  @IsOptional()
-  message?: string;
-
-  @IsStringLocalized()
-  @IsOptional()
-  templateId?: string;
 }

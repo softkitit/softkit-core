@@ -1,7 +1,5 @@
 import { Module } from '@nestjs/common';
 import { MailgunMailModule } from '../../mail.module';
-import { MailgunMockConfig } from './config/config.mock';
-import { MailgunConfig } from '../../config';
 import { MailService } from './mail/custom-mail.service';
 
 @Module({
@@ -9,16 +7,11 @@ import { MailService } from './mail/custom-mail.service';
     MailgunMailModule.forRoot({
       username: 'api',
       key: '',
-      domain: 'domain',
-      defaultFromEmail: 'default',
+      domain: 'sandboxea47440175b84daf8586d18c5d5e1f0a.mailgun.org',
+      defaultFromEmail: 'noreply@example.com',
+      defaultBccList: ['first@gmail.com', 'second@gmail.com'],
     }),
   ],
-  providers: [
-    MailService,
-    {
-      useClass: MailgunMockConfig,
-      provide: MailgunConfig,
-    },
-  ],
+  providers: [MailService],
 })
 export class TestingMailModule {}

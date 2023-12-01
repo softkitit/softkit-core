@@ -55,7 +55,6 @@ export class MailgunMailModule {
     return {
       module: MailgunMailModule,
       providers: [
-        MailgunConfig,
         {
           provide: AbstractMailService,
           useClass: MailgunService,
@@ -68,7 +67,7 @@ export class MailgunMailModule {
           inject: [MAILGUN_CONFIG_TOKEN],
         },
       ],
-      exports: [AbstractMailService, MailgunConfig],
+      exports: [AbstractMailService, MAILGUN_CLIENT_TOKEN],
     };
   }
 

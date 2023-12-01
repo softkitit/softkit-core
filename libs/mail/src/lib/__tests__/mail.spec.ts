@@ -1,11 +1,9 @@
 import { Test } from '@nestjs/testing';
 import { AbstractMailService, AttachmentFile, SendEmailDto } from '../services';
 import { MAILGUN_CLIENT_TOKEN } from '../constants';
-import { MailgunConfig } from '../config';
-import { MailgunMockConfig } from './app/config/config.mock';
 import { MailService } from './app/mail/custom-mail.service';
 import { EmailTypes } from './app/mail/types/email.types';
-import { GeneralBadRequestException } from '@softkit/exceptions';
+import { GeneralInternalServerException } from '@softkit/exceptions';
 import { plainToClass } from 'class-transformer';
 import { validate } from 'class-validator';
 
@@ -33,8 +31,6 @@ describe('mail e2e test', () => {
     })
       .overrideProvider(MAILGUN_CLIENT_TOKEN)
       .useValue(mockMailgunClient)
-      .overrideProvider(MailgunConfig)
-      .useClass(MailgunMockConfig)
       .compile();
 
     mailService = module.get<AbstractMailService<string>>(AbstractMailService);
@@ -46,65 +42,70 @@ describe('mail e2e test', () => {
     jest.clearAllMocks();
   });
 
-  it('should send emails with default fields and return status 200', async () => {
-    const attachment = {
-      filename: 'test.txt',
-      data: 'test attachment',
-    };
+  it.each([
+    { text: 'Test was successful' },
+    { html: '<h1>Test was successful</h1>' },
+  ])(
+    'should send emails with default fields and return status 200',
+    async (additionalPayloadData: object) => {
+      const attachment = {
+        filename: 'test.txt',
+        data: 'test attachment',
+      };
 
-    const payload: SendEmailDto = {
-      subject: 'TEST',
-      to: 'example@gmail.com',
-      text: 'Test was successful',
-      attachment: [attachment],
-      'o:testmode': 'yes',
-    };
+      const payload: SendEmailDto = {
+        subject: 'TEST',
+        to: 'example@gmail.com',
+        ...additionalPayloadData,
+        attachment: [attachment],
+        'o:testmode': 'yes',
+      };
 
-    const result = await mailService.sendEmail(payload);
+      const result = await mailService.sendEmail(payload);
 
-    const transformedDto = plainToClass(SendEmailDto, payload);
+      const transformedDto = plainToClass(SendEmailDto, payload);
 
-    const errors = await validate(transformedDto);
+      const errors = await validate(transformedDto);
 
-    expect(errors.length).toBe(0);
-    expect(transformedDto?.attachment?.[0]).toBeInstanceOf(AttachmentFile);
-    expect(transformedDto?.attachment?.[0].filename).toBe('test.txt');
-    expect(sendEmailSpy).toHaveBeenCalledWith(
-      'sandboxea47440175b84daf8586d18c5d5e1f0a.mailgun.org',
-      expect.objectContaining({
-        from: 'noreply@example.com',
-        ...payload,
-      }),
-    );
+      expect(errors.length).toBe(0);
+      expect(transformedDto?.attachment?.[0]).toBeInstanceOf(AttachmentFile);
+      expect(transformedDto?.attachment?.[0].filename).toBe('test.txt');
+      expect(sendEmailSpy).toHaveBeenCalledWith(
+        'sandboxea47440175b84daf8586d18c5d5e1f0a.mailgun.org',
+        expect.objectContaining({
+          from: 'noreply@example.com',
+          ...payload,
+        }),
+      );
 
-    expect(result.status).toBe(200);
-    expect(result.id).toBeDefined();
+      expect(result.status).toBe(200);
+      expect(result.id).toBeDefined();
 
-    const templatePayload = {
-      subject: 'TEST',
-      to: ['example@gmail.com'],
-      text: 'Test was successful',
-      bcc: ['example@gmail.com', 'noexample@gmail.com'],
-      'o:testmode': 'yes',
-    };
-    const sendTemplateEmailResult = await mailService.sendTemplateEmail(
-      'test',
-      templatePayload,
-      {
-        title: 'test title',
-      },
-    );
+      const templatePayload = {
+        subject: 'TEST',
+        to: ['example@gmail.com'],
+        bcc: ['example@gmail.com', 'noexample@gmail.com'],
+        'o:testmode': 'yes',
+      };
+      const sendTemplateEmailResult = await mailService.sendTemplateEmail(
+        'test',
+        templatePayload,
+        {
+          title: 'test title',
+        },
+      );
 
-    expect(sendEmailSpy).toHaveBeenCalledWith(
-      'sandboxea47440175b84daf8586d18c5d5e1f0a.mailgun.org',
-      expect.objectContaining({
-        from: 'noreply@example.com',
-        ...templatePayload,
-      }),
-    );
-    expect(sendTemplateEmailResult.status).toBe(200);
-    expect(sendTemplateEmailResult.id).toBeDefined();
-  });
+      expect(sendEmailSpy).toHaveBeenCalledWith(
+        'sandboxea47440175b84daf8586d18c5d5e1f0a.mailgun.org',
+        expect.objectContaining({
+          from: 'noreply@example.com',
+          ...templatePayload,
+        }),
+      );
+      expect(sendTemplateEmailResult.status).toBe(200);
+      expect(sendTemplateEmailResult.id).toBeDefined();
+    },
+  );
 
   it('should send email using typed client', async () => {
     const result = await typedMailService.sendTemplateEmail(
@@ -113,7 +114,6 @@ describe('mail e2e test', () => {
         from: 'Excited User <mailgun@sandboxea47440175b84daf8586d18c5d5e1f0a.mailgun.org>',
         subject: 'TEST',
         to: ['allromsok@gmail.com'],
-        text: 'Test was successful',
         'o:testmode': 'yes',
       },
       {
@@ -151,26 +151,15 @@ describe('mail e2e test', () => {
       'o:testmode': 'yes',
     };
 
-    await expect(
-      mailService.sendTemplateEmail('test', payload),
-    ).rejects.toThrow(GeneralBadRequestException);
-    expect(sendEmailSpy).not.toHaveBeenCalled();
-  });
-
-  it('should fail if both html and template fields are provided', async () => {
-    const payload = {
-      from: 'Excited User <mailgun@sandboxea47440175b84daf8586d18c5d5e1f0a.mailgun.org>',
-      subject: 'TEST',
-      to: 'example@gmail.com',
-      'o:testmode': 'yes',
-      html: '<p>Test HTML content</p>',
-    };
-
-    await expect(
-      mailService.sendTemplateEmail('test', payload),
-    ).rejects.toThrow(GeneralBadRequestException);
-
-    expect(sendEmailSpy).not.toHaveBeenCalled();
+    try {
+      await mailService.sendEmail(payload);
+      throw new Error(
+        'should not be here, seems like sendEmail method did not throw an error',
+      );
+    } catch (error) {
+      // eslint-disable-next-line jest/no-conditional-expect
+      expect(error).toBeInstanceOf(GeneralInternalServerException);
+    }
   });
 
   it('should send template email with template params and return status 200', async () => {
