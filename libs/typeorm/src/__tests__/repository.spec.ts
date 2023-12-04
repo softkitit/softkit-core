@@ -8,8 +8,9 @@ import {
   StartedDb,
   startPostgres,
 } from '@softkit/test-utils';
-import { UserEntity } from './app/user.entity';
+import { USER_PAGINATED_CONFIG, UserEntity } from './app/user.entity';
 import { UserRepository } from './app/user-repository.service';
+import { FilterOperator } from 'nestjs-paginate';
 import { setupTypeormModule } from '../lib/setup-typeorm-module';
 
 describe('start db and populate the entity', () => {
@@ -398,6 +399,42 @@ describe('start db and populate the entity', () => {
     });
 
     expect(savedEntity).toBeNull();
+  });
+
+  test('run in transaction success', async () => {
+    const toSaveSuccessFirst = {
+      password: faker.hacker.ingverb(),
+      firstName: faker.person.firstName() + '1',
+      lastName: faker.person.lastName(),
+      nullableStringField: faker.person.jobTitle(),
+    };
+
+    const toSaveSuccessSecond = {
+      ...toSaveSuccessFirst,
+      firstName: faker.person.firstName() + '2',
+    };
+
+    await testBaseRepository.runInTransaction(async (qr) => {
+      await qr.manager.save(UserEntity, toSaveSuccessFirst);
+      await qr.manager.save(UserEntity, toSaveSuccessSecond);
+    });
+
+    const savedEntity = await testBaseRepository.findAllPaginated(
+      {
+        path: 'users',
+        filter: {
+          firstName: [
+            FilterOperator.IN,
+            [toSaveSuccessFirst.firstName, toSaveSuccessSecond.firstName].join(
+              ',',
+            ),
+          ].join(':'),
+        },
+      },
+      USER_PAGINATED_CONFIG,
+    );
+
+    expect(savedEntity.data.length).toBe(2);
   });
 
   test('save and update', async () => {
