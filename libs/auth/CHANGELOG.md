@@ -1,4 +1,12 @@
 Softkit Core Libraries Changelog
+## [1.0.3](https://github.com/softkitit/softkit-core/compare/auth-1.0.2...auth-1.0.3) (2023-12-04)
+
+
+### Bug Fixes
+
+* **auth:** updated the refresh token guards path ([a40b90f](https://github.com/softkitit/softkit-core/commit/a40b90f246a5b5bedc0e45d5ea04e8d7d4e49a11))
+* **auth:** updated the refresh token guards to get current user data in endpoints ([d51f67e](https://github.com/softkitit/softkit-core/commit/d51f67e150354cc169204e5a4acba80c88c2e3a5))
+
 ## [1.0.2](https://github.com/softkitit/softkit-core/compare/auth-1.0.1...auth-1.0.2) (2023-11-21)
 
 
