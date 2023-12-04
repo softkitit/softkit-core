@@ -13,7 +13,7 @@ export class RefreshTokenAuthController {
     return 'hello';
   }
 
-  @Get('/context-user')
+  @Get('/user-context')
   @UseGuards(RefreshJwtAuthGuard)
   async refreshAuthGuardContextUserFromPayload(
     @CurrentUser() user: IRefreshTokenPayload,

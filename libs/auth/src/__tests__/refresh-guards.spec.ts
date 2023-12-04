@@ -62,7 +62,7 @@ describe('test refresh auth', () => {
 
       const response = await app.inject({
         method: 'GET',
-        url: 'refresh-auth/context-user',
+        url: 'refresh-auth/user-context',
         headers: {
           authorization: `Bearer ${tokens.refreshToken}`,
         },
