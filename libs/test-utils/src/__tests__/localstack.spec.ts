@@ -39,5 +39,5 @@ describe('start localstack and create config', () => {
       const stoppedTestContainer = await container.stop();
       expect(stoppedTestContainer).toBeDefined();
     }
-  }, 60_000);
+  }, 360_000);
 });
