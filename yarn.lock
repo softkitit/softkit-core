@@ -6847,7 +6847,7 @@ __metadata:
     nanoid: ^3.3.6
     nest-typed-config: ^2.9.1
     nestjs-cls: ^3.5.1
-    nestjs-paginate: ^8.2.1
+    nestjs-paginate: ^8.6.0
     nestjs-pino: ^3.4.0
     newrelic: ^11.1.0
     ngx-deploy-npm: ^7.0.1
@@ -17958,7 +17958,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nestjs-paginate@npm:^8.2.1":
+"nestjs-paginate@npm:^8.6.0":
   version: 8.6.0
   resolution: "nestjs-paginate@npm:8.6.0"
   dependencies:

@@ -116,7 +116,7 @@
     "nanoid": "^3.3.6",
     "nest-typed-config": "^2.9.1",
     "nestjs-cls": "^3.5.1",
-    "nestjs-paginate": "^8.2.1",
+    "nestjs-paginate": "^8.6.0",
     "nestjs-pino": "^3.4.0",
     "newrelic": "^11.1.0",
     "opossum": "^8.1.0",
