@@ -10,7 +10,7 @@
     "cls auto preset"
   ],
   "peerDependencies": {
-    "nestjs-paginate": "^8.2.1",
+    "nestjs-paginate": "^8.6.0",
     "typeorm-naming-strategies": "^4.1.0",
     "typeorm-transactional": "^0.4.1",
     "@softkit/validation": "*",

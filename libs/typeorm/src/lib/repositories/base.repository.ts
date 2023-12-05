@@ -74,7 +74,7 @@ export abstract class BaseRepository<
 
     const updatedConfig = {
       ...config,
-      where,
+      where: Object.keys(where).length > 0 ? where : undefined,
     } satisfies PaginateConfig<ENTITY>;
 
     return paginate(query, this, updatedConfig as PaginateConfig<ENTITY>);
