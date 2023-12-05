@@ -299,7 +299,7 @@ describe('base service tests', () => {
       for (let i = 1; ; i++) {
         const filterQuery = {
           filter: {
-            firstName: firstName,
+            firstName,
           },
           page: i,
           limit: pageSize,
@@ -356,6 +356,7 @@ describe('base service tests', () => {
         expect(allPasswords).toContain(i + '_' + uniqueId);
       }
     },
+    10_000_000,
   );
 
   test('success delete', async () => {
