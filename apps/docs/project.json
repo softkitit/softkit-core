@@ -8,7 +8,9 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "docusaurus build apps/docs"
+          "docusaurus build apps/docs",
+          "find ./docs -name \"*.html\" -type f -exec sed -i '' 's/\\/src//g' {} +",
+          "sed -i '' '/assets\\/navigation.js/d' ./docs/index.html"
         ]
       },
       "configurations": {

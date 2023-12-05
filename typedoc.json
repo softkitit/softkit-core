@@ -1,14 +1,21 @@
 {
-  "entryPoints": ["libs/**/src/index.ts"],
-  "out": "./docs",
-  "name": "Softkit Documentation",
-  "exclude": [
-  "**/__tests__/**",
-  "**/*.spec.ts",
-  "**/*.test.ts",
-  "jest.config.ts"
-  ],
-  "excludePrivate": true,
-  "extends": ["./typedoc.base.json"],
-  "logLevel": "Verbose"
+   "entryPoints": [
+      "libs/**/src/index.ts"
+   ],
+   "out": "./docs",
+   "name": "Softkit Documentation",
+   "exclude": [
+      "**/__tests__/**"
+   ],
+   "excludePrivate": true,
+   "extends": [
+      "./typedoc.base.json"
+   ],
+   "logLevel": "Verbose",
+   "plugin": [
+      "typedoc-plugin-coverage",
+      "typedoc-plugin-markdown",
+   ],
+  "tsconfig": "./tsconfig.typedoc.json",
+  "readme": "TYPEDOC_README.md"
 }

@@ -4,7 +4,8 @@
 /** @type {import("@docusaurus/types").Config} */
 const config = {
   title: 'Softkit Docs',
-  tagline: 'Softkit makes it easy to build modern applications with the best developer experience.',
+  tagline:
+    'Softkit makes it easy to build modern applications with the best developer experience.',
   favicon: 'img/favicon.ico',
   trailingSlash: true,
 
@@ -26,6 +27,7 @@ const config = {
 
   plugins: [
     'plugin-image-zoom',
+    'docusaurus-plugin-typedoc',
     [
       '@docusaurus/plugin-ideal-image',
       {
@@ -42,7 +44,7 @@ const config = {
       '@docusaurus/preset-classic',
       {
         docs: {
-          routeBasePath: "/",
+          routeBasePath: '/',
           showLastUpdateAuthor: true,
           showLastUpdateTime: true,
           sidebarPath: require.resolve('./sidebars.js'),
@@ -59,9 +61,9 @@ const config = {
     /** @type {import("@docusaurus/preset-classic").ThemeConfig} */
     ({
       algolia: {
-        appId: "Z9EWM9H0BN",
-        apiKey: "aab3af965df3c8049e5da4701e289618",
-        indexName: "softkit",
+        appId: 'Z9EWM9H0BN',
+        apiKey: 'aab3af965df3c8049e5da4701e289618',
+        indexName: 'softkit',
         contextualSearch: true,
       },
       navbar: {
@@ -70,7 +72,7 @@ const config = {
         logo: {
           alt: 'Softkit',
           src: 'img/logo.svg',
-          href: "https://softkit.dev/",
+          href: 'https://softkit.dev/',
         },
         items: [
           {
@@ -78,12 +80,12 @@ const config = {
             sidebarId: 'baseSidebar',
             position: 'left',
             label: 'Getting Started',
-            activeBaseRegex: '^/$'
+            activeBaseRegex: '^/$',
           },
           {
-            to: "/faq",
-            position: "left",
-            label: "FAQ",
+            to: '/faq',
+            position: 'left',
+            label: 'FAQ',
           },
           {
             href: 'https://github.com/softkitit/docusaurus',
