@@ -57,6 +57,31 @@ describe('test refresh auth', () => {
       expect(response.body).toEqual('hello');
     });
 
+    it('should accept refresh token and return a current user', async () => {
+      const tokens = await tokenService.signTokens(payloadToSign);
+
+      const response = await app.inject({
+        method: 'GET',
+        url: 'refresh-auth/user-context',
+        headers: {
+          authorization: `Bearer ${tokens.refreshToken}`,
+        },
+      });
+
+      expect(response.statusCode).toEqual(HttpStatus.OK);
+
+      const userDataFromToken = await tokenService.verifyRefreshToken(
+        tokens.refreshToken,
+      );
+
+      const responseJson = JSON.parse(response.body);
+
+      expect(responseJson.sub).toBe(userDataFromToken.sub);
+      expect(responseJson.email).toBe(userDataFromToken.email);
+      expect(responseJson.iat).toBeDefined();
+      expect(responseJson.exp).toBeDefined();
+    });
+
     it('should reject access token with 500', async () => {
       const tokens = await tokenService.signTokens(payloadToSign);
 

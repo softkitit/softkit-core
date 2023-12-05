@@ -1,0 +1,5 @@
+export enum EmailTypes {
+  SIGNUP_EMAIL = 'path/a/b',
+  WELCOME = 'WELCOME_TEMPLATE_ID',
+  CHANGE_PASSWORD = 'CHANGE_PASSWORD_TEMPLATE_ID',
+}

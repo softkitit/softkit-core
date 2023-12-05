@@ -18,9 +18,8 @@ export class RefreshJwtAuthGuard extends AuthGuard('refresh-jwt') {
    * @returns super.canActivate(context)
    */
   override async canActivate(context: ExecutionContext): Promise<boolean> {
-    const refreshToken = ExtractJwt.fromAuthHeaderAsBearerToken()(
-      context.switchToHttp().getRequest(),
-    );
+    const request = context.switchToHttp().getRequest();
+    const refreshToken = ExtractJwt.fromAuthHeaderAsBearerToken()(request);
 
     if (!refreshToken) {
       // guards are called before interceptors, that's why general loggers are not available here
@@ -30,7 +29,7 @@ export class RefreshJwtAuthGuard extends AuthGuard('refresh-jwt') {
       throw new GeneralUnauthorizedException();
     }
 
-    await this.tokenService.verifyRefreshToken(refreshToken);
+    request.user = await this.tokenService.verifyRefreshToken(refreshToken);
 
     return true;
   }
