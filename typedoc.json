@@ -2,7 +2,7 @@
   "entryPoints": [
     "libs/**/src/index.ts"
   ],
-  "out": "./docs",
+  "out": "apps/docs/docs",
   "name": "Softkit Documentation",
   "exclude": [
     "**/__tests__/**"
@@ -14,6 +14,7 @@
     "typedoc-plugin-coverage",
     "typedoc-plugin-markdown"
   ],
+  "categorizeByGroup": true,
   "tsconfig": "./tsconfig.typedoc.json",
   "readme": "TYPEDOC_README.md"
 }

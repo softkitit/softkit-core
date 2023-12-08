@@ -9,9 +9,9 @@
       "options": {
         "commands": [
           "docusaurus build apps/docs",
-          "find ./docs -name \"*.html\" -type f -exec sed -i '' 's/\\/src//g' {} +",
-          "sed -i '' '/assets\\/navigation.js/d' ./docs/index.html"
-        ]
+          "find ./apps/docs/docs/api -type f -name 'index.md' -exec sed -i '' -E 's/([a-zA-Z]+)\\/src/\\1/g' {} +"
+        ],
+        "parallel": false
       },
       "configurations": {
         "development": {},
@@ -30,7 +30,7 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "docusaurus start apps/docs"
+          "apps/docs/serve.sh"
         ]
       }
     }

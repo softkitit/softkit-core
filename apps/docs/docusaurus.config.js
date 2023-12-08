@@ -24,10 +24,17 @@ const config = {
     defaultLocale: 'en',
     locales: ['en', 'uk'],
   },
-
+  markdown: {
+    format: 'detect',
+  },
   plugins: [
     'plugin-image-zoom',
-    'docusaurus-plugin-typedoc',
+    [
+      'docusaurus-plugin-typedoc',
+      {
+        out: 'apps/docs/docs/api',
+      },
+    ],
     [
       '@docusaurus/plugin-ideal-image',
       {
