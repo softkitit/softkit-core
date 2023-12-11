@@ -7,6 +7,14 @@ Softkit Core Libraries Changelog
 * **typeorm-service:** lint readme file ([7b900e4](https://github.com/softkitit/softkit-core/commit/7b900e4487a1488b55829b2a862b93712e9fba24))
 * **typeorm-service:** update nestjs-paginate version and test timeout ([50d4682](https://github.com/softkitit/softkit-core/commit/50d4682076c74c27f06afe2467d3df6114b214b3))
 
+## [0.0.13](https://github.com/softkitit/softkit-core/compare/typeorm-service-0.0.12...typeorm-service-0.0.13) (2023-12-11)
+
+
+### Bug Fixes
+
+* **typeorm-service:** lint readme file ([7b900e4](https://github.com/softkitit/softkit-core/commit/7b900e4487a1488b55829b2a862b93712e9fba24))
+* **typeorm-service:** update nestjs-paginate version and test timeout ([50d4682](https://github.com/softkitit/softkit-core/commit/50d4682076c74c27f06afe2467d3df6114b214b3))
+
 ## [0.0.12](https://github.com/softkitit/softkit-core/compare/typeorm-service-0.0.11...typeorm-service-0.0.12) (2023-11-19)
 
 
