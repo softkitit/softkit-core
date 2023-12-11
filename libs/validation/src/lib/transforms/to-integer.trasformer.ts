@@ -6,6 +6,10 @@ import { i18nString } from '../utils';
 export const toInteger = (params: TransformFnParams): number | undefined => {
   let value = params.value;
 
+  if (value === null || value === undefined) {
+    return value;
+  }
+
   const constraint = /^-?(?!0\d)\d+$/;
 
   /**
