@@ -18,77 +18,185 @@ const sidebars = {
       type: 'category',
       label: 'Introduction',
       link: {
-        type: "doc",
-        id: "intro",
+        type: 'doc',
+        id: 'intro',
       },
-      items: [
-        "intro",
-        "intro/general-information"
-      ],
+      items: ['intro', 'intro/general-information'],
     },
     {
       type: 'category',
       label: 'How To',
       link: {
-        type: "doc",
-        id: "how-to/index",
+        type: 'doc',
+        id: 'how-to/index',
       },
-      items: [
-      ],
+      items: [],
     },
     {
       type: 'category',
       label: 'Available Features',
       link: {
-        type: "doc",
-        id: "features/index",
+        type: 'doc',
+        id: 'features/index',
       },
       items: [
         {
-          type: "category",
-          label: "Code Generators",
+          type: 'category',
+          label: 'Code Generators',
           link: {
-            type: "doc",
-            id: "features/code-generators/index",
+            type: 'doc',
+            id: 'features/code-generators/index',
           },
           items: [
-            "features/code-generators/microservice-generator",
-            "features/code-generators/library-generator",
-            "features/code-generators/service-generator",
-            "features/code-generators/backend-client-generator",
-          ]
+            'features/code-generators/microservice-generator',
+            'features/code-generators/library-generator',
+            'features/code-generators/service-generator',
+            'features/code-generators/backend-client-generator',
+          ],
         },
-        "features/error-handling",
-        "features/localization"
+        'features/error-handling',
+        'features/localization',
       ],
     },
     {
       type: 'category',
       label: 'About Softkit',
       link: {
-        type: "doc",
-        id: "about/index",
+        type: 'doc',
+        id: 'about/index',
       },
-      items: [
-        'about/licensing',
-        'about/product-roadmap',
-      ],
+      items: ['about/licensing', 'about/product-roadmap'],
     },
     {
       type: 'category',
       label: 'FAQ',
       link: {
-        type: "doc",
-        id: "faq/index",
+        type: 'doc',
+        id: 'faq/index',
+      },
+      items: [],
+    },
+    {
+      type: 'category',
+      label: 'API Documentation',
+      link: {
+        type: 'doc',
+        id: 'api/index',
       },
       items: [
+        {
+          type: 'doc',
+          label: 'Async Storage',
+          id: 'api/async-storage/src/index',
+        },
+        {
+          type: 'doc',
+          label: 'Auth',
+          id: 'api/auth/src/index',
+        },
+        {
+          type: 'doc',
+          label: 'Bootstrap',
+          id: 'api/bootstrap/src/index',
+        },
+        {
+          type: 'doc',
+          label: 'Platform Client',
+          id: 'api/clients/platform-client/src/index',
+        },
+        {
+          type: 'doc',
+          label: 'Common Types',
+          id: 'api/common-types/src/index',
+        },
+        {
+          type: 'doc',
+          label: 'Config',
+          id: 'api/config/src/index',
+        },
+        {
+          type: 'doc',
+          label: 'Crypto',
+          id: 'api/crypto/src/index',
+        },
+        {
+          type: 'doc',
+          label: 'Exceptions',
+          id: 'api/exceptions/src/index',
+        },
+        {
+          type: 'doc',
+          label: 'File Storage',
+          id: 'api/file-storage/src/index',
+        },
+        {
+          type: 'doc',
+          label: 'Health Check',
+          id: 'api/health-check/src/index',
+        },
+        {
+          type: 'doc',
+          label: 'I18n',
+          id: 'api/i18n/src/index',
+        },
+        {
+          type: 'doc',
+          label: 'Logger',
+          id: 'api/logger/src/index',
+        },
+        {
+          type: 'doc',
+          label: 'Mail',
+          id: 'api/mail/src/index',
+        },
+        {
+          type: 'doc',
+          label: 'Redis',
+          id: 'api/redis/src/index',
+        },
+        {
+          type: 'doc',
+          label: 'Resource Plugin',
+          id: 'api/resource-plugin/src/index',
+        },
+        {
+          type: 'doc',
+          label: 'Server HTTP Client',
+          id: 'api/server-http-client/src/index',
+        },
+        {
+          type: 'doc',
+          label: 'String Utils',
+          id: 'api/string-utils/src/index',
+        },
+        {
+          type: 'doc',
+          label: 'Swagger Utils',
+          id: 'api/swagger-utils/src/index',
+        },
+        {
+          type: 'doc',
+          label: 'Test Utils',
+          id: 'api/test-utils/src/index',
+        },
+        {
+          type: 'doc',
+          label: 'TypeORM',
+          id: 'api/typeorm/src/index',
+        },
+        {
+          type: 'doc',
+          label: 'Typeorm Service',
+          id: 'api/typeorm-service/src/index',
+        },
+        {
+          type: 'doc',
+          label: 'Validation',
+          id: 'api/validation/src/index',
+        },
       ],
     },
-
-
   ],
-
-
 };
 
 module.exports = sidebars;

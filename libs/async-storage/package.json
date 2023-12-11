@@ -12,6 +12,6 @@
   ],
   "peerDependencies": {
     "nestjs-cls": "^3.5.1",
-    "fastify": "4.22.0"
+    "fastify": "4.24.3"
   }
 }

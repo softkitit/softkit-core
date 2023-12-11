@@ -11,7 +11,7 @@
     "@softkit/validation": "*",
     "@nestjs/swagger": "^7.1.10",
     "class-transformer": "^0.5.1",
-    "@aws-sdk/credential-provider-node": "3.451.0"
+    "@aws-sdk/credential-provider-node": "3.465.0"
   },
   "type": "commonjs",
   "main": "./src/index.js",

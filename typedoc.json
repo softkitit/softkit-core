@@ -1,0 +1,20 @@
+{
+  "entryPoints": [
+    "libs/**/src/index.ts"
+  ],
+  "out": "apps/docs/docs",
+  "name": "Softkit Documentation",
+  "exclude": [
+    "**/__tests__/**"
+  ],
+  "excludePrivate": true,
+  "extends": ["./typedoc.base.json"],
+  "logLevel": "Verbose",
+  "plugin": [
+    "typedoc-plugin-coverage",
+    "typedoc-plugin-markdown"
+  ],
+  "categorizeByGroup": true,
+  "tsconfig": "./tsconfig.typedoc.json",
+  "readme": "TYPEDOC_README.md"
+}
