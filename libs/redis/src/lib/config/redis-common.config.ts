@@ -15,6 +15,18 @@ export class RedisCommonConfig {
   @Min(0)
   @IntegerType
   commandTimeout: number = 5000;
+
+  @IsString()
+  @IsOptional()
+  host?: string;
+
+  @IntegerType
+  @IsInt()
+  @IsOptional()
+  @Min(0)
+  @Max(65_535)
+  port?: number;
+
   /**
    * Enable/disable keep-alive functionality.
    * @link https://nodejs.org/api/net.html#socketsetkeepaliveenable-initialdelay
@@ -24,6 +36,7 @@ export class RedisCommonConfig {
   @Min(0)
   @IntegerType
   keepAlive: number = 0;
+
   /**
    * Enable/disable the use of Nagle's algorithm.
    * @link https://nodejs.org/api/net.html#socketsetnodelaynodelay
@@ -128,10 +141,12 @@ export class RedisCommonConfig {
    *
    * @default 20
    */
+
   @IsInt()
   @Min(0)
   @IntegerType
-  maxRetriesPerRequest: number = 20;
+  @IsOptional()
+  maxRetriesPerRequest: number | null = 20;
 
   /**
    * @default 10000
@@ -175,6 +190,7 @@ export class RedisCommonConfig {
   @IsBoolean()
   @BooleanType
   enableOfflineQueue: boolean = true;
+
   /**
    * The client will sent an INFO command to check whether the server is still loading data from the disk (
    * which happens when the server is just launched) when the connection is established, and only wait until
