@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.4.11](https://github.com/softkitit/softkit-core/compare/typeorm-0.4.10...typeorm-0.4.11) (2023-12-11)
+
+
+### Bug Fixes
+
+* **typeorm:** fixed paginate default logic with updated version of nestjs paginate ([62fca07](https://github.com/softkitit/softkit-core/commit/62fca07434aebd78702b9d3d1897c2ea97ea05fe))
+
 ## [0.4.10](https://github.com/softkitit/softkit-core/compare/typeorm-0.4.9...typeorm-0.4.10) (2023-11-30)
 
 
