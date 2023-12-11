@@ -189,6 +189,20 @@ export async function bootstrapBaseWebApp(
   app.useLogger(logger);
   app.flushLogs();
 
+  process.on('uncaughtException', function (err) {
+    // Handle the error safely
+    logger.error('Uncaught exception: %o', err);
+  });
+
+  process.on('unhandledRejection', (reason, promise) => {
+    // Handle the error safely
+    logger.error(
+      'Unhandled Rejection at: Promise: %o, reason: %s',
+      promise,
+      reason,
+    );
+  });
+
   const httpAdapterHost = app.get(HttpAdapterHost);
   app.useGlobalPipes(new I18nValidationPipe(DEFAULT_VALIDATION_OPTIONS));
 
