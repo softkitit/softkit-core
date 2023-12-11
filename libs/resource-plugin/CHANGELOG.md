@@ -6,6 +6,13 @@ Softkit Core Libraries Changelog
 
 * **resource-plugin:** add nest-typed-config in jest ignore for lib generator ([9b575e6](https://github.com/softkitit/softkit-core/commit/9b575e6713aee84e019891e5b35afdfe9d0c67c2))
 
+## [0.4.1](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.4.0...resource-plugin-0.4.1) (2023-12-11)
+
+
+### Bug Fixes
+
+* **resource-plugin:** add nest-typed-config in jest ignore for lib generator ([9b575e6](https://github.com/softkitit/softkit-core/commit/9b575e6713aee84e019891e5b35afdfe9d0c67c2))
+
 ## [0.4.0](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.3.2...resource-plugin-0.4.0) (2023-11-20)
 
 
