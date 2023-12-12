@@ -1,4 +1,6 @@
 Softkit Core Libraries Changelog
+## [0.1.1](https://github.com/softkitit/softkit-core/compare/file-storage-0.1.0...file-storage-0.1.1) (2023-12-11)
+
 ## 0.1.0 (2023-11-21)
 
 

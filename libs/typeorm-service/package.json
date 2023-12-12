@@ -1,6 +1,6 @@
 {
   "name": "@softkit/typeorm-service",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "type": "commonjs",
   "keywords": [
     "services",
@@ -17,7 +17,7 @@
     "@softkit/exceptions": "*",
     "class-transformer": "^0.5.1",
     "typeorm": "~0.3.17",
-    "nestjs-paginate": "^8.2.1",
+    "nestjs-paginate": "^8.6.0",
     "typeorm-transactional": "^0.4.1"
   }
 }

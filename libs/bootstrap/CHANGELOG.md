@@ -1,4 +1,18 @@
 Softkit Core Libraries Changelog
+## [0.2.4](https://github.com/softkitit/softkit-core/compare/bootstrap-0.2.3...bootstrap-0.2.4) (2023-12-11)
+
+
+### Bug Fixes
+
+* **bootstrap:** lint readme file ([7a808e3](https://github.com/softkitit/softkit-core/commit/7a808e35a84c4b04707ffad42ff9be74d9735e4f))
+
+## [0.2.4](https://github.com/softkitit/softkit-core/compare/bootstrap-0.2.3...bootstrap-0.2.4) (2023-12-11)
+
+
+### Bug Fixes
+
+* **bootstrap:** lint readme file ([7a808e3](https://github.com/softkitit/softkit-core/commit/7a808e35a84c4b04707ffad42ff9be74d9735e4f))
+
 ## [0.2.3](https://github.com/softkitit/softkit-core/compare/bootstrap-0.2.2...bootstrap-0.2.3) (2023-11-28)
 
 
