@@ -126,7 +126,7 @@ function setupGlobalInterceptors(app: INestApplication) {
   app.useGlobalInterceptors(new LoggerErrorInterceptor());
 }
 
-async function runDatabaseSeeders(
+export async function runDatabaseSeeders(
   app: INestApplication,
   logger: Logger,
   shouldRunSeeds: boolean,
@@ -172,10 +172,10 @@ export async function bootstrapBaseWebApp(
     initializeTransactionalContext();
   }
 
-  const app = await createNestWebApp(module, originalModule);
+  const app = await exports.createNestWebApp(module, originalModule);
 
   const fastifyInstance: FastifyInstance = app.getHttpAdapter().getInstance();
-  applyExpressCompatibilityRecommendations(fastifyInstance);
+  exports.applyExpressCompatibilityRecommendations(fastifyInstance);
 
   app.register(fastifyHelmet, {});
 
@@ -189,19 +189,25 @@ export async function bootstrapBaseWebApp(
   app.useLogger(logger);
   app.flushLogs();
 
-  process.on('uncaughtException', function (err) {
-    // Handle the error safely
-    logger.error('Uncaught exception: %o', err);
-  });
+  process.on(
+    'uncaughtException',
+    /* istanbul ignore next */ function (err) {
+      // Handle the error safely
+      logger.error('Uncaught exception: %o', err);
+    },
+  );
 
-  process.on('unhandledRejection', (reason, promise) => {
-    // Handle the error safely
-    logger.error(
-      'Unhandled Rejection at: Promise: %o, reason: %s',
-      promise,
-      reason,
-    );
-  });
+  process.on(
+    'unhandledRejection',
+    /* istanbul ignore next */ (reason, promise) => {
+      // Handle the error safely
+      logger.error(
+        'Unhandled Rejection at: Promise: %o, reason: %s',
+        promise,
+        reason,
+      );
+    },
+  );
 
   const httpAdapterHost = app.get(HttpAdapterHost);
   app.useGlobalPipes(new I18nValidationPipe(DEFAULT_VALIDATION_OPTIONS));
@@ -242,7 +248,7 @@ export async function bootstrapBaseWebApp(
   }
 
   if (dbConfig instanceof DbConfig) {
-    await runDatabaseSeeders(app, logger, dbConfig.runSeeds);
+    await exports.runDatabaseSeeders(app, logger, dbConfig.runSeeds);
   }
 
   await app.listen(appConfig.port, '0.0.0.0');

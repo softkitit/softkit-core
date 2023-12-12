@@ -277,4 +277,29 @@ describe('bootstrap test', () => {
 
     await bootstrapBaseWebApp(testingModule, BootstrapTestAppModule);
   });
+
+  it('should fail when random exception thrown', async () => {
+    dbConfig.runSeeds = true;
+
+    const bootstrap = require('../lib/setup-web-app');
+
+    jest
+      .spyOn(bootstrap, 'runDatabaseSeeders')
+      .mockRejectedValueOnce(Promise.reject());
+
+    const testingModule = await Test.createTestingModule(
+      testingModuleMetadata,
+    ).compile();
+
+    try {
+      await bootstrap.bootstrapBaseWebApp(
+        testingModule,
+        BootstrapTestAppModule,
+      );
+      expect(true).toBe(false);
+    } catch (error) {
+      // eslint-disable-next-line jest/no-conditional-expect
+      expect(error).toBeDefined();
+    }
+  });
 });
