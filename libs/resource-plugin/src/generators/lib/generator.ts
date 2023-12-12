@@ -21,7 +21,7 @@ export async function libGenerator(tree: Tree, options: LibGeneratorSchema) {
 
   const libRoot = readProjectConfiguration(tree, options.name).root;
 
-  updateJestConfig(tree);
+  updateJestConfig(tree, libRoot);
 
   if (options.config) {
     const configFolder = joinPathFragments(__dirname, './files/config');
@@ -52,12 +52,11 @@ export async function libGenerator(tree: Tree, options: LibGeneratorSchema) {
   }
 }
 
-function updateJestConfig(tree: Tree) {
-  const jestConfigFile = tree
-    .listChanges()
-    .find((c) => c.path.includes('jest.config.ts'));
+function updateJestConfig(tree: Tree, libRoot: string) {
+  const jestConfigPath = joinPathFragments(libRoot, 'jest.config.ts');
 
-  const fileConfig = jestConfigFile.content.toString().split(EOL);
+  const jestConfigContent = tree.read(jestConfigPath, 'utf8');
+  const fileConfig = jestConfigContent.split(EOL);
 
   const newJestConfigFile = [
     ...fileConfig.slice(0, -3),
@@ -65,7 +64,7 @@ function updateJestConfig(tree: Tree) {
     ...fileConfig.slice(-3),
   ].join(EOL);
 
-  tree.write(jestConfigFile.path, newJestConfigFile);
+  tree.write(jestConfigPath, newJestConfigFile);
 }
 
 function updateEslintJson(tree: Tree, libRoot: string) {

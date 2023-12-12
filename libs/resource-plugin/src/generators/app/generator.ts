@@ -59,12 +59,11 @@ function updateProjectJson(
   });
 }
 
-function updateJestConfig(tree: Tree) {
-  const jestConfigFile = tree
-    .listChanges()
-    .find((c) => c.path.includes('jest.config.ts'));
+function updateJestConfig(tree: Tree, appRoot: string) {
+  const jestConfigPath = joinPathFragments(appRoot, 'jest.config.ts');
 
-  const fileConfig = jestConfigFile.content.toString().split(EOL);
+  const jestConfigContent = tree.read(jestConfigPath, 'utf8');
+  const fileConfig = jestConfigContent.split(EOL);
 
   const newJestConfigFile = [
     ...fileConfig.slice(0, -3),
@@ -72,7 +71,7 @@ function updateJestConfig(tree: Tree) {
     ...fileConfig.slice(-3),
   ].join(EOL);
 
-  tree.write(jestConfigFile.path, newJestConfigFile);
+  tree.write(jestConfigPath, newJestConfigFile);
 }
 
 export async function appGenerator(tree: Tree, options: AppGeneratorSchema) {
@@ -90,7 +89,7 @@ export async function appGenerator(tree: Tree, options: AppGeneratorSchema) {
   for (const f of allFilesInSrc) {
     tree.delete(f.path);
   }
-  updateJestConfig(tree);
+  updateJestConfig(tree, appRoot);
 
   const generatorFolder = joinPathFragments(__dirname, './files');
   generateFiles(tree, generatorFolder, appRoot, {
