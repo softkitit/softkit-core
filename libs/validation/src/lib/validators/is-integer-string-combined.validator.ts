@@ -3,12 +3,14 @@ import { ValidatorOptions } from 'class-validator';
 import { MaxLocalized, MinLocalized } from './primitives';
 import { Transform } from 'class-transformer';
 import { toInteger } from '../transforms/';
+import { IsIntegerLocalized } from './primitives/is-int.validator';
 
 export interface IsIntegerStringCombinedOptions {
   min?: number;
   max?: number;
   minValidationOptions?: ValidatorOptions;
   maxValidationOptions?: ValidatorOptions;
+  numberValidationOptions?: ValidatorOptions;
 }
 
 /**
@@ -22,6 +24,7 @@ export const IsIntegerStringCombinedLocalized = ({
   maxValidationOptions = {},
 }: IsIntegerStringCombinedOptions = {}) => {
   const decorators = [
+    IsIntegerLocalized(),
     Transform(toInteger),
     min ? MinLocalized(min, minValidationOptions) : undefined,
     max ? MaxLocalized(max, maxValidationOptions) : undefined,
