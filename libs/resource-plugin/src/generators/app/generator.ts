@@ -12,6 +12,7 @@ import { paramCase, pascalCase, snakeCase } from 'change-case';
 import i18nGenerator from '../i18n/generator';
 import { runLint } from '../common/run-lint';
 import { EOL } from 'node:os';
+import { existsSync, readFileSync } from 'node:fs';
 
 function updateProjectJson(
   tree: Tree,
@@ -59,8 +60,44 @@ function updateProjectJson(
   });
 }
 
-function updateJestConfig(tree: Tree, appRoot: string) {
+function updateTSConfig(tree: Tree, appRoot: string) {
+  const tsConfigFilePath = joinPathFragments(appRoot, 'tsconfig.spec.json');
+  const tsConfigContent = tree.read(tsConfigFilePath, 'utf8');
+
+  const tsConfig = JSON.parse(tsConfigContent);
+
+  const defaultPathToGlobalDts = '../../global.d.ts';
+  const globalDtsPath = joinPathFragments(appRoot, defaultPathToGlobalDts);
+
+  // eslint-disable-next-line security/detect-non-literal-fs-filename
+  if (existsSync(globalDtsPath)) {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
+    const fileContent = readFileSync(globalDtsPath, 'utf8');
+    if (!fileContent.includes('/// <reference types="jest-extended" />')) {
+      throw new Error(
+        `Looks like a developer mistake. "global.d.ts" found, but it does not contain the required reference. Please ensure it includes: /// <reference types="jest-extended" />`,
+      );
+    }
+  } else {
+    throw new Error(
+      'Looks like a developer mistake. "global.d.ts" is missing at the default path "../../global.d.ts". This file is essential for the correct Jest setup and must include the following content: /// <reference types="jest-extended" />',
+    );
+  }
+  tsConfig.include.push(defaultPathToGlobalDts);
+
+  const updatedTsConfigContent = JSON.stringify(tsConfig, undefined, 2);
+  tree.write(tsConfigFilePath, updatedTsConfigContent);
+}
+
+function setupJestConfiguration(tree: Tree, appRoot: string) {
   const jestConfigPath = joinPathFragments(appRoot, 'jest.config.ts');
+  const jestSetupFilePath = joinPathFragments(appRoot, 'jest.setup.js');
+
+  const jestSetupContent = `const matchers = require('jest-extended');
+expect.extend(matchers);
+`;
+
+  tree.write(jestSetupFilePath, jestSetupContent);
 
   const jestConfigContent = tree.read(jestConfigPath, 'utf8');
   const fileConfig = jestConfigContent.split(EOL);
@@ -68,6 +105,7 @@ function updateJestConfig(tree: Tree, appRoot: string) {
   const newJestConfigFile = [
     ...fileConfig.slice(0, -3),
     `  transformIgnorePatterns: ['/node_modules/(?!nest-typed-config)'],`,
+    `  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],`,
     ...fileConfig.slice(-3),
   ].join(EOL);
 
@@ -89,7 +127,9 @@ export async function appGenerator(tree: Tree, options: AppGeneratorSchema) {
   for (const f of allFilesInSrc) {
     tree.delete(f.path);
   }
-  updateJestConfig(tree, appRoot);
+
+  setupJestConfiguration(tree, appRoot);
+  updateTSConfig(tree, appRoot);
 
   const generatorFolder = joinPathFragments(__dirname, './files');
   generateFiles(tree, generatorFolder, appRoot, {
