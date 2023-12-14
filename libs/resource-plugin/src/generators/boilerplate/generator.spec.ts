@@ -1,7 +1,7 @@
 /* eslint-disable security/detect-non-literal-fs-filename */
 import { createTree } from '@nx/devkit/testing';
 import { Tree, joinPathFragments } from '@nx/devkit';
-import { platformGenerator } from './generator';
+import { boilerplateGenerator } from './generator';
 
 import { BoilerplateGeneratorSchema } from './schema';
 import { generateRandomIdWithoutSpecialCharacters } from '@softkit/crypto';
@@ -31,7 +31,7 @@ describe('boilerplate generator', () => {
   });
 
   it('should clone boilerplate and modify package.json successfully', async () => {
-    await platformGenerator(tree, options);
+    await boilerplateGenerator(tree, options);
 
     const files = readdirSync(root);
     expect(files.length).toBe(26);
@@ -60,7 +60,7 @@ describe('boilerplate generator', () => {
 
   it('should fail without existing tag', async () => {
     await expect(
-      platformGenerator(tree, {
+      boilerplateGenerator(tree, {
         ...options,
         tag: 'randomTagThatDoesNotExist',
       }),

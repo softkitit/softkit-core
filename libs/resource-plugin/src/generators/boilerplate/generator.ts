@@ -14,7 +14,7 @@ async function updatePackageJson(tree: Tree, scopeName: string) {
   });
 }
 
-export async function platformGenerator(
+export async function boilerplateGenerator(
   _: Tree,
   options: BoilerplateGeneratorSchema,
 ) {
@@ -29,4 +29,4 @@ export async function platformGenerator(
   flushChanges(root, fsTree.listChanges());
 }
 
-export default platformGenerator;
+export default boilerplateGenerator;

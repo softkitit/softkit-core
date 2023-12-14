@@ -16,6 +16,7 @@ describe('app generator', () => {
     health: true,
     e2eTestRunner: 'none',
     db: true,
+    configureJestConfig: true,
     dbType: 'postgres',
     dbName: 'test',
     appPort: 3000,
@@ -35,25 +36,25 @@ describe('app generator', () => {
       {
         i18n: false,
       },
-      29,
+      31,
     ],
     [
       {
         auth: false,
       },
-      34,
+      36,
     ],
     [
       {
         health: false,
       },
-      34,
+      36,
     ],
     [
       {
         db: false,
       },
-      33,
+      35,
     ],
     [
       {
@@ -63,7 +64,7 @@ describe('app generator', () => {
         i18n: false,
         health: false,
       },
-      28,
+      30,
     ],
   ])(
     'without feature: %s',
@@ -86,7 +87,7 @@ describe('app generator', () => {
 
     const listChanges = tree.listChanges();
 
-    expect(listChanges.length).toBe(34);
+    expect(listChanges.length).toBe(36);
 
     const allDbFiles = listChanges.filter(
       (c) => c.path.includes('/database/') || c.path.includes('/repositories/'),

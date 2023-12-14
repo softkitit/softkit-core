@@ -1,10 +1,9 @@
+import { workspaceRoot } from '@nx/devkit';
 import { runLint } from './run-lint';
-import { joinPathFragments } from '@nx/devkit';
 
 describe('execute commands', () => {
   it('should successfully lint current repo', async () => {
-    const cwd = joinPathFragments(__dirname, '../../../../..');
-    await runLint('resource-plugin', 'lint', cwd);
+    await runLint('resource-plugin', 'lint', workspaceRoot);
   }, 10_000);
 
   it('should fail with some status', async () => {

@@ -1,9 +1,9 @@
 import {
   generateFiles,
   joinPathFragments,
-  logger,
   readProjectConfiguration,
   Tree,
+  workspaceRoot,
   updateJson,
 } from '@nx/devkit';
 import { LibGeneratorSchema } from './schema';
@@ -12,7 +12,7 @@ import { paramCase, pascalCase } from 'change-case';
 import i18nGenerator from '../i18n/generator';
 import { runLint } from '../common/run-lint';
 import { EOL } from 'node:os';
-import { existsSync, readFileSync } from 'node:fs';
+import { updateTypeScriptConfigurations } from '../common/update-ts-configurations';
 
 export async function libGenerator(tree: Tree, options: LibGeneratorSchema) {
   options.name = paramCase(options.name);
@@ -23,8 +23,11 @@ export async function libGenerator(tree: Tree, options: LibGeneratorSchema) {
 
   const libRoot = readProjectConfiguration(tree, options.name).root;
 
-  setupJestConfiguration(tree, libRoot);
-  updateTSConfig(tree, libRoot);
+  setupJestConfiguration(tree, libRoot, options.configureJestConfig);
+
+  if (options.configureJestConfig) {
+    updateTypeScriptConfigurations(tree, libRoot, workspaceRoot);
+  }
 
   if (options.config) {
     const configFolder = joinPathFragments(__dirname, './files/config');
@@ -55,54 +58,38 @@ export async function libGenerator(tree: Tree, options: LibGeneratorSchema) {
   }
 }
 
-function updateTSConfig(tree: Tree, libRoot: string) {
-  const tsConfigFilePath = joinPathFragments(libRoot, 'tsconfig.spec.json');
-
-  const defaultPathToGlobalDts = '../../global.d.ts';
-  const globalDtsPath = joinPathFragments(libRoot, defaultPathToGlobalDts);
-
-  // eslint-disable-next-line security/detect-non-literal-fs-filename
-  if (existsSync(globalDtsPath)) {
-    // eslint-disable-next-line security/detect-non-literal-fs-filename
-    const fileContent = readFileSync(globalDtsPath, 'utf8');
-    if (!fileContent.includes('/// <reference types="jest-extended" />')) {
-      logger.warn(
-        `Looks like a developer mistake. "global.d.ts" found, but it does not contain the required reference. Please ensure it includes: /// <reference types="jest-extended" />`,
-      );
-    }
-  } else {
-    logger.warn(
-      'Looks like a developer mistake. "global.d.ts" is missing at the default path "../../global.d.ts". This file is essential for the correct Jest setup and must include the following content: /// <reference types="jest-extended" />',
-    );
-  }
-
-  const tsConfigContent = tree.read(tsConfigFilePath, 'utf8');
-  const tsConfig = JSON.parse(tsConfigContent);
-  tsConfig.include.push(defaultPathToGlobalDts);
-
-  const updatedTsConfigContent = JSON.stringify(tsConfig, undefined, 2);
-  tree.write(tsConfigFilePath, updatedTsConfigContent);
-}
-
-function setupJestConfiguration(tree: Tree, libRoot: string) {
+function setupJestConfiguration(
+  tree: Tree,
+  libRoot: string,
+  configureJestConfig: boolean,
+) {
   const jestConfigPath = joinPathFragments(libRoot, 'jest.config.ts');
-  const jestSetupFilePath = joinPathFragments(libRoot, 'jest.setup.js');
 
-  const jestSetupContent = `const matchers = require('jest-extended');
+  if (configureJestConfig) {
+    const jestSetupFilePath = joinPathFragments(libRoot, 'jest.setup.js');
+
+    const jestSetupContent = `const matchers = require('jest-extended');
 expect.extend(matchers);
 `;
 
-  tree.write(jestSetupFilePath, jestSetupContent);
+    tree.write(jestSetupFilePath, jestSetupContent);
+  }
 
   const jestConfigContent = tree.read(jestConfigPath, 'utf8');
   const fileConfig = jestConfigContent.split(EOL);
 
-  const newJestConfigFile = [
+  const newConfigLines = [
     ...fileConfig.slice(0, -3),
     `  transformIgnorePatterns: ['/node_modules/(?!nest-typed-config)'],`,
-    `  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],`,
-    ...fileConfig.slice(-3),
-  ].join(EOL);
+  ];
+
+  if (configureJestConfig) {
+    newConfigLines.push(`  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],`);
+  }
+
+  const newJestConfigFile = [...newConfigLines, ...fileConfig.slice(-3)].join(
+    EOL,
+  );
 
   tree.write(jestConfigPath, newJestConfigFile);
 }

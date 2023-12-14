@@ -5,6 +5,7 @@ export interface AppGeneratorSchema extends ApplicationGeneratorOptions {
   title: string;
   description: string;
   i18n: boolean;
+  configureJestConfig: boolean;
   health: boolean;
   languages: string[];
   auth: boolean;
