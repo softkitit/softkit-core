@@ -128,7 +128,7 @@
     "passport-saml": "^3.2.4",
     "pg": "^8.11.3",
     "pino-http": "^8.5.0",
-    "pino-pretty": "^10.2.0",
+    "pino-pretty": "^10.3.0",
     "plugin-image-zoom": "^1.2.0",
     "prism-react-renderer": "^2.3.0",
     "react": "^18.2.0",
