@@ -1,4 +1,12 @@
 Softkit Core Libraries Changelog
+## [0.0.9](https://github.com/softkitit/softkit-core/compare/server-http-client-0.0.8...server-http-client-0.0.9) (2023-12-15)
+
+
+### Bug Fixes
+
+* **exceptions:** swagger errorCode property ([931fca6](https://github.com/softkitit/softkit-core/commit/931fca60b37e82457a81a20971160f1a3d27ee5d))
+* **exceptions:** swapped the “Error code” and “Root cause” fields ([462a382](https://github.com/softkitit/softkit-core/commit/462a382880b889f3d4d37004d6e44b5917118238))
+
 ## [0.0.8](https://github.com/softkitit/softkit-core/compare/server-http-client-0.0.7...server-http-client-0.0.8) (2023-11-15)
 
 ## [0.0.7](https://github.com/softkitit/softkit-core/compare/server-http-client-0.0.6...server-http-client-0.0.7) (2023-11-04)
