@@ -123,4 +123,13 @@ export class FailingController {
       ErrorCodes.RECORD_IS_NOT_ACTIVE,
     );
   }
+
+  @ApiUnprocessableEntity()
+  @Post('unprocessable-entity-default-detail')
+  public async unprocessableEntityDefaultDetail() {
+    throw new GeneralUnprocessableEntityException(
+      'This record must be active',
+      undefined,
+    );
+  }
 }

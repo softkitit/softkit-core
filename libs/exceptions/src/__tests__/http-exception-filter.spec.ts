@@ -287,6 +287,25 @@ describe('http exception filter', () => {
     expect(errorBody.instance).toContain('req-');
   });
 
+  it('unprocessable entity default detail', async () => {
+    const response = await app.inject({
+      method: 'POST',
+      url: '/failing-http/unprocessable-entity-default-detail',
+    });
+
+    const errorBody = JSON.parse(response.body);
+
+    expect(response.statusCode).toBe(HttpStatus.UNPROCESSABLE_ENTITY);
+    expect(errorBody.status).toBe(HttpStatus.UNPROCESSABLE_ENTITY);
+    expect(errorBody.type).toBeDefined();
+    expect(errorBody.title).toBe('Unprocessable Entity');
+    expect(errorBody.detail).toContain(
+      'The server could not process the request due to invalid or incomplete data. Please check your request and try again.',
+    );
+    expect(errorBody.errorCode).toContain(ErrorCodes.RECORD_IS_NOT_ACTIVE);
+    expect(errorBody.instance).toContain('req-');
+  });
+
   it('healthcheck', async () => {
     const response = await app.inject({
       method: 'POST',
