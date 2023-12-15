@@ -6,10 +6,11 @@ import {
 } from '@nestjs/swagger';
 import { ErrorResponse } from '../vo/error-response.dto';
 import { ObjectNotFoundData } from '../exceptions/vo/object-not-found.dto';
+import { errorCodeSwaggerProperty } from './properties/error-code-swagger.property';
 
 export const ApiEntityNotFound = (...errorCodes: string[]) =>
   applyDecorators(
-    ApiExtraModels(ObjectNotFoundData),
+    ApiExtraModels(ObjectNotFoundData, ErrorResponse),
     ApiNotFoundResponse({
       description: `Entity not found or user doesn't have access to it`,
       schema: {
@@ -21,11 +22,7 @@ export const ApiEntityNotFound = (...errorCodes: string[]) =>
                 type: 'object',
                 $ref: getSchemaPath(ObjectNotFoundData),
               },
-              errorCode: {
-                type: 'enum',
-                enum: errorCodes,
-                description: 'Enum representing possible error codes',
-              },
+              ...errorCodeSwaggerProperty(...errorCodes),
             },
           },
         ],

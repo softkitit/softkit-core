@@ -6,10 +6,11 @@ import {
 } from '@nestjs/swagger';
 import { BadRequestData } from '../exceptions/vo/bad-request.dto';
 import { ErrorResponse } from '../vo/error-response.dto';
+import { errorCodeSwaggerProperty } from './properties/error-code-swagger.property';
 
 export const ApiBadRequest = (...errorCodes: string[]) =>
   applyDecorators(
-    ApiExtraModels(BadRequestData),
+    ApiExtraModels(BadRequestData, ErrorResponse),
     ApiBadRequestResponse({
       description: `Bad request provided by user`,
       schema: {
@@ -23,11 +24,7 @@ export const ApiBadRequest = (...errorCodes: string[]) =>
                   $ref: getSchemaPath(BadRequestData),
                 },
               },
-              errorCode: {
-                type: 'enum',
-                enum: errorCodes,
-                description: 'Enum representing possible error codes',
-              },
+              ...errorCodeSwaggerProperty(...errorCodes),
             },
           },
         ],

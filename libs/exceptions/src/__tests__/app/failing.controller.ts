@@ -114,7 +114,7 @@ export class FailingController {
     throw new ServiceUnavailableException();
   }
 
-  @ApiUnprocessableEntity()
+  @ApiUnprocessableEntity('RECORD_IS_NOT_ACTIVE')
   @Post('unprocessable-entity')
   public async unprocessableEntity() {
     throw new GeneralUnprocessableEntityException(
