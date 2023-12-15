@@ -3,6 +3,7 @@ import {
   joinPathFragments,
   readProjectConfiguration,
   Tree,
+  workspaceRoot,
   updateJson,
 } from '@nx/devkit';
 import { LibGeneratorSchema } from './schema';
@@ -11,6 +12,7 @@ import { paramCase, pascalCase } from 'change-case';
 import i18nGenerator from '../i18n/generator';
 import { runLint } from '../common/run-lint';
 import { EOL } from 'node:os';
+import { updateTypeScriptConfigurations } from '../common/update-ts-configurations';
 
 export async function libGenerator(tree: Tree, options: LibGeneratorSchema) {
   options.name = paramCase(options.name);
@@ -21,7 +23,11 @@ export async function libGenerator(tree: Tree, options: LibGeneratorSchema) {
 
   const libRoot = readProjectConfiguration(tree, options.name).root;
 
-  updateJestConfig(tree);
+  setupJestConfiguration(tree, libRoot, options.configureJestConfig);
+
+  if (options.configureJestConfig) {
+    updateTypeScriptConfigurations(tree, libRoot, workspaceRoot);
+  }
 
   if (options.config) {
     const configFolder = joinPathFragments(__dirname, './files/config');
@@ -52,20 +58,40 @@ export async function libGenerator(tree: Tree, options: LibGeneratorSchema) {
   }
 }
 
-function updateJestConfig(tree: Tree) {
-  const jestConfigFile = tree
-    .listChanges()
-    .find((c) => c.path.includes('jest.config.ts'));
+function setupJestConfiguration(
+  tree: Tree,
+  libRoot: string,
+  configureJestConfig: boolean,
+) {
+  const jestConfigPath = joinPathFragments(libRoot, 'jest.config.ts');
 
-  const fileConfig = jestConfigFile.content.toString().split(EOL);
+  if (configureJestConfig) {
+    const jestSetupFilePath = joinPathFragments(libRoot, 'jest.setup.js');
 
-  const newJestConfigFile = [
+    const jestSetupContent = `const matchers = require('jest-extended');
+expect.extend(matchers);
+`;
+
+    tree.write(jestSetupFilePath, jestSetupContent);
+  }
+
+  const jestConfigContent = tree.read(jestConfigPath, 'utf8');
+  const fileConfig = jestConfigContent.split(EOL);
+
+  const newConfigLines = [
     ...fileConfig.slice(0, -3),
     `  transformIgnorePatterns: ['/node_modules/(?!nest-typed-config)'],`,
-    ...fileConfig.slice(-3),
-  ].join(EOL);
+  ];
 
-  tree.write(jestConfigFile.path, newJestConfigFile);
+  if (configureJestConfig) {
+    newConfigLines.push(`  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],`);
+  }
+
+  const newJestConfigFile = [...newConfigLines, ...fileConfig.slice(-3)].join(
+    EOL,
+  );
+
+  tree.write(jestConfigPath, newJestConfigFile);
 }
 
 function updateEslintJson(tree: Tree, libRoot: string) {

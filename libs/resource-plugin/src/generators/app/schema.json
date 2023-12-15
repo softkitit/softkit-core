@@ -39,18 +39,27 @@
     "linter": {
       "description": "The tool to use for running lint checks.",
       "type": "string",
-      "enum": ["eslint", "none"],
+      "enum": [
+        "eslint",
+        "none"
+      ],
       "default": "eslint"
     },
     "unitTestRunner": {
       "description": "Test runner to use for unit tests.",
       "type": "string",
-      "enum": ["jest", "none"],
+      "enum": [
+        "jest",
+        "none"
+      ],
       "default": "jest"
     },
     "e2eTestRunner": {
       "type": "string",
-      "enum": ["jest", "none"],
+      "enum": [
+        "jest",
+        "none"
+      ],
       "description": "Test runner to use for end to end (e2e) tests",
       "default": "none"
     },
@@ -105,9 +114,9 @@
       "default": true
     },
     "db": {
-        "description": "Configure database.",
-        "type": "boolean",
-        "default": true
+      "description": "Configure database.",
+      "type": "boolean",
+      "default": true
     },
     "dbType": {
       "description": "Database type.",
@@ -116,7 +125,7 @@
         "postgres"
       ]
     },
-    "dbName" : {
+    "dbName": {
       "description": "Database name.",
       "type": "string",
       "$default": {
@@ -125,37 +134,44 @@
       }
     },
     "appPort": {
-        "description": "Application port.",
-        "type": "number",
-        "default": 9000,
-        "minimum": 1025,
-        "maximum": 65535
+      "description": "Application port.",
+      "type": "number",
+      "default": 9000,
+      "minimum": 1025,
+      "maximum": 65535
     },
     "contactName": {
-        "description": "Contact person name.",
-        "type": "string",
-        "default": "Unknown"
+      "description": "Contact person name.",
+      "type": "string",
+      "default": "Unknown"
     },
     "contactEmail": {
-        "description": "Contact person email.",
-        "type": "string",
-        "default": "john.doe@example.com"
+      "description": "Contact person email.",
+      "type": "string",
+      "default": "john.doe@example.com"
     },
     "contactUrl": {
-        "description": "Contact url or website.",
-        "type": "string",
-        "default": "https://example.com/"
+      "description": "Contact url or website.",
+      "type": "string",
+      "default": "https://example.com/"
     },
     "testsFolderName": {
-        "description": "Tests folder name.",
-        "type": "string",
-        "default": "__tests__"
+      "description": "Tests folder name.",
+      "type": "string",
+      "default": "__tests__"
+    },
+    "configureJestConfig": {
+      "description": "Generates a tailored Jest configuration file for the application when set to true.",
+      "type": "boolean",
+      "default": true
     },
     "languages": {
       "description": "Set languages for i18n.",
       "type": "array",
       "alias": "l",
-      "default": ["en"],
+      "default": [
+        "en"
+      ],
       "x-prompt": {
         "type": "list",
         "multiselect": true,
@@ -662,5 +678,7 @@
     }
   },
   "additionalProperties": false,
-  "required": ["name"]
+  "required": [
+    "name"
+  ]
 }
