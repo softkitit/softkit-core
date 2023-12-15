@@ -4,12 +4,13 @@ import {
   ApiExtraModels,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { ErrorResponse } from '../vo/error-response.dto';
 import { ConflictEntityCreationData } from '../exceptions/vo/conflict-entity-creation.dto';
+import { ErrorResponse } from '../vo/error-response.dto';
+import { errorCodeSwaggerProperty } from './properties/error-code-swagger.property';
 
-export const ApiConflictEntityCreation = () =>
+export const ApiConflictEntityCreation = (...errorCodes: string[]) =>
   applyDecorators(
-    ApiExtraModels(ConflictEntityCreationData),
+    ApiExtraModels(ConflictEntityCreationData, ErrorResponse),
     ApiConflictResponse({
       description: `Can not create entity because of conflict`,
       schema: {
@@ -18,9 +19,9 @@ export const ApiConflictEntityCreation = () =>
           {
             properties: {
               data: {
-                type: 'object',
                 $ref: getSchemaPath(ConflictEntityCreationData),
               },
+              ...errorCodeSwaggerProperty(...errorCodes),
             },
           },
         ],

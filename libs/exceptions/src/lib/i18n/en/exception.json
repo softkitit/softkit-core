@@ -29,9 +29,14 @@
     "TITLE": "Access Denied",
     "GENERAL_DETAIL": "You don't have access to this resource. Please contact your administrator. If you are an administrator, please check your permissions."
   },
+
   "UNAUTHORIZED": {
     "TITLE": "Unauthorized",
     "GENERAL_DETAIL": "Apologies, but you are not authorized to proceed with this action."
-  }
+  },
 
+  "UNPROCESSABLE_ENTITY": {
+    "TITLE": "Unprocessable Entity",
+    "GENERAL_DETAIL": "The server could not process the request due to invalid or incomplete data. Please check your request and try again."
+  }
 }

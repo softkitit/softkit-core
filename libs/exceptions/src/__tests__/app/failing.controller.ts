@@ -19,8 +19,11 @@ import {
   ApiForbidden,
   ApiOptimisticLock,
   ApiEntityNotFound,
+  ApiUnprocessableEntity,
 } from '../../lib/swagger';
 import { GeneralBadRequestException } from '../../lib/exceptions/general-bad-request.exception';
+import { GeneralUnprocessableEntityException } from '../../lib/exceptions/general-unprocessable-entity.exception';
+import { ErrorCodes } from './vo/error-codes.enum';
 
 @Controller({
   path: 'failing-http',
@@ -109,5 +112,20 @@ export class FailingController {
   @Post('healthcheck')
   public async healthcheck() {
     throw new ServiceUnavailableException();
+  }
+
+  @ApiUnprocessableEntity('RECORD_IS_NOT_ACTIVE')
+  @Post('unprocessable-entity')
+  public async unprocessableEntity() {
+    throw new GeneralUnprocessableEntityException(
+      'This record must be active',
+      ErrorCodes.RECORD_IS_NOT_ACTIVE,
+    );
+  }
+
+  @ApiUnprocessableEntity()
+  @Post('unprocessable-entity-default-detail')
+  public async unprocessableEntityDefaultDetail() {
+    throw new GeneralUnprocessableEntityException();
   }
 }

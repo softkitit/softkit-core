@@ -38,4 +38,10 @@ export class ErrorResponse<ADDITIONAL_DATA extends object = object> {
       'error instance, unique identifier for this particular occurrence of the problem',
   })
   instance!: string;
+
+  @ApiProperty({
+    description:
+      'A code that uniquely identifies the type of error or problem that occurred',
+  })
+  errorCode?: string;
 }

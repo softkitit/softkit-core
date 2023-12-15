@@ -7,7 +7,11 @@ import { i18nString } from '../utils/i18n';
  * the call to internal service fails for a long time or just down
  * */
 export class InternalServiceUnavailableHttpException extends AbstractHttpException {
-  constructor(externalServiceIdentifier?: string, rootCause?: unknown) {
+  constructor(
+    externalServiceIdentifier?: string,
+    errorCode?: string,
+    rootCause?: unknown,
+  ) {
     super(
       i18nString('exception.SERVICE_UNAVAILABLE.TITLE'),
       i18nString('exception.SERVICE_UNAVAILABLE.GENERAL_DETAIL'),
@@ -15,6 +19,7 @@ export class InternalServiceUnavailableHttpException extends AbstractHttpExcepti
       {
         externalServiceIdentifier,
       },
+      errorCode,
       rootCause,
     );
   }
