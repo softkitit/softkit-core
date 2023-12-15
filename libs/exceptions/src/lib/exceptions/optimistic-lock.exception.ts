@@ -14,6 +14,7 @@ export class OptimisticLockException extends AbstractHttpException<OptimisticLoc
       i18nString('exception.CONFLICT.OPTIMISTIC_LOCK'),
       HttpStatus.CONFLICT,
       { currentVersion },
+      undefined,
       rootCause,
     );
   }

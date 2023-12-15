@@ -9,8 +9,8 @@ import { i18nString } from '../utils/i18n';
 export class InternalServiceUnavailableHttpException extends AbstractHttpException {
   constructor(
     externalServiceIdentifier?: string,
-    rootCause?: unknown,
     errorCode?: string,
+    rootCause?: unknown,
   ) {
     super(
       i18nString('exception.SERVICE_UNAVAILABLE.TITLE'),
@@ -19,8 +19,8 @@ export class InternalServiceUnavailableHttpException extends AbstractHttpExcepti
       {
         externalServiceIdentifier,
       },
-      rootCause,
       errorCode,
+      rootCause,
     );
   }
 }

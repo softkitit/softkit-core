@@ -8,16 +8,16 @@ export class ConflictEntityCreationException extends AbstractHttpException<Confl
     public readonly entityName: string,
     public readonly fieldName: string,
     public readonly fieldValue: unknown,
-    rootCause?: unknown,
     errorCode?: string,
+    rootCause?: unknown,
   ) {
     super(
       i18nString('exception.CONFLICT.TITLE'),
       i18nString('exception.CONFLICT.CAN_NOT_CREATE_ENTITY'),
       HttpStatus.CONFLICT,
       { entityName, fieldName, fieldValue },
-      rootCause,
       errorCode,
+      rootCause,
     );
   }
 }

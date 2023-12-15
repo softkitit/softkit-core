@@ -10,8 +10,8 @@ export class GeneralBadRequestException extends I18nValidationException {
   constructor(
     errors: I18nValidationError | I18nValidationError[],
     public detail?: string,
-    public rootCause?: unknown,
     public errorCode?: string,
+    public rootCause?: unknown,
   ) {
     super(Array.isArray(errors) ? errors : [errors], HttpStatus.BAD_REQUEST);
   }

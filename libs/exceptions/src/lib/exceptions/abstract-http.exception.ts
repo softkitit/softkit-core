@@ -7,8 +7,8 @@ export class AbstractHttpException<ADDITIONAL_DATA extends object = object> {
     public detail: string,
     public status: number,
     public data?: ADDITIONAL_DATA | ADDITIONAL_DATA[],
-    public rootCause?: unknown,
     public errorCode?: string,
+    public rootCause?: unknown,
   ) {}
 
   toErrorResponse(
