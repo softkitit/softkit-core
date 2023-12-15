@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.6.0](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.5.0...resource-plugin-0.6.0) (2023-12-15)
+
+
+### Features
+
+* **resource-plugin:** bump nx peer dependencies to v17.1.2 ([3fe8e33](https://github.com/softkitit/softkit-core/commit/3fe8e33c1574ea83914e0e62c3840a0dbc1d30da))
+
 ## [0.5.0](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.4.0...resource-plugin-0.5.0) (2023-12-15)
 
 
