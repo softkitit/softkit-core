@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.4.13](https://github.com/softkitit/softkit-core/compare/typeorm-0.4.12...typeorm-0.4.13) (2023-12-15)
+
+
+### Bug Fixes
+
+* **typeorm:** update readme ([c5853e6](https://github.com/softkitit/softkit-core/commit/c5853e64197bd2cd46590f39f2b9344ffbab566b))
+
 ## [0.4.12](https://github.com/softkitit/softkit-core/compare/typeorm-0.4.11...typeorm-0.4.12) (2023-12-15)
 
 
