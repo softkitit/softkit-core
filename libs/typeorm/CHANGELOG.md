@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.4.12](https://github.com/softkitit/softkit-core/compare/typeorm-0.4.11...typeorm-0.4.12) (2023-12-15)
+
+
+### Bug Fixes
+
+* **typeorm:** remove ApiProperty decorator to generate correct id types ([364d1c1](https://github.com/softkitit/softkit-core/commit/364d1c1b03688df4538f4048d967fc3097f39ed7))
+
 ## [0.4.11](https://github.com/softkitit/softkit-core/compare/typeorm-0.4.10...typeorm-0.4.11) (2023-12-11)
 
 
