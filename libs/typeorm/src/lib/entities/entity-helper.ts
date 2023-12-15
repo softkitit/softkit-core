@@ -24,9 +24,6 @@ export abstract class EntityHelper extends BaseEntity {
 }
 
 export abstract class BaseEntityHelper extends EntityHelper {
-  @ApiProperty({
-    description: 'Unique identifier',
-  })
   @Expose()
   id!: string | number;
 
