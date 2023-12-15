@@ -19,6 +19,7 @@ import {
   ApiForbidden,
   ApiOptimisticLock,
   ApiEntityNotFound,
+  ApiUnprocessableEntity,
 } from '../../lib/swagger';
 import { GeneralBadRequestException } from '../../lib/exceptions/general-bad-request.exception';
 import { GeneralUnprocessableEntityException } from '../../lib/exceptions/general-unprocessable-entity.exception';
@@ -113,7 +114,7 @@ export class FailingController {
     throw new ServiceUnavailableException();
   }
 
-  @ApiBadRequest()
+  @ApiUnprocessableEntity()
   @Post('unprocessable-entity')
   public async unprocessableEntity() {
     throw new GeneralUnprocessableEntityException(
