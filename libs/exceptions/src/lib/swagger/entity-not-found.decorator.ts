@@ -7,7 +7,7 @@ import {
 import { ErrorResponse } from '../vo/error-response.dto';
 import { ObjectNotFoundData } from '../exceptions/vo/object-not-found.dto';
 
-export const ApiEntityNotFound = () =>
+export const ApiEntityNotFound = (...errorCodes: string[]) =>
   applyDecorators(
     ApiExtraModels(ObjectNotFoundData),
     ApiNotFoundResponse({
@@ -20,6 +20,11 @@ export const ApiEntityNotFound = () =>
               data: {
                 type: 'object',
                 $ref: getSchemaPath(ObjectNotFoundData),
+              },
+              errorCode: {
+                type: 'enum',
+                enum: errorCodes,
+                description: 'Enum representing possible error codes',
               },
             },
           },

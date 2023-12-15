@@ -7,7 +7,7 @@ import {
 import { BadRequestData } from '../exceptions/vo/bad-request.dto';
 import { ErrorResponse } from '../vo/error-response.dto';
 
-export const ApiBadRequest = () =>
+export const ApiBadRequest = (...errorCodes: string[]) =>
   applyDecorators(
     ApiExtraModels(BadRequestData),
     ApiBadRequestResponse({
@@ -22,6 +22,11 @@ export const ApiBadRequest = () =>
                 items: {
                   $ref: getSchemaPath(BadRequestData),
                 },
+              },
+              errorCode: {
+                type: 'enum',
+                enum: errorCodes,
+                description: 'Enum representing possible error codes',
               },
             },
           },

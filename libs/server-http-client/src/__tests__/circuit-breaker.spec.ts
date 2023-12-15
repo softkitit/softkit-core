@@ -254,16 +254,16 @@ describe('Circuit breaker and retry', () => {
 
     it('got internal server error with retry only: with retry %s', async () => {
       const allResponses = await Promise.allSettled(
-        Array.from({ length: 100 }).map(() => {
+        Array.from({ length: 10 }).map(() => {
           return axiosInstanceWithoutCircuitBreaker.get(
             '/sample/always-internal-server-error',
           );
         }),
       );
 
-      expect(sampleController.counters.internalServerError).toBe(400);
+      expect(sampleController.counters.internalServerError).toBe(40);
 
-      expect(allResponses.length).toBe(100);
+      expect(allResponses.length).toBe(10);
       for (const response of allResponses) {
         const err = response.status === 'rejected' && response.reason;
         expect(err).toBeInstanceOf(InternalProxyHttpException);

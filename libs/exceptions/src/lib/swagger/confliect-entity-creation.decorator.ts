@@ -7,7 +7,7 @@ import {
 import { ErrorResponse } from '../vo/error-response.dto';
 import { ConflictEntityCreationData } from '../exceptions/vo/conflict-entity-creation.dto';
 
-export const ApiConflictEntityCreation = () =>
+export const ApiConflictEntityCreation = (...errorCodes: string[]) =>
   applyDecorators(
     ApiExtraModels(ConflictEntityCreationData),
     ApiConflictResponse({
@@ -20,6 +20,11 @@ export const ApiConflictEntityCreation = () =>
               data: {
                 type: 'object',
                 $ref: getSchemaPath(ConflictEntityCreationData),
+              },
+              errorCode: {
+                type: 'enum',
+                enum: errorCodes,
+                description: 'Enum representing possible error codes',
               },
             },
           },
