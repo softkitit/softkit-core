@@ -119,7 +119,6 @@ export class FailingController {
   public async unprocessableEntity() {
     throw new GeneralUnprocessableEntityException(
       'This record must be active',
-      undefined,
       ErrorCodes.RECORD_IS_NOT_ACTIVE,
     );
   }
