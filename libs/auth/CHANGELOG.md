@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [1.0.5](https://github.com/softkitit/softkit-core/compare/auth-1.0.4...auth-1.0.5) (2023-12-15)
+
+
+### Bug Fixes
+
+* **exceptions:** swapped the “Error code” and “Root cause” fields ([462a382](https://github.com/softkitit/softkit-core/commit/462a382880b889f3d4d37004d6e44b5917118238))
+
 ## [1.0.4](https://github.com/softkitit/softkit-core/compare/auth-1.0.3...auth-1.0.4) (2023-12-11)
 
 ## [1.0.3](https://github.com/softkitit/softkit-core/compare/auth-1.0.2...auth-1.0.3) (2023-12-04)
