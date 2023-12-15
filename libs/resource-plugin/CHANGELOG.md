@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.6.1](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.0...resource-plugin-0.6.1) (2023-12-15)
+
+
+### Bug Fixes
+
+* **resource-plugin:** update db config in app generation ([f93d7b2](https://github.com/softkitit/softkit-core/commit/f93d7b2ebee9f3d0e9344897fc766c54bca7e7c4))
+
 ## [0.6.0](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.5.0...resource-plugin-0.6.0) (2023-12-15)
 
 
