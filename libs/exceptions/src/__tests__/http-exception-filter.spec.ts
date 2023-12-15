@@ -302,7 +302,6 @@ describe('http exception filter', () => {
     expect(errorBody.detail).toContain(
       'The server could not process the request due to invalid or incomplete data. Please check your request and try again.',
     );
-    expect(errorBody.errorCode).toContain(ErrorCodes.RECORD_IS_NOT_ACTIVE);
     expect(errorBody.instance).toContain('req-');
   });
 

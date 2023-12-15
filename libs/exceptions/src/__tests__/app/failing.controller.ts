@@ -127,9 +127,6 @@ export class FailingController {
   @ApiUnprocessableEntity()
   @Post('unprocessable-entity-default-detail')
   public async unprocessableEntityDefaultDetail() {
-    throw new GeneralUnprocessableEntityException(
-      'This record must be active',
-      undefined,
-    );
+    throw new GeneralUnprocessableEntityException();
   }
 }
