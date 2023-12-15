@@ -9,6 +9,7 @@ export class ConflictEntityCreationException extends AbstractHttpException<Confl
     public readonly fieldName: string,
     public readonly fieldValue: unknown,
     rootCause?: unknown,
+    errorCode?: string,
   ) {
     super(
       i18nString('exception.CONFLICT.TITLE'),
@@ -16,6 +17,7 @@ export class ConflictEntityCreationException extends AbstractHttpException<Confl
       HttpStatus.CONFLICT,
       { entityName, fieldName, fieldValue },
       rootCause,
+      errorCode,
     );
   }
 }

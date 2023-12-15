@@ -35,6 +35,10 @@ export type I18nTranslations = {
             "TITLE": string;
             "GENERAL_DETAIL": string;
         };
+        "UNPROCESSABLE_ENTITY": {
+          "TITLE": string;
+          "GENERAL_DETAIL": string;
+        }
     };
 };
 export type I18nPath = Path<I18nTranslations>;

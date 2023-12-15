@@ -8,6 +8,7 @@ export class AbstractHttpException<ADDITIONAL_DATA extends object = object> {
     public status: number,
     public data?: ADDITIONAL_DATA | ADDITIONAL_DATA[],
     public rootCause?: unknown,
+    public errorCode?: string,
   ) {}
 
   toErrorResponse(
@@ -26,6 +27,7 @@ export class AbstractHttpException<ADDITIONAL_DATA extends object = object> {
       detail: detail?.toString() ?? /* istanbul ignore next */ this.detail,
       status: this.status,
       instance: requestId,
+      errorCode: this.errorCode,
     } satisfies ErrorResponse;
   }
 

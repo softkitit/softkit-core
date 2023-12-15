@@ -15,6 +15,7 @@ import {
 } from '../';
 import { AppModule } from './app/app.module';
 import { I18nValidationExceptionFilter } from '@saas-buildkit/nestjs-i18n';
+import { ErrorCodes } from './app/vo/error-codes.enum';
 
 describe('http exception filter', () => {
   let app: NestFastifyApplication;
@@ -267,6 +268,23 @@ describe('http exception filter', () => {
     expect(errorResponse.detail).toContain(
       'exception.BAD_REQUEST.GENERAL_DETAIL',
     );
+  });
+
+  it('unprocessable entity request', async () => {
+    const response = await app.inject({
+      method: 'POST',
+      url: '/failing-http/unprocessable-entity',
+    });
+
+    const errorBody = JSON.parse(response.body);
+
+    expect(response.statusCode).toBe(HttpStatus.UNPROCESSABLE_ENTITY);
+    expect(errorBody.status).toBe(HttpStatus.UNPROCESSABLE_ENTITY);
+    expect(errorBody.type).toBeDefined();
+    expect(errorBody.title).toBe('Unprocessable Entity');
+    expect(errorBody.detail).toContain('This record must be active');
+    expect(errorBody.errorCode).toContain(ErrorCodes.RECORD_IS_NOT_ACTIVE);
+    expect(errorBody.instance).toContain('req-');
   });
 
   it('healthcheck', async () => {
