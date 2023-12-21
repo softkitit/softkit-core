@@ -17,6 +17,8 @@ tmp
 !.yarn/sdks
 !.yarn/versions
 
+.nx
+
 # dependencies
 node_modules
 
