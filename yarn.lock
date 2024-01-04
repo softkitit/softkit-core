@@ -4959,13 +4959,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@newrelic/security-agent@npm:0.5.0":
-  version: 0.5.0
-  resolution: "@newrelic/security-agent@npm:0.5.0"
+"@newrelic/security-agent@npm:^0.6.0":
+  version: 0.6.0
+  resolution: "@newrelic/security-agent@npm:0.6.0"
   dependencies:
     "@aws-sdk/client-lambda": ^3.436.0
-    axios: 1.6.0
-    check-disk-space: 3.4.0
+    axios: ^1.6.3
+    check-disk-space: ^3.4.0
     content-type: ^1.0.5
     fast-safe-stringify: ^2.1.1
     find-package-json: ^1.2.0
@@ -4985,7 +4985,7 @@ __metadata:
     unescape-js: ^1.1.4
     uuid: ^9.0.1
     ws: ^8.14.2
-  checksum: fd551af31a47016c4cbf25fec6e16c29eb0c49009811e43f4f2857099960454928a61f32cded44ce0a0ee0a2ecce114d6cc55089467c88a32321b2946b2e5926
+  checksum: 24d7763970595b3d520aca89c646311d5ba85fb0522e0a01104e673c85608e2308cc6ea150720f8af136cbbfd4eaa64726a0fcf28368605d22d908912841b49a
   languageName: node
   linkType: hard
 
@@ -6415,7 +6415,7 @@ __metadata:
     nestjs-cls: ^3.5.1
     nestjs-paginate: ^8.6.0
     nestjs-pino: ^3.4.0
-    newrelic: ^11.1.0
+    newrelic: ^11.8.0
     ngx-deploy-npm: ^7.0.1
     nx: 17.1.2
     nx-cloud: 16.5.2
@@ -6448,7 +6448,7 @@ __metadata:
     typedoc: ^0.25.4
     typedoc-plugin-coverage: ^2.2.0
     typedoc-plugin-markdown: 4.0.0-next.28
-    typeorm: 0.3.17
+    typeorm: 0.3.18
     typeorm-extension: ^3.1.0
     typeorm-naming-strategies: ^4.1.0
     typeorm-transactional: ^0.4.1
@@ -8874,17 +8874,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:1.6.0":
-  version: 1.6.0
-  resolution: "axios@npm:1.6.0"
-  dependencies:
-    follow-redirects: ^1.15.0
-    form-data: ^4.0.0
-    proxy-from-env: ^1.1.0
-  checksum: c7c9f2ae9e0b9bad7d6f9a4dff030930b12ee667dedf54c3c776714f91681feb743c509ac0796ae5c01e12c4ab4a2bee74905068dd200fbc1ab86f9814578fb0
-  languageName: node
-  linkType: hard
-
 "axios@npm:^1.5.0, axios@npm:^1.5.1, axios@npm:^1.6.0":
   version: 1.6.2
   resolution: "axios@npm:1.6.2"
@@ -8893,6 +8882,17 @@ __metadata:
     form-data: ^4.0.0
     proxy-from-env: ^1.1.0
   checksum: 4a7429e2b784be0f2902ca2680964391eae7236faa3967715f30ea45464b98ae3f1c6f631303b13dfe721b17126b01f486c7644b9ef276bfc63112db9fd379f8
+  languageName: node
+  linkType: hard
+
+"axios@npm:^1.6.3":
+  version: 1.6.4
+  resolution: "axios@npm:1.6.4"
+  dependencies:
+    follow-redirects: ^1.15.4
+    form-data: ^4.0.0
+    proxy-from-env: ^1.1.0
+  checksum: 48d8af8488ac7402fae312437c0189b3b609a472fca2f7fc796129c804d98520589b6317096eba8509711d49f855a3f620b6a24ff23acd73ac26433d0383b8f9
   languageName: node
   linkType: hard
 
@@ -9676,7 +9676,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"check-disk-space@npm:3.4.0":
+"check-disk-space@npm:3.4.0, check-disk-space@npm:^3.4.0":
   version: 3.4.0
   resolution: "check-disk-space@npm:3.4.0"
   checksum: 0154c149c34a1233fe542f2a9f9ea2526bb90169489259eda8de1cf6870f765e8f5299c3b085085cc1ef33d9559f589fd10609c7e52d2e624ef6b5720dd9743c
@@ -11383,7 +11383,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"date-fns@npm:^2.16.1, date-fns@npm:^2.29.3":
+"date-fns@npm:^2.16.1":
   version: 2.30.0
   resolution: "date-fns@npm:2.30.0"
   dependencies:
@@ -11410,6 +11410,13 @@ __metadata:
   version: 1.11.7
   resolution: "dayjs@npm:1.11.7"
   checksum: 5003a7c1dd9ed51385beb658231c3548700b82d3548c0cfbe549d85f2d08e90e972510282b7506941452c58d32136d6362f009c77ca55381a09c704e9f177ebb
+  languageName: node
+  linkType: hard
+
+"dayjs@npm:^1.11.9":
+  version: 1.11.10
+  resolution: "dayjs@npm:1.11.10"
+  checksum: a6b5a3813b8884f5cd557e2e6b7fa569f4c5d0c97aca9558e38534af4f2d60daafd3ff8c2000fed3435cfcec9e805bcebd99f90130c6d1c5ef524084ced588c4
   languageName: node
   linkType: hard
 
@@ -13253,6 +13260,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"follow-redirects@npm:^1.15.4":
+  version: 1.15.4
+  resolution: "follow-redirects@npm:1.15.4"
+  peerDependenciesMeta:
+    debug:
+      optional: true
+  checksum: e178d1deff8b23d5d24ec3f7a94cde6e47d74d0dc649c35fc9857041267c12ec5d44650a0c5597ef83056ada9ea6ca0c30e7c4f97dbf07d035086be9e6a5b7b6
+  languageName: node
+  linkType: hard
+
 "foreground-child@npm:^3.1.0":
   version: 3.1.1
   resolution: "foreground-child@npm:3.1.1"
@@ -13504,7 +13521,7 @@ __metadata:
 
 "fsevents@patch:fsevents@^2.3.2#~builtin<compat/fsevents>, fsevents@patch:fsevents@~2.3.2#~builtin<compat/fsevents>":
   version: 2.3.3
-  resolution: "fsevents@patch:fsevents@npm%3A2.3.3#~builtin<compat/fsevents>::version=2.3.3&hash=df0bf1"
+  resolution: "fsevents@patch:fsevents@npm%3A2.3.3#~builtin<compat/fsevents>::version=2.3.3&hash=18f3a7"
   dependencies:
     node-gyp: latest
   conditions: os=darwin
@@ -13768,7 +13785,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:^8.0.1, glob@npm:^8.1.0":
+"glob@npm:^8.0.1":
   version: 8.1.0
   resolution: "glob@npm:8.1.0"
   dependencies:
@@ -18379,9 +18396,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"newrelic@npm:^11.1.0":
-  version: 11.7.0
-  resolution: "newrelic@npm:11.7.0"
+"newrelic@npm:^11.8.0":
+  version: 11.8.0
+  resolution: "newrelic@npm:11.8.0"
   dependencies:
     "@contrast/fn-inspect": ^3.3.0
     "@grpc/grpc-js": ^1.9.4
@@ -18389,7 +18406,7 @@ __metadata:
     "@newrelic/aws-sdk": ^7.0.3
     "@newrelic/koa": ^8.0.1
     "@newrelic/native-metrics": ^10.0.0
-    "@newrelic/security-agent": 0.5.0
+    "@newrelic/security-agent": ^0.6.0
     "@newrelic/superagent": ^7.0.1
     "@prisma/prisma-fmt-wasm": ^4.17.0-16.27eb2449f178cd9fe1a4b892d732cc4795f75085
     "@tyriar/fibonacci-heap": ^2.0.7
@@ -18412,7 +18429,7 @@ __metadata:
       optional: true
   bin:
     newrelic-naming-rules: bin/test-naming-rules.js
-  checksum: 58b15b4d774ea58c0b573be85b2474b6c4313464dbf859639461b35bb52a400a7c1ef2b607aa57d302b738e37529ddb0a138393d9147449833cb05860ceb66b8
+  checksum: 19c96e1b5133d6706517e4fdd8ff3270fce99fc5f5f3472cbdbc28bde44a703bcee16ab0faf7049cb0e4fb56bc1c5d516eded67ff97774b7a2f159f7817c3828
   languageName: node
   linkType: hard
 
@@ -21800,7 +21817,7 @@ node-fetch@cjs:
 
 "resolve@patch:resolve@^1.1.6#~builtin<compat/resolve>, resolve@patch:resolve@^1.1.7#~builtin<compat/resolve>, resolve@patch:resolve@^1.10.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.12.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.14.2#~builtin<compat/resolve>, resolve@patch:resolve@^1.20.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.22.1#~builtin<compat/resolve>, resolve@patch:resolve@^1.22.2#~builtin<compat/resolve>":
   version: 1.22.8
-  resolution: "resolve@patch:resolve@npm%3A1.22.8#~builtin<compat/resolve>::version=1.22.8&hash=c3c19d"
+  resolution: "resolve@patch:resolve@npm%3A1.22.8#~builtin<compat/resolve>::version=1.22.8&hash=07638b"
   dependencies:
     is-core-module: ^2.13.0
     path-parse: ^1.0.7
@@ -24233,19 +24250,19 @@ node-fetch@cjs:
   languageName: node
   linkType: hard
 
-"typeorm@npm:0.3.17":
-  version: 0.3.17
-  resolution: "typeorm@npm:0.3.17"
+"typeorm@npm:0.3.18":
+  version: 0.3.18
+  resolution: "typeorm@npm:0.3.18"
   dependencies:
     "@sqltools/formatter": ^1.2.5
     app-root-path: ^3.1.0
     buffer: ^6.0.3
     chalk: ^4.1.2
     cli-highlight: ^2.1.11
-    date-fns: ^2.29.3
+    dayjs: ^1.11.9
     debug: ^4.3.4
     dotenv: ^16.0.3
-    glob: ^8.1.0
+    glob: ^10.3.10
     mkdirp: ^2.1.3
     reflect-metadata: ^0.1.13
     sha.js: ^2.4.11
@@ -24255,13 +24272,13 @@ node-fetch@cjs:
   peerDependencies:
     "@google-cloud/spanner": ^5.18.0
     "@sap/hana-client": ^2.12.25
-    better-sqlite3: ^7.1.2 || ^8.0.0
+    better-sqlite3: ^7.1.2 || ^8.0.0 || ^9.0.0
     hdb-pool: ^0.1.6
     ioredis: ^5.0.4
-    mongodb: ^5.2.0
-    mssql: ^9.1.1
+    mongodb: ^5.8.0
+    mssql: ^9.1.1 || ^10.0.1
     mysql2: ^2.2.5 || ^3.0.1
-    oracledb: ^5.1.0
+    oracledb: ^6.3.0
     pg: ^8.5.1
     pg-native: ^3.0.0
     pg-query-stream: ^4.0.0
@@ -24309,7 +24326,7 @@ node-fetch@cjs:
     typeorm: cli.js
     typeorm-ts-node-commonjs: cli-ts-node-commonjs.js
     typeorm-ts-node-esm: cli-ts-node-esm.js
-  checksum: 71fcb2b2e889c759b24add6c6ab7938c9a52f7c206b055f3a2abd77725acfec125b8f303e263381258ee03e52f7d3eb88c1fb893b15750b5237c8fc9db31ed78
+  checksum: 141366fdc64c0ff9739b80c0684e3c831415864a00f8d3595a0baea3c6f3bd127997fe12e5bd650a67da0ee08e41b6c12e2e908c14c51c2bd0af0a7a80c45189
   languageName: node
   linkType: hard
 
@@ -24335,17 +24352,17 @@ node-fetch@cjs:
 
 "typescript@patch:typescript@5.2.2#~builtin<compat/typescript>, typescript@patch:typescript@~5.2.2#~builtin<compat/typescript>":
   version: 5.2.2
-  resolution: "typescript@patch:typescript@npm%3A5.2.2#~builtin<compat/typescript>::version=5.2.2&hash=f3b441"
+  resolution: "typescript@patch:typescript@npm%3A5.2.2#~builtin<compat/typescript>::version=5.2.2&hash=701156"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 0f4da2f15e6f1245e49db15801dbee52f2bbfb267e1c39225afdab5afee1a72839cd86000e65ee9d7e4dfaff12239d28beaf5ee431357fcced15fb08583d72ca
+  checksum: 07106822b4305de3f22835cbba949a2b35451cad50888759b6818421290ff95d522b38ef7919e70fb381c5fe9c1c643d7dea22c8b31652a717ddbd57b7f4d554
   languageName: node
   linkType: hard
 
 "typescript@patch:typescript@^4.6.4 || ^5.2.2#~builtin<compat/typescript>":
   version: 5.3.3
-  resolution: "typescript@patch:typescript@npm%3A5.3.3#~builtin<compat/typescript>::version=5.3.3&hash=f3b441"
+  resolution: "typescript@patch:typescript@npm%3A5.3.3#~builtin<compat/typescript>::version=5.3.3&hash=701156"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
