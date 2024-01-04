@@ -1,0 +1,59 @@
+---
+title: 'Getting Started'
+---
+
+import Admonition from '@theme/Admonition';
+
+# Getting Started with Mailgun Mail Module
+
+---
+
+The Mailgun Mail Module simplifies the process of integrating Mailgun's email services into your NestJS applications. It offers a streamlined approach to send emails, manage templates, and configure your email services with ease.
+
+<Admonition type="tip" title="Note">
+
+Before starting, make sure you have a Mailgun [account](https://signup.mailgun.com/new/signup) and API credentials.
+
+</Admonition>
+
+# Getting Started
+
+The Mailgun Mail Module simplifies the process of integrating Mailgun's email services into your NestJS applications. It offers a streamlined approach to send emails, manage templates, and configure your email services with ease.
+
+## Installation
+
+To begin using the Mailgun Mail Module, you need to install the package and its dependencies in your project:
+
+```bash
+yarn add @softkit/mail
+# For Mailgun, install the official mailgun.js package
+yarn add mailgun.js@^9.3.0
+```
+
+## Basic Setup
+
+Start by importing the `MailgunMailModule` into your NestJS application module:
+
+```typescript
+import { Module } from '@nestjs/common';
+import { MailgunMailModule } from '@softkit/mailgun-mail-module';
+
+@Module({
+  imports: [
+    MailgunMailModule.forRoot({
+      username: 'api',
+      key: 'YOUR_API_KEY',
+      domain: 'YOUR_DOMAIN',
+      defaultFromEmail: 'noreply@example.com',
+    }),
+  ],
+})
+export class YourAppModule {}
+```
+
+Replace 'YOUR_API_KEY', 'YOUR_DOMAIN', and 'noreply@example.com' with your actual Mailgun API key, domain, and preferred sender email address.
+
+## Next Steps
+
+- [Configure your Mailgun settings](/libraries/mail/configuration)
+- [Explore advanced usage and customizations](/libraries/mail/usage)

@@ -1,0 +1,63 @@
+---
+title: 'Configuration'
+---
+
+# Configuring the Mailgun Mail Module
+
+---
+
+After installing the Mailgun Mail Module, you'll need to configure it to suit your application's needs. This document walks you through the configuration process.
+
+## Asynchronous Configuration
+
+For applications that require asynchronous setup, you can configure the Mailgun Mail Module asynchronously. This is particularly useful when you need to inject configuration parameters that are loaded at runtime.
+
+```typescript
+@Module({
+  imports: [
+    MailgunMailModule.forRootAsync({
+      useFactory: async (config: SomeMailConfig) => {
+        return config;
+      },
+      inject: [SomeMailConfig],
+    }),
+  ],
+})
+export class YourAppModule {}
+```
+
+## Default Configuration in Root Config Class
+
+It's a good practice to add a default configuration in your root config class. This allows you to manage your Mailgun configuration centrally and use decorators for validation and type conversion.
+
+```typescript
+import { MailgunConfig } from '@softkit/mail';
+import { Type, ValidateNested } from 'class-validator';
+
+export class RootConfig {
+  @Type(() => MailgunConfig)
+  @ValidateNested()
+  public readonly mailgun!: MailgunConfig;
+}
+```
+
+## Environment Configuration with .env.yaml file
+
+Use an `.env.yaml` file to manage your environment-specific configurations, such as API keys and domains. Here is an example configuration:
+
+```yaml
+mailgun:
+  domain: 'YOUR_DOMAIN'
+  key: 'YOUR_API_KEY'
+  username: 'api'
+  defaultFromEmail: 'noreply@example.com'
+  defaultBccList:
+    - 'first@gmail.com'
+    - 'second@gmail.com'
+```
+
+Ensure to replace the placeholders with your actual Mailgun information.
+
+## Next Steps
+
+- [Explore advanced usage and customizations](/libraries/mail/usage)
