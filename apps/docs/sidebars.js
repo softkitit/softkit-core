@@ -60,6 +60,26 @@ const sidebars = {
     },
     {
       type: 'category',
+      label: 'Library Documentation',
+      items: [
+        {
+          type: 'category',
+          label: 'Mail Library',
+          items: [
+            'libraries/mail/getting-started',
+            'libraries/mail/configuration',
+            'libraries/mail/usage',
+            {
+              type: 'doc',
+              label: 'API',
+              id: 'api/mail/src/index',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      type: 'category',
       label: 'About Softkit',
       link: {
         type: 'doc',

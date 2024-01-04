@@ -1,0 +1,104 @@
+---
+title: 'Usage'
+---
+
+# Using the Mailgun Mail Module
+
+---
+
+With the Mailgun Mail Module configured, you can now leverage its functionality to send emails within your NestJS application.
+
+## Using Native Mailgun Client
+
+For cases where you need to customize the behavior beyond the provided service, you can directly use the native Mailgun client.
+
+```typescript
+import { Inject } from '@nestjs/common';
+import { MAILGUN_CLIENT_TOKEN, IMailgunClient } from '@softkit/mail';
+
+@Injectable()
+export class CustomMailService {
+  constructor(@Inject(MAILGUN_CLIENT_TOKEN) private mailgun: IMailgunClient) {
+    // Use this.mailgun to interact directly with the Mailgun API.
+  }
+}
+```
+
+## Enhancing Your Application with a Custom Typed Email Service
+
+Creating a custom typed email service adds type safety and versatility to your email-related operations.
+
+### Quick Setup Guide
+
+#### Step 1: Define Email Types
+
+Begin by enumerating the types of emails that your application will send.
+
+```typescript
+// email.types.ts
+export enum EmailTypes {
+  SIGNUP_EMAIL = 'SIGNUP_TEMPLATE',
+  WELCOME_EMAIL = 'WELCOME_TEMPLATE',
+}
+```
+
+#### Step 2: Specify Email Parameters
+
+Define parameters for each email type to ensure the correct information is included in every email.
+
+```typescript
+// email-params.dto.ts
+export class SignUpEmailParams {
+  username: string;
+  // Additional signup-specific parameters
+}
+
+export class WelcomeEmailParams {
+  firstName: string;
+  // Additional welcome-specific parameters
+}
+
+export type EmailDataParams<T extends EmailTypes> =
+  T extends EmailTypes.SIGNUP_EMAIL
+    ? SignUpEmailParams
+    : T extends EmailTypes.WELCOME_EMAIL
+      ? WelcomeEmailParams
+      : never;
+```
+
+#### Step 3: Create the Mail Service
+
+Implement a service that provides methods for sending emails based on the defined types.
+
+```typescript
+import { Injectable } from '@nestjs/common';
+import { AbstractMailService } from '@softkit/mail';
+import { EmailTypes, EmailDataParams } from './email.types';
+
+@Injectable()
+export class MailService {
+  constructor(private mailService: AbstractMailService<EmailTypes>) {}
+
+  public sendTemplateEmail(
+    templateId: EmailTypes,
+    emailData: SendEmailDto,
+    templateVariables: EmailDataParams<EmailTypes>,
+  ): Promise<SendEmailResult> {
+    return this.mailService.sendTemplateEmail(
+      templateId,
+      emailData,
+      templateVariables,
+    );
+  }
+
+  public sendEmail(emailData: SendEmailDto): Promise<SendEmailResult> {
+    return this.mailService.sendEmail(emailData);
+  }
+}
+```
+
+This service can now be used throughout your application to send different types of emails using predefined templates and parameters.
+
+## Conclusion
+
+With these examples, you should be able to start sending various types of emails using the Mailgun Mail Module in your NestJS applications. For more detailed information and advanced features, refer to the full documentation of the module and Mailgun's API.
