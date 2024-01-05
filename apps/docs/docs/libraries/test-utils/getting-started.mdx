@@ -1,0 +1,28 @@
+---
+title: 'Getting Started'
+---
+
+# Getting Started with Test Utils Library
+
+---
+
+The Test Utils library is your gateway to efficient and effective testing practices in development. It provides an array of functionalities tailored for the modern testing landscape, leveraging containers for database and service emulation.
+
+## Quick Installation
+
+Start by adding Test Utils to your project with yarn:
+
+```bash
+yarn add @softkit/test-utils
+```
+
+## Key Features
+
+- **Database Management**: Use [`startPostgres`](/libraries/test-utils/features#database-testing-made-easy-with-startpostgres) to configure a PostgreSQL container, tailored for realistic testing scenarios.
+- **Redis Server Setup**: Employ [`startRedis`](/libraries/test-utils/features#redis-server-with-startredis) to initialize a Redis container, ensuring your tests have access to a fast, in-memory data store.
+- **Local AWS Simulation**: With [`startLocalstack`](/libraries/test-utils/features#local-aws-testing-with-startlocalstack), replicate AWS services locally to test without incurring cloud costs.
+- **Enhanced Assertions**: Benefit from additional Jest assertions, such as [`expectNotNullAndGet`](/api/test-utils/src/functions/expectNotNullAndGet), to make your tests more expressive and comprehensive.
+
+## Get Started
+
+Jump right into testing with these powerful utilities designed to streamline your development process. Whether you're unit testing a new feature or integrating complex service interactions, Test Utils equips you with the tools to do it all with confidence and ease.

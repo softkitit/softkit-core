@@ -61,6 +61,10 @@ const sidebars = {
     {
       type: 'category',
       label: 'Library Documentation',
+      link: {
+        type: 'doc',
+        id: 'libraries/index',
+      },
       items: [
         {
           type: 'category',
@@ -73,6 +77,35 @@ const sidebars = {
               type: 'doc',
               label: 'API',
               id: 'api/mail/src/index',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'File Storage Library',
+          items: [
+            'libraries/file-storage/getting-started',
+            'libraries/file-storage/localstack',
+            'libraries/file-storage/advanced-features',
+            {
+              type: 'doc',
+              label: 'API',
+              id: 'api/file-storage/src/index',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Test Utils Library',
+          items: [
+            'libraries/test-utils/getting-started',
+            'libraries/test-utils/features',
+            'libraries/test-utils/test-containers',
+
+            {
+              type: 'doc',
+              label: 'API',
+              id: 'api/test-utils/src/index',
             },
           ],
         },

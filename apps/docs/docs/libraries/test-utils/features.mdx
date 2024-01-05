@@ -1,0 +1,48 @@
+---
+title: 'Features'
+---
+
+# Features of Test Utils Library
+
+---
+
+Unpack the comprehensive suite of features provided by the Test Utils library, designed to empower your testing with flexibility and precision.
+
+## Database Testing Made Easy with `startPostgres`
+
+The `startPostgres` function launches a Postgres database within a Docker container, fully equipped for testing. Customize your setup with a range of options or rely on the provided defaults for immediate startup.
+
+### Configuration Options and Defaults
+
+- **runMigrations**: Determines if migrations should run during setup. Default is `false`.
+- **dbName**: Sets the database name, which is `'nest'` by default.
+- **username & password**: Establishes the database credentials. Defaults are `'test-user'` and `'secret-test'`.
+- **imageTag**: Selects the Postgres version. The default is `'15.4-alpine'`, providing a lightweight container.
+- **setupTransactionsManagement**: Enables transactional context, set to `true` by default for robust data handling.
+- **additionalTypeOrmModuleOptions**: Allows additional TypeORM configurations, which are empty by default for maximum compatibility.
+
+With [`startPostgres`](/api/test-utils/src/functions/startPostgres/), you receive a [`StartedDb`](/api/test-utils/src/type-aliases/StartedDb/) object containing the container instance, TypeORM options, and a custom configuration service for TypeORM, providing a streamlined interface for your database tests.
+
+## Local AWS Testing with `startLocalstack`
+
+`startLocalstack` simulates an AWS environment on your local machine, configurable with a variety of services and settings:
+
+- **imageName & imageTag**: Selects the LocalStack image to use, allowing you to test with different versions.
+- **services**: A list of AWS services to include in your LocalStack, from S3 to DynamoDB, tailored to your testing needs.
+- **ports**: Specifies which ports to expose, giving you control over service accessibility.
+
+By calling [`startLocalstack`](/api/test-utils/src/functions/startLocalstack/), you receive a [`StartedLocalstack`](/api/test-utils/src/type-aliases/StartedLocalstack/) object, which includes the LocalStack container configuration and network settings, enabling immediate interaction with the emulated AWS services.
+
+## Redis Server with `startRedis`
+
+With `startRedis`, initiating a Redis server for testing is straightforward. It provides sensible defaults to get you started quickly, along with the flexibility to choose different versions as needed.
+
+### Options and Defaults
+
+- **imageName & imageTag**: Selects the Redis Docker image. By default, it uses `'redis:7.2.1-alpine3.18'`, combining the reliability of Redis with the efficiency of Alpine.
+
+Calling [`startRedis`](/api/test-utils/src/functions/startRedis/) gives you a [`StartedRedis`](/api/test-utils/src/type-aliases/StartedRedis/) object, which includes both the Redis container and its connection details, simplifying the integration into your tests.
+
+# Leverage Test Utils for High-Quality Testing
+
+The Test Utils library enriches your testing experience, offering detailed control over your environment setup. Embrace these tools to enhance the quality and reliability of your tests, ensuring they meet the demands of modern software development.

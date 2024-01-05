@@ -1,0 +1,64 @@
+---
+title: 'Testing with LocalStack'
+---
+
+# Testing with LocalStack
+
+---
+
+LocalStack provides a fully functional local AWS cloud stack for testing. It's a great tool for developing cloud applications without incurring costs or network latency associated with using real AWS instances.
+
+## Setting Up LocalStack
+
+Use the [`@softkit/test-utils`](/libraries/test-utils/getting-started) module to integrate LocalStack into your testing environment.
+
+### Example Test Configuration
+
+```typescript
+@Module({
+  imports: [
+    S3FileStorageModule.forRoot({
+      credentials: {
+        accessKeyId: 'test',
+        secretAccessKey: 'test',
+      },
+      forcePathStyle: true,
+      endpoint: \`http://localhost:\${process.env['TEST_LOCALSTACK_MAIN_PORT']}\`,
+      region: 'us-west-1',
+    }),
+  ],
+})
+export class FileUploadAppModule {}
+```
+
+## Understanding `startLocalstack`
+
+### What is `startLocalstack`?
+
+`startLocalstack` is a function provided by the [`@softkit/test-utils`](/libraries/test-utils/getting-started) library, designed to streamline the setup and management of a LocalStack container. LocalStack emulates AWS cloud services in a local environment, allowing developers to test applications without needing actual AWS infrastructure.
+
+### Benefits of Using `startLocalstack`
+
+- **Efficiency**: Quickly sets up a LocalStack container using `GenericContainer` from the ['testcontainers'](/libraries/test-utils/test-containers) library.
+- **Flexibility**: Allows custom configurations for different AWS services.
+- **Consistency**: Ensures that tests run in an environment that closely resembles production.
+
+### Practical Usage Example
+
+Here's a simple example of how to use [`startLocalstack`](/libraries/test-utils/features#local-aws-testing-with-startlocalstack) in your testing setup:
+
+```typescript
+import { startLocalstack } from '@softkit/test-utils';
+
+async function setupTestEnvironment() {
+  const localstack = await startLocalstack();
+  // LocalStack is now running with your specified configurations
+  // Continue with your test setup
+}
+```
+
+With `startLocalstack`, you can confidently test your applications, knowing they will interact with AWS services as they would in a real-world scenario.
+
+## Next Steps
+
+- After setting up your testing environment, explore the [Advanced Features and Customization](/libraries/file-storage/advanced-features) of the File Storage module.
