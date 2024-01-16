@@ -3,7 +3,6 @@ import { getQueueToken } from '@nestjs/bull-shared/dist/utils/get-queue-token.ut
 import { ModuleRef } from '@nestjs/core';
 import { Queue, RepeatableJob } from 'bullmq';
 import equal from 'fast-deep-equal';
-import { BaseJobData } from './vo';
 import { Propagation, Transactional } from 'typeorm-transactional';
 import { IJobService } from './job.interface';
 import { BaseJobEntity } from '../entity';
@@ -12,9 +11,7 @@ import { JOB_SERVICE_TOKEN } from '../constants';
 import { SystemJobConfig } from '../config/system-job.config';
 
 @Injectable()
-export class SchedulingJobService
-  implements ISchedulingJobService<BaseJobData>
-{
+export class SchedulingJobService implements ISchedulingJobService {
   protected readonly logger = new Logger(SchedulingJobService.name);
 
   /**
@@ -25,15 +22,13 @@ export class SchedulingJobService
   constructor(
     private readonly moduleRef: ModuleRef,
     @Inject(JOB_SERVICE_TOKEN)
-    private readonly jobService: IJobService<BaseJobEntity<BaseJobData>>,
+    private readonly jobService: IJobService<BaseJobEntity>,
   ) {}
 
   @Transactional({
     propagation: Propagation.REQUIRES_NEW,
   })
-  public async scheduleSystemJob(
-    systemJobConfig: SystemJobConfig<BaseJobData>,
-  ) {
+  public async scheduleSystemJob(systemJobConfig: SystemJobConfig) {
     this.logger.log(`Start scheduling system job ${systemJobConfig.name}`);
 
     const job = await this.jobService.getLatestJobVersionByName(
@@ -77,8 +72,8 @@ export class SchedulingJobService
   // eslint-disable-next-line complexity
   private async checkAndRescheduleJobs(
     scheduleJob: RepeatableJob | undefined,
-    systemJobConfig: SystemJobConfig<BaseJobData>,
-    job: BaseJobEntity<BaseJobData> | null,
+    systemJobConfig: SystemJobConfig,
+    job: BaseJobEntity | null,
     queue: Queue,
   ) {
     const patternChanged = scheduleJob?.pattern !== systemJobConfig.cron;
@@ -106,8 +101,8 @@ export class SchedulingJobService
   }
 
   private async rescheduleJob(
-    systemJobConfig: SystemJobConfig<BaseJobData>,
-    job: BaseJobEntity<BaseJobData> | null,
+    systemJobConfig: SystemJobConfig,
+    job: BaseJobEntity | null,
     queue: Queue,
   ) {
     const scheduledJob = await queue.add(

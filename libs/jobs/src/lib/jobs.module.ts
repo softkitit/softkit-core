@@ -3,7 +3,6 @@ import { Provider } from '@nestjs/common/interfaces/modules/provider.interface';
 import { InjectionToken } from '@nestjs/common/interfaces/modules/injection-token.interface';
 import { OptionalFactoryDependency } from '@nestjs/common/interfaces/modules/optional-factory-dependency.interface';
 import { JobsConfig } from './config';
-import { BaseJobData } from './service/vo';
 import {
   JOB_SERVICE_TOKEN,
   JOBS_CONFIG_TOKEN,
@@ -20,27 +19,25 @@ import * as Repositories from './repository';
 import { BullModule } from '@nestjs/bullmq';
 import { RegisterQueueOptions } from '@nestjs/bullmq/dist/interfaces/register-queue-options.interface';
 
-type JobsConfigOrPromise<T extends BaseJobData> =
-  | JobsConfig<T>
-  | Promise<JobsConfig<T>>;
+type JobsConfigOrPromise = JobsConfig | Promise<JobsConfig>;
 
 export interface JobsConfigFactory {
-  createJobsConfigOptions: <T extends BaseJobData>() => JobsConfigOrPromise<T>;
+  createJobsConfigOptions: () => JobsConfigOrPromise;
 }
 
 export interface JobsAsyncParams {
   queueNames: string[];
-  useFactory: <T extends BaseJobData>(
+  useFactory: (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ...args: any[]
-  ) => JobsConfigOrPromise<T>;
+  ) => JobsConfigOrPromise;
   inject?: Array<InjectionToken | OptionalFactoryDependency>;
   providers?: Provider[];
 }
 
-export const createAsyncOptions = async <T extends BaseJobData>(
+export const createAsyncOptions = async (
   optionsFactory: JobsConfigFactory,
-): Promise<JobsConfig<T>> => {
+): Promise<JobsConfig> => {
   return optionsFactory.createJobsConfigOptions();
 };
 
@@ -68,8 +65,8 @@ export class JobsModule {
     };
   }
 
-  static forRoot<T extends BaseJobData = BaseJobData>(
-    config: JobsConfig<T>,
+  static forRoot(
+    config: JobsConfig,
     queueNames: string[],
     global: boolean = true,
   ): DynamicModule {

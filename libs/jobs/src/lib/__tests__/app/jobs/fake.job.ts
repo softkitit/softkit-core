@@ -1,23 +1,23 @@
 import { InjectQueue, Processor, WorkerHost } from '@nestjs/bullmq';
 import { Job, Queue } from 'bullmq';
 import { wait } from 'nx-cloud/lib/utilities/waiter';
-import { Jobs } from './vo/jobs.enum';
+import { Queues } from './vo/queues.enum';
 
 export class FakeJobData {
   executeForMillis!: number;
 }
 
-@Processor(Jobs.FAKE_JOB, {
+// @ts-ignore
+@Processor(Queues.FAKE_JOB, {
   concurrency: 50,
   maxStalledCount: 10,
-  connection: {},
 })
 export class FakeJob extends WorkerHost {
   public startedProcessingCounter: number = 0;
   public finishedProcessingCounter: number = 0;
   public skipCount: number = 0;
 
-  constructor(@InjectQueue(Jobs.FAKE_JOB) private queue: Queue) {
+  constructor(@InjectQueue(Queues.FAKE_JOB) private queue: Queue) {
     super();
   }
 

@@ -14,7 +14,7 @@ import { Queue } from 'bullmq';
 import { FakeJob, FakeJobData } from './app/jobs/fake.job';
 import { wait } from 'nx-cloud/lib/utilities/waiter';
 import { generateRandomId } from '@softkit/crypto';
-import { Jobs } from './app/jobs/vo/jobs.enum';
+import { Queues } from './app/jobs/vo/queues.enum';
 
 describe('jobs e2e tests', () => {
   let startedRedis: StartedRedis;
@@ -49,7 +49,7 @@ describe('jobs e2e tests', () => {
     app = module.createNestApplication(new FastifyAdapter());
     await app.listen(0);
 
-    fakeJobQueue = app.get(getQueueToken(Jobs.FAKE_JOB));
+    fakeJobQueue = app.get(getQueueToken(Queues.FAKE_JOB));
     fakeJob = app.get(FakeJob);
 
     jobId = generateRandomId();
@@ -62,7 +62,7 @@ describe('jobs e2e tests', () => {
 
   it('should execute job only once with the same job id', async () => {
     await fakeJobQueue.add(
-      Jobs.FAKE_JOB,
+      Queues.FAKE_JOB,
       { executeForMillis: 20 },
       {
         jobId,
@@ -72,7 +72,7 @@ describe('jobs e2e tests', () => {
     await wait(1000);
 
     await fakeJobQueue.add(
-      Jobs.FAKE_JOB,
+      Queues.FAKE_JOB,
       { executeForMillis: 25 },
       {
         jobId,
@@ -86,7 +86,7 @@ describe('jobs e2e tests', () => {
 
   it('should execute scheduled job immediately', async () => {
     await fakeJobQueue.add(
-      Jobs.FAKE_JOB,
+      Queues.FAKE_JOB,
       { executeForMillis: 20 },
       {
         jobId,
@@ -105,7 +105,7 @@ describe('jobs e2e tests', () => {
 
   it('should execute scheduled job one time, even if added twice', async () => {
     await fakeJobQueue.add(
-      Jobs.FAKE_JOB,
+      Queues.FAKE_JOB,
       { executeForMillis: 500 },
       {
         jobId,
@@ -116,7 +116,7 @@ describe('jobs e2e tests', () => {
     );
 
     await fakeJobQueue.add(
-      Jobs.FAKE_JOB,
+      Queues.FAKE_JOB,
       { executeForMillis: 20 },
       {
         jobId,

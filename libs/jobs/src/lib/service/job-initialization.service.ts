@@ -5,7 +5,6 @@ import {
   OnApplicationBootstrap,
 } from '@nestjs/common';
 import { ISchedulingJobService } from './scheduling-job.interface';
-import { BaseJobData } from './vo';
 import { JobsConfig } from '../config';
 import { JOBS_CONFIG_TOKEN, SCHEDULING_JOB_SERVICE_TOKEN } from '../constants';
 
@@ -15,9 +14,9 @@ export class JobInitializationService implements OnApplicationBootstrap {
 
   constructor(
     @Inject(SCHEDULING_JOB_SERVICE_TOKEN)
-    private readonly schedulingJobService: ISchedulingJobService<BaseJobData>,
+    private readonly schedulingJobService: ISchedulingJobService,
     @Inject(JOBS_CONFIG_TOKEN)
-    private readonly jobConfig: JobsConfig<BaseJobData>,
+    private readonly jobConfig: JobsConfig,
   ) {}
 
   async onApplicationBootstrap(): Promise<void> {

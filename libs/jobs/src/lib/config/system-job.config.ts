@@ -1,13 +1,12 @@
-import { BaseJobData } from '../service/vo';
-import { IsString, ValidateNested } from 'class-validator';
+import { IsObject, IsString } from 'class-validator';
 import { JobConfig } from './job.config';
-import { Type } from 'class-transformer';
+import { Transform } from 'class-transformer';
 
-export class SystemJobConfig<T extends BaseJobData> extends JobConfig {
+export class SystemJobConfig extends JobConfig {
   @IsString()
   cron!: string;
 
-  @ValidateNested()
-  @Type(() => BaseJobData)
-  jobData!: T;
+  @Transform((j) => j.value)
+  @IsObject()
+  jobData!: object;
 }

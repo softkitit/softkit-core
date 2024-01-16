@@ -1,15 +1,15 @@
 import { InjectQueue, Processor } from '@nestjs/bullmq';
 import { Job, Queue } from 'bullmq';
-import { Jobs } from './vo/jobs.enum';
 import { FakeJob, FakeJobData } from './fake.job';
+import { Queues } from './vo/queues.enum';
 
-@Processor(Jobs.FAKE_SYSTEM_JOB, {
+// @ts-ignore
+@Processor(Queues.FAKE_SYSTEM_JOB, {
   concurrency: 1,
   maxStalledCount: 10,
-  connection: {},
 })
 export class FakeSystemJob extends FakeJob {
-  constructor(@InjectQueue(Jobs.FAKE_SYSTEM_JOB) queue: Queue) {
+  constructor(@InjectQueue(Queues.FAKE_SYSTEM_JOB) queue: Queue) {
     super(queue);
   }
 

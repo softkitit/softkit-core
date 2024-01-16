@@ -5,10 +5,10 @@ import { JobsConfig } from '../../config';
 import { FakeJob } from './jobs/fake.job';
 import { setupTypeormModule } from '@softkit/typeorm';
 import { JobsModule } from '../../jobs.module';
-import { Jobs } from './jobs/vo/jobs.enum';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Job, JobExecution } from '../../entity';
 import { FakeSystemJob } from './jobs/fake-system.job';
+import { Queues } from './jobs/vo/queues.enum';
 
 @Module({
   controllers: [],
@@ -19,7 +19,7 @@ import { FakeSystemJob } from './jobs/fake-system.job';
     setupTypeormModule(),
     TypeOrmModule.forFeature([Job, JobExecution]),
     JobsModule.forRootAsync({
-      queueNames: Object.values(Jobs),
+      queueNames: Object.values(Queues),
       useFactory: (j) => j,
       inject: [JobsConfig],
     }),

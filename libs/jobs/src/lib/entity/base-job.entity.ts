@@ -3,11 +3,8 @@ import { Column, PrimaryGeneratedColumn } from 'typeorm';
 import { Expose } from 'class-transformer';
 import { IsUUIDLocalized } from '@softkit/validation';
 import { JobsOptions } from 'bullmq';
-import { BaseJobData } from '../service/vo';
 
-export abstract class BaseJobEntity<
-  JOB_DATA extends BaseJobData,
-> extends BaseEntityHelper {
+export abstract class BaseJobEntity extends BaseEntityHelper {
   @PrimaryGeneratedColumn('uuid')
   @Expose()
   @IsUUIDLocalized()
@@ -27,7 +24,7 @@ export abstract class BaseJobEntity<
 
   @Expose()
   @Column('jsonb', { nullable: true })
-  jobData?: JOB_DATA;
+  jobData?: object;
 
   @Expose()
   @Column('jsonb', { nullable: true })

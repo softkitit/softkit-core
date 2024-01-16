@@ -13,7 +13,7 @@ import { JobStatus } from './vo';
 import { Job } from './job.entity';
 
 @Entity('job_executions')
-export class JobExecution<JOB_DATA> extends BaseEntityHelper {
+export class JobExecution extends BaseEntityHelper {
   @PrimaryGeneratedColumn('uuid')
   @Expose()
   @IsUUIDLocalized()
@@ -50,7 +50,7 @@ export class JobExecution<JOB_DATA> extends BaseEntityHelper {
 
   @Expose()
   @Column('jsonb', { nullable: true })
-  jobData?: JOB_DATA;
+  jobData?: object;
 
   @Expose()
   @Column('jsonb', { nullable: true })

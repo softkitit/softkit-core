@@ -1,10 +1,9 @@
-import { BaseJobData } from '../service/vo';
 import { IsArray, IsInt, IsOptional, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { IntegerType } from '@softkit/validation';
 import { SystemJobConfig } from './system-job.config';
 
-export class SystemJobsConfig<T extends BaseJobData> {
+export class SystemJobsConfig {
   @IntegerType
   @IsInt()
   systemJobLockTimeoutMillis: number = 15_000;
@@ -14,6 +13,6 @@ export class SystemJobsConfig<T extends BaseJobData> {
   @ValidateNested({
     each: true,
   })
-  @Type(() => SystemJobConfig<T>)
-  jobs?: SystemJobConfig<T>[];
+  @Type(() => SystemJobConfig)
+  jobs?: SystemJobConfig[];
 }

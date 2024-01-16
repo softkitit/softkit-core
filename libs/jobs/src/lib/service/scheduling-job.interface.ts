@@ -1,6 +1,5 @@
-import { BaseJobData } from './vo';
 import { SystemJobConfig } from '../config/system-job.config';
 
-export interface ISchedulingJobService<T extends BaseJobData> {
-  scheduleSystemJob(systemJobConfig: SystemJobConfig<T>): Promise<void>;
+export interface ISchedulingJobService {
+  scheduleSystemJob(systemJobConfig: SystemJobConfig): Promise<void>;
 }
