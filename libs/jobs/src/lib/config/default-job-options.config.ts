@@ -62,6 +62,7 @@ export class DefaultJobOptionsConfig {
   @BooleanType
   @IsBoolean()
   lifo?: boolean;
+
   /**
    * Default behavior is up to 3 days and 10k jobs
    */
@@ -78,21 +79,22 @@ export class DefaultJobOptionsConfig {
 
   /**
    * Maximum amount of log entries that will be preserved
-   * Default 10
+   * Default 0, because we don't think that storing logs in redis is a good idea in general
    */
   @IsInt()
   @IntegerType
   @Min(0)
-  keepLogs: number = 10;
+  keepLogs: number = 0;
 
   /**
    * Limits the amount of stack trace lines that will be recorded in the stacktrace.
-   * Default 10
+   * Default 0, everything will be in logs if you need a stacktrace and should be for debugging,
+   * doesn't sound like a good idea to store in redis
    */
   @IsInt()
   @IntegerType
   @Min(0)
-  stackTraceLimit: number = 10;
+  stackTraceLimit: number = 0;
 
   /**
    * Limits the size in bytes of the job's data payload (as a JSON serialized string).

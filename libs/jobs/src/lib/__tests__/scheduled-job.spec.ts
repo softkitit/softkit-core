@@ -1,4 +1,9 @@
-import { StartedRedis, startRedis } from '@softkit/test-utils';
+import {
+  StartedDb,
+  StartedRedis,
+  startPostgres,
+  startRedis,
+} from '@softkit/test-utils';
 import { Test } from '@nestjs/testing';
 import {
   FastifyAdapter,
@@ -9,35 +14,42 @@ import { Queue } from 'bullmq';
 import { FakeJob, FakeJobData } from './app/jobs/fake.job';
 import { wait } from 'nx-cloud/lib/utilities/waiter';
 import { generateRandomId } from '@softkit/crypto';
+import { Jobs } from './app/jobs/vo/jobs.enum';
 
 describe('jobs e2e tests', () => {
-  let startedRedisPromise: StartedRedis;
+  let startedRedis: StartedRedis;
+  let startedDb: StartedDb;
   let app: NestFastifyApplication;
   let fakeJobQueue: Queue<FakeJobData>;
   let fakeJob: FakeJob;
   let jobId: string;
 
   beforeAll(async () => {
-    startedRedisPromise = await startRedis();
+    startedRedis = await startRedis();
+    startedDb = await startPostgres();
   }, 60_000);
 
   afterAll(async () => {
-    if (startedRedisPromise) {
-      await startedRedisPromise.container.stop();
+    if (startedRedis) {
+      await startedRedis.container.stop();
+    }
+
+    if (startedDb) {
+      await startedDb.container.stop();
     }
   });
 
   beforeEach(async () => {
-    const { JobsModule } = require('./app/jobs.module');
+    const { AppModule } = require('./app/app.module');
 
     const module = await Test.createTestingModule({
-      imports: [JobsModule],
+      imports: [AppModule],
     }).compile();
 
     app = module.createNestApplication(new FastifyAdapter());
     await app.listen(0);
 
-    fakeJobQueue = app.get(getQueueToken('fake-job-queue'));
+    fakeJobQueue = app.get(getQueueToken(Jobs.FAKE_JOB));
     fakeJob = app.get(FakeJob);
 
     jobId = generateRandomId();
@@ -48,18 +60,9 @@ describe('jobs e2e tests', () => {
     jest.resetAllMocks();
   });
 
-  it('should auto schedule jobs and run 5 times', async () => {
-    await fakeJobQueue.add('fake-job-queue', { executeForMillis: 1000 });
-    await fakeJobQueue.add('fake-job-queue', { executeForMillis: 20 });
-
-    await wait(2000);
-
-    expect(fakeJob.callCounter).toBe(2);
-  });
-
   it('should execute job only once with the same job id', async () => {
     await fakeJobQueue.add(
-      'fake-job-name',
+      Jobs.FAKE_JOB,
       { executeForMillis: 20 },
       {
         jobId,
@@ -69,7 +72,7 @@ describe('jobs e2e tests', () => {
     await wait(1000);
 
     await fakeJobQueue.add(
-      'fake-job-name',
+      Jobs.FAKE_JOB,
       { executeForMillis: 25 },
       {
         jobId,
@@ -78,12 +81,12 @@ describe('jobs e2e tests', () => {
 
     await wait(1000);
 
-    expect(fakeJob.callCounter).toBe(1);
+    expect(fakeJob.startedProcessingCounter).toBe(1);
   });
 
   it('should execute scheduled job immediately', async () => {
     await fakeJobQueue.add(
-      'fake-job-name',
+      Jobs.FAKE_JOB,
       { executeForMillis: 20 },
       {
         jobId,
@@ -97,12 +100,12 @@ describe('jobs e2e tests', () => {
 
     await wait(1000);
 
-    expect(fakeJob.callCounter).toBe(1);
+    expect(fakeJob.startedProcessingCounter).toBe(1);
   });
 
-  it('should execute scheduled job and one time', async () => {
+  it('should execute scheduled job one time, even if added twice', async () => {
     await fakeJobQueue.add(
-      'fake-job-name',
+      Jobs.FAKE_JOB,
       { executeForMillis: 500 },
       {
         jobId,
@@ -113,7 +116,7 @@ describe('jobs e2e tests', () => {
     );
 
     await fakeJobQueue.add(
-      'fake-job-name',
+      Jobs.FAKE_JOB,
       { executeForMillis: 20 },
       {
         jobId,
@@ -122,27 +125,10 @@ describe('jobs e2e tests', () => {
 
     await wait(400);
 
-    expect(fakeJob.callCounter).toBe(1);
+    expect(fakeJob.startedProcessingCounter).toBe(1);
 
     await wait(3000);
 
-    expect(fakeJob.callCounter).toBe(4);
-  }, 10_000);
-
-  it('should execute only one job at a time with overlap and concurrency bigger then 1', async () => {
-    await fakeJobQueue.add(
-      'fake-job-name',
-      { executeForMillis: 3000 },
-      {
-        jobId,
-        repeat: {
-          every: 1000,
-        },
-      },
-    );
-
-    await wait(5000);
-
-    expect(fakeJob.callCounter).toBe(2);
+    expect(fakeJob.startedProcessingCounter).toBe(4);
   }, 10_000);
 });

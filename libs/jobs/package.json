@@ -9,7 +9,16 @@
     "class-validator": "^0.14.0",
     "@softkit/validation": "*",
     "@softkit/redis": "*",
-    "bullmq": "^4.14.0"
+    "bullmq": "^5.1.1",
+    "@softkit/typeorm": "*",
+    "typeorm": "0.3.17",
+    "@nestjs/typeorm": "^10.0.0",
+    "@nestjs/bullmq": "^10.0.1",
+    "@softkit/typeorm-service": "*",
+    "typeorm-transactional": "^0.4.1",
+    "@nestjs/bull-shared": "10.0.1",
+    "@nestjs/core": "^10.2.4",
+    "fast-deep-equal": "^3.1.3"
   },
   "type": "commonjs",
   "main": "./src/index.js",

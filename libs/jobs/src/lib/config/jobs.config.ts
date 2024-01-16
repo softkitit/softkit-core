@@ -8,8 +8,11 @@ import {
 import { BooleanType } from '@softkit/validation';
 import { RedisClientConfig } from '@softkit/redis';
 import { DefaultJobOptionsConfig } from './default-job-options.config';
+import { SystemJobsConfig } from './system-jobs.config';
+import { BaseJobData } from '../service/vo';
+import { JobConfig } from './job.config';
 
-export class JobsConfig {
+export class JobsConfig<T extends BaseJobData = BaseJobData> {
   @ValidateNested()
   @Type(() => DefaultJobOptionsConfig)
   defaultJobOptions: DefaultJobOptionsConfig = new DefaultJobOptionsConfig();
@@ -39,4 +42,16 @@ export class JobsConfig {
   @Type(() => RedisClientConfig)
   @ValidateNested()
   connection!: RedisClientConfig;
+
+  @IsOptional()
+  @ValidateNested({
+    each: true,
+  })
+  @Type(() => JobConfig)
+  jobs?: JobConfig[];
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => SystemJobsConfig)
+  systemJobs?: SystemJobsConfig<T>;
 }

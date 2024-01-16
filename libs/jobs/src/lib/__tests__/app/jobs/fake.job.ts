@@ -1,31 +1,41 @@
 import { InjectQueue, Processor, WorkerHost } from '@nestjs/bullmq';
 import { Job, Queue } from 'bullmq';
 import { wait } from 'nx-cloud/lib/utilities/waiter';
+import { Jobs } from './vo/jobs.enum';
 
 export class FakeJobData {
   executeForMillis!: number;
 }
 
-@Processor('fake-job-queue', {
+@Processor(Jobs.FAKE_JOB, {
   concurrency: 50,
+  maxStalledCount: 10,
+  connection: {},
 })
 export class FakeJob extends WorkerHost {
-  public callCounter: number = 0;
+  public startedProcessingCounter: number = 0;
+  public finishedProcessingCounter: number = 0;
+  public skipCount: number = 0;
 
-  constructor(@InjectQueue('fake-job-queue') private queue: Queue) {
+  constructor(@InjectQueue(Jobs.FAKE_JOB) private queue: Queue) {
     super();
   }
 
   override async process(job: Job<FakeJobData, number>): Promise<FakeJobData> {
+    // eslint-disable-next-line no-console
+    console.log('token', job.asJSON());
     const hasActiveJobs = await this.hasOtherActiveJobsById(job);
 
     if (hasActiveJobs) {
+      this.skipCount++;
       return job.data;
     }
 
-    this.callCounter++;
+    this.startedProcessingCounter++;
 
     await wait(job.data.executeForMillis);
+
+    this.finishedProcessingCounter++;
 
     return job.data;
   }

@@ -41,7 +41,7 @@ export function ClsPreset<CLS_STORE extends TenantClsStore>(
         entityPropertyName: propertyName,
         entityName,
         clsStorageKey: options.clsPropertyFieldName as symbol,
-        presetType: options.presetType || PresetType.ALL,
+        presetType: options.presetType ?? PresetType.ALL,
       });
     }
   };
