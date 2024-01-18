@@ -4,7 +4,12 @@ import { BaseEntityService } from '../../lib/base.service';
 import { UserRepository } from './user.repository';
 
 @Injectable()
-export class UserService extends BaseEntityService<UserEntity, UserRepository> {
+export class UserService extends BaseEntityService<
+  UserEntity,
+  'id',
+  UserRepository,
+  Pick<UserEntity, 'id' | 'version'>
+> {
   constructor(userRepository: UserRepository) {
     super(userRepository);
   }

@@ -5,11 +5,11 @@ import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 
 @Injectable()
-export class UserRepository extends BaseRepository<UserEntity> {
+export class UserRepository extends BaseRepository<UserEntity, 'id'> {
   constructor(
     @InjectDataSource()
     ds: DataSource,
   ) {
-    super(UserEntity, ds);
+    super(UserEntity, ds, 'id');
   }
 }

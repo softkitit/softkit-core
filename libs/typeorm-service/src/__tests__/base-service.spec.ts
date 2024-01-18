@@ -127,7 +127,8 @@ describe('base service tests', () => {
     const savedEntity =
       await testBaseService.createOrUpdateEntity(objectToSave);
 
-    const updatedEntity = await testBaseService.partialUpdate(savedEntity.id, {
+    const updatedEntity = await testBaseService.partialUpdate({
+      id: savedEntity.id,
       firstName: 'updated',
     });
 
