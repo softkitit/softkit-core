@@ -1,11 +1,13 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, VersionColumn } from 'typeorm';
 import { BaseEntityHelper } from '../../lib/entities/entity-helper';
 import { PaginateConfig } from 'nestjs-paginate';
+import { IsNumberLocalized } from '@softkit/validation';
+import { Expose } from 'class-transformer';
 
 @Entity()
 export class UserEntity extends BaseEntityHelper {
   @PrimaryGeneratedColumn('uuid')
-  override id!: string;
+  id!: string;
 
   // having it nullable is useful for set password later logic
   @Column({ nullable: true, length: 256 })
@@ -19,6 +21,11 @@ export class UserEntity extends BaseEntityHelper {
 
   @Column({ type: String, nullable: true, length: 128 })
   nullableStringField?: string | null;
+
+  @VersionColumn()
+  @IsNumberLocalized()
+  @Expose()
+  version!: number;
 }
 
 export const USER_PAGINATED_CONFIG: PaginateConfig<UserEntity> = {

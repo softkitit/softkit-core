@@ -5,10 +5,8 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   UpdateDateColumn,
-  VersionColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumberLocalized } from '@softkit/validation';
 
 export abstract class EntityHelper extends BaseEntity {
   __entity?: string;
@@ -24,12 +22,6 @@ export abstract class EntityHelper extends BaseEntity {
 }
 
 export abstract class BaseEntityHelper extends EntityHelper {
-  @ApiProperty({
-    description: 'Unique identifier',
-  })
-  @Expose()
-  id!: string | number;
-
   @ApiProperty({
     type: Date,
     description: 'Created at date time in ISO format',
@@ -53,13 +45,4 @@ export abstract class BaseEntityHelper extends EntityHelper {
   @Expose()
   @DeleteDateColumn()
   deletedAt?: Date;
-
-  @ApiProperty({
-    type: 'string',
-    description: 'Entity version for optimistic lock handling',
-  })
-  @VersionColumn()
-  @IsNumberLocalized()
-  @Expose()
-  version!: number;
 }

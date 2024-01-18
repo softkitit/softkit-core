@@ -1,14 +1,22 @@
-import { Column, Entity, JoinColumn, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  PrimaryGeneratedColumn,
+  VersionColumn,
+} from 'typeorm';
 import { BaseTenantEntityHelper } from '../../lib/entities/tenant-entity-helper';
 import { TenantEntity } from './tenant.entity';
 import { ClsPreset } from '../../lib/subscribers/decorator/cls-preset.decorator';
 import { PresetType } from '../../lib/subscribers/decorator/vo/preset-type';
 import { UserAndTenantClsStore } from './cls/user.cls-store';
+import { IsNumberLocalized } from '@softkit/validation';
+import { Expose } from 'class-transformer';
 
 @Entity()
 export class TenantUserEntity extends BaseTenantEntityHelper {
   @PrimaryGeneratedColumn('uuid')
-  override id!: string;
+  id!: string;
 
   // having it nullable is useful for set password later logic
   @Column({ nullable: true, length: 256 })
@@ -42,4 +50,9 @@ export class TenantUserEntity extends BaseTenantEntityHelper {
 
   @JoinColumn()
   tenant?: TenantEntity | null;
+
+  @VersionColumn()
+  @IsNumberLocalized()
+  @Expose()
+  version!: number;
 }
