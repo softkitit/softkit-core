@@ -5,7 +5,7 @@ export class BaseTenantEntityService<
   ENTITY extends BaseTenantEntityHelper,
   ID extends keyof ENTITY,
   REPOSITORY extends BaseTenantRepository<ENTITY, ID>,
-  FIELDS_REQUIRED_FOR_UPDATE extends keyof ENTITY,
+  FIELDS_REQUIRED_FOR_UPDATE = Pick<ENTITY, ID>,
   DEFAULT_EXCLUDE_LIST extends BaseTenantEntityHelper = BaseTenantEntityHelper,
 > extends BaseEntityService<
   ENTITY,
@@ -13,4 +13,8 @@ export class BaseTenantEntityService<
   REPOSITORY,
   FIELDS_REQUIRED_FOR_UPDATE,
   DEFAULT_EXCLUDE_LIST
-> {}
+> {
+  constructor(repository: REPOSITORY) {
+    super(repository);
+  }
+}

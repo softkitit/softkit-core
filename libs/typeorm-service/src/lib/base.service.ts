@@ -32,7 +32,7 @@ export class BaseEntityService<
   @Transactional()
   override async partialUpdate(
     entity: DeepPartial<Omit<ENTITY, keyof DEFAULT_EXCLUDE_LIST>> &
-      Pick<ENTITY, ID>,
+      FIELDS_REQUIRED_FOR_UPDATE,
   ) {
     return await this.repository.save({
       ...entity,
@@ -60,7 +60,7 @@ export class BaseEntityService<
           ENTITY,
           keyof DEFAULT_EXCLUDE_LIST | keyof FIELDS_REQUIRED_FOR_UPDATE
         > &
-          Partial<Never<FIELDS_REQUIRED_FOR_UPDATE>>)
+          Partial<Never<Omit<FIELDS_REQUIRED_FOR_UPDATE, ID>>>)
       | (Omit<ENTITY, keyof DEFAULT_EXCLUDE_LIST> & FIELDS_REQUIRED_FOR_UPDATE),
   ) {
     return this.repository.createOrUpdate(

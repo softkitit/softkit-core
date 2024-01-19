@@ -8,15 +8,15 @@ import {
   startPostgres,
 } from '@softkit/test-utils';
 import { ObjectNotFoundException } from '@softkit/exceptions';
-import { PAGINATED_CONFIG, UserEntity } from './app/user.entity';
-import { UserService } from './app/user.service';
-import { UserRepository } from './app/user.repository';
-import { UserDto } from './app/user.dto';
+import { PAGINATED_CONFIG, UserEntity } from './app/entity/user.entity';
+import { UserService } from './app/service/user.service';
+import { UserRepository } from './app/repository/user.repository';
+import { UserDto } from './app/vo/user.dto';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { setupTypeormModule } from '@softkit/typeorm';
 
-describe('base service tests', () => {
-  let testBaseService: UserService;
+describe('base user service tests', () => {
+  let userService: UserService;
   let db: StartedDb;
 
   beforeAll(async () => {
@@ -48,7 +48,7 @@ describe('base service tests', () => {
       providers: [UserRepository, UserService],
     }).compile();
 
-    testBaseService = module.get(UserService);
+    userService = module.get<UserService>(UserService);
   });
 
   test('create one test', async () => {
@@ -58,8 +58,7 @@ describe('base service tests', () => {
       lastName: faker.person.lastName(),
     };
 
-    const savedEntity =
-      await testBaseService.createOrUpdateEntity(objectToSave);
+    const savedEntity = await userService.createOrUpdateEntity(objectToSave);
 
     checkAllTestFieldsPresent(objectToSave, savedEntity);
   });
@@ -71,8 +70,7 @@ describe('base service tests', () => {
       lastName: faker.person.lastName(),
     };
 
-    const savedEntity =
-      await testBaseService.createOrUpdateEntity(objectToSave);
+    const savedEntity = await userService.createOrUpdateEntity(objectToSave);
 
     const dataToUpdate = {
       ...objectToSave,
@@ -81,14 +79,13 @@ describe('base service tests', () => {
       firstName: 'updated first name',
     };
 
-    const updatedEntity =
-      await testBaseService.createOrUpdateEntity(dataToUpdate);
+    const updatedEntity = await userService.createOrUpdateEntity(dataToUpdate);
 
     expect(updatedEntity.id).toBe(savedEntity.id);
     expect(updatedEntity.firstName).toBe(dataToUpdate.firstName);
     expect(savedEntity.updatedAt).not.toBe(updatedEntity.updatedAt);
 
-    const foundEntity = await testBaseService.findAll();
+    const foundEntity = await userService.findAll();
     expect(foundEntity.length).toBeGreaterThanOrEqual(1);
   });
 
@@ -99,10 +96,9 @@ describe('base service tests', () => {
       lastName: faker.person.lastName(),
     };
 
-    const savedEntity =
-      await testBaseService.createOrUpdateEntity(objectToSave);
+    const savedEntity = await userService.createOrUpdateEntity(objectToSave);
 
-    const updatedEntity = await testBaseService.createOrUpdateEntity({
+    const updatedEntity = await userService.createOrUpdateEntity({
       id: savedEntity.id,
       firstName: 'updated',
       lastName: 'updated',
@@ -124,12 +120,12 @@ describe('base service tests', () => {
       lastName: faker.person.lastName(),
     };
 
-    const savedEntity =
-      await testBaseService.createOrUpdateEntity(objectToSave);
+    const savedEntity = await userService.createOrUpdateEntity(objectToSave);
 
-    const updatedEntity = await testBaseService.partialUpdate({
+    const updatedEntity = await userService.partialUpdate({
       id: savedEntity.id,
       firstName: 'updated',
+      version: 3,
     });
 
     expect(updatedEntity.id).toBe(savedEntity.id);
@@ -147,12 +143,11 @@ describe('base service tests', () => {
       lastName: faker.person.lastName(),
     };
 
-    const savedEntity =
-      await testBaseService.createOrUpdateEntity(objectToSave);
+    const savedEntity = await userService.createOrUpdateEntity(objectToSave);
 
-    expectNotNullAndGet(await testBaseService.findOneById(savedEntity.id));
+    expectNotNullAndGet(await userService.findOneById(savedEntity.id));
 
-    const archived = await testBaseService.archive(
+    const archived = await userService.archive(
       savedEntity.id,
       savedEntity.version,
     );
@@ -160,7 +155,7 @@ describe('base service tests', () => {
     expect(archived).toBeTruthy();
 
     await expect(
-      testBaseService.findOneById(savedEntity.id),
+      userService.findOneById(savedEntity.id),
     ).rejects.toBeInstanceOf(ObjectNotFoundException);
   });
 
@@ -171,12 +166,11 @@ describe('base service tests', () => {
       lastName: faker.person.lastName(),
     };
 
-    const savedEntity =
-      await testBaseService.createOrUpdateEntity(objectToSave);
+    const savedEntity = await userService.createOrUpdateEntity(objectToSave);
 
-    expectNotNullAndGet(await testBaseService.findOneById(savedEntity.id));
+    expectNotNullAndGet(await userService.findOneById(savedEntity.id));
 
-    const archived = await testBaseService.archive(
+    const archived = await userService.archive(
       savedEntity.id,
       savedEntity.version,
     );
@@ -184,17 +178,17 @@ describe('base service tests', () => {
     expect(archived).toBeTruthy();
 
     await expect(
-      testBaseService.findOneById(savedEntity.id),
+      userService.findOneById(savedEntity.id),
     ).rejects.toBeInstanceOf(ObjectNotFoundException);
 
-    const restored = await testBaseService.unarchive(
+    const restored = await userService.unarchive(
       savedEntity.id,
       savedEntity.version + 1,
     );
 
     expect(restored).toBeTruthy();
 
-    expect(await testBaseService.findOneById(savedEntity.id)).toBeDefined();
+    expect(await userService.findOneById(savedEntity.id)).toBeDefined();
   });
 
   test('create one and use find test', async () => {
@@ -204,11 +198,10 @@ describe('base service tests', () => {
       lastName: faker.person.lastName(),
     };
 
-    const savedEntity =
-      await testBaseService.createOrUpdateEntity(objectToSave);
+    const savedEntity = await userService.createOrUpdateEntity(objectToSave);
 
     const savedEntityFound = expectNotNullAndGet(
-      await testBaseService.findOneById(savedEntity.id),
+      await userService.findOneById(savedEntity.id),
     );
 
     expect(savedEntityFound.id).toBe(savedEntity.id);
@@ -220,11 +213,10 @@ describe('base service tests', () => {
       firstName: 'updated first name',
     };
 
-    const updatedEntity =
-      await testBaseService.createOrUpdateEntity(dataToUpdate);
+    const updatedEntity = await userService.createOrUpdateEntity(dataToUpdate);
 
     const updatedEntityFound = expectNotNullAndGet(
-      await testBaseService.findOneById(savedEntity.id),
+      await userService.findOneById(savedEntity.id),
     );
 
     expect(updatedEntity.firstName).toBe(updatedEntityFound.firstName);
@@ -232,19 +224,19 @@ describe('base service tests', () => {
 
   test('find one throw exception test', async () => {
     await expect(
-      testBaseService.findOneById(faker.string.uuid(), true),
+      userService.findOneById(faker.string.uuid(), true),
     ).rejects.toBeInstanceOf(ObjectNotFoundException);
   });
 
   test('custom find one throw exception test', async () => {
     await expect(
-      testBaseService.findOneByFirstName(faker.person.firstName()),
+      userService.findOneByFirstName(faker.person.firstName()),
     ).rejects.toBeInstanceOf(ObjectNotFoundException);
   });
 
   test('custom find one return undefined test', async () => {
     expect(
-      await testBaseService.findOneByFirstNameWithoutException(
+      await userService.findOneByFirstNameWithoutException(
         faker.person.firstName(),
       ),
     ).toBeUndefined();
@@ -257,11 +249,10 @@ describe('base service tests', () => {
       lastName: faker.person.lastName(),
     };
 
-    const savedEntity =
-      await testBaseService.createOrUpdateEntity(objectToSave);
+    const savedEntity = await userService.createOrUpdateEntity(objectToSave);
 
     await expect(
-      testBaseService.findOneByFirstName(savedEntity.firstName),
+      userService.findOneByFirstName(savedEntity.firstName),
     ).toBeDefined();
   });
 
@@ -291,7 +282,7 @@ describe('base service tests', () => {
         },
       );
 
-      await testBaseService.createOrUpdateEntities(dataToSave);
+      await userService.createOrUpdateEntities(dataToSave);
 
       const allEntities = [];
 
@@ -307,13 +298,13 @@ describe('base service tests', () => {
           path: 'test',
         };
 
-        const entities = await testBaseService.findAllPaginated(
+        const entities = await userService.findAllPaginated(
           filterQuery,
           PAGINATED_CONFIG,
         );
 
         const entitiesTransformed =
-          await testBaseService.findAllPaginatedAndTransform(
+          await userService.findAllPaginatedAndTransform(
             filterQuery,
             PAGINATED_CONFIG,
             UserDto,
@@ -340,7 +331,7 @@ describe('base service tests', () => {
         }
       }
 
-      const allEntitiesFromDb = await testBaseService.findAll(1, 1000);
+      const allEntitiesFromDb = await userService.findAll(1, 1000);
 
       const allIdsFromDb = allEntitiesFromDb
         .filter((e) => e.firstName === firstName)
@@ -368,25 +359,24 @@ describe('base service tests', () => {
       lastName: faker.person.lastName(),
     };
 
-    const savedEntity =
-      await testBaseService.createOrUpdateEntity(objectToSave);
+    const savedEntity = await userService.createOrUpdateEntity(objectToSave);
 
-    const foundEntity = await testBaseService.findOneById(savedEntity.id);
+    const foundEntity = await userService.findOneById(savedEntity.id);
 
     expect(foundEntity).toBeDefined();
 
-    const deleted = await testBaseService.delete(savedEntity.id);
+    const deleted = await userService.delete(savedEntity.id);
 
     expect(deleted).toBeTruthy();
 
-    const foundEntitySecondTime = await testBaseService.findOneById(
+    const foundEntitySecondTime = await userService.findOneById(
       savedEntity.id,
       false,
     );
 
     expect(foundEntitySecondTime).toBeUndefined();
 
-    const deletedSecondTime = await testBaseService.delete(savedEntity.id);
+    const deletedSecondTime = await userService.delete(savedEntity.id);
 
     expect(deletedSecondTime).toBeFalsy();
   });
