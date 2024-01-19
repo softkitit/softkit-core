@@ -125,7 +125,7 @@ describe('base user service tests', () => {
     const updatedEntity = await userService.partialUpdate({
       id: savedEntity.id,
       firstName: 'updated',
-      version: 3,
+      version: 2,
     });
 
     expect(updatedEntity.id).toBe(savedEntity.id);
