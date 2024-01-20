@@ -23,10 +23,6 @@ import { JobVersionService } from './service/job-version.service';
 
 type JobsConfigOrPromise = JobsConfig | Promise<JobsConfig>;
 
-export interface JobsConfigFactory {
-  createJobsConfigOptions: () => JobsConfigOrPromise;
-}
-
 export interface JobsAsyncParams {
   queueNames: string[];
   useFactory: (
@@ -36,12 +32,6 @@ export interface JobsAsyncParams {
   inject?: Array<InjectionToken | OptionalFactoryDependency>;
   providers?: Provider[];
 }
-
-export const createAsyncOptions = async (
-  optionsFactory: JobsConfigFactory,
-): Promise<JobsConfig> => {
-  return optionsFactory.createJobsConfigOptions();
-};
 
 @Module({})
 export class JobsModule {

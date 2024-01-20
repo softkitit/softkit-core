@@ -7,16 +7,19 @@ import {
 import { VersionedJobData } from './vo/job-data.dto';
 import { JobProcessor } from './job.processor';
 import { BaseJobExecution, BaseJobVersion } from '../entity';
+import { PinoLogger } from 'nestjs-pino';
+import { WithLoggerContext } from '@softkit/logger';
 
 export abstract class PersistentJobProcessor<
   JobDataType extends VersionedJobData,
 > extends JobProcessor<JobDataType> {
   constructor(
     queue: Queue<JobDataType>,
+    logger: PinoLogger,
     protected jobVersionService: AbstractJobVersionService,
     protected jobExecutionService: AbstractJobExecutionService,
   ) {
-    super(queue);
+    super(queue, logger);
   }
 
   protected abstract runWithTracking(
@@ -31,13 +34,16 @@ export abstract class PersistentJobProcessor<
     );
   }
 
+  @WithLoggerContext()
   override async process(
     job: Job<JobDataType>,
     token?: string,
   ): Promise<unknown> {
     const jobId = this.getJobId(job);
 
-    this.logger.log(`Starting a job: ${job.name}:${jobId}`);
+    this.assignLoggerContextVariables(job, token);
+
+    this.logger.info(`Starting a job: ${job.name}:${jobId}`);
 
     const jobVersion =
       await this.jobVersionService.findJobVersionByJobDefinitionIdAndVersion(
@@ -46,29 +52,28 @@ export abstract class PersistentJobProcessor<
       );
 
     if (!jobVersion) {
-      throw new UnrecoverableError(
-        `Job: ${job.id}, with version: ${job.data.jobVersion}, wasn't saved to a persistent db, this is out of sync and require attention`,
-      );
+      const message = `Job: ${job.id}, with version: ${job.data.jobVersion}, wasn't saved to a persistent db, this is out of sync and require attention`;
+      this.logger.error(message);
+      throw new UnrecoverableError(message);
     }
 
     try {
       await this.trackJobStart(jobVersion, token);
 
-      if (job.data.jobVersion >= this.minimalSupportedVersion()) {
+      if (job.data.jobVersion >= this.minimalSupportedVersion) {
         const result = await this.runWithTracking(job, jobVersion, token);
         await this.trackJobCompleted(jobVersion, token, result);
         return result;
       } else {
-        throw new UnrecoverableError(
-          `The job version for job is not supported by worker: ${
-            job.id
-          } is not supported, minimal version: ${this.minimalSupportedVersion()}, current version: ${
-            job.data.jobVersion
-          }`,
-        );
+        const message = `The job version for job is not supported by worker: ${job.id} is not supported, minimal version: ${this.minimalSupportedVersion}, current version: ${job.data.jobVersion}`;
+        this.logger.error(message);
+        throw new UnrecoverableError(message);
       }
     } catch (error) {
       this.logger.error(
+        {
+          error,
+        },
         `Exception happened while executing job: ${job.name}:${job.id}`,
       );
       await this.trackJobFailed(jobVersion, error, token);

@@ -1,4 +1,3 @@
-import { BackoffOptions } from 'bullmq/dist/esm/interfaces';
 import { Type } from 'class-transformer';
 import {
   IsBoolean,
@@ -51,7 +50,7 @@ export class DefaultJobOptionsConfig {
    */
   @Type(() => BackoffOptionsConfig)
   @ValidateNested()
-  backoff: BackoffOptions = new BackoffOptionsConfig();
+  backoff: BackoffOptionsConfig = new BackoffOptionsConfig();
 
   /**
    * If true, adds the job to the right of the queue instead of the left (default false)

@@ -7,6 +7,7 @@ import {
 } from '../../../service';
 import { Jobs } from './vo/jobs.enum';
 import { BaseBusyPersistentJob } from './base-busy-persistent.job';
+import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 
 // @ts-ignore
 @Processor(Jobs.BUSY_PERSISTENT_SYSTEM_JOB, {
@@ -16,9 +17,11 @@ import { BaseBusyPersistentJob } from './base-busy-persistent.job';
 export class BusyPersistentSystemJob extends BaseBusyPersistentJob {
   constructor(
     @InjectQueue(Jobs.BUSY_PERSISTENT_SYSTEM_JOB) queue: Queue<BusyJobData>,
+    @InjectPinoLogger(BusyPersistentSystemJob.name)
+    logger: PinoLogger,
     jobVersionService: AbstractJobVersionService,
     jobExecutionService: AbstractJobExecutionService,
   ) {
-    super(queue, jobVersionService, jobExecutionService);
+    super(queue, logger, jobVersionService, jobExecutionService);
   }
 }

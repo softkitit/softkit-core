@@ -14,6 +14,9 @@ import { wait } from 'nx-cloud/lib/utilities/waiter';
 import { JobDefinitionRepository } from '../repository';
 import { Jobs } from './app/jobs/vo/jobs.enum';
 import { BusyPersistentSystemJob } from './app/jobs/busy-persistent-system.job';
+import { setupYamlBaseConfigModule } from '@softkit/config';
+import { RootConfig } from './app/config/root.config';
+import path from 'node:path';
 
 describe('persistent system job e2e tests', () => {
   let startedRedis: StartedRedis;
@@ -41,7 +44,10 @@ describe('persistent system job e2e tests', () => {
     const { AppModule } = require('./app/app.module');
 
     const module = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [
+        setupYamlBaseConfigModule(path.join(__dirname, 'app'), RootConfig),
+        AppModule,
+      ],
     }).compile();
 
     app = module.createNestApplication(new FastifyAdapter());

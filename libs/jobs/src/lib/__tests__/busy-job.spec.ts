@@ -16,6 +16,9 @@ import { wait } from 'nx-cloud/lib/utilities/waiter';
 import { generateRandomId } from '@softkit/crypto';
 import { Jobs } from './app/jobs/vo/jobs.enum';
 import { BusyJobData } from './app/jobs/vo/busy-job-data.dto';
+import { setupYamlBaseConfigModule } from '@softkit/config';
+import { RootConfig } from './app/config/root.config';
+import * as path from 'node:path';
 
 describe('busy job e2e tests', () => {
   let startedRedis: StartedRedis;
@@ -44,7 +47,10 @@ describe('busy job e2e tests', () => {
     const { AppModule } = require('./app/app.module');
 
     const module = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [
+        setupYamlBaseConfigModule(path.join(__dirname, 'app'), RootConfig),
+        AppModule,
+      ],
     }).compile();
 
     app = module.createNestApplication(new FastifyAdapter());
