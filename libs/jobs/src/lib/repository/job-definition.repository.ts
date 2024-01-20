@@ -1,15 +1,17 @@
 import { BaseRepository } from '@softkit/typeorm';
 import { DataSource } from 'typeorm';
-import { Job } from '../entity';
+import { BaseJobDefinitionEntity, JobDefinition } from '../entity';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class JobRepository extends BaseRepository<Job> {
+export class JobDefinitionRepository<
+  T extends BaseJobDefinitionEntity = JobDefinition,
+> extends BaseRepository<T, 'id'> {
   constructor(
     @InjectDataSource()
     ds: DataSource,
   ) {
-    super(Job, ds);
+    super(JobDefinition, ds, 'id');
   }
 }

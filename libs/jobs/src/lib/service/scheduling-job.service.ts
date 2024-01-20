@@ -1,17 +1,17 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { getQueueToken } from '@nestjs/bull-shared/dist/utils/get-queue-token.util';
 import { ModuleRef } from '@nestjs/core';
 import { Queue, RepeatableJob } from 'bullmq';
 import equal from 'fast-deep-equal';
 import { Propagation, Transactional } from 'typeorm-transactional';
-import { IJobService } from './job.interface';
-import { BaseJobEntity } from '../entity';
-import { ISchedulingJobService } from './scheduling-job.interface';
-import { JOB_SERVICE_TOKEN } from '../constants';
+import { AbstractSchedulingJobService } from './abstract-scheduling-job.service';
 import { SystemJobConfig } from '../config/system-job.config';
+import { AbstractJobDefinitionService } from './abstract-job-definition.service';
+import { AbstractJobVersionService } from './abstract-job-version.service';
+import { BaseJobVersion } from '../entity';
 
 @Injectable()
-export class SchedulingJobService implements ISchedulingJobService {
+export class SchedulingJobService implements AbstractSchedulingJobService {
   protected readonly logger = new Logger(SchedulingJobService.name);
 
   /**
@@ -21,22 +21,38 @@ export class SchedulingJobService implements ISchedulingJobService {
 
   constructor(
     private readonly moduleRef: ModuleRef,
-    @Inject(JOB_SERVICE_TOKEN)
-    private readonly jobService: IJobService<BaseJobEntity>,
+    private readonly jobDefinitionService: AbstractJobDefinitionService,
+    private readonly jobVersionService: AbstractJobVersionService,
   ) {}
 
   @Transactional({
     propagation: Propagation.REQUIRES_NEW,
   })
-  public async scheduleSystemJob(systemJobConfig: SystemJobConfig) {
-    this.logger.log(`Start scheduling system job ${systemJobConfig.name}`);
+  public async scheduleSystemJob(job: SystemJobConfig) {
+    this.logger.log(`Start scheduling system job ${job.name}`);
 
-    const job = await this.jobService.getLatestJobVersionByName(
-      systemJobConfig.name,
-    );
+    const jobVersion =
+      await this.jobVersionService.findJobVersionByJobDefinitionIdAndVersion(
+        job.name,
+        job.jobVersion,
+      );
+
+    if (jobVersion) {
+      this.logger.log(
+        `System job ${job.name}, with version ${job.jobVersion} already exists, nothing to reschedule`,
+      );
+      return;
+    }
+
+    // for system jobs, the name, id and queue name are the same
+    await this.jobDefinitionService.createOrUpdateEntity({
+      id: job.name,
+      jobName: job.name,
+      queueName: job.name,
+    });
 
     const queue = this.moduleRef.get<Queue>(
-      getQueueToken(systemJobConfig.name),
+      getQueueToken(job.name),
       // To retrieve a provider from the global context pass the { strict: false } option as a second argument to get().
       { strict: false },
     );
@@ -47,7 +63,7 @@ export class SchedulingJobService implements ISchedulingJobService {
 
     const scheduleJob: RepeatableJob | undefined = repeatableJobsForQueue[0];
 
-    await this.checkAndRescheduleJobs(scheduleJob, systemJobConfig, job, queue);
+    await this.checkAndRescheduleJobs(scheduleJob, job, jobVersion, queue);
   }
 
   private async getRepeatableJobs(queue: Queue) {
@@ -73,12 +89,11 @@ export class SchedulingJobService implements ISchedulingJobService {
   private async checkAndRescheduleJobs(
     scheduleJob: RepeatableJob | undefined,
     systemJobConfig: SystemJobConfig,
-    job: BaseJobEntity | null,
+    job: BaseJobVersion | null,
     queue: Queue,
   ) {
     const patternChanged = scheduleJob?.pattern !== systemJobConfig.cron;
-    const jobDataChanged =
-      !job || !equal(job?.jobData, systemJobConfig.jobData);
+    const jobDataChanged = !job || !equal(job.jobData, systemJobConfig.jobData);
 
     // removing a job if data or cron changed
     if (patternChanged || jobDataChanged || !job) {
@@ -92,7 +107,7 @@ export class SchedulingJobService implements ISchedulingJobService {
         await queue.removeRepeatableByKey(scheduleJob.key);
       }
 
-      await this.rescheduleJob(systemJobConfig, job, queue);
+      await this.rescheduleSystemJob(systemJobConfig, queue);
     } else {
       this.logger.log(
         `System job ${systemJobConfig.name} is already scheduled and not changed`,
@@ -100,14 +115,17 @@ export class SchedulingJobService implements ISchedulingJobService {
     }
   }
 
-  private async rescheduleJob(
+  @Transactional()
+  private async rescheduleSystemJob(
     systemJobConfig: SystemJobConfig,
-    job: BaseJobEntity | null,
     queue: Queue,
   ) {
     const scheduledJob = await queue.add(
       systemJobConfig.name,
-      systemJobConfig.jobData,
+      {
+        ...systemJobConfig.jobData,
+        jobVersion: systemJobConfig.jobVersion,
+      },
       {
         jobId: systemJobConfig.name,
         repeat: {
@@ -116,16 +134,18 @@ export class SchedulingJobService implements ISchedulingJobService {
       },
     );
 
-    const savedJob = await this.jobService.saveJob({
-      name: systemJobConfig.name,
-      jobData: systemJobConfig.jobData,
-      jobVersion: (job?.jobVersion ?? 0) + 1,
-      pattern: systemJobConfig.cron,
+    const jobVersion = await this.jobVersionService.createOrUpdateEntity({
+      jobVersion: systemJobConfig.jobVersion,
       jobOptions: scheduledJob.opts,
+      jobDefinitionId: systemJobConfig.name,
+      jobData: {
+        ...systemJobConfig.jobData,
+        jobVersion: systemJobConfig.jobVersion,
+      },
     });
 
     this.logger.log(
-      `System job ${systemJobConfig.name} is scheduled with id ${scheduledJob.id}, and saved to db: ${savedJob?.id}`,
+      `System job ${systemJobConfig.name} is scheduled with id ${scheduledJob.id}, and saved to db: ${jobVersion.id}`,
     );
   }
 }

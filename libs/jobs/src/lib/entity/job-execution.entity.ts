@@ -1,58 +1,14 @@
-import { BaseEntityHelper } from '@softkit/typeorm';
-import {
-  Column,
-  Entity,
-  Index,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Entity, ManyToOne } from 'typeorm';
 import { Expose } from 'class-transformer';
-import { IsStringEnumLocalized, IsUUIDLocalized } from '@softkit/validation';
-import { JobsOptions } from 'bullmq';
-import { JobStatus } from './vo';
-import { Job } from './job.entity';
+import { BaseJobExecution } from './base/base-job-execution.entity';
+import { JobVersion } from './job-version.entity';
 
-@Entity('job_executions')
-export class JobExecution extends BaseEntityHelper {
-  @PrimaryGeneratedColumn('uuid')
+@Entity('job_execution')
+export class JobExecution extends BaseJobExecution {
   @Expose()
-  @IsUUIDLocalized()
-  override id!: string;
-
-  @Expose()
-  @Index({ unique: true })
-  @Column({ type: String, nullable: false, length: 255 })
-  jobName!: string;
-
-  @Expose()
-  @Column({
-    type: 'enum',
-    enum: JobStatus,
-    nullable: false,
-  })
-  @IsStringEnumLocalized(JobStatus)
-  jobStatus!: JobStatus;
-
-  @Expose()
-  @Column({ type: String, nullable: false })
-  jobId!: string;
-
-  @Expose()
-  @ManyToOne(() => Job, {
+  @ManyToOne(() => JobVersion, {
     eager: false,
     cascade: false,
   })
-  job?: Job;
-
-  @Expose()
-  @Column({ type: String, nullable: false, length: 255 })
-  workerId!: string;
-
-  @Expose()
-  @Column('jsonb', { nullable: true })
-  jobData?: object;
-
-  @Expose()
-  @Column('jsonb', { nullable: true })
-  jobOptions?: JobsOptions;
+  jobVersion?: JobVersion;
 }

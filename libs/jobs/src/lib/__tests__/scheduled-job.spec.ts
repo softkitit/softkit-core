@@ -11,17 +11,18 @@ import {
 } from '@nestjs/platform-fastify';
 import { getQueueToken } from '@nestjs/bull-shared/dist/utils/get-queue-token.util';
 import { Queue } from 'bullmq';
-import { FakeJob, FakeJobData } from './app/jobs/fake.job';
+import { BusyJob } from './app/jobs/busy.job';
 import { wait } from 'nx-cloud/lib/utilities/waiter';
 import { generateRandomId } from '@softkit/crypto';
-import { Queues } from './app/jobs/vo/queues.enum';
+import { Jobs } from './app/jobs/vo/jobs.enum';
+import { BusyJobData } from './app/jobs/vo/busy-job-data.dto';
 
-describe('jobs e2e tests', () => {
+describe('busy job e2e tests', () => {
   let startedRedis: StartedRedis;
   let startedDb: StartedDb;
   let app: NestFastifyApplication;
-  let fakeJobQueue: Queue<FakeJobData>;
-  let fakeJob: FakeJob;
+  let fakeJobQueue: Queue<BusyJobData>;
+  let fakeJob: BusyJob;
   let jobId: string;
 
   beforeAll(async () => {
@@ -49,8 +50,8 @@ describe('jobs e2e tests', () => {
     app = module.createNestApplication(new FastifyAdapter());
     await app.listen(0);
 
-    fakeJobQueue = app.get(getQueueToken(Queues.FAKE_JOB));
-    fakeJob = app.get(FakeJob);
+    fakeJobQueue = app.get(getQueueToken(Jobs.BUSY_JOB));
+    fakeJob = app.get(BusyJob);
 
     jobId = generateRandomId();
   });
@@ -62,8 +63,8 @@ describe('jobs e2e tests', () => {
 
   it('should execute job only once with the same job id', async () => {
     await fakeJobQueue.add(
-      Queues.FAKE_JOB,
-      { executeForMillis: 20 },
+      Jobs.BUSY_JOB,
+      { executeForMillis: 20, jobVersion: 1 },
       {
         jobId,
       },
@@ -72,8 +73,8 @@ describe('jobs e2e tests', () => {
     await wait(1000);
 
     await fakeJobQueue.add(
-      Queues.FAKE_JOB,
-      { executeForMillis: 25 },
+      Jobs.BUSY_JOB,
+      { executeForMillis: 25, jobVersion: 2 },
       {
         jobId,
       },
@@ -81,13 +82,13 @@ describe('jobs e2e tests', () => {
 
     await wait(1000);
 
-    expect(fakeJob.startedProcessingCounter).toBe(1);
+    expect(fakeJob.jobStats.started).toBe(1);
   });
 
   it('should execute scheduled job immediately', async () => {
     await fakeJobQueue.add(
-      Queues.FAKE_JOB,
-      { executeForMillis: 20 },
+      Jobs.BUSY_JOB,
+      { executeForMillis: 20, jobVersion: 1 },
       {
         jobId,
         repeat: {
@@ -100,13 +101,14 @@ describe('jobs e2e tests', () => {
 
     await wait(1000);
 
-    expect(fakeJob.startedProcessingCounter).toBe(1);
+    expect(fakeJob.jobStats.started).toBe(1);
+    expect(fakeJob.jobStats.finished).toBe(1);
   });
 
   it('should execute scheduled job one time, even if added twice', async () => {
     await fakeJobQueue.add(
-      Queues.FAKE_JOB,
-      { executeForMillis: 500 },
+      Jobs.BUSY_JOB,
+      { executeForMillis: 500, jobVersion: 1 },
       {
         jobId,
         repeat: {
@@ -116,8 +118,8 @@ describe('jobs e2e tests', () => {
     );
 
     await fakeJobQueue.add(
-      Queues.FAKE_JOB,
-      { executeForMillis: 20 },
+      Jobs.BUSY_JOB,
+      { executeForMillis: 20, jobVersion: 1 },
       {
         jobId,
       },
@@ -125,10 +127,10 @@ describe('jobs e2e tests', () => {
 
     await wait(400);
 
-    expect(fakeJob.startedProcessingCounter).toBe(1);
+    expect(fakeJob.jobStats.started).toBe(1);
 
     await wait(3000);
 
-    expect(fakeJob.startedProcessingCounter).toBe(4);
+    expect(fakeJob.jobStats.started).toBe(4);
   }, 10_000);
 });

@@ -3,21 +3,23 @@ import { Provider } from '@nestjs/common/interfaces/modules/provider.interface';
 import { InjectionToken } from '@nestjs/common/interfaces/modules/injection-token.interface';
 import { OptionalFactoryDependency } from '@nestjs/common/interfaces/modules/optional-factory-dependency.interface';
 import { JobsConfig } from './config';
-import {
-  JOB_SERVICE_TOKEN,
-  JOBS_CONFIG_TOKEN,
-  SCHEDULING_JOB_SERVICE_TOKEN,
-} from './constants';
+import { JOBS_CONFIG_TOKEN } from './constants';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   JobInitializationService,
-  JobService,
+  JobDefinitionService,
   SchedulingJobService,
+  AbstractSchedulingJobService,
+  AbstractJobDefinitionService,
+  AbstractJobExecutionService,
+  JobExecutionService,
+  AbstractJobVersionService,
 } from './service';
-import { Job, JobExecution } from './entity';
+import { JobDefinition, JobExecution, JobVersion } from './entity';
 import * as Repositories from './repository';
 import { BullModule } from '@nestjs/bullmq';
 import { RegisterQueueOptions } from '@nestjs/bullmq/dist/interfaces/register-queue-options.interface';
+import { JobVersionService } from './service/job-version.service';
 
 type JobsConfigOrPromise = JobsConfig | Promise<JobsConfig>;
 
@@ -104,16 +106,28 @@ export class JobsModule {
       imports: [
         ...registerQueuesModules,
         bullModule,
-        TypeOrmModule.forFeature([Job, JobExecution]),
+        TypeOrmModule.forFeature([JobDefinition, JobExecution, JobVersion]),
       ],
       providers: [
         JobInitializationService,
         {
-          provide: JOB_SERVICE_TOKEN,
-          useClass: JobService,
+          provide: AbstractJobDefinitionService,
+          useClass: JobDefinitionService,
         },
         {
-          provide: SCHEDULING_JOB_SERVICE_TOKEN,
+          provide: AbstractJobExecutionService,
+          useClass: JobExecutionService,
+        },
+        {
+          provide: AbstractJobDefinitionService,
+          useClass: JobDefinitionService,
+        },
+        {
+          provide: AbstractJobVersionService,
+          useClass: JobVersionService,
+        },
+        {
+          provide: AbstractSchedulingJobService,
           useClass: SchedulingJobService,
         },
         ...Object.values(Repositories),
@@ -122,8 +136,10 @@ export class JobsModule {
         bullModule,
         ...registerQueuesModules,
         JOBS_CONFIG_TOKEN,
-        JOB_SERVICE_TOKEN,
-        SCHEDULING_JOB_SERVICE_TOKEN,
+        AbstractSchedulingJobService,
+        AbstractJobVersionService,
+        AbstractJobDefinitionService,
+        AbstractJobExecutionService,
       ],
     };
   }
@@ -150,7 +166,9 @@ export class JobsModule {
 
           if (!allPresent) {
             const message = `Not all provided queues are presented in a config, that should not happen.
-                  Config queues: ${allQueuesConfigs}, provided list to a method: ${sanitizedQueueNames}`;
+                  Config queues: ${[
+                    ...allQueuesConfigs,
+                  ]}, provided list to a method: ${sanitizedQueueNames}`;
             JobsModule.logger.log(message);
             throw new Error(message);
           }

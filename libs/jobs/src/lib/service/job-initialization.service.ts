@@ -4,24 +4,22 @@ import {
   Logger,
   OnApplicationBootstrap,
 } from '@nestjs/common';
-import { ISchedulingJobService } from './scheduling-job.interface';
+import { AbstractSchedulingJobService } from './abstract-scheduling-job.service';
 import { JobsConfig } from '../config';
-import { JOBS_CONFIG_TOKEN, SCHEDULING_JOB_SERVICE_TOKEN } from '../constants';
+import { JOBS_CONFIG_TOKEN } from '../constants';
 
 @Injectable()
 export class JobInitializationService implements OnApplicationBootstrap {
   private readonly logger: Logger = new Logger(JobInitializationService.name);
 
   constructor(
-    @Inject(SCHEDULING_JOB_SERVICE_TOKEN)
-    private readonly schedulingJobService: ISchedulingJobService,
+    private readonly schedulingJobService: AbstractSchedulingJobService,
     @Inject(JOBS_CONFIG_TOKEN)
     private readonly jobConfig: JobsConfig,
   ) {}
 
   async onApplicationBootstrap(): Promise<void> {
     //   todo redis lock
-
     const jobs = this.jobConfig.systemJobs?.jobs;
     if (!jobs?.length) {
       this.logger.log(`No system job provided, nothing to schedule`);

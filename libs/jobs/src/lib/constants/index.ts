@@ -1,3 +1,1 @@
 export const JOBS_CONFIG_TOKEN = Symbol('SK_JOBS_CONFIG');
-export const JOB_SERVICE_TOKEN = Symbol('SK_JOB_SERVICE');
-export const SCHEDULING_JOB_SERVICE_TOKEN = Symbol('SK_SCHEDULING_JOB_SERVICE');

@@ -1,6 +1,10 @@
 export enum JobStatus {
-  SCHEDULED = 'SCHEDULED',
-  RUNNING = 'RUNNING',
-  SUCCESS = 'SUCCESS',
-  FAILED = 'FAILED',
+  COMPLETED = 'completed',
+  FAILED = 'failed',
+  DELAYED = 'delayed',
+  ACTIVE = 'active',
+  WAIT = 'wait',
+  PRIORITIZED = 'prioritized',
+  PAUSED = 'paused',
+  PROCESSING = 'processing',
 }

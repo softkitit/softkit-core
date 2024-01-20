@@ -1,6 +1,12 @@
-import { Entity, Index } from 'typeorm';
-import { BaseJobEntity } from './base-job.entity';
+import { Entity, OneToMany } from 'typeorm';
+import { BaseJobDefinitionEntity } from './base/base-job-definition.entity';
+import { JobVersion } from './job-version.entity';
 
-@Index(['name', 'jobVersion'], { unique: true })
-@Entity('jobs')
-export class Job extends BaseJobEntity {}
+@Entity('job')
+export class JobDefinition extends BaseJobDefinitionEntity {
+  @OneToMany(() => JobVersion, (version) => version.jobDefinitionId, {
+    eager: false,
+    cascade: false,
+  })
+  jobDataVersions?: JobVersion[];
+}

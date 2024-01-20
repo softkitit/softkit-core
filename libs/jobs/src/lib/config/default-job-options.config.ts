@@ -23,7 +23,7 @@ export class BackoffOptionsConfig {
 }
 
 export class KeepJobsConfig {
-  constructor(ageInDays: number = 3, count: number = 10_000) {
+  constructor(ageInDays: number = 30, count: number = 10_000) {
     this.age = ageInDays * 60 * 60 * 24;
     this.count = count;
   }
@@ -34,7 +34,7 @@ export class KeepJobsConfig {
   @IsInt()
   @IntegerType
   @Min(0)
-  age: number = 60 * 60 * 24 * 3;
+  age: number = 60 * 60 * 24 * 30;
 
   /**
    * Maximum count of jobs to be kept.

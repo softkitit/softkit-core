@@ -1,6 +1,9 @@
 {
   "name": "@softkit/jobs",
   "version": "0.0.1",
+  "dependencies": {
+    "fast-deep-equal": "^3.1.3"
+  },
   "peerDependencies": {
     "tslib": "^2.3.0",
     "@saas-buildkit/nestjs-i18n": "11.1.3",
@@ -9,16 +12,15 @@
     "class-validator": "^0.14.0",
     "@softkit/validation": "*",
     "@softkit/redis": "*",
-    "bullmq": "^5.1.1",
+    "bullmq": "^5.0.0",
     "@softkit/typeorm": "*",
     "typeorm": "0.3.17",
     "@nestjs/typeorm": "^10.0.0",
     "@nestjs/bullmq": "^10.0.1",
     "@softkit/typeorm-service": "*",
     "typeorm-transactional": "^0.4.1",
-    "@nestjs/bull-shared": "10.0.1",
-    "@nestjs/core": "^10.2.4",
-    "fast-deep-equal": "^3.1.3"
+    "@nestjs/bull-shared": "^10.0.1",
+    "@nestjs/core": "^10.2.4"
   },
   "type": "commonjs",
   "main": "./src/index.js",
