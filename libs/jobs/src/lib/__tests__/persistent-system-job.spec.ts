@@ -11,7 +11,7 @@ import {
 } from '@nestjs/platform-fastify';
 import { getQueueToken } from '@nestjs/bull-shared/dist/utils/get-queue-token.util';
 import { wait } from 'nx-cloud/lib/utilities/waiter';
-import { JobDefinitionRepository, JobVersionRepository } from '../repository';
+import { JobDefinitionRepository } from '../repository';
 import { Jobs } from './app/jobs/vo/jobs.enum';
 import { BusyPersistentSystemJob } from './app/jobs/busy-persistent-system.job';
 
@@ -21,7 +21,6 @@ describe('persistent system job e2e tests', () => {
   let app: NestFastifyApplication;
   let busyPersistentSystemJob: BusyPersistentSystemJob;
   let jobDefinitionRepository: JobDefinitionRepository;
-  let jobVersionRepository: JobVersionRepository;
 
   beforeAll(async () => {
     startedRedis = await startRedis();
@@ -53,7 +52,6 @@ describe('persistent system job e2e tests', () => {
     );
     busyPersistentSystemJob = app.get(BusyPersistentSystemJob);
     jobDefinitionRepository = app.get(JobDefinitionRepository);
-    jobVersionRepository = app.get(JobVersionRepository);
   });
 
   afterEach(async () => {
@@ -68,6 +66,7 @@ describe('persistent system job e2e tests', () => {
       where: {
         id: Jobs.BUSY_PERSISTENT_SYSTEM_JOB,
       },
+      relations: ['jobDataVersions'],
     });
 
     expect(allJobs.length).toBe(1);
@@ -79,14 +78,9 @@ describe('persistent system job e2e tests', () => {
     expect(job.jobName).toBe(Jobs.BUSY_PERSISTENT_SYSTEM_JOB);
     expect(job.id).toBe(Jobs.BUSY_PERSISTENT_SYSTEM_JOB);
 
-    const jobDataVersions = await jobVersionRepository.find({
-      where: {
-        jobDefinitionId: Jobs.BUSY_PERSISTENT_SYSTEM_JOB,
-      },
-    });
-    expect(jobDataVersions?.length).toBe(1);
+    expect(job?.jobDataVersions?.length).toBe(1);
 
-    const jobVersion = jobDataVersions![0];
+    const jobVersion = job.jobDataVersions![0];
     expect(jobVersion.jobData).toStrictEqual({
       jobVersion: 1,
       executeForMillis: 900,

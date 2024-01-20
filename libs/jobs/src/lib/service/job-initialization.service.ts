@@ -28,31 +28,10 @@ export class JobInitializationService implements OnApplicationBootstrap {
 
     this.logger.log(`Start scheduling ${jobs?.length || 0} system jobs`);
 
-    const counters = {
-      success: 0,
-      failed: 0,
-    };
-
     for (const job of jobs || []) {
-      try {
-        await this.schedulingJobService.scheduleSystemJob(job);
-        counters.success++;
-      } catch (error) {
-        counters.failed++;
-        this.logger.error(
-          `Can not schedule a job: ${job.name}. Job Data: ${JSON.stringify(
-            job,
-          )}. ${error}`,
-        );
-      }
+      await this.schedulingJobService.scheduleSystemJob(job);
     }
 
-    this.logger.log(`All system jobs scheduled: ${JSON.stringify(counters)}`);
-
-    if (counters.success === 0) {
-      throw new Error(
-        `All system job failed to start that suspicious and better to do not start the app. ${counters.failed} - failed`,
-      );
-    }
+    this.logger.log(`All system jobs scheduled: ${jobs.length}`);
   }
 }

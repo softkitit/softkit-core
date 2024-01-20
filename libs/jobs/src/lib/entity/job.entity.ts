@@ -4,7 +4,7 @@ import { JobVersion } from './job-version.entity';
 
 @Entity('job')
 export class JobDefinition extends BaseJobDefinitionEntity {
-  @OneToMany(() => JobVersion, (version) => version.jobDefinitionId, {
+  @OneToMany(() => JobVersion, (version) => version.jobDefinition, {
     eager: false,
     cascade: false,
   })
