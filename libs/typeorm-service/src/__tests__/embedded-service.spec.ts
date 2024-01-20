@@ -74,6 +74,6 @@ describe('embedded service tests', () => {
 
     const entityWithEmbeddedIds = await embeddedService.findAll();
 
-    expect(entityWithEmbeddedIds.length === 1);
+    expect(entityWithEmbeddedIds.length === 1).toBeTruthy();
   });
 });
