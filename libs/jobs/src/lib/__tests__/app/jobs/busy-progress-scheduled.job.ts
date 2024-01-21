@@ -1,23 +1,23 @@
 import { InjectQueue, Processor } from '@nestjs/bullmq';
-import { Queue } from 'bullmq';
 import { Jobs } from './vo/jobs.enum';
+import { Queue } from 'bullmq';
 import { BusyJobData } from './vo/busy-job-data.dto';
 import {
   AbstractJobExecutionService,
   AbstractJobVersionService,
 } from '../../../service';
-import { BaseBusyPersistentJob } from './base-busy-persistent.job';
+import { BaseBusyProgressJob } from './base-busy-progress.job';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 
 // @ts-ignore
-@Processor(Jobs.BUSY_PERSISTENT_JOB, {
+@Processor(Jobs.BUSY_PROGRESS_SCHEDULED_JOB, {
   concurrency: 50,
   maxStalledCount: 10,
 })
-export class BusyPersistentJob extends BaseBusyPersistentJob {
+export class BusyProgressScheduledJob extends BaseBusyProgressJob {
   constructor(
-    @InjectQueue(Jobs.BUSY_PERSISTENT_JOB) queue: Queue<BusyJobData>,
-    @InjectPinoLogger(BusyPersistentJob.name)
+    @InjectQueue(Jobs.BUSY_PROGRESS_SCHEDULED_JOB) queue: Queue<BusyJobData>,
+    @InjectPinoLogger(BusyProgressScheduledJob.name)
     logger: PinoLogger,
     jobVersionService: AbstractJobVersionService,
     jobExecutionService: AbstractJobExecutionService,

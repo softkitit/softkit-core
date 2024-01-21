@@ -1,11 +1,11 @@
 import { Job } from 'bullmq';
 import { wait } from 'nx-cloud/lib/utilities/waiter';
-import { PersistentJobProcessor } from '../../../job';
+import { ProgressJobProcessor } from '../../../job';
 import { BusyJobData } from './vo/busy-job-data.dto';
 
 import { BaseJobVersion } from '../../../entity';
 
-export class BaseBusyPersistentJob extends PersistentJobProcessor<BusyJobData> {
+export class BaseBusyProgressJob extends ProgressJobProcessor<BusyJobData> {
   public jobStats = {
     started: 0,
     skip: 0,

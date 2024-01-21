@@ -6,20 +6,20 @@ import {
   AbstractJobVersionService,
 } from '../../../service';
 import { Jobs } from './vo/jobs.enum';
-import { BaseBusyPersistentJob } from './base-busy-persistent.job';
+import { BaseBusyProgressJob } from './base-busy-progress.job';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 
 // @ts-ignore
-@Processor(Jobs.BUSY_PERSISTENT_SYSTEM_JOB, {
+@Processor(Jobs.BUSY_PROGRESS_SYSTEM_JOB, {
   concurrency: 1,
   maxStalledCount: 10,
 })
-export class BusyPersistentSystemJob extends BaseBusyPersistentJob {
+export class BusyProgressSystemJob extends BaseBusyProgressJob {
   protected override singleRunningJobGlobally = true;
 
   constructor(
-    @InjectQueue(Jobs.BUSY_PERSISTENT_SYSTEM_JOB) queue: Queue<BusyJobData>,
-    @InjectPinoLogger(BusyPersistentSystemJob.name)
+    @InjectQueue(Jobs.BUSY_PROGRESS_SYSTEM_JOB) queue: Queue<BusyJobData>,
+    @InjectPinoLogger(BusyProgressSystemJob.name)
     logger: PinoLogger,
     jobVersionService: AbstractJobVersionService,
     jobExecutionService: AbstractJobExecutionService,

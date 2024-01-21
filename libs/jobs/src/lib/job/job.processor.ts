@@ -39,9 +39,9 @@ export abstract class JobProcessor<JobDataType extends VersionedJobData>
     } catch (error) {
       this.logger.error(
         {
-          error,
+          ...(error instanceof Error ? error : {}),
         },
-        `Exception happened while executing job: ${job.name}:${job.id}`,
+        `Exception happened while executing job: ${job.name}:${job.id} - ${error}`,
       );
       throw error;
     }

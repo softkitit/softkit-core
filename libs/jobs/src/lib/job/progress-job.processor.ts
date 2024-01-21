@@ -10,7 +10,7 @@ import { PinoLogger } from 'nestjs-pino';
 import { WithLoggerContext } from '@softkit/logger';
 import { BaseJobProcessor } from './base-job.processor';
 
-export abstract class PersistentJobProcessor<
+export abstract class ProgressJobProcessor<
   JobDataType extends VersionedJobData,
 > extends BaseJobProcessor<JobDataType> {
   constructor(
@@ -69,12 +69,14 @@ export abstract class PersistentJobProcessor<
       } else {
         const message = `The job version for job is not supported by worker: ${job.id} is not supported, minimal version: ${this.minimalSupportedVersion}, current version: ${job.data.jobVersion}`;
         this.logger.error(message);
-        throw new UnrecoverableError(message);
+        const error = new UnrecoverableError(message);
+        await this.trackJobFailed(jobVersion, error, token);
+        throw error;
       }
     } catch (error) {
       this.logger.error(
         {
-          error,
+          ...(error instanceof Error ? error : {}),
         },
         `Exception happened while executing job: ${job.name}:${job.id}`,
       );

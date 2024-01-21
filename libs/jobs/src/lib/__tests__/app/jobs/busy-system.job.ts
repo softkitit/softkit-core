@@ -7,7 +7,7 @@ import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 
 // @ts-ignore
 @Processor(Jobs.BUSY_SYSTEM_JOB, {
-  concurrency: 1,
+  concurrency: 10,
   maxStalledCount: 10,
 })
 export class BusySystemJob extends BaseBusyJob {

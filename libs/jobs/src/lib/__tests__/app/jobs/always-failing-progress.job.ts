@@ -1,27 +1,29 @@
 import { InjectQueue, Processor } from '@nestjs/bullmq';
 import { Jobs } from './vo/jobs.enum';
-import { Job, Queue } from 'bullmq';
+import { Queue } from 'bullmq';
 import { BusyJobData } from './vo/busy-job-data.dto';
 import {
   AbstractJobExecutionService,
   AbstractJobVersionService,
 } from '../../../service';
-import { PersistentJobProcessor } from '../../../job';
-import { BaseJobVersion } from '../../../entity';
+import { ProgressJobProcessor } from '../../../job';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 
 // @ts-ignore
-@Processor(Jobs.ALWAYS_FAILING_PERSISTENT_JOB, {
+@Processor(Jobs.ALWAYS_FAILING_PROGRESS_JOB, {
   concurrency: 50,
   maxStalledCount: 10,
 })
-export class AlwaysFailingPersistentJob extends PersistentJobProcessor<BusyJobData> {
+export class AlwaysFailingProgressJob extends ProgressJobProcessor<BusyJobData> {
+  override singleRunningJobGlobally = true;
+
   public jobStats = {
     executed: 0,
   };
+
   constructor(
-    @InjectQueue(Jobs.ALWAYS_FAILING_PERSISTENT_JOB) queue: Queue<BusyJobData>,
-    @InjectPinoLogger(AlwaysFailingPersistentJob.name)
+    @InjectQueue(Jobs.ALWAYS_FAILING_PROGRESS_JOB) queue: Queue<BusyJobData>,
+    @InjectPinoLogger(AlwaysFailingProgressJob.name)
     logger: PinoLogger,
     jobVersionService: AbstractJobVersionService,
     jobExecutionService: AbstractJobExecutionService,
@@ -29,11 +31,7 @@ export class AlwaysFailingPersistentJob extends PersistentJobProcessor<BusyJobDa
     super(queue, logger, jobVersionService, jobExecutionService);
   }
 
-  protected override run(
-    job: Job<BusyJobData>,
-    jobVersion: BaseJobVersion,
-    token?: string,
-  ): Promise<unknown> {
+  protected override run(): Promise<unknown> {
     this.jobStats.executed++;
     throw new Error('Method not implemented.');
   }

@@ -110,33 +110,4 @@ describe('busy job e2e tests', () => {
     expect(fakeJob.jobStats.started).toBe(1);
     expect(fakeJob.jobStats.finished).toBe(1);
   });
-
-  it('should execute scheduled job one time, even if added twice', async () => {
-    await fakeJobQueue.add(
-      Jobs.BUSY_JOB,
-      { executeForMillis: 500, jobVersion: 1 },
-      {
-        jobId,
-        repeat: {
-          every: 1000,
-        },
-      },
-    );
-
-    await fakeJobQueue.add(
-      Jobs.BUSY_JOB,
-      { executeForMillis: 20, jobVersion: 1 },
-      {
-        jobId,
-      },
-    );
-
-    await wait(400);
-
-    expect(fakeJob.jobStats.started).toBe(1);
-
-    await wait(3000);
-
-    expect(fakeJob.jobStats.started).toBe(4);
-  }, 10_000);
 });

@@ -16,10 +16,9 @@ export abstract class BaseJobProcessor<JobDataType extends VersionedJobData>
     this.worker.on('error', (error: Error) => {
       this.logger.error(
         {
-          error,
           jobStatus: 'error',
         },
-        `Queue: ${this.queue.name} worker error: ${error.message}`,
+        `Queue: ${this.queue.name} worker error: ${error.message}, %s`,
         error.stack,
       );
     });
@@ -29,11 +28,10 @@ export abstract class BaseJobProcessor<JobDataType extends VersionedJobData>
       (job: Job<JobDataType> | undefined, error: Error, prev: string) => {
         this.logger.error(
           {
-            error,
             previousStatus: prev,
             jobStatus: 'failed',
           },
-          `Queue: ${this.queue.name} job: ${job?.name} failed with error: ${error.message}. Previous status: ${prev}`,
+          `Queue: ${this.queue.name} job: ${job?.name} failed with error: ${error.message}. Previous status: ${prev}. %s`,
           error.stack,
         );
       },
@@ -158,11 +156,10 @@ export abstract class BaseJobProcessor<JobDataType extends VersionedJobData>
         ) {
           activeJobsCount += activeJobsCount + 1;
 
-          this.logger.info(
-            `Job: ${job.name}:${currentJobId} has other active job, skipping it, because the worker configured to run only one job by this type at a time`,
-          );
-
           if (activeJobsCount > 1) {
+            this.logger.info(
+              `Job: ${job.name}:${currentJobId} has other active job, skipping it, because the worker configured to run only one job by this type at a time`,
+            );
             return true;
           }
         }
