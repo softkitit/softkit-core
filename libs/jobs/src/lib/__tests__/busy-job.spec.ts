@@ -18,7 +18,7 @@ import { Jobs } from './app/jobs/vo/jobs.enum';
 import { BusyJobData } from './app/jobs/vo/busy-job-data.dto';
 import { setupYamlBaseConfigModule } from '@softkit/config';
 import { RootConfig } from './app/config/root.config';
-import * as path from 'node:path';
+import path from 'node:path';
 
 describe('busy job e2e tests', () => {
   let startedRedis: StartedRedis;

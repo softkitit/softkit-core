@@ -2,7 +2,6 @@ import { Injectable, Logger } from '@nestjs/common';
 import { getQueueToken } from '@nestjs/bull-shared/dist/utils/get-queue-token.util';
 import { ModuleRef } from '@nestjs/core';
 import { Queue, RepeatableJob } from 'bullmq';
-import equal from 'fast-deep-equal';
 import { Propagation, Transactional } from 'typeorm-transactional';
 import { AbstractSchedulingJobService } from './abstract-scheduling-job.service';
 import { SystemJobConfig } from '../config/system-job.config';
@@ -59,11 +58,9 @@ export class SchedulingJobService implements AbstractSchedulingJobService {
 
     const repeatableJobsForQueue = await this.getRepeatableJobs(queue);
 
-    this.validateSystemJobs(repeatableJobsForQueue);
-
     const scheduleJob: RepeatableJob | undefined = repeatableJobsForQueue[0];
 
-    await this.checkAndRescheduleJobs(scheduleJob, job, jobVersion, queue);
+    await this.rescheduleJobs(scheduleJob, job, jobVersion, queue);
   }
 
   private async getRepeatableJobs(queue: Queue) {
@@ -74,45 +71,23 @@ export class SchedulingJobService implements AbstractSchedulingJobService {
     );
   }
 
-  private validateSystemJobs(repeatableJobs: RepeatableJob[]) {
-    if (repeatableJobs.length > 1) {
-      const errorMessage = `Only one repeatable job is allowed per queue for system jobs, there is some misconfiguration that require manual fix. All repeatable jobs: ${JSON.stringify(
-        repeatableJobs,
-      )}`;
-
-      this.logger.error(errorMessage);
-      throw new Error(errorMessage);
-    }
-  }
-
-  // eslint-disable-next-line complexity
-  private async checkAndRescheduleJobs(
+  private async rescheduleJobs(
     scheduleJob: RepeatableJob | undefined,
     systemJobConfig: SystemJobConfig,
     job: BaseJobVersion | null,
     queue: Queue,
   ) {
-    const patternChanged = scheduleJob?.pattern !== systemJobConfig.cron;
-    const jobDataChanged = !job || !equal(job.jobData, systemJobConfig.jobData);
-
-    // removing a job if data or cron changed
-    if (patternChanged || jobDataChanged || !job) {
-      if (!job && scheduleJob) {
-        this.logger.warn(
-          `System job ${systemJobConfig.name} was not found in database, but found in redis as a repeatable job`,
-        );
-      }
-
-      if (scheduleJob) {
-        await queue.removeRepeatableByKey(scheduleJob.key);
-      }
-
-      await this.rescheduleSystemJob(systemJobConfig, queue);
-    } else {
-      this.logger.log(
-        `System job ${systemJobConfig.name} is already scheduled and not changed`,
+    if (!job && scheduleJob) {
+      this.logger.warn(
+        `System job ${systemJobConfig.name} was not found in database, but found in redis as a repeatable job`,
       );
     }
+
+    if (scheduleJob) {
+      await queue.removeRepeatableByKey(scheduleJob.key);
+    }
+
+    await this.rescheduleSystemJob(systemJobConfig, queue);
   }
 
   @Transactional()
@@ -127,6 +102,7 @@ export class SchedulingJobService implements AbstractSchedulingJobService {
         jobVersion: systemJobConfig.jobVersion,
       },
       {
+        ...systemJobConfig.defaultJobOptions,
         jobId: systemJobConfig.name,
         repeat: {
           pattern: systemJobConfig.cron,
