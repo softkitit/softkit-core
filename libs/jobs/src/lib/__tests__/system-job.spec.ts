@@ -98,8 +98,6 @@ describe('system job e2e', () => {
 
     const busySystemJob = testingModule.get(BusyProgressSystemJob);
 
-    await wait(300);
-
     await busySystemJobQueue.add(
       Jobs.BUSY_PROGRESS_SYSTEM_JOB,
       { executeForMillis: 20, jobVersion: 1 },

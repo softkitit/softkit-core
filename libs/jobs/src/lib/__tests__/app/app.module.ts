@@ -11,6 +11,7 @@ import { BusyProgressSystemJob } from './jobs/busy-progress-system.job';
 import { AlwaysFailingProgressJob } from './jobs/always-failing-progress.job';
 import { BusyNotScheduledJob } from './jobs/busy-not-scheduled.job';
 import { BusyNotScheduledProgressJob } from './jobs/busy-not-scheduled-progress.job';
+import { BusyNotLockableJob } from './jobs/busy-not-lockable.job';
 
 @Module({
   controllers: [],
@@ -22,6 +23,7 @@ import { BusyNotScheduledProgressJob } from './jobs/busy-not-scheduled-progress.
     AlwaysFailingProgressJob,
     BusyNotScheduledJob,
     BusyNotScheduledProgressJob,
+    BusyNotLockableJob,
   ],
   exports: [],
   imports: [

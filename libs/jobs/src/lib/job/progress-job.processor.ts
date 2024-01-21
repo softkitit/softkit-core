@@ -131,7 +131,11 @@ export abstract class ProgressJobProcessor<
       ...this.baseTrackJobData(jobVersion, token),
       jobStatus: JobStatus.FAILED,
       progress: 100,
-      stepData: err,
+      stepData: {
+        ...(err instanceof Error
+          ? { message: err.message, stacktrace: err.stack, name: err.name }
+          : {}),
+      },
     } as BaseJobExecution);
   }
 
