@@ -9,6 +9,7 @@ import { ClassConstructor } from 'class-transformer';
 import { ClassTransformOptions } from 'class-transformer/types/interfaces';
 import { map } from '@softkit/validation';
 import { Never } from '@softkit/common-types';
+import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere';
 
 export class BaseEntityService<
   ENTITY extends BaseEntityHelper,
@@ -105,12 +106,14 @@ export class BaseEntityService<
   override async findAll(
     page = 1,
     limit = 20,
+    where?: FindOptionsWhere<ENTITY>[] | FindOptionsWhere<ENTITY>,
     order?: FindOptionsOrder<ENTITY>,
   ): Promise<ENTITY[]> {
     return this.repository.find({
       take: limit,
       skip: (page - 1) * limit,
-      order: order,
+      where,
+      order,
     });
   }
 

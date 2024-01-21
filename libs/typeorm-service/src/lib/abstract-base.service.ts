@@ -4,6 +4,7 @@ import { PaginateConfig, Paginated, PaginateQuery } from 'nestjs-paginate';
 import { ClassConstructor } from 'class-transformer';
 import { ClassTransformOptions } from 'class-transformer/types/interfaces';
 import { Never } from '@softkit/common-types';
+import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere';
 
 export abstract class AbstractBaseService<
   ENTITY extends BaseEntityHelper,
@@ -40,6 +41,7 @@ export abstract class AbstractBaseService<
   abstract findAll(
     page: number,
     limit: number,
+    where?: FindOptionsWhere<ENTITY>[] | FindOptionsWhere<ENTITY>,
     order?: FindOptionsOrder<ENTITY>,
   ): Promise<ENTITY[]>;
 
