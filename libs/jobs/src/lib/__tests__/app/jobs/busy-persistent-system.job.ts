@@ -15,6 +15,8 @@ import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
   maxStalledCount: 10,
 })
 export class BusyPersistentSystemJob extends BaseBusyPersistentJob {
+  protected override singleRunningJobGlobally = true;
+
   constructor(
     @InjectQueue(Jobs.BUSY_PERSISTENT_SYSTEM_JOB) queue: Queue<BusyJobData>,
     @InjectPinoLogger(BusyPersistentSystemJob.name)

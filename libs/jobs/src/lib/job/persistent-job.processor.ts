@@ -5,14 +5,14 @@ import {
   AbstractJobVersionService,
 } from '../service';
 import { VersionedJobData } from './vo/job-data.dto';
-import { JobProcessor } from './job.processor';
 import { BaseJobExecution, BaseJobVersion } from '../entity';
 import { PinoLogger } from 'nestjs-pino';
 import { WithLoggerContext } from '@softkit/logger';
+import { BaseJobProcessor } from './base-job.processor';
 
 export abstract class PersistentJobProcessor<
   JobDataType extends VersionedJobData,
-> extends JobProcessor<JobDataType> {
+> extends BaseJobProcessor<JobDataType> {
   constructor(
     queue: Queue<JobDataType>,
     logger: PinoLogger,
@@ -22,17 +22,11 @@ export abstract class PersistentJobProcessor<
     super(queue, logger);
   }
 
-  protected abstract runWithTracking(
+  protected abstract run(
     job: Job<JobDataType>,
     jobVersion: BaseJobVersion,
     token?: string,
   ): Promise<unknown>;
-
-  protected override run(): Promise<unknown> {
-    throw new UnrecoverableError(
-      `Persistent job doesn't support method run, use run with tracking, it populates the job version so tracking is based on it`,
-    );
-  }
 
   @WithLoggerContext()
   override async process(
@@ -60,8 +54,16 @@ export abstract class PersistentJobProcessor<
     try {
       await this.trackJobStart(jobVersion, token);
 
+      if (this.singleRunningJobGlobally) {
+        const hasOtherJobRunning = await this.hasJobRunning(job);
+        if (hasOtherJobRunning) {
+          await this.trackJobSkipped(jobVersion, token);
+          return;
+        }
+      }
+
       if (job.data.jobVersion >= this.minimalSupportedVersion) {
-        const result = await this.runWithTracking(job, jobVersion, token);
+        const result = await this.run(job, jobVersion, token);
         await this.trackJobCompleted(jobVersion, token, result);
         return result;
       } else {
@@ -126,7 +128,7 @@ export abstract class PersistentJobProcessor<
 
   protected async trackJobFailed(
     jobVersion: BaseJobVersion,
-    err: Error | unknown,
+    err: unknown,
     token?: string,
   ) {
     await this.jobExecutionService.createOrUpdateEntity({
@@ -134,6 +136,13 @@ export abstract class PersistentJobProcessor<
       jobStatus: JobStatus.FAILED,
       progress: 100,
       stepData: err,
+    } as BaseJobExecution);
+  }
+
+  protected async trackJobSkipped(jobVersion: BaseJobVersion, token?: string) {
+    await this.jobExecutionService.createOrUpdateEntity({
+      ...this.baseTrackJobData(jobVersion, token),
+      jobStatus: JobStatus.SKIPPED,
     } as BaseJobExecution);
   }
 }

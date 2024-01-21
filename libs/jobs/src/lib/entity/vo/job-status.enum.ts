@@ -7,4 +7,5 @@ export enum JobStatus {
   PRIORITIZED = 'prioritized',
   PAUSED = 'paused',
   PROCESSING = 'processing',
+  SKIPPED = 'skipped',
 }

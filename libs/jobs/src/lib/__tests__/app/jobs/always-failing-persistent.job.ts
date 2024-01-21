@@ -29,7 +29,7 @@ export class AlwaysFailingPersistentJob extends PersistentJobProcessor<BusyJobDa
     super(queue, logger, jobVersionService, jobExecutionService);
   }
 
-  protected override runWithTracking(
+  protected override run(
     job: Job<BusyJobData>,
     jobVersion: BaseJobVersion,
     token?: string,

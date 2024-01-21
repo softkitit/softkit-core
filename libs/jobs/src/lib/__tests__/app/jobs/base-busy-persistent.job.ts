@@ -12,7 +12,7 @@ export class BaseBusyPersistentJob extends PersistentJobProcessor<BusyJobData> {
     finished: 0,
   };
 
-  override async runWithTracking(
+  override async run(
     job: Job<BusyJobData>,
     jobVersion: BaseJobVersion,
   ): Promise<void> {
