@@ -54,6 +54,8 @@ export abstract class ProgressJobProcessor<
     try {
       await this.trackJobStart(jobVersion, token);
 
+      this.verifyJobVersionMatch(job);
+
       if (this.singleRunningJobGlobally) {
         const hasOtherJobRunning = await this.hasJobRunning(job);
         if (hasOtherJobRunning) {
@@ -62,17 +64,9 @@ export abstract class ProgressJobProcessor<
         }
       }
 
-      if (job.data.jobVersion >= this.minimalSupportedVersion) {
-        const result = await this.run(job, jobVersion, token);
-        await this.trackJobCompleted(jobVersion, token, result);
-        return result;
-      } else {
-        const message = `The job version for job is not supported by worker: ${job.id} is not supported, minimal version: ${this.minimalSupportedVersion}, current version: ${job.data.jobVersion}`;
-        this.logger.error(message);
-        const error = new UnrecoverableError(message);
-        await this.trackJobFailed(jobVersion, error, token);
-        throw error;
-      }
+      const result = await this.run(job, jobVersion, token);
+      await this.trackJobCompleted(jobVersion, token, result);
+      return result;
     } catch (error) {
       this.logger.error(
         {

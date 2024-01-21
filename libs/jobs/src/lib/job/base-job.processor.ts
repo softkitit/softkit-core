@@ -105,6 +105,14 @@ export abstract class BaseJobProcessor<JobDataType extends VersionedJobData>
     });
   }
 
+  protected verifyJobVersionMatch(job: Job<JobDataType>) {
+    if (job.data.jobVersion < this.minimalSupportedVersion) {
+      const message = `The job version for job is not supported by worker: ${job.id} is not supported, minimal version: ${this.minimalSupportedVersion}, current version: ${job.data.jobVersion}`;
+      this.logger.error(message);
+      throw new UnrecoverableError(message);
+    }
+  }
+
   protected getJobId(job: Job<JobDataType>) {
     const jobId = job.opts.repeat?.jobId ?? job.opts.jobId;
 

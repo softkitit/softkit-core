@@ -27,6 +27,8 @@ export abstract class JobProcessor<JobDataType extends VersionedJobData>
 
     this.logger.info(`Starting a job: ${job.name}:${job.id}`);
 
+    this.verifyJobVersionMatch(job);
+
     if (this.singleRunningJobGlobally) {
       const hasOtherJobRunning = await this.hasJobRunning(job);
       if (hasOtherJobRunning) {

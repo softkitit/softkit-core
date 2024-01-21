@@ -1,4 +1,5 @@
 import {
+  expectNotNullAndGet,
   StartedDb,
   StartedRedis,
   startPostgres,
@@ -19,6 +20,8 @@ import { Queue } from 'bullmq';
 import { AlwaysFailingJob } from './app/jobs/always-failing.job';
 import { wait } from 'nx-cloud/lib/utilities/waiter';
 import { AlwaysFailingProgressJob } from './app/jobs/always-failing-progress.job';
+import { BusyNotScheduledProgressJob } from './app/jobs/busy-not-scheduled-progress.job';
+import { BusyNotScheduledJob } from './app/jobs/busy-not-scheduled.job';
 
 describe('failing jobs e2e tests', () => {
   let startedRedis: StartedRedis;
@@ -105,6 +108,127 @@ describe('failing jobs e2e tests', () => {
     await wait(2000);
 
     expect(failingJob.jobStats.executed).toBe(5);
+  });
+
+  it.skip('should schedule and run always failing progress job with retries', async () => {
+    const alwaysFailingProgressQueue = testingModule.get<Queue>(
+      getQueueToken(Jobs.ALWAYS_FAILING_PROGRESS_JOB),
+    );
+
+    const job = testingModule.get<AlwaysFailingProgressJob>(
+      AlwaysFailingProgressJob,
+    );
+
+    await alwaysFailingProgressQueue.add(
+      Jobs.ALWAYS_FAILING_PROGRESS_JOB,
+      { executeForMillis: 20, jobVersion: 1 },
+      {
+        removeOnComplete: true,
+        removeOnFail: true,
+        attempts: 2,
+        backoff: {
+          type: 'fixed',
+          delay: 1,
+        },
+        jobId: Jobs.ALWAYS_FAILING_PROGRESS_JOB,
+      },
+    );
+
+    await wait(2000);
+
+    expect(job.jobStats.executed).toBe(2);
+
+    // schedule second failing job
+    await alwaysFailingProgressQueue.add(
+      Jobs.ALWAYS_FAILING_PROGRESS_JOB,
+      { executeForMillis: 20, jobVersion: 1 },
+      {
+        removeOnComplete: true,
+        removeOnFail: true,
+        attempts: 3,
+        backoff: {
+          type: 'fixed',
+          delay: 1,
+        },
+        jobId: Jobs.ALWAYS_FAILING_PROGRESS_JOB,
+      },
+    );
+
+    await wait(2000);
+
+    expect(job.jobStats.executed).toBe(5);
+  });
+
+  it(`should schedule a progress job manually, but it will fail because it wasn't added to db, without retries`, async () => {
+    const notScheduledJobQueue = testingModule.get<Queue>(
+      getQueueToken(Jobs.BUSY_NOT_SCHEDULED_PROGRESS_JOB),
+    );
+
+    const job = testingModule.get<BusyNotScheduledProgressJob>(
+      BusyNotScheduledProgressJob,
+    );
+
+    await notScheduledJobQueue.add(
+      Jobs.BUSY_NOT_SCHEDULED_PROGRESS_JOB,
+      { executeForMillis: 20, jobVersion: 1 },
+      {
+        attempts: 2,
+        backoff: {
+          type: 'fixed',
+          delay: 1,
+        },
+        jobId: Jobs.BUSY_NOT_SCHEDULED_PROGRESS_JOB,
+      },
+    );
+
+    await wait(1000);
+    expect(job).toBeDefined();
+
+    const jobInfoInRedis = expectNotNullAndGet(
+      await notScheduledJobQueue.getJob(Jobs.BUSY_NOT_SCHEDULED_PROGRESS_JOB),
+    );
+
+    expect(jobInfoInRedis.stacktrace.length).toBe(1);
+    expect(jobInfoInRedis.attemptsStarted).toBe(1);
+    expect(jobInfoInRedis.attemptsMade).toBe(1);
+    expect(jobInfoInRedis.failedReason).toContain(
+      `wasn't saved to a persistent db`,
+    );
+  });
+
+  it(`should schedule a job manually, with not supported payload version`, async () => {
+    const notScheduledJobQueue = testingModule.get<Queue>(
+      getQueueToken(Jobs.BUSY_NOT_SCHEDULED_JOB),
+    );
+
+    const job = testingModule.get<BusyNotScheduledJob>(BusyNotScheduledJob);
+
+    await notScheduledJobQueue.add(
+      Jobs.BUSY_NOT_SCHEDULED_JOB,
+      { executeForMillis: 20, jobVersion: -1 },
+      {
+        attempts: 2,
+        backoff: {
+          type: 'fixed',
+          delay: 1,
+        },
+        jobId: Jobs.BUSY_NOT_SCHEDULED_JOB,
+      },
+    );
+
+    await wait(1000);
+    expect(job).toBeDefined();
+
+    const jobInfoInRedis = expectNotNullAndGet(
+      await notScheduledJobQueue.getJob(Jobs.BUSY_NOT_SCHEDULED_JOB),
+    );
+
+    expect(jobInfoInRedis.stacktrace.length).toBe(1);
+    expect(jobInfoInRedis.attemptsStarted).toBe(1);
+    expect(jobInfoInRedis.attemptsMade).toBe(1);
+    expect(jobInfoInRedis.failedReason).toContain(
+      `The job version for job is not supported by worker`,
+    );
   });
 
   it.skip('should schedule and run always failing progress job with retries', async () => {

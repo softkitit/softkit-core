@@ -6,14 +6,14 @@ import { BaseBusyJob } from './base-busy.job';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 
 // @ts-ignore
-@Processor(Jobs.BUSY_SCHEDULED_JOB, {
+@Processor(Jobs.BUSY_NOT_SCHEDULED_JOB, {
   concurrency: 50,
   maxStalledCount: 10,
 })
-export class BusyScheduledJob extends BaseBusyJob {
+export class BusyNotScheduledJob extends BaseBusyJob {
   constructor(
-    @InjectQueue(Jobs.BUSY_SCHEDULED_JOB) queue: Queue<BusyJobData>,
-    @InjectPinoLogger(BusyScheduledJob.name)
+    @InjectQueue(Jobs.BUSY_NOT_SCHEDULED_JOB) queue: Queue<BusyJobData>,
+    @InjectPinoLogger(BusyNotScheduledJob.name)
     logger: PinoLogger,
   ) {
     super(queue, logger);
