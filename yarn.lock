@@ -6375,7 +6375,7 @@ __metadata:
     "@testcontainers/postgresql": ^10.2.1
     "@types/jest": ^29.5.4
     "@types/newrelic": ^9.14.0
-    "@types/node": 18.16.9
+    "@types/node": 20.11.5
     "@types/opossum": ^8.1.1
     "@types/passport-jwt": ^3.0.9
     "@types/passport-local": ^1.0.35
@@ -7104,10 +7104,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:18.16.9":
-  version: 18.16.9
-  resolution: "@types/node@npm:18.16.9"
-  checksum: 7fe0ef372ba8b157bd646efe29b0ece92ccb9f455171a7ceb4c92d6b490789ff0f14411b1dc6ad203351a0efa2b435072dfab5566fb6eaaaa5cd549e1fb22afa
+"@types/node@npm:20.11.5":
+  version: 20.11.5
+  resolution: "@types/node@npm:20.11.5"
+  dependencies:
+    undici-types: ~5.26.4
+  checksum: a542727de1334ae20a3ca034b0ecf4b464a57ca01efc4f9cf43bd9ab93896125ab3c2de060ecd8f6ae23b86c6bf3463f681b643e69c032c6a662d376c98a6092
   languageName: node
   linkType: hard
 
