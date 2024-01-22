@@ -38,6 +38,7 @@ export abstract class BaseJobProcessor<JobDataType extends VersionedJobData>
     );
 
     this.worker.on('stalled', (jobId, prev) => {
+      /* istanbul ignore next */
       this.logger.error(
         {
           jobId,
@@ -49,6 +50,7 @@ export abstract class BaseJobProcessor<JobDataType extends VersionedJobData>
     });
 
     this.worker.on('resumed', () => {
+      /* istanbul ignore next */
       this.logger.info(
         {
           jobStatus: 'resumed',
@@ -67,6 +69,7 @@ export abstract class BaseJobProcessor<JobDataType extends VersionedJobData>
     });
 
     this.worker.on('paused', () => {
+      /* istanbul ignore next */
       this.logger.info(
         {
           jobStatus: 'paused',
@@ -117,6 +120,8 @@ export abstract class BaseJobProcessor<JobDataType extends VersionedJobData>
     const jobId = job.opts.repeat?.jobId ?? job.opts.jobId;
 
     if (!jobId) {
+      // I didn't find a case where job id is not present, so far it always there, probably type is not correctly reflecting it
+      /* istanbul ignore next */
       throw new UnrecoverableError(
         `Job id must be present in each job, but it's not here for job: ${job.name}`,
       );

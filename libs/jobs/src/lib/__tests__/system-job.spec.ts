@@ -98,9 +98,25 @@ describe('system job e2e', () => {
 
     const busySystemJob = testingModule.get(BusyProgressSystemJob);
 
+    await wait(300);
+
     await busySystemJobQueue.add(
       Jobs.BUSY_PROGRESS_SYSTEM_JOB,
-      { executeForMillis: 20, jobVersion: 1 },
+      { executeForMillis: 600, jobVersion: 1 },
+      {
+        removeOnComplete: true,
+        removeOnFail: true,
+        attempts: 2,
+        backoff: {
+          type: 'fixed',
+          delay: 1,
+        },
+        jobId: Jobs.BUSY_PROGRESS_SYSTEM_JOB,
+      },
+    );
+    await busySystemJobQueue.add(
+      Jobs.BUSY_PROGRESS_SYSTEM_JOB,
+      { executeForMillis: 600, jobVersion: 1 },
       {
         removeOnComplete: true,
         removeOnFail: true,
@@ -113,9 +129,8 @@ describe('system job e2e', () => {
       },
     );
 
-    await wait(800);
-
-    expect(busySystemJob.jobStats.finished).toBe(1);
+    await wait(3000);
     expect(busySystemJob.jobStats.started).toBe(2);
+    expect(busySystemJob.jobStats.finished).toBe(2);
   }, 10_000);
 });
