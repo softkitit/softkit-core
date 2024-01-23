@@ -23,12 +23,16 @@ import { AlwaysFailingProgressJob } from './app/jobs/always-failing-progress.job
 import { BusyNotScheduledProgressJob } from './app/jobs/busy-not-scheduled-progress.job';
 import { BusyNotScheduledJob } from './app/jobs/busy-not-scheduled.job';
 import { BusyNotLockableJob } from './app/jobs/busy-not-lockable.job';
+import { AbstractSchedulingJobService } from '../service';
+import { faker } from '@faker-js/faker';
+import { Type } from '@nestjs/common';
 
 describe('failing jobs e2e tests', () => {
   let startedRedis: StartedRedis;
   let startedDb: StartedDb;
   let app: NestFastifyApplication;
   let testingModule: TestingModule;
+  let schedulingService: AbstractSchedulingJobService;
 
   beforeAll(async () => {
     startedRedis = await startRedis();
@@ -57,6 +61,7 @@ describe('failing jobs e2e tests', () => {
 
     app = testingModule.createNestApplication(new FastifyAdapter());
     await app.listen(0);
+    schedulingService = app.get(AbstractSchedulingJobService);
   });
 
   afterEach(async () => {
@@ -64,17 +69,20 @@ describe('failing jobs e2e tests', () => {
     jest.resetAllMocks();
   });
 
-  it('should schedule and run always failing job with retries', async () => {
-    const alwaysFailingQueue = testingModule.get<Queue>(
-      getQueueToken(Jobs.ALWAYS_FAILING_JOB),
-    );
+  it.each([
+    [Jobs.ALWAYS_FAILING_PROGRESS_JOB, AlwaysFailingProgressJob],
+    [Jobs.ALWAYS_FAILING_JOB, AlwaysFailingJob],
+  ])(
+    'should schedule and run always failing job with retries',
+    async (
+      jobName: string,
+      job: Type<AlwaysFailingJob> | Type<AlwaysFailingProgressJob>,
+    ) => {
+      const jobId = faker.string.uuid();
 
-    const failingJob = testingModule.get<AlwaysFailingJob>(AlwaysFailingJob);
+      const failingJob = testingModule.get(job);
 
-    await alwaysFailingQueue.add(
-      Jobs.ALWAYS_FAILING_JOB,
-      { executeForMillis: 20, jobVersion: 1 },
-      {
+      const jobOptions = {
         removeOnComplete: true,
         removeOnFail: true,
         attempts: 2,
@@ -82,83 +90,40 @@ describe('failing jobs e2e tests', () => {
           type: 'fixed',
           delay: 1,
         },
-        jobId: Jobs.ALWAYS_FAILING_JOB,
-      },
-    );
+      };
 
-    await wait(1000);
+      for (let i = 0; i < 2; i++) {
+        await schedulingService.scheduleJob(
+          jobName,
+          jobName,
+          jobId,
+          { executeForMillis: 300, jobVersion: 1 },
+          jobOptions,
+        );
+      }
 
-    expect(failingJob.jobStats.executed).toBe(2);
+      await wait(1000);
 
-    // schedule second failing job
-    await alwaysFailingQueue.add(
-      Jobs.ALWAYS_FAILING_JOB,
-      { executeForMillis: 20, jobVersion: 1 },
-      {
-        removeOnComplete: true,
-        removeOnFail: true,
-        attempts: 3,
-        backoff: {
-          type: 'fixed',
-          delay: 1,
-        },
-        jobId: Jobs.ALWAYS_FAILING_JOB,
-      },
-    );
+      expect(failingJob.jobStats.executed).toBe(2);
 
-    await wait(2000);
+      for (let i = 0; i < 2; i++) {
+        await schedulingService.scheduleJob(
+          jobName,
+          jobName,
+          jobId,
+          { executeForMillis: 300, jobVersion: 1 },
+          {
+            ...jobOptions,
+            attempts: 3,
+          },
+        );
+      }
 
-    expect(failingJob.jobStats.executed).toBe(5);
-  });
+      await wait(2000);
 
-  it.skip('should schedule and run always failing progress job with retries', async () => {
-    const alwaysFailingProgressQueue = testingModule.get<Queue>(
-      getQueueToken(Jobs.ALWAYS_FAILING_PROGRESS_JOB),
-    );
-
-    const job = testingModule.get<AlwaysFailingProgressJob>(
-      AlwaysFailingProgressJob,
-    );
-
-    await alwaysFailingProgressQueue.add(
-      Jobs.ALWAYS_FAILING_PROGRESS_JOB,
-      { executeForMillis: 20, jobVersion: 1 },
-      {
-        removeOnComplete: true,
-        removeOnFail: true,
-        attempts: 2,
-        backoff: {
-          type: 'fixed',
-          delay: 1,
-        },
-        jobId: Jobs.ALWAYS_FAILING_PROGRESS_JOB,
-      },
-    );
-
-    await wait(2000);
-
-    expect(job.jobStats.executed).toBe(2);
-
-    // schedule second failing job
-    await alwaysFailingProgressQueue.add(
-      Jobs.ALWAYS_FAILING_PROGRESS_JOB,
-      { executeForMillis: 20, jobVersion: 1 },
-      {
-        removeOnComplete: true,
-        removeOnFail: true,
-        attempts: 3,
-        backoff: {
-          type: 'fixed',
-          delay: 1,
-        },
-        jobId: Jobs.ALWAYS_FAILING_PROGRESS_JOB,
-      },
-    );
-
-    await wait(2000);
-
-    expect(job.jobStats.executed).toBe(5);
-  });
+      expect(failingJob.jobStats.executed).toBe(5);
+    },
+  );
 
   it(`should schedule a progress job manually, but it will fail because it wasn't added to db, without retries`, async () => {
     const notScheduledJobQueue = testingModule.get<Queue>(
@@ -173,6 +138,7 @@ describe('failing jobs e2e tests', () => {
       Jobs.BUSY_NOT_SCHEDULED_PROGRESS_JOB,
       { executeForMillis: 20, jobVersion: 1 },
       {
+        removeOnFail: 100,
         attempts: 2,
         backoff: {
           type: 'fixed',
@@ -204,16 +170,21 @@ describe('failing jobs e2e tests', () => {
 
     const job = testingModule.get<BusyNotScheduledJob>(BusyNotScheduledJob);
 
-    await notScheduledJobQueue.add(
+    const jobId = faker.string.uuid();
+
+    await schedulingService.scheduleJob(
       Jobs.BUSY_NOT_SCHEDULED_JOB,
+      Jobs.BUSY_NOT_SCHEDULED_JOB,
+      jobId,
       { executeForMillis: 20, jobVersion: -1 },
       {
         attempts: 2,
+        removeOnFail: 100,
+        removeOnComplete: 100,
         backoff: {
           type: 'fixed',
           delay: 1,
         },
-        jobId: Jobs.BUSY_NOT_SCHEDULED_JOB,
       },
     );
 
@@ -221,7 +192,7 @@ describe('failing jobs e2e tests', () => {
     expect(job).toBeDefined();
 
     const jobInfoInRedis = expectNotNullAndGet(
-      await notScheduledJobQueue.getJob(Jobs.BUSY_NOT_SCHEDULED_JOB),
+      await notScheduledJobQueue.getJob(jobId),
     );
 
     expect(jobInfoInRedis.stacktrace.length).toBe(1);
@@ -239,25 +210,28 @@ describe('failing jobs e2e tests', () => {
 
     const job = testingModule.get(BusyNotLockableJob);
 
-    await queue.add(
+    const jobId = faker.string.uuid();
+
+    await schedulingService.scheduleJob(
       Jobs.BUSY_NOT_LOCKABLE_JOB,
+      Jobs.BUSY_NOT_LOCKABLE_JOB,
+      jobId,
       { executeForMillis: 20, jobVersion: 1 },
       {
         attempts: 2,
+        removeOnFail: 100,
+        removeOnComplete: 100,
         backoff: {
           type: 'fixed',
           delay: 1,
         },
-        jobId: Jobs.BUSY_NOT_LOCKABLE_JOB,
       },
     );
 
     await wait(1000);
     expect(job).toBeDefined();
 
-    const jobInfoInRedis = expectNotNullAndGet(
-      await queue.getJob(Jobs.BUSY_NOT_LOCKABLE_JOB),
-    );
+    const jobInfoInRedis = expectNotNullAndGet(await queue.getJob(jobId));
 
     expect(jobInfoInRedis.stacktrace.length).toBe(2);
     expect(jobInfoInRedis.attemptsStarted).toBe(2);
@@ -265,54 +239,5 @@ describe('failing jobs e2e tests', () => {
     expect(jobInfoInRedis.failedReason).toContain(
       `Failed to acquire lock for job`,
     );
-  });
-
-  it.skip('should schedule and run always failing progress job with retries', async () => {
-    const alwaysFailingProgressQueue = testingModule.get<Queue>(
-      getQueueToken(Jobs.ALWAYS_FAILING_PROGRESS_JOB),
-    );
-
-    const job = testingModule.get<AlwaysFailingProgressJob>(
-      AlwaysFailingProgressJob,
-    );
-
-    await alwaysFailingProgressQueue.add(
-      Jobs.ALWAYS_FAILING_PROGRESS_JOB,
-      { executeForMillis: 20, jobVersion: 1 },
-      {
-        removeOnComplete: true,
-        removeOnFail: true,
-        attempts: 2,
-        backoff: {
-          type: 'fixed',
-          delay: 1,
-        },
-        jobId: Jobs.ALWAYS_FAILING_PROGRESS_JOB,
-      },
-    );
-
-    await wait(2000);
-
-    expect(job.jobStats.executed).toBe(2);
-
-    // schedule second failing job
-    await alwaysFailingProgressQueue.add(
-      Jobs.ALWAYS_FAILING_PROGRESS_JOB,
-      { executeForMillis: 20, jobVersion: 1 },
-      {
-        removeOnComplete: true,
-        removeOnFail: true,
-        attempts: 3,
-        backoff: {
-          type: 'fixed',
-          delay: 1,
-        },
-        jobId: Jobs.ALWAYS_FAILING_PROGRESS_JOB,
-      },
-    );
-
-    await wait(2000);
-
-    expect(job.jobStats.executed).toBe(5);
   });
 });

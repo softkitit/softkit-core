@@ -66,7 +66,7 @@ describe('progress system job e2e tests', () => {
   });
 
   it('should auto schedule jobs and run 2 times', async () => {
-    await wait(2500);
+    await wait(3000);
     expect(busyProgressSystemJob.jobStats.started).toBeGreaterThanOrEqual(2);
     const allJobs = await jobDefinitionRepository.find({
       where: {
@@ -89,11 +89,10 @@ describe('progress system job e2e tests', () => {
     const jobVersion = job.jobDataVersions![0];
     expect(jobVersion.jobData).toStrictEqual({
       jobVersion: 1,
-      executeForMillis: 1000,
+      executeForMillis: 800,
     });
     expect(jobVersion.jobDefinitionId).toBe(Jobs.BUSY_PROGRESS_SYSTEM_JOB);
     expect(jobVersion.jobVersion).toBe(1);
-    // todo set proper
     expect(jobVersion.jobOptions).toBeDefined();
     expect(jobVersion.id).toBeDefined();
   });

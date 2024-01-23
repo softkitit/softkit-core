@@ -6,7 +6,6 @@ import { BusyJobData } from './vo/busy-job-data.dto';
 export class BaseBusyJob extends JobProcessor<BusyJobData> {
   public jobStats = {
     started: 0,
-    skip: 0,
     finished: 0,
   };
 

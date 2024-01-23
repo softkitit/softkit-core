@@ -19,12 +19,14 @@ import { BusyJobData } from './app/jobs/vo/busy-job-data.dto';
 import { setupYamlBaseConfigModule } from '@softkit/config';
 import { RootConfig } from './app/config/root.config';
 import path from 'node:path';
+import { AbstractSchedulingJobService } from '../service';
 
 describe('busy job e2e tests', () => {
   let startedRedis: StartedRedis;
   let startedDb: StartedDb;
   let app: NestFastifyApplication;
   let fakeJobQueue: Queue<BusyJobData>;
+  let schedulingService: AbstractSchedulingJobService;
   let fakeJob: BusyJob;
   let jobId: string;
 
@@ -58,6 +60,7 @@ describe('busy job e2e tests', () => {
 
     fakeJobQueue = app.get(getQueueToken(Jobs.BUSY_JOB));
     fakeJob = app.get(BusyJob);
+    schedulingService = app.get(AbstractSchedulingJobService);
 
     jobId = generateRandomId();
   });
@@ -67,36 +70,13 @@ describe('busy job e2e tests', () => {
     jest.resetAllMocks();
   });
 
-  it('should execute job only once with the same job id', async () => {
-    await fakeJobQueue.add(
-      Jobs.BUSY_JOB,
-      { executeForMillis: 20, jobVersion: 1 },
-      {
-        jobId,
-      },
-    );
-
-    await wait(1000);
-
-    await fakeJobQueue.add(
-      Jobs.BUSY_JOB,
-      { executeForMillis: 25, jobVersion: 2 },
-      {
-        jobId,
-      },
-    );
-
-    await wait(1000);
-
-    expect(fakeJob.jobStats.started).toBe(1);
-  });
-
   it('should execute scheduled job immediately', async () => {
-    await fakeJobQueue.add(
+    await schedulingService.scheduleJob(
       Jobs.BUSY_JOB,
+      Jobs.BUSY_JOB,
+      jobId,
       { executeForMillis: 20, jobVersion: 1 },
       {
-        jobId,
         repeat: {
           // 1st january of every year
           pattern: '0 0 1 1 *',
@@ -104,10 +84,18 @@ describe('busy job e2e tests', () => {
         },
       },
     );
-
     await wait(1000);
 
     expect(fakeJob.jobStats.started).toBe(1);
     expect(fakeJob.jobStats.finished).toBe(1);
+
+    for (let i = 0; i < 2; i++) {
+      await schedulingService.runRepeatableJobNow(Jobs.BUSY_JOB, jobId);
+    }
+
+    await wait(1000);
+
+    expect(fakeJob.jobStats.started).toBe(2);
+    expect(fakeJob.jobStats.finished).toBe(2);
   });
 });
