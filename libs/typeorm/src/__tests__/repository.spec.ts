@@ -332,6 +332,37 @@ describe('start db and populate the entity', () => {
     expect(foundArchivedAfterSecondArchive).toBeNull();
   });
 
+  test('delete by id entity test', async () => {
+    const toSave = {
+      password: faker.hacker.ingverb(),
+      firstName: faker.person.firstName() + faker.number.int(),
+      lastName: faker.person.lastName(),
+      nullableStringField: faker.person.jobTitle(),
+    };
+
+    const saved = await testUserRepository.save(toSave);
+
+    expectNotNullAndGet(await testUserRepository.findSingle(saved.id));
+
+    const deleted = await testUserRepository.deleteById(saved.id);
+
+    expect(deleted.affected).toBe(1);
+
+    const foundDeleted = await testUserRepository.findSingle(saved.id);
+
+    expect(foundDeleted).toBeNull();
+
+    const notFoundArchiveForTheFirstTime = await testUserRepository.findSingle(
+      saved.id,
+    );
+
+    expect(notFoundArchiveForTheFirstTime).toBeNull();
+
+    const deletedSecondTime = await testUserRepository.deleteById(saved.id);
+
+    expect(deletedSecondTime.affected).toBe(0);
+  });
+
   test('archive and restore entity test', async () => {
     const toSave = {
       password: faker.hacker.ingverb(),

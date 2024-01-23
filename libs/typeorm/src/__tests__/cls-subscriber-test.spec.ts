@@ -283,7 +283,7 @@ describe('tenant base service test', () => {
   });
 
   // todo document that as well
-  test.todo('insert multiple entities with hierarchy', () => {});
+  test.todo('insert multiple entities with hierarchy');
 });
 
 function checkAllTestFieldsPresent(
