@@ -52,7 +52,12 @@ export abstract class AbstractBaseService<
 
   protected abstract findOne(
     findOptions: FindOneOptions<ENTITY>,
-    throwExceptionIfNotFound: boolean,
+    throwExceptionIfNotFound?: true,
+  ): Promise<ENTITY>;
+
+  protected abstract findOne(
+    findOptions: FindOneOptions<ENTITY>,
+    throwExceptionIfNotFound: false,
   ): Promise<ENTITY | undefined>;
 
   abstract findAllPaginated(

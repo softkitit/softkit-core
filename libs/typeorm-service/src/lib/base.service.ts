@@ -40,8 +40,18 @@ export class BaseEntityService<
     } as unknown as DeepPartial<ENTITY>);
   }
 
+  async findOne(
+    findOptions: FindOneOptions<ENTITY>,
+    throwExceptionIfNotFound?: true,
+  ): Promise<ENTITY>;
+
+  async findOne(
+    findOptions: FindOneOptions<ENTITY>,
+    throwExceptionIfNotFound: false,
+  ): Promise<ENTITY | undefined>;
+
   @Transactional()
-  override async findOne(
+  async findOne(
     findOptions: FindOneOptions<ENTITY>,
     throwExceptionIfNotFound = true,
   ): Promise<ENTITY | undefined> {
