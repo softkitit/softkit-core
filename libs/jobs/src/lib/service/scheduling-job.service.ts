@@ -32,6 +32,7 @@ export class SchedulingJobService implements AbstractSchedulingJobService {
 
     const queue = this.getQueueByName(queueName);
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { repeat: _, repeatJobKey: __, ...options } = job.jobOptions || {};
 
     await queue.add(job.jobDefinitionId, overrideData ?? job.jobData, {

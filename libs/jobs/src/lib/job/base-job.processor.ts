@@ -120,7 +120,7 @@ export abstract class BaseJobProcessor<JobDataType extends VersionedJobData>
     const jobId = job.opts.repeat?.jobId ?? job.opts.jobId;
 
     if (!jobId) {
-      // I didn't find a case where job id is not present, so far it always there, probably type is not correctly reflecting it
+      // todo add test, that may happen when job scheduled without a custom id, that shouldn't be used in jobs at all
       /* istanbul ignore next */
       throw new UnrecoverableError(
         `Job id must be present in each job, but it's not here for job: ${job.name}`,
@@ -185,13 +185,18 @@ export abstract class BaseJobProcessor<JobDataType extends VersionedJobData>
   }
 
   protected async acquireLock(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _jobId: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _lockFor: number = 30_000,
   ): Promise<boolean> {
     // todo implement
     return true;
   }
-  protected async releaseLock(_jobId: string): Promise<boolean> {
+  protected async releaseLock(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _jobId: string,
+  ): Promise<boolean> {
     // todo implement
     return true;
   }

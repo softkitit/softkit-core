@@ -9,13 +9,10 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
-import { getQueueToken } from '@nestjs/bull-shared/dist/utils/get-queue-token.util';
-import { Queue } from 'bullmq';
 import { BusyJob } from './app/jobs/busy.job';
 import { wait } from 'nx-cloud/lib/utilities/waiter';
 import { generateRandomId } from '@softkit/crypto';
 import { Jobs } from './app/jobs/vo/jobs.enum';
-import { BusyJobData } from './app/jobs/vo/busy-job-data.dto';
 import { setupYamlBaseConfigModule } from '@softkit/config';
 import { RootConfig } from './app/config/root.config';
 import path from 'node:path';
@@ -25,7 +22,6 @@ describe('busy job e2e tests', () => {
   let startedRedis: StartedRedis;
   let startedDb: StartedDb;
   let app: NestFastifyApplication;
-  let fakeJobQueue: Queue<BusyJobData>;
   let schedulingService: AbstractSchedulingJobService;
   let fakeJob: BusyJob;
   let jobId: string;
@@ -58,7 +54,6 @@ describe('busy job e2e tests', () => {
     app = module.createNestApplication(new FastifyAdapter());
     await app.listen(0);
 
-    fakeJobQueue = app.get(getQueueToken(Jobs.BUSY_JOB));
     fakeJob = app.get(BusyJob);
     schedulingService = app.get(AbstractSchedulingJobService);
 
