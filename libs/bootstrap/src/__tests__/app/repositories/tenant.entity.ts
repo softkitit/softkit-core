@@ -13,7 +13,7 @@ export class TenantEntity extends BaseEntityHelper {
   @PrimaryGeneratedColumn('uuid')
   @Expose()
   @IsUUIDLocalized()
-  override id!: string;
+  id!: string;
 
   @Column({ type: String, nullable: false, length: 127 })
   @Index({ unique: true })
