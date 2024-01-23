@@ -4,9 +4,10 @@ import {
   Logger,
   OnApplicationBootstrap,
 } from '@nestjs/common';
-import { AbstractSchedulingJobService } from './abstract-scheduling-job.service';
+import { AbstractSchedulingJobService } from './abstract/abstract-scheduling-job.service';
 import { JobsConfig } from '../config';
 import { JOBS_CONFIG_TOKEN } from '../constants';
+import { runInTransaction } from 'typeorm-transactional';
 
 @Injectable()
 export class JobInitializationService implements OnApplicationBootstrap {
@@ -29,7 +30,9 @@ export class JobInitializationService implements OnApplicationBootstrap {
     this.logger.log(`Start scheduling ${jobs?.length || 0} system jobs`);
 
     for (const job of jobs || []) {
-      await this.schedulingJobService.scheduleSystemJob(job);
+      await runInTransaction(async () => {
+        await this.schedulingJobService.scheduleSystemJob(job);
+      });
     }
 
     this.logger.log(`All system jobs scheduled: ${jobs.length}`);

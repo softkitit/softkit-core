@@ -1,4 +1,4 @@
-import { BaseJobExecution, JobExecution } from '../entity';
+import { BaseJobExecution, JobExecution } from '../../entity';
 import { BaseEntityHelper, BaseRepository } from '@softkit/typeorm';
 import { BaseEntityService } from '@softkit/typeorm-service';
 

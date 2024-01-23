@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { AbstractJobVersionService } from './abstract-job-version.service';
-import { JobVersionRepository } from '../repository/job-version.repository';
+import { AbstractJobVersionService } from './abstract/abstract-job-version.service';
+import { JobVersionRepository } from '../repository';
 import { BaseJobVersion } from '../entity';
+import { Transactional } from 'typeorm-transactional';
 
 @Injectable()
 export class JobVersionService extends AbstractJobVersionService {
@@ -9,14 +10,32 @@ export class JobVersionService extends AbstractJobVersionService {
     super(repository);
   }
 
+  @Transactional()
   override findJobVersionByJobDefinitionIdAndVersion(
     jobDefinitionId: string,
     jobVersion: number,
-  ): Promise<BaseJobVersion | null> {
-    return this.repository.findOne({
+  ): Promise<BaseJobVersion | undefined> {
+    return this.findOne(
+      {
+        where: {
+          jobDefinitionId,
+          jobVersion,
+        },
+      },
+      false,
+    );
+  }
+
+  @Transactional()
+  override findLatestJobVersion(
+    jobDefinitionId: string,
+  ): Promise<BaseJobVersion> {
+    return this.findOne({
       where: {
         jobDefinitionId,
-        jobVersion,
+      },
+      order: {
+        jobVersion: 'DESC',
       },
     });
   }

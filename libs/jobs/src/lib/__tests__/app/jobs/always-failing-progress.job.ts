@@ -6,15 +6,16 @@ import {
   AbstractJobExecutionService,
   AbstractJobVersionService,
 } from '../../../service';
-import { ProgressJobProcessor } from '../../../job';
+import { JobProcessor } from '../../../job';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 @Processor(Jobs.ALWAYS_FAILING_PROGRESS_JOB, {
   concurrency: 50,
   maxStalledCount: 10,
 })
-export class AlwaysFailingProgressJob extends ProgressJobProcessor<BusyJobData> {
+export class AlwaysFailingProgressJob extends JobProcessor<BusyJobData> {
   override singleRunningJobGlobally = true;
 
   public jobStats = {
@@ -33,6 +34,6 @@ export class AlwaysFailingProgressJob extends ProgressJobProcessor<BusyJobData> 
 
   protected override run(): Promise<unknown> {
     this.jobStats.executed++;
-    throw new Error('Method not implemented.');
+    throw new Error('Failing intentionally.');
   }
 }

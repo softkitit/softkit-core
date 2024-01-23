@@ -185,13 +185,13 @@ export abstract class BaseJobProcessor<JobDataType extends VersionedJobData>
   }
 
   protected async acquireLock(
-    jobId: string,
-    lockFor: number = 30_000,
+    _jobId: string,
+    _lockFor: number = 30_000,
   ): Promise<boolean> {
     // todo implement
     return true;
   }
-  protected async releaseLock(jobId: string): Promise<boolean> {
+  protected async releaseLock(_jobId: string): Promise<boolean> {
     // todo implement
     return true;
   }

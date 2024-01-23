@@ -1,4 +1,4 @@
-import { BaseJobDefinitionEntity, JobDefinition } from '../entity';
+import { BaseJobDefinitionEntity, JobDefinition } from '../../entity';
 import { BaseEntityHelper, BaseRepository } from '@softkit/typeorm';
 import { BaseEntityService } from '@softkit/typeorm-service';
 

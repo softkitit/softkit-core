@@ -9,6 +9,7 @@ import {
 import { BaseBusyProgressJob } from './base-busy-progress.job';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 @Processor(Jobs.BUSY_PROGRESS_SCHEDULED_JOB, {
   concurrency: 50,

@@ -22,7 +22,7 @@ export class BackoffOptionsConfig {
 }
 
 export class KeepJobsConfig {
-  constructor(ageInDays: number = 30, count: number = 10_000) {
+  constructor(ageInDays: number = 0, count: number = 0) {
     this.age = ageInDays * 60 * 60 * 24;
     this.count = count;
   }
@@ -33,7 +33,8 @@ export class KeepJobsConfig {
   @IsInt()
   @IntegerType
   @Min(0)
-  age: number = 60 * 60 * 24 * 30;
+  @IsOptional()
+  age?: number = 0;
 
   /**
    * Maximum count of jobs to be kept.
@@ -41,7 +42,8 @@ export class KeepJobsConfig {
   @IsInt()
   @IntegerType
   @Min(0)
-  count: number = 10_000;
+  @IsOptional()
+  count?: number = 0;
 }
 
 export class DefaultJobOptionsConfig {
@@ -63,18 +65,20 @@ export class DefaultJobOptionsConfig {
   lifo?: boolean;
 
   /**
-   * Default behavior is up to 3 days and 10k jobs
+   * Default behavior is up to 0 days and 0 jobs
+   * It allows us to do not have multiple jobs with the same type running in a cluster
    */
   @ValidateNested()
   @Type(() => KeepJobsConfig)
   removeOnComplete: KeepJobsConfig = new KeepJobsConfig();
 
   /**
-   * Default behavior is up to 14 days and 10k jobs
+   * Default behavior is 0 days and 0 jobs
+   * We do store this information in postgres, so redis doesn't make too much sense
    */
   @ValidateNested()
   @Type(() => KeepJobsConfig)
-  removeOnFail?: KeepJobsConfig = new KeepJobsConfig(14);
+  removeOnFail?: KeepJobsConfig = new KeepJobsConfig();
 
   /**
    * Maximum amount of log entries that will be preserved

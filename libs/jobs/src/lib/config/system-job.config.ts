@@ -1,15 +1,33 @@
-import { IsNumber, IsObject, IsString } from 'class-validator';
-import { JobConfig } from './job.config';
-import { Transform } from 'class-transformer';
+import {
+  IsNumber,
+  IsObject,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
+import { Transform, Type } from 'class-transformer';
+import { DefaultJobOptionsConfig } from './default-job-options.config';
+import { RepeatableJobOptions } from './repeatable-job-options';
 
-export class SystemJobConfig extends JobConfig {
+export class SystemJobConfig {
   @IsString()
-  cron!: string;
+  name!: string;
 
   @IsNumber()
   jobVersion!: number;
 
+  @IsObject()
+  @ValidateNested()
+  @Type(() => RepeatableJobOptions)
+  repeat!: RepeatableJobOptions;
+
   @Transform((j) => j.value)
   @IsObject()
-  jobData!: object;
+  @IsOptional()
+  jobData?: object;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => DefaultJobOptionsConfig)
+  defaultJobOptions: DefaultJobOptionsConfig = new DefaultJobOptionsConfig();
 }

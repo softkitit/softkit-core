@@ -1,6 +1,6 @@
 import { BaseEntityHelper, BaseRepository } from '@softkit/typeorm';
 import { BaseEntityService } from '@softkit/typeorm-service';
-import { BaseJobVersion, JobVersion } from '../entity';
+import { BaseJobVersion, JobVersion } from '../../entity';
 
 export abstract class AbstractJobVersionService<
   T extends BaseJobVersion = JobVersion,
@@ -16,5 +16,9 @@ export abstract class AbstractJobVersionService<
   public abstract findJobVersionByJobDefinitionIdAndVersion(
     jobDefinitionId: string,
     jobVersion: number,
-  ): Promise<BaseJobVersion | null>;
+  ): Promise<BaseJobVersion | undefined>;
+
+  public abstract findLatestJobVersion(
+    jobDefinitionId: string,
+  ): Promise<BaseJobVersion>;
 }

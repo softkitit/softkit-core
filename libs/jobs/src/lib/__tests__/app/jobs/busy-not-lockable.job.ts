@@ -5,7 +5,12 @@ import { BusyJobData } from './vo/busy-job-data.dto';
 
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 import { BaseBusyJob } from './base-busy.job';
+import {
+  AbstractJobExecutionService,
+  AbstractJobVersionService,
+} from '../../../service';
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 @Processor(Jobs.BUSY_NOT_LOCKABLE_JOB, {
   concurrency: 50,
@@ -19,14 +24,13 @@ export class BusyNotLockableJob extends BaseBusyJob {
     queue: Queue<BusyJobData>,
     @InjectPinoLogger(BusyNotLockableJob.name)
     logger: PinoLogger,
+    jobVersionService: AbstractJobVersionService,
+    jobExecutionService: AbstractJobExecutionService,
   ) {
-    super(queue, logger);
+    super(queue, logger, jobVersionService, jobExecutionService);
   }
 
-  protected override async acquireLock(
-    jobId: string,
-    lockFor: number = 30_000,
-  ): Promise<boolean> {
+  protected override async acquireLock(): Promise<boolean> {
     return false;
   }
 }
