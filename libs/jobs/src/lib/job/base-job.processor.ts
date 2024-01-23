@@ -37,27 +37,31 @@ export abstract class BaseJobProcessor<JobDataType extends VersionedJobData>
       },
     );
 
-    this.worker.on('stalled', (jobId, prev) => {
-      /* istanbul ignore next */
-      this.logger.error(
-        {
-          jobId,
-          previousStatus: prev,
-          jobStatus: 'stalled',
-        },
-        `Queue: ${this.queue.name} job: ${jobId} moved to stalled. In general it's ok, but if that happens often, it better to research it. Previous status: ${prev}`,
-      );
-    });
+    this.worker.on(
+      'stalled',
+      /* istanbul ignore next */ (jobId, prev) => {
+        this.logger.error(
+          {
+            jobId,
+            previousStatus: prev,
+            jobStatus: 'stalled',
+          },
+          `Queue: ${this.queue.name} job: ${jobId} moved to stalled. In general it's ok, but if that happens often, it better to research it. Previous status: ${prev}`,
+        );
+      },
+    );
 
-    this.worker.on('resumed', () => {
-      /* istanbul ignore next */
-      this.logger.info(
-        {
-          jobStatus: 'resumed',
-        },
-        `Queue: ${this.queue.name} worker resumed`,
-      );
-    });
+    this.worker.on(
+      'resumed',
+      /* istanbul ignore next */ () => {
+        this.logger.info(
+          {
+            jobStatus: 'resumed',
+          },
+          `Queue: ${this.queue.name} worker resumed`,
+        );
+      },
+    );
 
     this.worker.on('closing', (msg) => {
       this.logger.info(
@@ -68,15 +72,17 @@ export abstract class BaseJobProcessor<JobDataType extends VersionedJobData>
       );
     });
 
-    this.worker.on('paused', () => {
-      /* istanbul ignore next */
-      this.logger.info(
-        {
-          jobStatus: 'paused',
-        },
-        `Queue: ${this.queue.name} worker paused`,
-      );
-    });
+    this.worker.on(
+      'paused',
+      /* istanbul ignore next */ () => {
+        this.logger.info(
+          {
+            jobStatus: 'paused',
+          },
+          `Queue: ${this.queue.name} worker paused`,
+        );
+      },
+    );
 
     this.worker.on('drained', () => {
       this.logger.info(
@@ -119,9 +125,9 @@ export abstract class BaseJobProcessor<JobDataType extends VersionedJobData>
   protected getJobId(job: Job<JobDataType>) {
     const jobId = job.opts.repeat?.jobId ?? job.opts.jobId;
 
+    /* istanbul ignore next */
     if (!jobId) {
       // todo add test, that may happen when job scheduled without a custom id, that shouldn't be used in jobs at all
-      /* istanbul ignore next */
       throw new UnrecoverableError(
         `Job id must be present in each job, but it's not here for job: ${job.name}`,
       );
@@ -156,10 +162,7 @@ export abstract class BaseJobProcessor<JobDataType extends VersionedJobData>
     let activeJobsCount = 0;
 
     for (let i = 0; ; i++) {
-      const activeJobs = await this.retrieveActiveJobs(
-        i,
-        this.GET_JOBS_BATCH_SIZE,
-      );
+      const activeJobs = await this.retrieveActiveJobs(i);
 
       for (const activeJob of activeJobs) {
         const jobOptions = activeJob.opts;
@@ -201,14 +204,11 @@ export abstract class BaseJobProcessor<JobDataType extends VersionedJobData>
     return true;
   }
 
-  protected retrieveActiveJobs(
-    pageNumber: number,
-    GET_JOBS_BATCH_SIZE: number = 100,
-  ) {
+  protected retrieveActiveJobs(pageNumber: number) {
     return this.queue.getJobs(
       ['active'],
-      pageNumber * GET_JOBS_BATCH_SIZE,
-      GET_JOBS_BATCH_SIZE,
+      pageNumber * this.GET_JOBS_BATCH_SIZE,
+      this.GET_JOBS_BATCH_SIZE,
       true,
     );
   }

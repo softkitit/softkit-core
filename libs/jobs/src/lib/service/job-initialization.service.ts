@@ -27,9 +27,9 @@ export class JobInitializationService implements OnApplicationBootstrap {
       return;
     }
 
-    this.logger.log(`Start scheduling ${jobs?.length || 0} system jobs`);
+    this.logger.log(`Start scheduling ${jobs.length} system jobs`);
 
-    for (const job of jobs || []) {
+    for (const job of jobs) {
       await runInTransaction(async () => {
         await this.schedulingJobService.scheduleSystemJob(job);
       });

@@ -18,6 +18,11 @@ export abstract class AbstractJobVersionService<
     jobVersion: number,
   ): Promise<BaseJobVersion | undefined>;
 
+  public abstract findPreviousJobVersion(
+    jobDefinitionId: string,
+    newJobVersion: number,
+  ): Promise<BaseJobVersion | undefined>;
+
   public abstract findLatestJobVersion(
     jobDefinitionId: string,
   ): Promise<BaseJobVersion>;

@@ -3,6 +3,7 @@ import { AbstractJobVersionService } from './abstract/abstract-job-version.servi
 import { JobVersionRepository } from '../repository';
 import { BaseJobVersion } from '../entity';
 import { Transactional } from 'typeorm-transactional';
+import { LessThan } from 'typeorm';
 
 @Injectable()
 export class JobVersionService extends AbstractJobVersionService {
@@ -20,6 +21,25 @@ export class JobVersionService extends AbstractJobVersionService {
         where: {
           jobDefinitionId,
           jobVersion,
+        },
+      },
+      false,
+    );
+  }
+
+  @Transactional()
+  override findPreviousJobVersion(
+    jobDefinitionId: string,
+    newJobVersion: number,
+  ): Promise<BaseJobVersion | undefined> {
+    return this.findOne(
+      {
+        where: {
+          jobDefinitionId,
+          jobVersion: LessThan(newJobVersion),
+        },
+        order: {
+          jobVersion: 'DESC',
         },
       },
       false,

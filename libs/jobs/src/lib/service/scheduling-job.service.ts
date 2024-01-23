@@ -53,12 +53,9 @@ export class SchedulingJobService implements AbstractSchedulingJobService {
         jobVersion: systemJobConfig.jobVersion,
       },
       {
-        repeat: {
-          key: systemJobConfig.name,
-          ...systemJobConfig.repeat,
-        },
         jobId: systemJobConfig.name,
         ...systemJobConfig.defaultJobOptions,
+        repeat: systemJobConfig.repeat,
       },
     );
   }
@@ -113,13 +110,25 @@ export class SchedulingJobService implements AbstractSchedulingJobService {
     const queue = this.getQueueByName(queueName);
 
     if (jobOptions?.repeat) {
-      const jobRemoved = await queue.removeRepeatableByKey(jobId);
-
-      this.logger.log(
-        `${
-          jobRemoved ? 'Rescheduling' : 'Scheduling'
-        } a repeatable job ${jobName}:${jobId}`,
+      const jobVersion = await this.jobVersionService.findPreviousJobVersion(
+        jobId,
+        data.jobVersion,
       );
+
+      if (jobVersion) {
+        const jobRemoved = await queue.removeRepeatable(
+          jobName,
+          jobVersion.jobOptions?.repeat || {},
+          jobId,
+        );
+
+        /* istanbul ignore next */
+        if (!jobRemoved) {
+          throw new Error(
+            `Failed to remove repeatable job ${jobName}:${jobId}, there is a chance that you may have multiple scheduled jobs now. It require investigation.`,
+          );
+        }
+      }
     }
 
     await this.rescheduleJob(jobId, queue, jobName, data, updatedJobOptions);
