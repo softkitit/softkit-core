@@ -3,8 +3,7 @@ import { TransformFnParams } from 'class-transformer';
 export const toInteger = (params: TransformFnParams): number | undefined => {
   let value = params.value;
 
-  // we don't need to check for null or undefined because if it's optional it won't be called
-
+  /* istanbul ignore next */
   if (value === null || value === undefined) {
     return value;
   }

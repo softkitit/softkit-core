@@ -2,7 +2,7 @@ import { TransformSimpleEntity } from './app/vo/transform/transform-simple.entit
 import { WithPasswordFieldEntity } from './app/vo/transform/with-password-field.entity';
 import { TransformWithChildEntity } from './app/vo/transform/transform-with-child.entity';
 import { TransformWithChildArrayEntity } from './app/vo/transform/transform-with-child-array.entity';
-import { map } from '../lib/mapping/entity-to-entity';
+import { map } from '../lib/mapping';
 import { BASE_TRANSFORM_ENTITY } from './app/vo/transform/base-transform.entity';
 import { Test, TestingModule } from '@nestjs/testing';
 import { SampleModule } from './app/sample.module';
