@@ -7,7 +7,7 @@ import { AbstractJobDefinitionService } from './abstract/abstract-job-definition
 import { AbstractJobVersionService } from './abstract/abstract-job-version.service';
 import { VersionedJobData } from '../job';
 import { getQueueToken } from '@nestjs/bullmq';
-import { SystemJobConfig } from '../config/system-job.config';
+import { SystemJobConfig } from '../config';
 
 @Injectable()
 export class SchedulingJobService implements AbstractSchedulingJobService {
