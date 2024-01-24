@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.2.2](https://github.com/softkitit/softkit-core/compare/mail-0.2.1...mail-0.2.2) (2024-01-24)
+
+
+### Bug Fixes
+
+* **mail:** fixed typed emails method ([74b6598](https://github.com/softkitit/softkit-core/commit/74b659885027bf4c7d5f479627a4a13925b493be))
+
 ## [0.2.1](https://github.com/softkitit/softkit-core/compare/mail-0.2.0...mail-0.2.1) (2023-12-11)
 
 ## [0.2.0](https://github.com/softkitit/softkit-core/compare/mail-0.1.0...mail-0.2.0) (2023-12-01)
