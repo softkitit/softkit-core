@@ -11,7 +11,6 @@
     "migration:generate": "sh -c 'export MIGRATION_APP_NAME=${0}; yarn run typeorm --dataSource=libs/typeorm/src/lib/migration/migration-data-source.ts migration:generate apps/${0}/src/app/database/migrations/${1}'",
     "prebuild": "rimraf dist",
     "test:all": "nx affected:test --all --codeCoverage --skip-nx-cache --parallel=false",
-    "docs": "typedoc",
     "prepare": "husky install"
   },
   "packageManager": "yarn@3.6.3",
@@ -83,6 +82,7 @@
     "verdaccio": "^5.26.2"
   },
   "dependencies": {
+    "@anchan828/nest-redlock": "^0.2.7",
     "@aws-sdk/client-s3": "^3.454.0",
     "@aws-sdk/credential-provider-node": "^3.451.0",
     "@aws-sdk/s3-presigned-post": "^3.454.0",
@@ -95,6 +95,7 @@
     "@fastify/helmet": "^11.0.0",
     "@fastify/static": "^6.11.0",
     "@mdx-js/react": "^3.0.0",
+    "@nestjs/bullmq": "^10.0.1",
     "@nestjs/common": "^10.2.4",
     "@nestjs/core": "^10.2.4",
     "@nestjs/jwt": "^10.1.1",
@@ -109,9 +110,12 @@
     "argon2": "^0.31.1",
     "axios": "^1.5.0",
     "axios-retry": "^3.7.0",
+    "bullmq": "^5.1.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
     "clsx": "^2.0.0",
+    "deep-equal": "^2.2.3",
+    "fast-deep-equal": "^3.1.3",
     "form-data": "^4.0.0",
     "ioredis": "^5.3.2",
     "mailgun.js": "^9.3.0",

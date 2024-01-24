@@ -7,12 +7,15 @@ import { TenantClsStore } from '../../lib/vo/tenant-base-cls-store';
 import { TenantUserEntity } from './user-tenant.entity';
 
 @Injectable()
-export class TenantUserRepository extends BaseTenantRepository<TenantUserEntity> {
+export class TenantUserRepository extends BaseTenantRepository<
+  TenantUserEntity,
+  'id'
+> {
   constructor(
     @InjectDataSource()
     ds: DataSource,
     clsService: ClsService<TenantClsStore>,
   ) {
-    super(TenantUserEntity, ds, clsService);
+    super(TenantUserEntity, ds, 'id', clsService);
   }
 }

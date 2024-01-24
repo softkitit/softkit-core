@@ -1,12 +1,12 @@
 import { TransformFnParams } from 'class-transformer';
-import { validateAndThrow } from '../validators/dynamic';
-import { MatchesRegexpValidatorDefinition } from '../validators';
-import { i18nString } from '../utils';
 
 export const toInteger = (params: TransformFnParams): number | undefined => {
   let value = params.value;
 
-  const constraint = /^-?(?!0\d)\d+$/;
+  /* istanbul ignore next */
+  if (value === null || value === undefined) {
+    return value;
+  }
 
   /**
    * This is needed because we want to make sure that the value is a string
@@ -15,13 +15,11 @@ export const toInteger = (params: TransformFnParams): number | undefined => {
     value = value.toString();
   }
 
-  validateAndThrow(
-    MatchesRegexpValidatorDefinition,
-    params.key,
-    value as string,
-    constraint,
-    i18nString('validation.INTEGER'),
-  );
+  const constraint = /^-?(?!0\d)\d+$/;
+
+  if (!constraint.test(value.toString())) {
+    return;
+  }
 
   return Number.parseInt(value, 10);
 };

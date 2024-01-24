@@ -16,7 +16,7 @@ export class UserProfile extends BaseEntityHelper {
   @PrimaryGeneratedColumn('uuid')
   @Expose()
   @IsUUIDLocalized()
-  override id!: string;
+  id!: string;
 
   @Column({ type: String, unique: true, nullable: false, length: 320 })
   @Index({ unique: true })

@@ -27,12 +27,14 @@ import {
 
 export abstract class BaseRepository<
   ENTITY extends BaseEntityHelper,
+  ID extends keyof ENTITY,
 > extends Repository<ENTITY> {
   private readonly logger: Logger = new Logger(BaseRepository.name);
 
   protected constructor(
     protected entityTarget: EntityTarget<ENTITY>,
     protected dataSource: DataSource,
+    public idFieldName: ID,
   ) {
     const entityManager = dataSource.createEntityManager();
     super(entityTarget, entityManager);
@@ -54,13 +56,7 @@ export abstract class BaseRepository<
   async createOrUpdateWithReload(entity: DeepPartial<ENTITY>): Promise<ENTITY> {
     const e = this.create(entity);
     const result = await this.save(e);
-
-    // if id present then full entity is returned by typeorm
-    if (!entity.id) {
-      return result;
-    }
-    // if id not present we need to get full entity
-    const foundEntity = await this.findSingle(result.id);
+    const foundEntity = await this.findSingle(result[this.idFieldName]);
 
     // can't imagine a situation where find won't work after successful save
     return foundEntity ?? /* istanbul ignore next */ result;
@@ -81,7 +77,7 @@ export abstract class BaseRepository<
   }
 
   async findSingle(
-    id: ENTITY['id'],
+    id: ENTITY[ID],
     withDeleted = false,
     where: FindOptionsWhere<ENTITY> = {},
   ): Promise<ENTITY | null> {
@@ -97,7 +93,7 @@ export abstract class BaseRepository<
   }
 
   async findAllByIds(
-    ids: ENTITY['id'][],
+    ids: ENTITY[ID][],
     where: FindOptionsWhere<ENTITY> = {},
   ): Promise<ENTITY[]> {
     return this.find(
@@ -110,7 +106,7 @@ export abstract class BaseRepository<
     );
   }
 
-  async archive(id: ENTITY['id'], version: number) {
+  async archive(id: ENTITY[ID], version: number) {
     const result = await this.update(
       this.presetDefaultWhereOptions({
         id,
@@ -125,7 +121,7 @@ export abstract class BaseRepository<
     return result.affected === 1;
   }
 
-  async unarchive(id: ENTITY['id'], version: number) {
+  async unarchive(id: ENTITY[ID], version: number) {
     const result = await this.update(
       this.presetDefaultWhereOptions({
         id,
@@ -257,6 +253,14 @@ export abstract class BaseRepository<
     return super.delete(this.presetIdWhereOptions(criteria));
   }
 
+  async deleteById(id: ENTITY[ID]): Promise<DeleteResult> {
+    return super.delete(
+      this.presetIdWhereOptions({
+        [this.idFieldName]: id,
+      }),
+    );
+  }
+
   override async findAndCount(
     options?: FindManyOptions<ENTITY>,
   ): Promise<[ENTITY[], number]> {
@@ -384,21 +388,20 @@ export abstract class BaseRepository<
       | number[]
       | Date
       | Date[]
-      | FindOptionsWhere<ENTITY>,
+      | FindOptionsWhere<ENTITY>
+      | object,
   ): FindOptionsWhere<ENTITY> {
     if (
-      // todo can not check for ObjectID type because it's not exported from typeorm package
-      //  but it doesn't matter because it's not used in this project
       criteria instanceof Date ||
       typeof criteria === 'string' ||
       typeof criteria === 'number'
     ) {
       return this.presetDefaultWhereOptions({
-        id: criteria,
+        [this.idFieldName]: criteria,
       } as FindOptionsWhere<ENTITY>);
     } else if (Array.isArray(criteria)) {
       return this.presetDefaultWhereOptions({
-        id: In(criteria as unknown[]),
+        [this.idFieldName]: In(criteria as unknown[]),
       } as FindOptionsWhere<ENTITY>);
     } else {
       return this.presetDefaultWhereOptions(criteria);

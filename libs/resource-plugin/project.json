@@ -76,7 +76,7 @@
       "options": {
         "postTargets": [
           "resource-plugin:npm",
-          "crypto:github"
+          "resource-plugin:github"
         ],
         "preset": "conventional"
       }

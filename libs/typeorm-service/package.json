@@ -18,6 +18,7 @@
     "class-transformer": "^0.5.1",
     "typeorm": "~0.3.17",
     "nestjs-paginate": "^8.6.0",
-    "typeorm-transactional": "^0.4.1"
+    "typeorm-transactional": "^0.4.1",
+    "@softkit/common-types": "*"
   }
 }

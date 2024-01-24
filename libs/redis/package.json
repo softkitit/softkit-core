@@ -16,6 +16,9 @@
     "cache-manager-redis-store-multi",
     "cache-manager-redis-store-sentinel"
   ],
+  "dependencies": {
+    "@anchan828/nest-redlock": "^0.2.7"
+  },
   "peerDependencies": {
     "class-validator": "^0.14.0",
     "@songkeys/nestjs-redis": "~10.0.0",
