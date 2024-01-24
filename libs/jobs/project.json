@@ -60,8 +60,8 @@
       ],
       "options": {
         "postTargets": [
-          "resource-plugin:npm",
-          "resource-plugin:github"
+          "jobs:npm",
+          "jobs:github"
         ],
         "preset": "conventional"
       }
