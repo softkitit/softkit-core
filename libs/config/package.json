@@ -8,7 +8,7 @@
     "external config"
   ],
   "peerDependencies": {
-    "nest-typed-config": "^2.9.1",
-    "class-transformer": "^0.5.1"
+    "class-transformer": "^0.5.1",
+    "nest-typed-config": "^2.9.1"
   }
 }
