@@ -6,6 +6,7 @@ import { UserEntity } from './app/repository/vo/user.entity';
 import { StringRedisRepository } from './app/repository/string.redis.repository';
 import { RedlockService } from '@anchan828/nest-redlock';
 import { wait } from 'nx-cloud/lib/utilities/waiter';
+import { faker } from '@faker-js/faker';
 
 describe('redis in app tests', () => {
   let redis: StartedRedis;
@@ -57,12 +58,13 @@ describe('redis in app tests', () => {
   });
 
   it('should do the lock properly', async () => {
-    const lock1 = lockService.using(['test'], 1000, async () => {
+    const lockId = faker.string.uuid();
+    const lock1 = lockService.using([lockId], 1000, async () => {
       await wait(2000);
       return 1;
     });
 
-    const lock2 = lockService.using(['test'], 1000, async () => {
+    const lock2 = lockService.using([lockId], 1000, async () => {
       await wait(1000);
       return 2;
     });
@@ -83,5 +85,41 @@ describe('redis in app tests', () => {
         'The operation was unable to achieve a quorum during its retry window.',
       );
     }
+  });
+
+  it('should release lock once finished, no matter time we pass', async () => {
+    const lockId = faker.string.uuid();
+
+    const lock1 = lockService.using([lockId], 40_000, async () => {
+      await wait(300);
+      return 1;
+    });
+
+    await wait(400);
+
+    const lock2 = lockService.using([lockId], 234_234, async () => {
+      await wait(500);
+      return 2;
+    });
+
+    const [firstLock, secondLock] = await Promise.all([lock1, lock2]);
+
+    expect(firstLock).toBe(1);
+    expect(secondLock).toBe(2);
+  });
+
+  it('should lock various resources and finish all of them successfully', async () => {
+    const results = await Promise.allSettled(
+      Array.from({ length: 10 }).map((_, index) => {
+        return lockService.using([`resource-${index % 10}`], 1100, async () => {
+          await wait(1000);
+          return index;
+        });
+      }),
+    );
+
+    expect(results).toStrictEqual(
+      Array.from({ length: 10 }).map((_, index) => index),
+    );
   });
 });

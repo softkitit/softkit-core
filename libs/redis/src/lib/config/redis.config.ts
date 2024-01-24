@@ -2,6 +2,7 @@ import {
   ArrayMinSize,
   IsArray,
   IsBoolean,
+  IsObject,
   IsOptional,
   ValidateNested,
 } from 'class-validator';
@@ -25,6 +26,7 @@ export class RedisConfig {
   @IsOptional()
   @Type(() => RedisCommonConfig)
   @ValidateNested()
+  @IsObject()
   commonConfig?: RedisCommonConfig;
 
   @IsArray()
