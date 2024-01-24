@@ -1,4 +1,12 @@
 Softkit Core Libraries Changelog
+## [0.2.5](https://github.com/softkitit/softkit-core/compare/bootstrap-0.2.4...bootstrap-0.2.5) (2024-01-24)
+
+
+### Bug Fixes
+
+* **bootstrap:** added ignore for new process functions and added a failed case for run seeds ([d3475ea](https://github.com/softkitit/softkit-core/commit/d3475ea46c211c19f8213736fbe6472d25a0d1b0))
+* **bootstrap:** added uncaught exceptions handlers ([74f7781](https://github.com/softkitit/softkit-core/commit/74f77817eb0a71bf51c694844302592eb754a001))
+
 ## [0.2.4](https://github.com/softkitit/softkit-core/compare/bootstrap-0.2.3...bootstrap-0.2.4) (2023-12-11)
 
 
