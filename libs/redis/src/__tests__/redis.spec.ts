@@ -109,9 +109,9 @@ describe('redis in app tests', () => {
   });
 
   it('should lock various resources and finish all of them successfully', async () => {
-    const results = await Promise.allSettled(
+    const results = await Promise.all(
       Array.from({ length: 10 }).map((_, index) => {
-        return lockService.using([`resource-${index % 10}`], 1100, async () => {
+        return lockService.using([`resource-${index}`], 1100, async () => {
           await wait(1000);
           return index;
         });
