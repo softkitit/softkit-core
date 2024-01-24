@@ -1,8 +1,7 @@
 {
   "name": "@softkit/jobs",
-  "version": "0.0.1",
-  "devDependencies": {
-  },
+  "version": "0.1.0",
+  "devDependencies": {},
   "peerDependencies": {
     "@softkit/logger": "*",
     "nestjs-pino": "^3.4.0",
