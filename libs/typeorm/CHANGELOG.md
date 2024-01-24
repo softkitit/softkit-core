@@ -1,4 +1,22 @@
 Softkit Core Libraries Changelog
+## [0.5.0](https://github.com/softkitit/softkit-core/compare/typeorm-0.4.13...typeorm-0.5.0) (2024-01-24)
+
+
+### Features
+
+* **jobs:** automated bull jobs creation and auto queue registrations, introduced one connection by queue by default ([7ceedaa](https://github.com/softkitit/softkit-core/commit/7ceedaad2a1f875e282880899b93453108ba3d68))
+* **typeorm:** made version field optional, get rid of default id field in base entity, extended base repositories to pass needed information about id field, and added example with versions ([5655c17](https://github.com/softkitit/softkit-core/commit/5655c170adeb19162b7d14b36134464b8208c9d7))
+
+
+### Bug Fixes
+
+* **typeorm:** fixed paginate default logic with updated version of nestjs paginate ([dd6cf94](https://github.com/softkitit/softkit-core/commit/dd6cf94ab330ca9edde61454b8ee6461b57ff136))
+
+
+### Reverts
+
+* Revert "test(typeorm): removed unneeded test for internals of paginate" ([2f35ff9](https://github.com/softkitit/softkit-core/commit/2f35ff9944e2a20774ce64b8c0feb34c27b18951))
+
 ## [0.4.13](https://github.com/softkitit/softkit-core/compare/typeorm-0.4.12...typeorm-0.4.13) (2023-12-15)
 
 
