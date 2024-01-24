@@ -1,4 +1,32 @@
 Softkit Core Libraries Changelog
+## [0.6.1](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.0...resource-plugin-0.6.1) (2023-12-15)
+
+
+### Bug Fixes
+
+* **resource-plugin:** update db config in app generation ([f93d7b2](https://github.com/softkitit/softkit-core/commit/f93d7b2ebee9f3d0e9344897fc766c54bca7e7c4))
+
+## [0.6.0](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.5.0...resource-plugin-0.6.0) (2023-12-15)
+
+
+### Features
+
+* **resource-plugin:** bump nx peer dependencies to v17.1.2 ([3fe8e33](https://github.com/softkitit/softkit-core/commit/3fe8e33c1574ea83914e0e62c3840a0dbc1d30da))
+
+## [0.5.0](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.4.0...resource-plugin-0.5.0) (2023-12-15)
+
+
+### Features
+
+* **resource-plugin:** add configuring jest-extended to lib and app generation ([d66ac46](https://github.com/softkitit/softkit-core/commit/d66ac465037094f7014920e288bfac7eb0fe9927))
+
+
+### Bug Fixes
+
+* **resource-plugin:** add nest-typed-config in jest ignore for lib generator ([9b575e6](https://github.com/softkitit/softkit-core/commit/9b575e6713aee84e019891e5b35afdfe9d0c67c2))
+* **resource-plugin:** enhance jest-extended configuration process for lib and app generation ([c434ecb](https://github.com/softkitit/softkit-core/commit/c434ecb04c2f369b962d9f043f74baa4fb3714b0))
+* **resource-plugin:** update jest configuration handling in app and lib generators ([2664064](https://github.com/softkitit/softkit-core/commit/266406461e6ff82ab6d0a32c8637ba245f3cc6a0))
+
 ## [0.4.1](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.4.0...resource-plugin-0.4.1) (2023-12-11)
 
 

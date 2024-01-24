@@ -1,4 +1,18 @@
 Softkit Core Libraries Changelog
+## [0.1.3](https://github.com/softkitit/softkit-core/compare/exceptions-0.1.2...exceptions-0.1.3) (2023-12-15)
+
+
+### Bug Fixes
+
+* **exceptions:** added a test ([dbf81ef](https://github.com/softkitit/softkit-core/commit/dbf81efd774104adf122d2da60af7f375ec60523))
+* **exceptions:** added a test ([d5144cc](https://github.com/softkitit/softkit-core/commit/d5144cc4387a23ff6810f586d1c5c188efc62e12))
+* **exceptions:** added the error code to the exceptions ([74f4fc0](https://github.com/softkitit/softkit-core/commit/74f4fc02eee9c30d59680960df716132592edead))
+* **exceptions:** added the error codes and the general unprocessable entity error ([b31c5b6](https://github.com/softkitit/softkit-core/commit/b31c5b68a95285bc51d339b797ae0068ddac349a))
+* **exceptions:** added the unprocessable entity error decorator ([204821e](https://github.com/softkitit/softkit-core/commit/204821e504ab8728d4ea3830b3337504a2c5ad88))
+* **exceptions:** swagger errorCode property ([931fca6](https://github.com/softkitit/softkit-core/commit/931fca60b37e82457a81a20971160f1a3d27ee5d))
+* **exceptions:** swapped the “Error code” and “Root cause” fields ([462a382](https://github.com/softkitit/softkit-core/commit/462a382880b889f3d4d37004d6e44b5917118238))
+* **exceptions:** swapped the “Error code” and “Root cause” fields ([907f714](https://github.com/softkitit/softkit-core/commit/907f7144b90e0861f91716c8334792b9472b0f44))
+
 ## [0.1.2](https://github.com/softkitit/softkit-core/compare/exceptions-0.1.1...exceptions-0.1.2) (2023-11-04)
 
 

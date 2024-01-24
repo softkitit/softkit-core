@@ -1,0 +1,78 @@
+---
+title: 'Getting Started'
+---
+
+import Admonition from '@theme/Admonition';
+
+# Getting Started with File Storage Module
+
+---
+
+This module provides a straightforward way to work with file storage in NestJS applications, primarily focusing on AWS S3 storage.
+
+<Admonition type="tip" title="Note">
+  Ensure you have AWS credentials set up for accessing S3.
+</Admonition>
+
+## Installation
+
+To begin using the File Storage Module, you need to install the package in your project:
+
+```bash
+yarn add @softkit/file-storage
+```
+
+## Basic Setup
+
+To get started, import and configure the `S3FileStorageModule` in your NestJS application.
+
+```typescript
+import { Module } from '@nestjs/common';
+import { S3FileStorageModule } from '@softkit/file-storage';
+
+@Module({
+  imports: [S3FileStorageModule.forRoot()],
+})
+export class YourAppModule {}
+```
+
+## Configuration
+
+Configure the module to suit your needs, including overriding default credentials and setting up asynchronous configurations.
+
+### Overriding Credentials
+
+```typescript
+@Module({
+  imports: [
+    S3FileStorageModule.forRoot({
+      credentials: {
+        accessKeyId: 'test',
+        secretAccessKey: 'test',
+      },
+    }),
+  ],
+})
+export class YourAppModule {}
+```
+
+### Asynchronous Configuration
+
+```typescript
+@Module({
+  imports: [
+    S3FileStorageModule.forRootAsync({
+      useFactory: async (config: SomeS3Config) => {
+        return config;
+      },
+      inject: [SomeS3Config],
+    }),
+  ],
+})
+export class YourAppModule {}
+```
+
+## Next Steps
+
+- Explore [Testing with LocalStack](/libraries/file-storage/localstack) for a local development environment.
+- Learn about [Advanced Features and Customization](/libraries/file-storage/advanced-features) to enhance your file storage capabilities.

@@ -1,11 +1,26 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiForbiddenResponse } from '@nestjs/swagger';
+import {
+  ApiExtraModels,
+  ApiForbiddenResponse,
+  getSchemaPath,
+} from '@nestjs/swagger';
 import { ErrorResponse } from '../vo/error-response.dto';
+import { errorCodeSwaggerProperty } from './properties/error-code-swagger.property';
 
-export const ApiForbidden = () =>
+export const ApiForbidden = (...errorCodes: string[]) =>
   applyDecorators(
+    ApiExtraModels(ErrorResponse),
     ApiForbiddenResponse({
       description: `Access is forbidden`,
-      type: ErrorResponse,
+      schema: {
+        allOf: [
+          { $ref: getSchemaPath(ErrorResponse) },
+          {
+            properties: {
+              ...errorCodeSwaggerProperty(...errorCodes),
+            },
+          },
+        ],
+      },
     }),
   );

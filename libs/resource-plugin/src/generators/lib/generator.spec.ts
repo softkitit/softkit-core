@@ -1,5 +1,10 @@
 import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing';
-import { Tree, readProjectConfiguration } from '@nx/devkit';
+import {
+  Tree,
+  joinPathFragments,
+  readProjectConfiguration,
+  workspaceRoot,
+} from '@nx/devkit';
 
 import { libGenerator } from './generator';
 import { LibGeneratorSchema } from './schema';
@@ -12,6 +17,7 @@ describe('lib generator', () => {
     languages: ['en', 'de'],
     buildable: true,
     i18n: true,
+    configureJestConfig: true,
     unitTestRunner: 'jest',
     lintCommandName: 'lint',
   };
@@ -25,7 +31,7 @@ describe('lib generator', () => {
     const config = readProjectConfiguration(tree, 'test');
 
     const fileChanges = tree.listChanges();
-    expect(fileChanges.length).toEqual(24);
+    expect(fileChanges.length).toEqual(26);
 
     const i18nFiles = fileChanges.filter((path) => path.path.includes('i18n'));
 
@@ -49,7 +55,7 @@ describe('lib generator', () => {
     readProjectConfiguration(tree, 'test');
 
     const fileChanges = tree.listChanges();
-    expect(fileChanges.length).toEqual(27);
+    expect(fileChanges.length).toEqual(29);
   });
 
   it('should generate lib without config', async () => {
@@ -60,7 +66,7 @@ describe('lib generator', () => {
     const config = readProjectConfiguration(tree, 'test');
 
     const fileChanges = tree.listChanges();
-    expect(fileChanges.length).toEqual(23);
+    expect(fileChanges.length).toEqual(25);
 
     const i18nFiles = fileChanges.filter((path) => path.path.includes('i18n'));
 
@@ -83,7 +89,7 @@ describe('lib generator', () => {
     const config = readProjectConfiguration(tree, 'test');
 
     const fileChanges = tree.listChanges();
-    expect(fileChanges.length).toEqual(20);
+    expect(fileChanges.length).toEqual(22);
 
     const i18nFiles = fileChanges.filter((path) => path.path.includes('i18n'));
 
@@ -118,7 +124,7 @@ describe('lib generator', () => {
     expect(config).toBeDefined();
 
     const fileChanges = tree.listChanges();
-    expect(fileChanges.length).toEqual(24);
+    expect(fileChanges.length).toEqual(26);
 
     const configFile = fileChanges.find((path) =>
       path.path.includes('config/library-name.config.ts'),
@@ -126,5 +132,18 @@ describe('lib generator', () => {
 
     expect(configFile).toBeDefined();
     expect(configFile.type).toBe('CREATE');
+  });
+
+  it('should create and update global.d.ts if it does not exist', async () => {
+    const globalDtsPath = joinPathFragments(workspaceRoot, 'global.d.ts');
+    tree.write(globalDtsPath, '');
+
+    await libGenerator(tree, options);
+
+    expect(tree.exists(globalDtsPath)).toBeTruthy();
+    const globalDtsContent = tree.read(globalDtsPath, 'utf8');
+    expect(globalDtsContent).toContain(
+      '/// <reference types="jest-extended" />',
+    );
   });
 });

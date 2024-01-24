@@ -3,8 +3,11 @@ on:
   pull_request:
     branches:
       - main
-    types: [ closed ]
+    types: [closed]
 
+concurrency:
+  group: single-group
+  cancel-in-progress: false
 
 jobs:
   publish:

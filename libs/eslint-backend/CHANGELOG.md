@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.1.0](https://github.com/softkitit/softkit-core/compare/eslint-backend-0.0.8...eslint-backend-0.1.0) (2023-12-15)
+
+
+### Features
+
+* **eslint-backend:** bump @nx/eslint-plugin peer dependency to v17.1.2 ([406d8b7](https://github.com/softkitit/softkit-core/commit/406d8b7b438c2f95efca93e3c83cf745a29879a1))
+
 ## [0.0.8](https://github.com/softkitit/softkit-core/compare/eslint-backend-0.0.7...eslint-backend-0.0.8) (2023-11-15)
 
 ## [0.0.7](https://github.com/softkitit/softkit-core/compare/eslint-backend-0.0.6...eslint-backend-0.0.7) (2023-11-10)

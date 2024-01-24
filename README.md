@@ -1,11 +1,10 @@
-# Softkit - a toolkit for software development on NestJS
+# Softkit - a comprehensive toolkit for software development with NestJS
 
-### This repository is a work in progress. It is not ready for use.
+> **⚠️ Note:** This repository is a work in progress and not ready for production use.
 
-#### This repo contains a set of libraries for software development on NestJS and NodeJS. It is intended to be used as a framework for building applications.
+#### This repository contains a set of libraries for software development on NestJS and NodeJS. It is intended to be used as a framework for building applications.
 
 ## Libraries
-
 
 | Name                                                      | Description                                                                                                                    |
 | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |

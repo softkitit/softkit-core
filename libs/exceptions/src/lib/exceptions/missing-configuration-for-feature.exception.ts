@@ -3,7 +3,7 @@ import { AbstractHttpException } from './abstract-http.exception';
 import { i18nString } from '../utils/i18n';
 
 export class MissingConfigurationForFeatureException extends AbstractHttpException {
-  constructor(featureName: string, rootCause?: unknown) {
+  constructor(featureName: string, errorCode?: string, rootCause?: unknown) {
     super(
       i18nString('exception.NOT_FOUND.TITLE'),
       i18nString(
@@ -13,6 +13,7 @@ export class MissingConfigurationForFeatureException extends AbstractHttpExcepti
       {
         featureName,
       },
+      errorCode,
       rootCause,
     );
   }

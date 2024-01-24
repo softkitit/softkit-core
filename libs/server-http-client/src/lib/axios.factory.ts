@@ -62,7 +62,11 @@ function proxyHttpException(serviceName: string) {
       switch (error.code) {
         case 'ETIMEDOUT':
         case 'EOPENBREAKER': {
-          throw new InternalServiceUnavailableHttpException(serviceName, error);
+          throw new InternalServiceUnavailableHttpException(
+            serviceName,
+            undefined,
+            error,
+          );
         }
 
         default: {

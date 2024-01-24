@@ -10,6 +10,7 @@ export class GeneralBadRequestException extends I18nValidationException {
   constructor(
     errors: I18nValidationError | I18nValidationError[],
     public detail?: string,
+    public errorCode?: string,
     public rootCause?: unknown,
   ) {
     super(Array.isArray(errors) ? errors : [errors], HttpStatus.BAD_REQUEST);
@@ -21,6 +22,7 @@ export class GeneralBadRequestException extends I18nValidationException {
       detail: this.detail ?? i18nString('exception.BAD_REQUEST.GENERAL_DETAIL'),
       status: HttpStatus.BAD_REQUEST,
       type: 'todo implement link to docs',
+      errorCode: this.errorCode,
     };
   }
 }

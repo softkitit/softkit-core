@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.3.4](https://github.com/softkitit/softkit-core/compare/validation-0.3.3...validation-0.3.4) (2023-12-13)
+
+
+### Bug Fixes
+
+* **validation:** fixed the string enum validation message ([3cfb20c](https://github.com/softkitit/softkit-core/commit/3cfb20c12c2924a2c255cd12604d4ab0e113c4b1))
+
 ## [0.3.3](https://github.com/softkitit/softkit-core/compare/validation-0.3.2...validation-0.3.3) (2023-12-01)
 
 

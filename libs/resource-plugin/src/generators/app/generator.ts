@@ -4,6 +4,7 @@ import {
   readProjectConfiguration,
   Tree,
   updateJson,
+  workspaceRoot,
 } from '@nx/devkit';
 import { applicationGenerator } from '@nx/nest';
 
@@ -12,6 +13,7 @@ import { paramCase, pascalCase, snakeCase } from 'change-case';
 import i18nGenerator from '../i18n/generator';
 import { runLint } from '../common/run-lint';
 import { EOL } from 'node:os';
+import { updateTypeScriptConfigurations } from '../common/update-ts-configurations';
 
 function updateProjectJson(
   tree: Tree,
@@ -59,20 +61,40 @@ function updateProjectJson(
   });
 }
 
-function updateJestConfig(tree: Tree) {
-  const jestConfigFile = tree
-    .listChanges()
-    .find((c) => c.path.includes('jest.config.ts'));
+function setupJestConfiguration(
+  tree: Tree,
+  appRoot: string,
+  configureJestConfig: boolean,
+) {
+  const jestConfigPath = joinPathFragments(appRoot, 'jest.config.ts');
 
-  const fileConfig = jestConfigFile.content.toString().split(EOL);
+  if (configureJestConfig) {
+    const jestSetupFilePath = joinPathFragments(appRoot, 'jest.setup.js');
 
-  const newJestConfigFile = [
+    const jestSetupContent = `const matchers = require('jest-extended');
+expect.extend(matchers);
+`;
+
+    tree.write(jestSetupFilePath, jestSetupContent);
+  }
+
+  const jestConfigContent = tree.read(jestConfigPath, 'utf8');
+  const fileConfig = jestConfigContent.split(EOL);
+
+  const newConfigLines = [
     ...fileConfig.slice(0, -3),
     `  transformIgnorePatterns: ['/node_modules/(?!nest-typed-config)'],`,
-    ...fileConfig.slice(-3),
-  ].join(EOL);
+  ];
 
-  tree.write(jestConfigFile.path, newJestConfigFile);
+  if (configureJestConfig) {
+    newConfigLines.push(`  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],`);
+  }
+
+  const newJestConfigFile = [...newConfigLines, ...fileConfig.slice(-3)].join(
+    EOL,
+  );
+
+  tree.write(jestConfigPath, newJestConfigFile);
 }
 
 export async function appGenerator(tree: Tree, options: AppGeneratorSchema) {
@@ -90,7 +112,12 @@ export async function appGenerator(tree: Tree, options: AppGeneratorSchema) {
   for (const f of allFilesInSrc) {
     tree.delete(f.path);
   }
-  updateJestConfig(tree);
+
+  setupJestConfiguration(tree, appRoot, options.configureJestConfig);
+
+  if (options.configureJestConfig) {
+    updateTypeScriptConfigurations(tree, appRoot, workspaceRoot);
+  }
 
   const generatorFolder = joinPathFragments(__dirname, './files');
   generateFiles(tree, generatorFolder, appRoot, {

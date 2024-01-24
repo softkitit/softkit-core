@@ -34,13 +34,19 @@
     "linter": {
       "description": "The tool to use for running lint checks.",
       "type": "string",
-      "enum": ["eslint", "none"],
+      "enum": [
+        "eslint",
+        "none"
+      ],
       "default": "eslint"
     },
     "unitTestRunner": {
       "description": "Test runner to use for unit tests.",
       "type": "string",
-      "enum": ["jest", "none"],
+      "enum": [
+        "jest",
+        "none"
+      ],
       "default": "jest"
     },
     "tags": {
@@ -93,7 +99,10 @@
     "testEnvironment": {
       "description": "The test environment for jest, for node applications this should stay as node unless doing DOM testing.",
       "type": "string",
-      "enum": ["jsdom", "node"],
+      "enum": [
+        "jsdom",
+        "node"
+      ],
       "default": "node"
     },
     "target": {
@@ -150,11 +159,18 @@
       "type": "boolean",
       "default": false
     },
+    "configureJestConfig": {
+      "description": "Generates a tailored Jest configuration file for the library when set to true.",
+      "type": "boolean",
+      "default": true
+    },
     "languages": {
       "description": "Set languages for i18n.",
       "type": "array",
       "alias": "l",
-      "default": ["en"],
+      "default": [
+        "en"
+      ],
       "x-prompt": {
         "type": "list",
         "message": "What languages would you like to use for i18n? It also possible to specify a region",
@@ -660,5 +676,7 @@
     }
   },
   "additionalProperties": false,
-  "required": ["name"]
+  "required": [
+    "name"
+  ]
 }
