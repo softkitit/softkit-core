@@ -1,4 +1,16 @@
 Softkit Core Libraries Changelog
+## [0.1.0](https://github.com/softkitit/softkit-core/compare/logger-0.0.8...logger-0.1.0) (2024-01-24)
+
+
+### Features
+
+* **logger:** added with logger context decorator to support pino logger out of http requests ([c745079](https://github.com/softkitit/softkit-core/commit/c745079c9e5b8b11b5505901d6da88ff3d4efd96))
+
+
+### Bug Fixes
+
+* eslint fixes ([2c08b69](https://github.com/softkitit/softkit-core/commit/2c08b69e37c1bf3fd3000c4703603657eeba7f06))
+
 ## [0.0.8](https://github.com/softkitit/softkit-core/compare/logger-0.0.7...logger-0.0.8) (2023-11-20)
 
 
