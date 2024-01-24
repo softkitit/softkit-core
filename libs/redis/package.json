@@ -16,13 +16,15 @@
     "cache-manager-redis-store-multi",
     "cache-manager-redis-store-sentinel"
   ],
+  "dependencies": {
+    "@anchan828/nest-redlock": "0.2.7"
+  },
   "peerDependencies": {
     "class-validator": "^0.14.0",
     "@songkeys/nestjs-redis": "~10.0.0",
     "ioredis": "~5.3.2",
     "@softkit/validation": "*",
-    "class-transformer": "^0.5.1",
-    "@anchan828/nest-redlock": "^0.2.7"
+    "class-transformer": "^0.5.1"
   },
   "type": "commonjs",
   "main": "./src/index.js",
