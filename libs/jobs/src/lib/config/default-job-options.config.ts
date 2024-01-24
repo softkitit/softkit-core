@@ -3,6 +3,7 @@ import {
   IsBoolean,
   IsEnum,
   IsInt,
+  IsObject,
   IsOptional,
   Min,
   ValidateNested,
@@ -52,6 +53,7 @@ export class DefaultJobOptionsConfig {
    */
   @Type(() => BackoffOptionsConfig)
   @ValidateNested()
+  @IsObject()
   backoff: BackoffOptionsConfig = new BackoffOptionsConfig();
 
   /**
@@ -70,6 +72,7 @@ export class DefaultJobOptionsConfig {
    */
   @ValidateNested()
   @Type(() => KeepJobsConfig)
+  @IsObject()
   removeOnComplete: KeepJobsConfig = new KeepJobsConfig();
 
   /**
@@ -78,6 +81,7 @@ export class DefaultJobOptionsConfig {
    */
   @ValidateNested()
   @Type(() => KeepJobsConfig)
+  @IsObject()
   removeOnFail?: KeepJobsConfig = new KeepJobsConfig();
 
   /**

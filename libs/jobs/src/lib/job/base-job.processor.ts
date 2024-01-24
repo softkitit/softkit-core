@@ -3,6 +3,7 @@ import { Job, Queue, UnrecoverableError } from 'bullmq';
 import { VersionedJobData } from './vo/job-data.dto';
 import { PinoLogger } from 'nestjs-pino';
 import { OnApplicationBootstrap } from '@nestjs/common';
+import { RedlockService } from '@anchan828/nest-redlock';
 
 export abstract class BaseJobProcessor<JobDataType extends VersionedJobData>
   extends WorkerHost
@@ -11,6 +12,16 @@ export abstract class BaseJobProcessor<JobDataType extends VersionedJobData>
   protected GET_JOBS_BATCH_SIZE = 100;
   protected minimalSupportedVersion: number = 0;
   protected singleRunningJobGlobally = false;
+  protected lockPrefix = 'base-job-lock-prefix';
+  protected lockEnd = 'base-job-lock-env';
+
+  /**
+   * Lock is needed for a case when we don't want to run few jobs in the same time,
+   * and to avoid race conditions we need to lock a job,
+   * to retrieve all available jobs now from redis, because redis and only redis is a real
+   * source of truth for currently executing jobs
+   * */
+  protected lockDuration = 20_000;
 
   public onApplicationBootstrap() {
     this.worker.on('error', (error: Error) => {
@@ -97,6 +108,7 @@ export abstract class BaseJobProcessor<JobDataType extends VersionedJobData>
   constructor(
     protected queue: Queue<JobDataType>,
     protected readonly logger: PinoLogger,
+    protected readonly lockService: RedlockService,
   ) {
     super();
   }
@@ -141,27 +153,39 @@ export abstract class BaseJobProcessor<JobDataType extends VersionedJobData>
    * */
   protected async hasJobRunning(job: Job<JobDataType>): Promise<boolean> {
     const jobId = this.getJobId(job);
-    try {
-      const locked = await this.acquireLock(jobId);
-      if (!locked) {
-        const msg = `Failed to acquire lock for job: ${job.name}, that's uncommon, but not critical, because the job will be retried`;
-        this.logger.warn(msg);
-        throw new Error(msg);
-      }
-      return await this.hasOtherActiveJobsById(job);
-    } finally {
-      await this.releaseLock(jobId);
-    }
+
+    return this.lockService.using(
+      [this.buildLockKey(jobId)],
+      this.lockDuration,
+      async (signal) => {
+        return this.hasOtherActiveJobsById(job, async () => {
+          // no way to test it, need to figure out when that may happen, but it is a recommended approach by redlock
+          /* istanbul ignore next */
+          if (signal.aborted) {
+            throw signal.error;
+          }
+        });
+      },
+    );
+  }
+
+  private buildLockKey(jobId: string) {
+    return `${this.lockPrefix}:${jobId}:${this.queue.name}:${this.lockEnd}`;
   }
 
   protected async hasOtherActiveJobsById(
     job: Job<JobDataType>,
+    onNextIteration: (
+      activeJobsCount: number,
+    ) => Promise<void> = async () => {},
   ): Promise<boolean> {
     const currentJobId = this.getJobId(job);
 
     let activeJobsCount = 0;
 
     for (let i = 0; ; i++) {
+      await onNextIteration(activeJobsCount);
+
       const activeJobs = await this.retrieveActiveJobs(i);
 
       for (const activeJob of activeJobs) {
@@ -182,26 +206,12 @@ export abstract class BaseJobProcessor<JobDataType extends VersionedJobData>
       }
 
       if (activeJobs.length < this.GET_JOBS_BATCH_SIZE) {
+        this.logger.info(
+          `Job: ${job.name}:${currentJobId} doesn't have other active job, ready to fly, will be executed in a second`,
+        );
         return false;
       }
     }
-  }
-
-  protected async acquireLock(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    _jobId: string,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    _lockFor: number = 30_000,
-  ): Promise<boolean> {
-    // todo implement
-    return true;
-  }
-  protected async releaseLock(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    _jobId: string,
-  ): Promise<boolean> {
-    // todo implement
-    return true;
   }
 
   protected retrieveActiveJobs(pageNumber: number) {

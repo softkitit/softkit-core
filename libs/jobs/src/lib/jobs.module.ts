@@ -20,6 +20,7 @@ import * as Repositories from './repository';
 import { BullModule } from '@nestjs/bullmq';
 import { RegisterQueueOptions } from '@nestjs/bullmq/dist/interfaces/register-queue-options.interface';
 import { JobVersionService } from './service/job-version.service';
+import { setupRedisLockModule, setupRedisModule } from '@softkit/redis';
 
 type JobsConfigOrPromise = JobsConfig | Promise<JobsConfig>;
 
@@ -86,14 +87,15 @@ export class JobsModule {
     const sanitizedQueueNames = this.validateAndSanitizeQueueNames(queueNames);
 
     const registerQueuesModules = this.registerQueues(sanitizedQueueNames);
-    const bullModule = BullModule.forRootAsync({
-      useFactory: (jobsConfig: JobsConfig) => jobsConfig,
-      inject: [JOBS_CONFIG_TOKEN],
-    });
+    const bullModule = this.setupBullModule();
+    const redisModule = setupRedisModule();
+    const lockModule = setupRedisLockModule();
 
     return {
       module: JobsModule,
       imports: [
+        lockModule,
+        redisModule,
         ...registerQueuesModules,
         bullModule,
         TypeOrmModule.forFeature([JobDefinition, JobExecution, JobVersion]),
@@ -123,6 +125,8 @@ export class JobsModule {
         ...Object.values(Repositories),
       ],
       exports: [
+        redisModule,
+        lockModule,
         bullModule,
         ...registerQueuesModules,
         JOBS_CONFIG_TOKEN,
@@ -132,6 +136,20 @@ export class JobsModule {
         AbstractJobExecutionService,
       ],
     };
+  }
+
+  private static setupBullModule() {
+    return BullModule.forRootAsync({
+      useFactory: (jobsConfig: JobsConfig) => {
+        const { redisConfig, ...bullConfig } = jobsConfig;
+        return {
+          // we are picking up the first connection from the config, because bull do support only one connection
+          connection: redisConfig.config[0],
+          ...bullConfig,
+        };
+      },
+      inject: [JOBS_CONFIG_TOKEN],
+    });
   }
 
   private static registerQueues(sanitizedQueueNames: string[]) {
@@ -191,7 +209,7 @@ export class JobsModule {
             name: jobConfig.name,
             defaultJobOptions: jobConfig.defaultJobOptions,
             // connection should be provided each time to prevent redis to hang up with one connection
-            connection: config.connection,
+            connection: config.redisConfig.config[0],
           } satisfies RegisterQueueOptions;
         },
         inject: [JOBS_CONFIG_TOKEN],

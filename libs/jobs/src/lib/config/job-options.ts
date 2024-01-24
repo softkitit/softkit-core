@@ -1,5 +1,5 @@
 import { RepeatableJobOptions } from './repeatable-job-options';
-import { IsOptional, ValidateNested } from 'class-validator';
+import { IsObject, IsOptional, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { BooleanType, IsBooleanLocalized } from '@softkit/validation';
 
@@ -7,6 +7,7 @@ export class JobOptions {
   @IsOptional()
   @ValidateNested()
   @Type(/* istanbul ignore next */ () => RepeatableJobOptions)
+  @IsObject()
   repeat?: RepeatableJobOptions;
 
   @BooleanType

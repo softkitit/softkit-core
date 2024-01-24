@@ -9,6 +9,7 @@ import { BaseJobExecution, BaseJobVersion } from '../entity';
 import { PinoLogger } from 'nestjs-pino';
 import { WithLoggerContext } from '@softkit/logger';
 import { BaseJobProcessor } from './base-job.processor';
+import { RedlockService } from '@anchan828/nest-redlock';
 
 export abstract class JobProcessor<
   JobDataType extends VersionedJobData,
@@ -16,10 +17,11 @@ export abstract class JobProcessor<
   constructor(
     queue: Queue<JobDataType>,
     logger: PinoLogger,
+    lockService: RedlockService,
     protected jobVersionService: AbstractJobVersionService,
     protected jobExecutionService: AbstractJobExecutionService,
   ) {
-    super(queue, logger);
+    super(queue, logger, lockService);
   }
 
   protected abstract run(

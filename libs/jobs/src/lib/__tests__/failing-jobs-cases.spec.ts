@@ -26,6 +26,7 @@ import { BusyNotLockableJob } from './app/jobs/busy-not-lockable.job';
 import { AbstractSchedulingJobService } from '../service';
 import { faker } from '@faker-js/faker';
 import { Type } from '@nestjs/common';
+import { RedlockService } from '@anchan828/nest-redlock';
 
 describe('failing jobs e2e tests', () => {
   let startedRedis: StartedRedis;
@@ -207,6 +208,12 @@ describe('failing jobs e2e tests', () => {
     const queue = testingModule.get<Queue>(
       getQueueToken(Jobs.BUSY_NOT_LOCKABLE_JOB),
     );
+
+    const lockService = testingModule.get<RedlockService>(RedlockService);
+
+    jest.spyOn(lockService, 'using').mockImplementation(async () => {
+      throw new Error(`Failed to acquire lock for job`);
+    });
 
     const job = testingModule.get(BusyNotLockableJob);
 

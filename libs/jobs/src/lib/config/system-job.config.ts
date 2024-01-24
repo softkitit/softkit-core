@@ -29,5 +29,6 @@ export class SystemJobConfig {
   @IsOptional()
   @ValidateNested()
   @Type(() => DefaultJobOptionsConfig)
+  @IsObject()
   defaultJobOptions: DefaultJobOptionsConfig = new DefaultJobOptionsConfig();
 }

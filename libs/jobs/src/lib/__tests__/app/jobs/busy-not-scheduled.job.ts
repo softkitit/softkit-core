@@ -8,6 +8,7 @@ import {
   AbstractJobExecutionService,
   AbstractJobVersionService,
 } from '../../../service';
+import { RedlockService } from '@anchan828/nest-redlock';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -20,9 +21,10 @@ export class BusyNotScheduledJob extends BaseBusyJob {
     @InjectQueue(Jobs.BUSY_NOT_SCHEDULED_JOB) queue: Queue<BusyJobData>,
     @InjectPinoLogger(BusyNotScheduledJob.name)
     logger: PinoLogger,
+    lockService: RedlockService,
     jobVersionService: AbstractJobVersionService,
     jobExecutionService: AbstractJobExecutionService,
   ) {
-    super(queue, logger, jobVersionService, jobExecutionService);
+    super(queue, logger, lockService, jobVersionService, jobExecutionService);
   }
 }

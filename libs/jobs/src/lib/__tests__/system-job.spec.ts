@@ -83,7 +83,7 @@ describe('system job e2e', () => {
   it('should schedule a progress system job and run it manually, and manual run should be skipped', async () => {
     const busySystemJob = testingModule.get(BusyProgressSystemJob);
 
-    await wait(300);
+    await wait(100);
 
     for (let i = 0; i < 2; i++) {
       await schedulingService.runRepeatableJobNow(
@@ -93,7 +93,7 @@ describe('system job e2e', () => {
       );
     }
 
-    await wait(1600);
+    await wait(2000);
     expect(busySystemJob.jobStats.started).toBe(2);
   }, 10_000);
 });

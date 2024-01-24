@@ -1,12 +1,14 @@
 import { Type } from 'class-transformer';
 import {
+  IsArray,
   IsBoolean,
+  IsObject,
   IsOptional,
   IsString,
   ValidateNested,
 } from 'class-validator';
 import { BooleanType } from '@softkit/validation';
-import { RedisClientConfig } from '@softkit/redis';
+import { RedisConfig, RedisLockConfig } from '@softkit/redis';
 import { DefaultJobOptionsConfig } from './default-job-options.config';
 import { SystemJobsConfig } from './system-jobs.config';
 import { JobConfig } from './job.config';
@@ -14,6 +16,7 @@ import { JobConfig } from './job.config';
 export class JobsConfig {
   @ValidateNested()
   @Type(() => DefaultJobOptionsConfig)
+  @IsObject()
   defaultJobOptions: DefaultJobOptionsConfig = new DefaultJobOptionsConfig();
 
   /**
@@ -38,19 +41,27 @@ export class JobsConfig {
   @IsBoolean()
   skipVersionCheck: boolean = false;
 
-  @Type(() => RedisClientConfig)
+  @Type(() => RedisConfig)
   @ValidateNested()
-  connection!: RedisClientConfig;
+  @IsObject()
+  redisConfig!: RedisConfig;
+
+  @Type(() => RedisLockConfig)
+  @ValidateNested()
+  @IsObject()
+  redisLockConfig: RedisLockConfig = new RedisLockConfig();
 
   @IsOptional()
   @ValidateNested({
     each: true,
   })
   @Type(() => JobConfig)
+  @IsArray()
   jobs?: JobConfig[];
 
   @IsOptional()
   @ValidateNested()
   @Type(() => SystemJobsConfig)
+  @IsObject()
   systemJobs?: SystemJobsConfig;
 }
