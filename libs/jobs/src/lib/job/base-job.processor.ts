@@ -175,9 +175,7 @@ export abstract class BaseJobProcessor<JobDataType extends VersionedJobData>
 
   protected async hasOtherActiveJobsById(
     job: Job<JobDataType>,
-    onNextIteration: (
-      activeJobsCount: number,
-    ) => Promise<void> = async () => {},
+    onNextIteration: (activeJobsCount: number) => Promise<void>,
   ): Promise<boolean> {
     const currentJobId = this.getJobId(job);
 
