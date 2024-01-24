@@ -30,8 +30,11 @@ export class JobsConfig {
    * Prefix for all queue keys.
    */
   @IsString()
+  prefix!: string;
+
+  @IsString()
   @IsOptional()
-  prefix?: string;
+  applicationStartupLock?: string;
 
   /**
    * Avoid version validation to be greater or equal than v5.0.0.
