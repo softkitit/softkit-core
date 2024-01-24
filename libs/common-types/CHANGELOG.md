@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.2.0](https://github.com/softkitit/softkit-core/compare/common-types-0.1.2...common-types-0.2.0) (2024-01-24)
+
+
+### Features
+
+* **common-types:** added never type to make all fields in object never and optional ([7bc4510](https://github.com/softkitit/softkit-core/commit/7bc45100b9aaa6228a1acf1abc94dc1f7082b51f))
+
 ## [0.1.2](https://github.com/softkitit/softkit-core/compare/common-types-0.1.1...common-types-0.1.2) (2023-12-11)
 
 ## [0.1.1](https://github.com/softkitit/softkit-core/compare/common-types-0.1.0...common-types-0.1.1) (2023-11-13)
