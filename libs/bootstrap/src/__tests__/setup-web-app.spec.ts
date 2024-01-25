@@ -49,7 +49,10 @@ describe('bootstrap test', () => {
   beforeEach(async () => {
     const configModule = await Test.createTestingModule({
       imports: [
-        setupYamlBaseConfigModule(path.join(__dirname, 'app'), RootConfig),
+        setupYamlBaseConfigModule({
+          baseDir: path.join(__dirname, 'app'),
+          rootSchemaClass: RootConfig,
+        }),
       ],
     }).compile();
 
@@ -59,7 +62,6 @@ describe('bootstrap test', () => {
     swaggerConfig = configModule.get(SwaggerConfig);
     appConfig = configModule.get(AppConfig);
     dbConfig = configModule.get(DbConfig);
-
     const { BootstrapTestAppModule } = require('./app/app.module');
 
     testingModuleMetadata = {
