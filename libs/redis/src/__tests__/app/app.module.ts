@@ -7,7 +7,10 @@ import { StringRedisRepository } from './repository/string.redis.repository';
 
 @Module({
   imports: [
-    setupYamlBaseConfigModule(__dirname, RedisRootConfig),
+    setupYamlBaseConfigModule({
+      baseDir: __dirname,
+      rootSchemaClass: RedisRootConfig,
+    }),
     setupRedisModule(),
   ],
   providers: [UserRedisRepository, StringRedisRepository],
