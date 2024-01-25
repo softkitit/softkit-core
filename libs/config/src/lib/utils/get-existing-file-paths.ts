@@ -1,11 +1,12 @@
 import { existsSync } from 'node:fs';
 import path from 'node:path';
+import { getProfiles } from './get-profiles';
 
 export function getExistingFilePaths(
   baseDir: string,
-  folderName: string,
-  baseFileName: string,
-  profiles: string[],
+  folderName = 'assets',
+  baseFileName = '.env.yaml',
+  profiles = getProfiles(),
 ) {
   const fileNameSplit = baseFileName.split('.');
   const extension = fileNameSplit.at(-1);

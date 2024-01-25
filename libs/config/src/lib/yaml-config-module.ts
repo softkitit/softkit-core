@@ -1,23 +1,19 @@
 import { TypedConfigModule, fileLoader } from 'nest-typed-config';
-import { getProfiles } from './utils/get-profiles';
 import { ROOT_CONFIG_ALIAS_TOKEN } from './constants';
 import { SetupConfigOptions } from './vo/setup-config-options';
 import { getExistingFilePaths } from './utils/get-existing-file-paths';
+import { ClassConstructor } from 'class-transformer';
 
-export function setupYamlBaseConfigModule(options: SetupConfigOptions) {
-  const {
-    baseDir,
-    rootSchemaClass,
-    folderName = 'assets',
-    baseFileName = '.env.yaml',
-    profiles = getProfiles(),
-  } = options;
-
+export function setupYamlBaseConfigModule(
+  baseDir: string,
+  rootSchemaClass: ClassConstructor<unknown>,
+  options?: SetupConfigOptions,
+) {
   const existingFilePaths = getExistingFilePaths(
     baseDir,
-    folderName,
-    baseFileName,
-    profiles,
+    options?.folderName,
+    options?.baseFileName,
+    options?.profiles,
   );
 
   const dynamicModule = TypedConfigModule.forRoot({

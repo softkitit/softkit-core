@@ -22,12 +22,7 @@ yarn add @softkit/config
 import { setupYamlBaseConfigModule } from '@softkit/config';
 
 @Module({
-  imports: [
-    setupYamlBaseConfigModule({
-      baseDir: path.join(__dirname, './assets'),
-      rootSchemaClass: RootConfig,
-    }),
-  ],
+  imports: [setupYamlBaseConfigModule(path.join(__dirname, './assets'), RootConfig)],
 })
 export class YourAppModule {}
 ```
@@ -62,6 +57,7 @@ export class YourAppModule {}
   process.env.NESTJS_PROFILES = 'test';
   ```
 - Another adjustments is adding a general alias for RootConfig class, so we can reuse it across various apps in the same way.
+
   - To inject a config in another library you just need to use common token `ROOT_CONFIG_ALIAS_TOKEN`
   - We leverage NestJS DI use existing feature to provide a config in a common way
     ```typescript
@@ -71,6 +67,7 @@ export class YourAppModule {}
     }
     ```
   - In your library you can expect this Provider be available globally, and you can force this config to implement your interface. So you will be able to decouple application very well, and declarative define what config you need to use in your library.
+
     - Example in your library:
 
       ```typescript
