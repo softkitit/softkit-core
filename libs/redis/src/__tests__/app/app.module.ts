@@ -8,10 +8,7 @@ import { setupRedisLockModule } from '../../lib/redis-lock.module';
 
 @Module({
   imports: [
-    setupYamlBaseConfigModule({
-      baseDir: __dirname,
-      rootSchemaClass: RedisRootConfig,
-    }),
+    setupYamlBaseConfigModule(__dirname, RedisRootConfig),
     setupRedisModule(),
     setupRedisLockModule(),
   ],
