@@ -1,0 +1,25 @@
+---
+title: 'Transaction Management'
+---
+
+# Effective Transaction Management with `typeorm-transactional`
+
+---
+
+## Overview
+
+The [`@Transactional`](https://github.com/Aliheym/typeorm-transactional?tab=readme-ov-file#using-transactional-decorator) decorator, derived from the [typeorm-transactional](https://www.npmjs.com/package/typeorm-transactional) library, simplifies handling transactions in TypeORM. It utilizes [ALS (Async Local Storage)](https://nodejs.org/api/async_context.html#class-asynclocalstorage) or [cls-hooked](https://www.npmjs.com/package/cls-hooked) to manage and propagate transactions across different repositories and service methods.
+
+## Key Features
+
+- [**Data Sources**](https://github.com/Aliheym/typeorm-transactional?tab=readme-ov-file#data-sources): Provides the ability to handle multiple data sources, enhancing flexibility in database management by providing the `connectionName` property.
+- [**Transaction Propagation**](https://github.com/Aliheym/typeorm-transactional?tab=readme-ov-file#transaction-propagation): Supports options like MANDATORY, NESTED, NEVER, NOT_SUPPORTED, REQUIRED, REQUIRES_NEW, and SUPPORTS, defining how transactions are handled under different scenarios.
+- [**Isolation Levels**](https://github.com/Aliheym/typeorm-transactional?tab=readme-ov-file#isolation-levels): Supports multiple isolation levels like READ_COMMITTED and SERIALIZABLE for transaction control.
+- [**Hooks**](https://github.com/Aliheym/typeorm-transactional?tab=readme-ov-file#hooks): Offers hooks for transaction commit, rollback, and completion to execute custom callbacks.
+- [**Unit Test Mocking**](https://github.com/Aliheym/typeorm-transactional?tab=readme-ov-file#unit-test-mocking): Facilitates mocking of transactions in unit tests to bypass actual transactional code.
+
+## Example with Audit Functionality
+
+- needs to be done
+
+An example of using the `@Transactional` decorator could involve a user sign-up process, where the signup action is audited. The decorator ensures that all operations within the scope of the function are executed within a transaction. This setup enhances data integrity, especially in complex operations involving multiple steps or interactions with different data entities.

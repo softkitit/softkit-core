@@ -1,0 +1,45 @@
+---
+title: 'Base Tenant Entity Service'
+---
+
+# Base Tenant Entity Service
+
+---
+
+## Overview
+
+`BaseTenantEntityService` specializes in handling multi-tenant scenarios, extending `BaseEntityService` to cater to applications managing data across multiple tenants.
+
+### Key Features
+
+- **Tenant-aware Operations**: Tailored to manage entities in a multi-tenant context.
+- **Consistent Data Management**: Ensures secure and isolated handling of data for each tenant.
+- **Inherited Robust Features**: Inherits all functionalities from `BaseEntityService`, including transactional operations and query capabilities.
+
+Perfect for SaaS applications and systems requiring secure and isolated data management for different tenants.
+
+# Usage
+
+## Using Service with Generics
+
+This service has an additional parameter in generics, after the repository type, used for excluding auto-generated types. This keeps the service type safe and avoids type errors.
+
+Example:
+
+```typescript
+@Injectable()
+export class CustomUserRoleTenantService extends BaseTenantEntityService<
+  CustomUserRole,
+  CustomUserRoleTenantRepository,
+  Pick<
+    CustomUserRole,
+    'id' | 'createdAt' | 'updatedAt' | 'deletedAt' | 'userId'
+  >
+> {
+  constructor(repository: CustomUserRoleTenantRepository) {
+    super(repository);
+  }
+}
+```
+
+This example excludes 5 fields from base methods and types, as they are populated by subscribers.

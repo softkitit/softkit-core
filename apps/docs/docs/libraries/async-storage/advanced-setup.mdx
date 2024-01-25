@@ -1,0 +1,38 @@
+---
+title: 'Advanced Setup'
+---
+
+# Advanced Setup
+
+---
+
+The `setupClsModule` function allows for detailed configuration of context-local storage, leveraging the options available in `nestjs-cls`
+
+```typescript
+import { ClsModule, ClsModuleOptions } from 'nestjs-cls';
+import { FastifyRequest } from 'fastify';
+
+export function setupClsModule(clsOptions?: ClsModuleOptions) {
+  return ClsModule.forRoot({
+    global: true,
+    middleware: {
+      mount: true,
+      generateId: true,
+      idGenerator: (req: FastifyRequest) => req.id.toString(),
+    },
+    ...clsOptions,
+  });
+}
+```
+
+## ClsModuleOptions
+
+The `ClsModuleOptions` class provides various configuration options:
+
+- `global`: Whether to make the module global.
+- `middleware`: Options for the `ClsMiddleware`.
+- `guard`: Options for the `ClsGuard`.
+- `interceptor`: Options for the `ClsInterceptor`.
+- `proxyProviders`: Array of Proxy Provider classes to register.
+
+For a complete understanding of these options, refer to the [nestjs-cls documentation](https://papooch.github.io/nestjs-cls/)

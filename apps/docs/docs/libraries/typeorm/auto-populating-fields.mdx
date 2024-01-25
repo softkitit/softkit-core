@@ -1,0 +1,33 @@
+---
+title: 'Automatic Population Of Specific Fields'
+---
+
+# Automatic Population Of Specific Fields with ClsPreset Decorator
+
+---
+
+## ClsPreset Decorator and ClsPresetSubscriber
+
+### ClsPreset Decorator
+
+The [`ClsPreset`](/api/typeorm/src/functions/ClsPreset/) decorator is a key feature of the library, enabling automatic population of specific fields in entities. It's primarily used for populating fields like `tenantId`, `createdBy`, and `updatedBy` in multi-tenant scenarios, but it can be adapted for various other purposes. This functionality is essential for tracking user activities and ensuring accountability in data management.
+
+### ClsPresetSubscriber
+
+The [`ClsPresetSubscriber`](/api/typeorm/src/classes/ClsPresetSubscriber/) complements the `ClsPreset` decorator by populating fields from the ClsStore into the entity before insert and update operations. This mechanism ensures data consistency and integrity, particularly in scenarios where accurate tracking of data changes is crucial.
+
+### Usage Example
+
+The `ClsPreset` decorator is configurable and can be implemented as shown in the following example. In this case, it's used to automatically populate the `tenantId` field in a base tenant entity class.
+
+```typescript
+export class BaseTenantEntityHelper extends BaseEntityHelper {
+  @ClsPreset<TenantClsStore>({
+    clsPropertyFieldName: 'tenantId',
+  })
+  @Column({ nullable: false })
+  tenantId!: string;
+}
+```
+
+This setup ensures that every instance of [`BaseTenantEntityHelper`](/api/typeorm/src/classes/BaseTenantEntityHelper/) will have its `tenantId` field automatically filled from the ClsStore, enhancing the security and reliability of the application's data handling processes.

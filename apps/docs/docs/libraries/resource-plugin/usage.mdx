@@ -1,0 +1,108 @@
+---
+title: 'Usage'
+---
+
+# Usage
+
+---
+
+## Understanding `nx generate` vs `npx nx generate` Commands
+
+When working with the [`@softkit/resource-plugin`](https://www.npmjs.com/package/@softkit/resource-plugin) library, you may encounter two different command formats: `nx generate` and `npx nx generate`. Here's a quick explanation:
+
+- **`nx generate`**: This format is used when the [Nx CLI](https://nx.dev/nx-api/nx) is installed globally on your system. It allows you to run Nx commands directly from any directory.
+
+- **`npx nx generate`**: This is used when Nx is not installed globally. `npx` is a package runner tool that comes with npm and enables you to use Nx directly from your project's local dependencies, ensuring you're using the version specified in your `package.json`.
+
+Depending on your setup and the installation of Nx, you might need to use one format over the other.
+
+For a deeper understanding of how `npx` works and its benefits, you can refer to the official npm documentation [here](https://docs.npmjs.com/cli/v8/commands/npx).
+
+## Basic Usage of Generators
+
+### App Generator
+
+Use the following command to generate a new application:
+
+```bash
+nx generate @softkit/resource-plugin:app [name]
+```
+
+### Boilerplate Generator
+
+To create a new project using the boilerplate generator, use the following command:
+
+```bash
+nx g @softkit/resource-plugin:boilerplate --appFolder="platform" --companyName="Softkit"
+```
+
+### Controller Generator
+
+To generate a new controller, use the following command:
+
+```bash
+nx generate @softkit/resource-plugin:controller --projectName="platform" --controllerName="user-group" --basePath="api/platform" --serviceName="user-group" --entityName="user-group" --groupName="users" --tenantBaseEntity=true
+```
+
+### HTTP Client Generator
+
+To generate a new HTTP Client, use the following command:
+
+```bash
+nx generate @softkit/resource-plugin:http-client --name="platform" --importPath="@platform/client" --directory="clients"
+```
+
+### I18n Generator
+
+For generating internationalization (i18n) features, you can use the following command:
+
+```bash
+nx generate @softkit/resource-plugin:i18n --name="platform" --buildable=true --baseFolder="libs" --languages="en,es"
+```
+
+### Library Generator
+
+To create a new library using the Lib Generator, the default command would be:
+
+```bash
+nx generate @softkit/resource-plugin:lib --name="platform" --directory="platform" --linter="eslint" --unitTestRunner="jest" --tags="tag1,tag2" --buildable=true --importPath="@myorg/mylib" --strict=true
+```
+
+### Repository Generator
+
+To generate a new repository, use the following command with default options:
+
+```bash
+nx generate @softkit/resource-plugin:repository --projectName="platform" --repositoryName="user" --entityName="User" --groupName="users" --tenantBaseRepository=true
+```
+
+### Resource Generator
+
+For generating a complete resource (controller, service, repository),
+use the following command:
+
+```bash
+nx generate @softkit/resource-plugin:resource --projectName="platform" --entityName="user-profile" --basePath="api/platform" --groupName="users" --tenantBaseEntity=true --generateRepository=true --generateService=true --generateController=true
+```
+
+### Service Generator
+
+To generate a new service, use the following command:
+
+```bash
+nx generate @softkit/resource-plugin:service --projectName="platform" --serviceName="user" --repositoryName="user" --entityName="User" --groupName="users" --tenantBaseService=true
+```
+
+## Example with Dry Run
+
+To test the generation of a resource without actually creating the files, you can perform a "dry run". This allows you to see what files would be generated without making any changes to your project.
+
+For example, to perform a dry run for creating a new app, use the command:
+
+```bash
+nx generate @softkit/resource-plugin:app [name] --dryRun
+```
+
+## Conclusion
+
+By using these generators, developers can significantly speed up the process of creating and managing various aspects of their applications, making the Resource Plugin an invaluable tool in your development toolkit.

@@ -1,0 +1,42 @@
+---
+title: 'Advanced Configuration'
+---
+
+# Advanced Configuration
+
+---
+
+Leverage the Swagger Utils Library to configure multiple Swagger instances for various API access levels, like public and private endpoints. Tailor the Swagger setup to meet the specific documentation needs of your application.
+
+## Environment-Specific Swagger Configuration
+
+You can manage environment-specific settings, such as disabling the writing of the `open-api.json` file in production environments:
+
+### Configuring `docsOutputPath`
+
+In development, specify a path to output the OpenAPI JSON. For higher environments, remove or ignore the `docsOutputPath` to disable this feature:
+
+```typescript
+// Example for development environment
+swaggerConfig.docsOutputPath = 'path/to/assets/openapi.json';
+```
+
+## Multiple Swagger Instances
+
+The Swagger Utils Library supports multiple Swagger setups for different API access levels, such as public and private endpoints.
+
+### Implementing Multiple Swagger Setups
+
+Here's how you can configure multiple Swagger instances within your application:
+
+```typescript
+import { setupSwagger } from '@softkit/swagger-utils';
+
+const appPrefix = 'api';
+const publicSwaggerSetup = setupSwagger(publicSwaggerConfig, app, appPrefix);
+const privateSwaggerSetup = setupSwagger(privateSwaggerConfig, app, appPrefix);
+```
+
+## Conclusion
+
+Effective API documentation management is simplified with the Swagger Utils Library, ensuring that developers and consumers of your API have access to accurate and detailed information.

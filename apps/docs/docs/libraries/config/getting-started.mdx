@@ -1,0 +1,64 @@
+---
+title: 'Getting Started'
+---
+
+# Getting Started
+
+---
+
+## Overview
+
+The [`@softkit/config`](https://www.npmjs.com/package/@softkit/config) library provides a comprehensive solution for managing configurations in NestJS applications. It's built as a wrapper around [nestjs-config](https://github.com/Nikaple/nest-typed-config), offering ease of use and additional features.
+
+## Installation
+
+```bash
+yarn add @softkit/config
+```
+
+## Basic Usage
+
+```typescript
+import { setupYamlBaseConfigModule } from '@softkit/config';
+
+@Module({
+  imports: [
+    setupYamlBaseConfigModule({
+      baseDir: path.join(__dirname, './assets'),
+      rootSchemaClass: RootConfig,
+    }),
+  ],
+})
+export class YourAppModule {}
+```
+
+## Integrating RootConfig Alias
+
+- Provides a common token [`ROOT_CONFIG_ALIAS_TOKEN`](/api/config/src/variables/ROOT_CONFIG_ALIAS_TOKEN/) for injecting configurations.
+- Example of using this in a library:
+
+```typescript
+import { Inject, Injectable } from '@nestjs/common';
+import { ROOT_CONFIG_ALIAS_TOKEN, RootConfig } from '@softkit/config';
+import { YourConfigInterface } from './your-config.interface';
+
+@Injectable()
+export class YourService {
+  constructor(
+    @Inject(ROOT_CONFIG_ALIAS_TOKEN)
+    private readonly config: YourConfigInterface,
+  ) {}
+
+  getYourConfig(): YourConfigInterface {
+    return this config.yourConfig;
+  }
+}
+```
+
+## Next Steps
+
+- **Exploring Key Features**: Understand the key features such as failing fast, configuration checking, independent configuration injection, and variable substitutions. [Key Features Guide](/libraries/config/key-features).
+
+- **Config File Structure**: Learn about organizing and structuring your configuration files effectively. [Config File Structure Guide](/libraries/config/structure-example).
+
+These guides will help you to fully leverage the capabilities of the `@softkit/config` library in your NestJS applications.

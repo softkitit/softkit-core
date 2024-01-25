@@ -1,0 +1,52 @@
+---
+title: 'Base Entity Service'
+---
+
+# Base Entity Service
+
+---
+
+## Overview
+
+`BaseEntityService` is a cornerstone of the [`@softkit/typeorm-service`](https://www.npmjs.com/package/@softkit/typeorm-service) library, offering robust functionalities for entity operations. It extends the [`AbstractBaseService`](/) and integrates transactional support for a variety of operations.
+
+### Key Features
+
+- **Transactional Support**: Ensures all operations are part of a transactional context, enhancing data consistency and reliability.
+- **Entity Management**: Comprehensive methods for creating, updating, archiving, and deleting entities.
+- **Query Capabilities**: Advanced features for handling complex queries, including pagination, sorting, and data transformation.
+- **Standardized Exception Handling**: Utilizes [`@softkit/exceptions`](/libraries/exceptions/getting-started) for consistent error handling across the application.
+
+This service is ideal for applications requiring reliable and versatile entity management.
+
+### Implementation Example for BaseEntityService
+
+Here's an example of how to implement the `BaseEntityService`:
+
+```typescript
+import { Injectable } from '@nestjs/common';
+import { Transactional } from 'typeorm-transactional';
+import { CustomUserRoleRepository } from '../../repositories';
+import { BaseEntityService } from '@softkit/typeorm-service';
+import { IsNull } from 'typeorm';
+
+@Injectable()
+export class CustomUserRoleService extends BaseEntityService<
+  CustomUserRole,
+  CustomUserRoleRepository
+> {
+  constructor(repository: CustomUserRoleRepository) {
+    super(repository);
+  }
+
+  @Transactional()
+  async findDefaultRole() {
+    return await this.repository.findOne({
+      where: {
+        roleType: RoleType.REGULAR_USER,
+        tenantId: IsNull(),
+      },
+    });
+  }
+}
+```
