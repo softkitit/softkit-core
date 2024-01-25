@@ -6,7 +6,7 @@ It can be useful outside Softkit ecosystem
 
 ## Features
 
-- It provides a base entity that has some useful fields like `createdAt`, `updatedAt`, `deletedAt`, `version`, `id`
+- It provides a base entity that has some useful fields like `createdAt`, `updatedAt`, `deletedAt`
 - It overrides the default typeorm repository, and fixes some type confuses in the default typeorm repository
 - It provides a tenant base repository, that make all requests based on tenant id that must be present in `ClsStore`
 - Useful subscribers for auto populate any field from ClsStore, like `tenantId`, `userId`
@@ -66,7 +66,7 @@ class YourAppModule {}
 ### Entities to extend from
 
 - `EntityHelper` - with entity data for handling polymorphism
-- `BaseEntityHelper` - with `id`, `createdAt`, `updatedAt`, `deletedAt`, `version` fields
+- `BaseEntityHelper` - with `id`, `createdAt`, `updatedAt`, `deletedAt` fields
 - `BaseTenantEntityHelper` - useful for entities that belongs to specific tenant. It has `tenantId` field, that is auto populated for search operations on repository level
 
 Note:

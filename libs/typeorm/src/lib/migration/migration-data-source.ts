@@ -22,7 +22,12 @@ class RootConfig {
 }
 
 @Module({
-  imports: [setupYamlBaseConfigModule(`${sourceDir}/app`, RootConfig)],
+  imports: [
+    setupYamlBaseConfigModule({
+      baseDir: `${sourceDir}/app`,
+      rootSchemaClass: RootConfig,
+    }),
+  ],
 })
 class DatabaseMigrationModule {}
 
