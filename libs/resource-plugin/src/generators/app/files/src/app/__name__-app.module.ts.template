@@ -41,10 +41,7 @@ import { HealthCheckModule } from '@softkit/healthcheck';
     setupI18NModule(__dirname),
 <% } %>
     setupLoggerModule(),
-    setupYamlBaseConfigModule({ 
-      baseDir: path.join(__dirname, './assets'), 
-      rootSchemaClass: <%= pascalCase(name) -%>RootConfig
-    }),
+    setupYamlBaseConfigModule(path.join(__dirname, './assets'), <%= pascalCase(name) -%>RootConfig),
     setupClsModule(),
 <% if (health) { %>
     HealthCheckModule,
