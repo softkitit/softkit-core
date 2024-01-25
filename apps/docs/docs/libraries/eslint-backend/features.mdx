@@ -1,0 +1,89 @@
+---
+title: 'Features'
+---
+
+# Features
+
+---
+
+This ESLint configuration comes with a comprehensive set of plugins and rules designed to enhance security, improve performance, and enforce best coding practices for any JavaScript or TypeScript project.
+
+## Default Plugins
+
+The configuration includes the following ESLint plugins:
+
+- `@nx`
+- `@typescript-eslint/eslint-plugin`
+- `simple-import-sort`
+- `security`
+- `sonarjs`
+- `jest`
+- `unicorn`
+- `promise`
+- `unused-imports`
+
+## Predefined Rules
+
+A set of rules have been established to guide code quality and consistency:
+
+- Unused imports and variables are flagged as errors or warnings.
+- Enforces module boundaries as per Nx workspace constraints.
+- Extends various recommended rules from the ESLint community.
+- Overrides for specific file patterns, including TypeScript and JavaScript files.
+- Customized rules for Jest test files to accommodate testing patterns.
+
+## Environment Configuration
+
+The ESLint configuration is set up to support the following environments:
+
+- `node`: Indicates that the code runs in a Node.js environment.
+- `jest`: Enables Jest testing environment.
+- `jest/globals`: Includes Jest's global variables.
+- `es2021`: Ensures compatibility with ECMAScript 2021 features.
+
+These environment settings ensure that the linter understands the context in which your code runs, applying the most relevant rules and globals.
+
+## Extending the Configuration
+
+While the ESLint Backend library provides a robust set of linting rules, you might want to extend or customize the configuration to fit your project's specific needs.
+
+### Creating a Custom Configuration
+
+Here's how you can create your own ESLint configuration based on the ESLint Backend library:
+
+1. **Install the Base Configuration**:
+   Begin by adding the ESLint Backend configuration to your project:
+
+   ```bash
+   yarn add -D @softkit/eslint-config
+   ```
+
+2. **Create a Custom ESLint File**:
+   In your project's root, create an `.eslintrc.js` or `.eslintrc.json` file.
+
+3. **Extend the Base Configuration**:
+   Use the `extends` property to build upon the provided configuration:
+
+   ```javascript
+   module.exports = {
+     extends: ['./node_modules/@softkit/eslint-backend/src/index.js'],
+     rules: {
+       // Override or add additional rules here
+     },
+   };
+   ```
+
+4. **Override or Add Rules**:
+   You can customize the rules as needed to enforce your own coding standards.
+
+### Integration with IDEs
+
+For a seamless development experience, integrate your ESLint configuration with your preferred IDE. This provides real-time linting and code quality checks while you write code.
+
+### Use in Continuous Integration
+
+To ensure consistent code quality, include ESLint checks in your continuous integration (CI) pipeline. This will automatically enforce your coding standards on every commit or pull request.
+
+## Conclusion
+
+By adopting this ESLint configuration, your project benefits from a robust and well-considered set of linting rules and practices. Whether you're maintaining a large codebase or starting a new project, these settings will help ensure your code remains clean, efficient, and aligned with industry standards.

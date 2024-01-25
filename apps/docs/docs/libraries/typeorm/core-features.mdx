@@ -1,0 +1,47 @@
+---
+title: 'Core Features'
+---
+
+# Core Features
+
+---
+
+This document outlines the key features of the TypeORM library. The library enhances typical TypeORM functionalities with additional utilities and customizations for more efficient and error-resistant development.
+
+## Auto Configuration and Migrations
+
+- **Automatic TypeORM Configuration**: The library offers a [`TypeOrmConfigService`](/api/typeorm/src/classes/TypeOrmConfigService/) that simplifies the configuration process of TypeORM within a NestJS environment. This service automatically integrates comprehensive database configuration settings, streamlining the setup process.
+- **Advanced Database Configuration**: Includes detailed options like SSL settings, connection pooling, and migration controls, all customizable to cater to a range of database requirements.
+- **Seamless Integration with NestJS**: Designed to fit effortlessly into NestJS applications, providing a robust and scalable ORM solution with minimal setup.
+
+:::note
+Detailed configuration options are available in [our API documentation](/api/typeorm/src/classes/DbConfig/), ensuring easy reference and implementation.
+:::
+
+## Enhanced Entities
+
+These enhanced entities are designed for both single and multi-tenant applications, offering flexibility in database design.
+
+- **Base Entity**: Includes essential fields like `createdAt`, `updatedAt`, and `deletedAt` enriching standard entity structures.
+- **Entity Helpers**: Provides [`EntityHelper`](/api/typeorm/src/classes/EntityHelper/), [`BaseEntityHelper`](/api/typeorm/src/classes/BaseEntityHelper/), and [`BaseTenantEntityHelper`](/api/typeorm/src/classes/BaseTenantEntityHelper/) for varying levels of entity customizations, including automatic tenant ID handling and polymorphism support.
+
+## Simplified Migration Configuration
+
+The library simplifies the process of configuring and managing database migrations within a NestJS environment.
+
+- **Single Configuration Approach**: It offers a streamlined setup for database migrations, consolidating various settings into a single, cohesive configuration. This minimizes the complexity typically associated with setting up migrations in different environments.
+- **Seamless Integration**: The configuration aligns with the NestJS framework, ensuring a smooth and intuitive integration for developers familiar with NestJS.
+- **Flexible Migration Management**: It supports a range of migration requirements, from entity management to detailed migration scripts, all within the familiar context of a NestJS application.
+
+This user-friendly configuration ensures that developers can efficiently manage database changes and versioning with minimal setup and maximum compatibility with the NestJS ecosystem.
+
+## Base Single and Multi-Tenant Repositories
+
+The library provides robust support for both single and multi-tenant applications through its [Base Single](/api/typeorm/src/classes/BaseRepository/) and [Multi-Tenant](/api/typeorm/src/classes/BaseTenantRepository/) Repositories. These repositories are integral in maintaining data integrity and security, particularly in multi-tenant environments.
+
+- **Auto-Population of Tenant IDs**: In multi-tenant setups, tenant IDs are automatically populated from the cls store for critical operations such as find, update, archive, increment, and decrement requests. This feature ensures that each tenant's data is isolated and secure, significantly reducing the risk of cross-tenant data leaks. More details on this functionality and its usage can be found in the section about the [ClsPreset decorator and ClsPresetSubscriber](/libraries/typeorm/additional-features/#clspreset-decorator-and-clspresetsubscriber).
+- **Enhanced Security in Data Handling**: By enforcing the provision of tenant IDs for all tenant-specific operations, the repositories provide an additional layer of security. This automated process guarantees that data access and modifications are strictly tenant-bound, preventing unauthorized access or modification of data belonging to other tenants.
+- **Composite ID Field Handling**: Both repositories accommodate the composite pattern by allowing customization of the id field name, enabling more complex entity relationships and data structures.
+- **Versatility for Different Application Types**: While the multi-tenant repository caters to applications with multiple tenants, the single-tenant repository is perfectly suited for applications where such complexity is not required. Both types of repositories are designed to seamlessly integrate with the respective application architecture, ensuring efficient data management.
+
+This dual repository approach not only simplifies the development process but also fortifies the application's data security, making it an essential feature for applications handling sensitive multi-tenant data.

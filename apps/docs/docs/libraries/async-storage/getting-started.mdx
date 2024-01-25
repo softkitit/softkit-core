@@ -1,0 +1,39 @@
+---
+title: 'Getting Started'
+---
+
+# Getting Started
+
+---
+
+This is a simple wrapper to setup a Cls Async Storage, which utilizes [`nestjs-cls`](https://papooch.github.io/nestjs-cls/) behind the scenes for robust context handling.
+
+:::note
+This utility is tailored for the Softkit ecosystem and is not intended for use outside of this context.
+:::
+
+## Installation
+
+To get started, add the Async Storage library to your NestJS project:
+
+```bash
+yarn add @softkit/async-storage
+```
+
+## Usage
+
+Once installed, you can set up the library in your application module as follows:
+
+```typescript
+import { setupClsModule } from '@softkit/async-storage';
+import { Module } from '@nestjs/common';
+
+@Module({
+  imports: [setupClsModule()],
+})
+export class AppModule {}
+```
+
+This initializes the library with default settings suitable for most applications.
+
+For more advanced configuration options and detailed explanations of the [`setupClsModule`](/api/async-storage/src/functions/setupClsModule/) function, see the [Advanced Setup](/libraries/async-storage/advanced-setup.mdx)

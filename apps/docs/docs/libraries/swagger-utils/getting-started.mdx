@@ -1,0 +1,79 @@
+---
+title: 'Getting Started'
+---
+
+# Getting Started
+
+---
+
+The Swagger Utils Library wraps the [nestjs-swagger](https://docs.nestjs.com/openapi/introduction) library, offering automatic configuration and convenient config classes for application use. It is primarily utilized within the [@softkit/bootstrap](/libraries/bootstrap/getting-started) library but can also be independently integrated into your projects.
+
+## Installation
+
+To include Swagger Utils in your project, install it using yarn:
+
+```bash
+yarn add @softkit/swagger-utils
+```
+
+## Configuration
+
+Configure Swagger details in your root config class to align with your application's needs:
+
+```typescript
+import { SwaggerConfig } from '@softkit/swagger-utils';
+
+export class RootConfig {
+  @Type(() => SwaggerConfig)
+  @ValidateNested()
+  public readonly swagger!: SwaggerConfig;
+}
+```
+
+## YAML Configuration
+
+You can define your Swagger configurations using a YAML file, which allows for easy management and versioning of your API documentation settings:
+
+```yaml
+swagger:
+  title: 'Your API Title'
+  description: 'Detailed description of your API'
+  version: '1.0.0'
+  contactName: 'Your Name'
+  contactEmail: 'your.email@example.com'
+  contactUrl: 'https://www.example.com'
+  docsOutputPath: 'path/to/your/assets/openapi.json'
+  swaggerPath: '/swagger'
+  enabled: true
+  servers:
+    - url: 'http://localhost:3000'
+      description: 'Local development server'
+    - url: 'https://api.example.com'
+      description: 'Production server'
+```
+
+## Basic Usage
+
+Incorporate default swagger configurations in your `main.ts` file as follows:
+
+```typescript
+import { setupSwagger } from '@softkit/swagger-utils';
+// ... other imports
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  // ... other setup
+
+  const appPrefix = 'prefix';
+  const swaggerSetup = setupSwagger(swaggerConfig, app, appPrefix);
+  // ... further configuration
+}
+```
+
+Ensure you have the correct Swagger path configuration, especially if using an API route prefix.
+
+Define your swagger configurations in the `.env.yaml` file to manage various aspects like the title, description, version, and contact information.
+
+## Next Steps
+
+- For advanced setup and multiple swagger instances, proceed to the [Advanced Configuration](/libraries/swagger-utils/advanced-configuration) section.

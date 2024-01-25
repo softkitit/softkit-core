@@ -1,0 +1,35 @@
+---
+title: 'Getting Started'
+---
+
+# Getting Started
+
+---
+
+The Common Types Library provides a set of general types and interfaces for the Softkit ecosystem, frequently used in auto-generated code to ensure consistency and reduce redundancy.
+
+## Installation
+
+To include the Common Types Library in your project, install it via yarn:
+
+```bash
+yarn add @softkit/common-types
+```
+
+## Basic Usage
+
+The library includes a variety of types for general use across your applications. Below is a list of some key types and where to find more information on them:
+
+### Standard Types
+
+- [`SimpleResponseForCreatedEntityWithMessage`](/api/common-types/src/classes/SimpleResponseForCreatedEntityWithMessage): A response structure for newly created entities.
+- [`IdParamUUID`](/api/common-types/src/classes/IdParamUUID): For validating UUID parameters in requests.
+- [`VersionNumberParam`](/api/common-types/src/classes/VersionNumberParam): Validates version numbers as non-negative integers.
+
+### Utility Types
+
+- [`ExcludeKeys`](/api/common-types/src/type-aliases/ExcludeKeys): Excludes specified keys from a type.
+- [`ExtractArrayMembers`](/api/common-types/src/type-aliases/ExtractArrayMembers): Extracts member types from array types.
+- [`Maybe`](/api/common-types/src/type-aliases/Maybe): Represents a type that can be `undefined`.
+
+These types are integral to DTOs, entity definitions, and other complex types, providing a consistent structure across your services.
