@@ -75,6 +75,10 @@ export class SampleDto {
 
   @Optional()
   optionalField?: string;
+
+  @Optional()
+  @IntegerType
+  optionalNumber?: number;
 }
 
 export const DEFAULT_SAMPLE_DTO: SampleDto = {

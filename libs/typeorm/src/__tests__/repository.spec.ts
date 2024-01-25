@@ -14,7 +14,7 @@ import { FilterOperator } from 'nestjs-paginate';
 import { setupTypeormModule } from '../lib/setup-typeorm-module';
 
 describe('start db and populate the entity', () => {
-  let testBaseRepository: UserRepository;
+  let testUserRepository: UserRepository;
   let db: StartedDb;
 
   beforeAll(async () => {
@@ -42,7 +42,7 @@ describe('start db and populate the entity', () => {
       providers: [UserRepository],
     }).compile();
 
-    testBaseRepository = module.get(UserRepository);
+    testUserRepository = module.get(UserRepository);
   });
 
   test('insert and find test', async () => {
@@ -52,11 +52,11 @@ describe('start db and populate the entity', () => {
       lastName: faker.person.lastName(),
     };
 
-    const saved = await testBaseRepository.createOrUpdate(toSave);
+    const saved = await testUserRepository.createOrUpdate(toSave);
 
     checkAllTestFieldsPresent(toSave, saved);
 
-    const resultFromFindOne = await testBaseRepository.findOne({
+    const resultFromFindOne = await testUserRepository.findOne({
       where: {
         firstName: toSave.firstName,
       },
@@ -66,7 +66,7 @@ describe('start db and populate the entity', () => {
     expect(resultFromFindOne?.id).toBe(saved.id);
     checkAllTestFieldsPresent(toSave, resultFromFindOne);
 
-    const findOneById = await testBaseRepository.findSingle(saved.id);
+    const findOneById = await testUserRepository.findSingle(saved.id);
 
     checkAllTestFieldsPresent(toSave, findOneById);
   });
@@ -78,10 +78,10 @@ describe('start db and populate the entity', () => {
       lastName: faker.person.lastName(),
     };
 
-    const saved = await testBaseRepository.createOrUpdate(toSave);
+    const saved = await testUserRepository.createOrUpdate(toSave);
 
     const updates = [...'1'.repeat(10)].map(() => {
-      return testBaseRepository.update(saved.id, {
+      return testUserRepository.update(saved.id, {
         firstName: faker.person.firstName() + faker.number.int(),
       });
     });
@@ -89,7 +89,7 @@ describe('start db and populate the entity', () => {
     await Promise.all(updates);
 
     const saves = [...'1'.repeat(10)].map(() => {
-      return testBaseRepository.save({
+      return testUserRepository.save({
         ...saved,
         firstName: faker.person.firstName() + faker.number.int(),
       });
@@ -105,7 +105,7 @@ describe('start db and populate the entity', () => {
       lastName: faker.person.lastName(),
     };
 
-    const saved = await testBaseRepository.createOrUpdate(toSave);
+    const saved = await testUserRepository.createOrUpdate(toSave);
 
     expect(saved).toBeDefined();
     expect(saved.id).toBeDefined();
@@ -118,7 +118,7 @@ describe('start db and populate the entity', () => {
     expect(saved.deletedAt).toBeNull();
     expect(saved.version).toBeDefined();
 
-    const updateLastNameField = await testBaseRepository.createOrUpdate({
+    const updateLastNameField = await testUserRepository.createOrUpdate({
       id: saved.id,
       lastName: faker.person.lastName() + faker.number.int(),
     });
@@ -141,7 +141,7 @@ describe('start db and populate the entity', () => {
       lastName: faker.person.lastName(),
     };
 
-    const saved = await testBaseRepository.createOrUpdateWithReload(toSave);
+    const saved = await testUserRepository.createOrUpdateWithReload(toSave);
 
     expect(saved).toBeDefined();
     expect(saved.id).toBeDefined();
@@ -155,7 +155,7 @@ describe('start db and populate the entity', () => {
     expect(saved.version).toBeDefined();
 
     const updateLastNameField =
-      await testBaseRepository.createOrUpdateWithReload({
+      await testUserRepository.createOrUpdateWithReload({
         id: saved.id,
         lastName: faker.person.lastName() + faker.number.int(),
       });
@@ -180,7 +180,7 @@ describe('start db and populate the entity', () => {
       nullableStringField: faker.person.jobTitle(),
     };
 
-    const saved = await testBaseRepository.createOrUpdate(toSave);
+    const saved = await testUserRepository.createOrUpdate(toSave);
 
     expect(saved.nullableStringField).toBe(toSave.nullableStringField);
 
@@ -193,11 +193,11 @@ describe('start db and populate the entity', () => {
     };
 
     const savedSecondTime =
-      await testBaseRepository.createOrUpdate(secondToSave);
+      await testUserRepository.createOrUpdate(secondToSave);
 
     expect(savedSecondTime.nullableStringField).toBeNull();
 
-    const findSecondTime = await testBaseRepository.findSingle(
+    const findSecondTime = await testUserRepository.findSingle(
       savedSecondTime.id,
     );
 
@@ -216,9 +216,9 @@ describe('start db and populate the entity', () => {
       };
     });
 
-    const saved = await testBaseRepository.save(dataToSave);
+    const saved = await testUserRepository.save(dataToSave);
 
-    const count = await testBaseRepository.countBy({
+    const count = await testUserRepository.countBy({
       firstName,
     });
 
@@ -235,11 +235,11 @@ describe('start db and populate the entity', () => {
       };
     });
 
-    const savedEntities = await testBaseRepository.save(dataToSave);
+    const savedEntities = await testUserRepository.save(dataToSave);
 
     const allIds = savedEntities.map(({ id }) => id);
 
-    const resultOfFind = await testBaseRepository.findAllByIds(allIds);
+    const resultOfFind = await testUserRepository.findAllByIds(allIds);
 
     for (const saved of savedEntities) {
       const foundEntity = expectNotNullAndGet(
@@ -259,10 +259,10 @@ describe('start db and populate the entity', () => {
       nullableStringField: faker.person.jobTitle(),
     };
 
-    const saved = await testBaseRepository.save(toSave);
+    const saved = await testUserRepository.save(toSave);
 
     const savedEntity = expectNotNullAndGet(
-      await testBaseRepository.findSingle(saved.id),
+      await testUserRepository.findSingle(saved.id),
     );
 
     const json = savedEntity.toJSON();
@@ -285,31 +285,31 @@ describe('start db and populate the entity', () => {
       nullableStringField: faker.person.jobTitle(),
     };
 
-    const saved = await testBaseRepository.save(toSave);
+    const saved = await testUserRepository.save(toSave);
 
     const foundEntity = expectNotNullAndGet(
-      await testBaseRepository.findSingle(saved.id),
+      await testUserRepository.findSingle(saved.id),
     );
 
-    const archived = await testBaseRepository.archive(
+    const archived = await testUserRepository.archive(
       saved.id,
       foundEntity.version,
     );
 
     expect(archived).toBeTruthy();
 
-    const foundArchived = await testBaseRepository.findSingle(saved.id);
+    const foundArchived = await testUserRepository.findSingle(saved.id);
 
     expect(foundArchived).toBeNull();
 
-    const notFoundArchiveForTheFirstTime = await testBaseRepository.findSingle(
+    const notFoundArchiveForTheFirstTime = await testUserRepository.findSingle(
       saved.id,
     );
 
     expect(notFoundArchiveForTheFirstTime).toBeNull();
 
     const foundArchivedAfterFirstArchive = expectNotNullAndGet(
-      await testBaseRepository.findSingle(saved.id, true),
+      await testUserRepository.findSingle(saved.id, true),
     );
 
     expect(foundArchivedAfterFirstArchive.version).toBe(
@@ -318,18 +318,49 @@ describe('start db and populate the entity', () => {
 
     expect(foundArchivedAfterFirstArchive.deletedAt).toBeDefined();
 
-    const archivedSecondTime = await testBaseRepository.archive(
+    const archivedSecondTime = await testUserRepository.archive(
       saved.id,
       foundEntity.version + 1,
     );
 
     expect(archivedSecondTime).toBeFalsy();
 
-    const foundArchivedAfterSecondArchive = await testBaseRepository.findSingle(
+    const foundArchivedAfterSecondArchive = await testUserRepository.findSingle(
       saved.id,
     );
 
     expect(foundArchivedAfterSecondArchive).toBeNull();
+  });
+
+  test('delete by id entity test', async () => {
+    const toSave = {
+      password: faker.hacker.ingverb(),
+      firstName: faker.person.firstName() + faker.number.int(),
+      lastName: faker.person.lastName(),
+      nullableStringField: faker.person.jobTitle(),
+    };
+
+    const saved = await testUserRepository.save(toSave);
+
+    expectNotNullAndGet(await testUserRepository.findSingle(saved.id));
+
+    const deleted = await testUserRepository.deleteById(saved.id);
+
+    expect(deleted.affected).toBe(1);
+
+    const foundDeleted = await testUserRepository.findSingle(saved.id);
+
+    expect(foundDeleted).toBeNull();
+
+    const notFoundArchiveForTheFirstTime = await testUserRepository.findSingle(
+      saved.id,
+    );
+
+    expect(notFoundArchiveForTheFirstTime).toBeNull();
+
+    const deletedSecondTime = await testUserRepository.deleteById(saved.id);
+
+    expect(deletedSecondTime.affected).toBe(0);
   });
 
   test('archive and restore entity test', async () => {
@@ -340,25 +371,25 @@ describe('start db and populate the entity', () => {
       nullableStringField: faker.person.jobTitle(),
     };
 
-    const saved = await testBaseRepository.save(toSave);
+    const saved = await testUserRepository.save(toSave);
 
     const foundEntity = expectNotNullAndGet(
-      await testBaseRepository.findSingle(saved.id),
+      await testUserRepository.findSingle(saved.id),
     );
 
-    const archived = await testBaseRepository.archive(
+    const archived = await testUserRepository.archive(
       saved.id,
       foundEntity.version,
     );
 
     expect(archived).toBeTruthy();
 
-    const foundArchived = await testBaseRepository.findSingle(saved.id);
+    const foundArchived = await testUserRepository.findSingle(saved.id);
 
     expect(foundArchived).toBeNull();
 
     const versionToRestore = foundEntity.version + 1;
-    const restoreResults = await testBaseRepository.unarchive(
+    const restoreResults = await testUserRepository.unarchive(
       foundEntity.id,
       versionToRestore,
     );
@@ -366,7 +397,7 @@ describe('start db and populate the entity', () => {
     expect(restoreResults).toBeTruthy();
 
     const restoredEntity = expectNotNullAndGet(
-      await testBaseRepository.findSingle(saved.id),
+      await testUserRepository.findSingle(saved.id),
     );
 
     expect(restoredEntity.version).toBe(versionToRestore + 1);
@@ -386,13 +417,13 @@ describe('start db and populate the entity', () => {
     };
 
     await expect(
-      testBaseRepository.runInTransaction(async (qr) => {
+      testUserRepository.runInTransaction(async (qr) => {
         await qr.manager.save(UserEntity, toSaveSuccess);
         await qr.manager.save(UserEntity, toSaveFailed);
       }),
     ).rejects.toBeInstanceOf(QueryFailedError);
 
-    const savedEntity = await testBaseRepository.findOne({
+    const savedEntity = await testUserRepository.findOne({
       where: {
         firstName: toSaveSuccess.firstName,
       },
@@ -414,12 +445,12 @@ describe('start db and populate the entity', () => {
       firstName: faker.person.firstName() + '2',
     };
 
-    await testBaseRepository.runInTransaction(async (qr) => {
+    await testUserRepository.runInTransaction(async (qr) => {
       await qr.manager.save(UserEntity, toSaveSuccessFirst);
       await qr.manager.save(UserEntity, toSaveSuccessSecond);
     });
 
-    const savedEntity = await testBaseRepository.findAllPaginated(
+    const savedEntity = await testUserRepository.findAllPaginated(
       {
         path: 'users',
         filter: {
@@ -444,9 +475,9 @@ describe('start db and populate the entity', () => {
       lastName: faker.person.lastName(),
     };
 
-    const saved = await testBaseRepository.save(toSave);
+    const saved = await testUserRepository.save(toSave);
 
-    const insertedRecord = await testBaseRepository
+    const insertedRecord = await testUserRepository
       .findSingle(saved.id)
       .then(expectNotNullAndGet);
 
@@ -459,9 +490,9 @@ describe('start db and populate the entity', () => {
       ...toSave,
     };
 
-    const updated = await testBaseRepository.save(entityToUpdate);
+    const updated = await testUserRepository.save(entityToUpdate);
 
-    const updatedRecord = await testBaseRepository
+    const updatedRecord = await testUserRepository
       .findSingle(updated.id)
       .then(expectNotNullAndGet);
 
@@ -470,9 +501,9 @@ describe('start db and populate the entity', () => {
     expect(insertedRecord.lastName).not.toBe(updatedRecord.lastName);
 
     const updatedSameRecordWithSameValuesAsInDb =
-      await testBaseRepository.save(entityToUpdate);
+      await testUserRepository.save(entityToUpdate);
 
-    const updatedRecordWithoutAnyChanges = await testBaseRepository
+    const updatedRecordWithoutAnyChanges = await testUserRepository
       .findSingle(updatedSameRecordWithSameValuesAsInDb.id)
       .then(expectNotNullAndGet);
 

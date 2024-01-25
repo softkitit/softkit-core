@@ -138,10 +138,10 @@ import { EmailDataParams } from './types/email-params.dto';
 export class MailService {
   constructor(private mailService: AbstractMailService<EmailTypes>) {}
 
-  public sendTemplateEmail(
-    templateId: EmailTypes,
+  public sendTemplateEmail<T extends EmailTypes>(
+    templateId: T,
     emailData: SendEmailDto,
-    templateVariables: EmailDataParams<EmailTypes>,
+    templateVariables: EmailDataParams<T>,
   ): Promise<SendEmailResult> {
     return this.mailService.sendTemplateEmail(
       templateId,

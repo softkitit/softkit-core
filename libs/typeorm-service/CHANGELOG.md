@@ -1,4 +1,20 @@
 Softkit Core Libraries Changelog
+## [0.1.0](https://github.com/softkitit/softkit-core/compare/typeorm-service-0.0.13...typeorm-service-0.1.0) (2024-01-24)
+
+
+### Features
+
+* **common-types:** added never type to make all fields in object never and optional ([7bc4510](https://github.com/softkitit/softkit-core/commit/7bc45100b9aaa6228a1acf1abc94dc1f7082b51f))
+* **typeorm-service:** added where option condition to find all function in base service ([5ae5cb9](https://github.com/softkitit/softkit-core/commit/5ae5cb91dd976b9ac4e324d4708fe7313903a4cf))
+* **typeorm-service:** updated base services structure to match new repositories needs ([90b732d](https://github.com/softkitit/softkit-core/commit/90b732dd3b3cbc9ea6ea6875d3a4aa8c4e600f34))
+* **typeorm:** fixed type definition for services, added ability to save record with ability to provide id, because sometimes ids must be defined externally, added tenant service test ([8073e37](https://github.com/softkitit/softkit-core/commit/8073e374e5ba9b25f8f908a52ae8fa592a2c4c0d))
+
+
+### Bug Fixes
+
+* **typeorm-service:** improved typing for find one method, to return an exact type depends on throw or do not throw exception ([b1fc14a](https://github.com/softkitit/softkit-core/commit/b1fc14a5ad7b20c7022d3f76933a69cbc35b6899))
+* **typeorm:** fixed paginate default logic with updated version of nestjs paginate ([dd6cf94](https://github.com/softkitit/softkit-core/commit/dd6cf94ab330ca9edde61454b8ee6461b57ff136))
+
 ## [0.0.13](https://github.com/softkitit/softkit-core/compare/typeorm-service-0.0.12...typeorm-service-0.0.13) (2023-12-11)
 
 

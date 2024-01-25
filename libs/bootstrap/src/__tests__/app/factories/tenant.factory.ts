@@ -15,7 +15,7 @@ export const tenantFactory = setSeederFactory(TenantEntity, (_, meta) => {
     ownerId: '',
   } satisfies ExcludeKeys<
     TenantEntity,
-    typeof DEFAULT_CREATE_ENTITY_EXCLUDE_LIST
+    typeof DEFAULT_CREATE_ENTITY_EXCLUDE_LIST | 'id'
   >;
 
   if (isMeta(meta)) {

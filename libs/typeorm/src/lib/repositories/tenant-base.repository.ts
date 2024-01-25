@@ -7,13 +7,15 @@ import { GeneralInternalServerException } from '@softkit/exceptions';
 
 export abstract class BaseTenantRepository<
   ENTITY extends BaseTenantEntityHelper,
-> extends BaseRepository<ENTITY> {
+  ID extends keyof ENTITY,
+> extends BaseRepository<ENTITY, ID> {
   protected constructor(
     et: EntityTarget<ENTITY>,
     dataSource: DataSource,
+    idFieldName: ID,
     protected clsService: ClsService<TenantClsStore>,
   ) {
-    super(et, dataSource);
+    super(et, dataSource, idFieldName);
   }
 
   protected override presetDefaultWhereOptions<

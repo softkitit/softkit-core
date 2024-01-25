@@ -1,17 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { AbstractMailService } from '../../../services';
-import { EmailTypes } from './types/email.types';
 import { SendEmailDto, SendEmailResult } from '../../../services/vo';
 import { EmailDataParams } from './types/email-params.dto';
+import { EmailTypes } from './types/email.types';
 
 @Injectable()
 export class MailService {
   constructor(private mailService: AbstractMailService<EmailTypes>) {}
 
-  public sendTemplateEmail(
-    templateId: EmailTypes,
+  public sendTemplateEmail<T extends EmailTypes>(
+    templateId: T,
     emailData: SendEmailDto,
-    templateVariables: EmailDataParams<EmailTypes>,
+    templateVariables: EmailDataParams<T>,
   ): Promise<SendEmailResult> {
     return this.mailService.sendTemplateEmail(
       templateId,

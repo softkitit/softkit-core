@@ -4,6 +4,7 @@ import { RedisRootConfig } from './config/redis-root.config';
 import { setupRedisModule } from '../../lib/redis.module';
 import { UserRedisRepository } from './repository/user.redis.repository';
 import { StringRedisRepository } from './repository/string.redis.repository';
+import { setupRedisLockModule } from '../../lib/redis-lock.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { StringRedisRepository } from './repository/string.redis.repository';
       rootSchemaClass: RedisRootConfig,
     }),
     setupRedisModule(),
+    setupRedisLockModule(),
   ],
   providers: [UserRedisRepository, StringRedisRepository],
 })

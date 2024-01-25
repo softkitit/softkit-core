@@ -2,10 +2,10 @@ import { Test } from '@nestjs/testing';
 import { AbstractMailService, AttachmentFile, SendEmailDto } from '../services';
 import { MAILGUN_CLIENT_TOKEN } from '../constants';
 import { MailService } from './app/mail/custom-mail.service';
-import { EmailTypes } from './app/mail/types/email.types';
 import { GeneralInternalServerException } from '@softkit/exceptions';
 import { plainToClass } from 'class-transformer';
 import { validate } from 'class-validator';
+import { EmailTypes } from './app/mail/types/email.types';
 
 const mockMailgunClient = {
   messages: {

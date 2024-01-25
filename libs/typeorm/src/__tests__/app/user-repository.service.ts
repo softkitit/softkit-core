@@ -5,11 +5,11 @@ import { DataSource } from 'typeorm';
 import { UserEntity } from './user.entity';
 
 @Injectable()
-export class UserRepository extends BaseRepository<UserEntity> {
+export class UserRepository extends BaseRepository<UserEntity, 'id'> {
   constructor(
     @InjectDataSource()
-    private ds: DataSource,
+    dataSource: DataSource,
   ) {
-    super(UserEntity, ds);
+    super(UserEntity, dataSource, 'id');
   }
 }

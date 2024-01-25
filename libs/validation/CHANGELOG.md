@@ -1,4 +1,14 @@
 Softkit Core Libraries Changelog
+## [0.3.5](https://github.com/softkitit/softkit-core/compare/validation-0.3.4...validation-0.3.5) (2024-01-24)
+
+
+### Bug Fixes
+
+* **validation:** added new isIntegerLocalized decorator, improved IsIntegerString ([a9d0cda](https://github.com/softkitit/softkit-core/commit/a9d0cdab06257aa044cddb0cc2f3f6e63dad1a21))
+* **validation:** exported missing int-validator ([a3bc3d8](https://github.com/softkitit/softkit-core/commit/a3bc3d8e8b2074b04e0be2a5734c1020073aed60))
+* **validation:** fixed to integer transform to handle null and undefined cases for optional integers ([d8e0e18](https://github.com/softkitit/softkit-core/commit/d8e0e18592c71aeff4ed40f9a6e0c2b4ae9db52b))
+* **validation:** fixed to integer transformer again ([0100fbc](https://github.com/softkitit/softkit-core/commit/0100fbc33b58f55e1aecab70d3090c76e0d95c7c))
+
 ## [0.3.4](https://github.com/softkitit/softkit-core/compare/validation-0.3.3...validation-0.3.4) (2023-12-13)
 
 

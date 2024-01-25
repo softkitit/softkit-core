@@ -1,6 +1,6 @@
 {
   "name": "@softkit/test-utils",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "type": "commonjs",
   "keywords": [
     "test",

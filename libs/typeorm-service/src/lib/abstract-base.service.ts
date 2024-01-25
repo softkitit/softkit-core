@@ -3,53 +3,61 @@ import { BaseEntityHelper } from '@softkit/typeorm';
 import { PaginateConfig, Paginated, PaginateQuery } from 'nestjs-paginate';
 import { ClassConstructor } from 'class-transformer';
 import { ClassTransformOptions } from 'class-transformer/types/interfaces';
+import { Never } from '@softkit/common-types';
+import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere';
 
 export abstract class AbstractBaseService<
   ENTITY extends BaseEntityHelper,
-  EXCLUDE_FIELDS_FOR_SAVE_TYPE,
+  ID extends keyof ENTITY,
+  FIELDS_REQUIRED_FOR_UPDATE,
+  DEFAULT_EXCLUDE_LIST extends BaseEntityHelper,
 > {
   abstract createOrUpdateEntity(
     entity: // update type
-    | (Omit<ENTITY, keyof EXCLUDE_FIELDS_FOR_SAVE_TYPE> & {
-          id?: never;
-          version?: never;
-        })
-      | (Omit<ENTITY, keyof EXCLUDE_FIELDS_FOR_SAVE_TYPE> &
-          Pick<ENTITY, 'id' | 'version'>),
+    | (Omit<
+          ENTITY,
+          keyof DEFAULT_EXCLUDE_LIST | keyof FIELDS_REQUIRED_FOR_UPDATE
+        > &
+          Never<FIELDS_REQUIRED_FOR_UPDATE> &
+          Partial<Pick<ENTITY, ID>>)
+      | (Omit<ENTITY, keyof DEFAULT_EXCLUDE_LIST> & FIELDS_REQUIRED_FOR_UPDATE),
   ): Promise<ENTITY>;
 
-  abstract partialUpdate(
-    id: ENTITY['id'],
+  abstract createOrUpdateEntities(
     entity: // update type
-    DeepPartial<ENTITY>,
-  ): Promise<
-    DeepPartial<ENTITY> & Pick<ENTITY, 'id' | 'updatedAt' | 'version'>
-  >;
+    | (Omit<
+          ENTITY,
+          keyof DEFAULT_EXCLUDE_LIST | keyof FIELDS_REQUIRED_FOR_UPDATE
+        > &
+          Partial<Never<FIELDS_REQUIRED_FOR_UPDATE>>)[]
+      | (Omit<ENTITY, keyof DEFAULT_EXCLUDE_LIST> &
+          FIELDS_REQUIRED_FOR_UPDATE)[],
+  ): Promise<ENTITY[]>;
+
+  abstract partialUpdate(
+    entity: DeepPartial<Omit<ENTITY, keyof DEFAULT_EXCLUDE_LIST>>,
+  ): Promise<DeepPartial<ENTITY>>;
 
   abstract findAll(
     page: number,
     limit: number,
+    where?: FindOptionsWhere<ENTITY>[] | FindOptionsWhere<ENTITY>,
     order?: FindOptionsOrder<ENTITY>,
   ): Promise<ENTITY[]>;
 
-  abstract createOrUpdateEntities(
-    entity: // update type
-    | (Omit<ENTITY, keyof EXCLUDE_FIELDS_FOR_SAVE_TYPE> & {
-          id?: never;
-          version?: never;
-        })[]
-      | (Omit<ENTITY, keyof EXCLUDE_FIELDS_FOR_SAVE_TYPE> &
-          Pick<ENTITY, 'id' | 'version'>)[],
-  ): Promise<ENTITY[]>;
-
   abstract findOneById(
-    id: ENTITY['id'],
+    id: ENTITY[ID],
     throwExceptionIfNotFound: boolean,
   ): Promise<ENTITY | undefined>;
 
   protected abstract findOne(
     findOptions: FindOneOptions<ENTITY>,
-    throwExceptionIfNotFound: boolean,
+    throwExceptionIfNotFound?: true,
+  ): Promise<ENTITY>;
+
+  protected abstract findOne(
+    findOptions: FindOneOptions<ENTITY>,
+    throwExceptionIfNotFound: false,
   ): Promise<ENTITY | undefined>;
 
   abstract findAllPaginated(
@@ -64,9 +72,9 @@ export abstract class AbstractBaseService<
     options?: ClassTransformOptions,
   ): Promise<Paginated<T>>;
 
-  abstract archive(id: ENTITY['id'], version: number): Promise<boolean>;
+  abstract archive(id: ENTITY[ID], version: number): Promise<boolean>;
 
-  abstract unarchive(id: ENTITY['id'], version: number): Promise<boolean>;
+  abstract unarchive(id: ENTITY[ID], version: number): Promise<boolean>;
 
-  abstract delete(id: ENTITY['id']): Promise<boolean>;
+  abstract delete(id: ENTITY[ID]): Promise<boolean>;
 }
