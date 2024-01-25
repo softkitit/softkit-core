@@ -49,10 +49,7 @@ describe('bootstrap test', () => {
   beforeEach(async () => {
     const configModule = await Test.createTestingModule({
       imports: [
-        setupYamlBaseConfigModule({
-          baseDir: path.join(__dirname, 'app'),
-          rootSchemaClass: RootConfig,
-        }),
+        setupYamlBaseConfigModule(path.join(__dirname, 'app'), RootConfig),
       ],
     }).compile();
 

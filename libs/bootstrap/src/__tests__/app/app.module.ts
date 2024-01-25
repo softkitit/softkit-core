@@ -12,10 +12,7 @@ export class BootstrapTestAppModule {}
 
 @Module({
   imports: [
-    setupYamlBaseConfigModule({
-      baseDir: __dirname,
-      rootSchemaClass: RootConfig,
-    }),
+    setupYamlBaseConfigModule(__dirname, RootConfig),
     setupLoggerModule(),
   ],
   providers: [Logger],
