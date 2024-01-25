@@ -1,0 +1,31 @@
+---
+title: Configuration
+---
+
+# Configuration
+
+---
+
+## Configuration Options
+
+The Redis Library offers a range of configuration options to tailor Redis clients to your specific needs.
+
+### Common Configuration
+
+- **commandTimeout**: The timeout in milliseconds for Redis commands. Default is `5000`.
+- **keepAlive**: Configures the keep-alive functionality. Default is `0` (disabled).
+- **noDelay**: Toggles the use of Nagle's algorithm. Default is `true`.
+- **connectionName**: Sets a custom name for the connection.
+- **username & password**: Credentials for Redis 6 AUTH command.
+
+### Client-Specific Configuration
+
+Each Redis client can be configured with:
+
+- **url**: The connection URL.
+- **namespace**: An optional namespace for the client.
+- **path**: The connection path for Unix domain sockets.
+
+## Next Steps
+
+- Explore advanced features and practical implementations in the [Features](/libraries/redis/features) section.

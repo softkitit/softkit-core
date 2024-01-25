@@ -1,0 +1,60 @@
+---
+title: 'Getting Started'
+---
+
+# Getting Started
+
+---
+
+Leveraging the power of [nestjs-pino](https://www.npmjs.com/package/nestjs-pino), this library provides a structured and efficient logging solution, making it easier to manage logs in your NestJS applications.
+
+
+:::note 
+This Logger Library is specifically tailored for the Softkit ecosystem.
+:::
+
+## Installation
+
+```bash
+yarn add @softkit/logger
+```
+
+## Basic Usage
+
+After installing, integrate the logger into your application:
+
+### Default Configuration
+
+```typescript
+import { setupLoggerModule } from '@softkit/logger';
+
+@Module({
+  imports: [setupLoggerModule()],
+})
+export class YourAppModule {}
+```
+
+### Update Root Configuration
+
+```typescript
+export class RootConfig {
+  @Type(() => LoggerConfig)
+  @ValidateNested()
+  public readonly logger!: LoggerConfig;
+}
+```
+
+### Environment Configuration
+
+Configure the logger in your `.env.yaml` file:
+
+```yaml
+logs:
+  colorize: true
+  level: info
+  prettyPrint: true
+```
+
+## Next Steps
+
+For detailed information about default settings, advanced configuration, and features, proceed to the [configuration](/libraries/logger/configuration) section.

@@ -1,0 +1,63 @@
+---
+title: Getting Started
+---
+
+# Getting Started
+
+---
+
+The Redis Library, based on [ioredis](https://www.npmjs.com/package/ioredis), provides an opinionated Redis setup for the Softkit ecosystem, solving common configuration challenges in NestJS applications.
+
+## Installation
+
+```bash
+yarn add @softkit/redis
+```
+
+## Basic Usage
+
+To integrate Redis into your application:
+
+### Default Configuration
+
+```typescript
+import { setupRedisModule } from '@softkit/redis';
+
+@Module({
+  imports: [setupRedisModule()],
+})
+export class YourAppModule {}
+```
+
+### Update Root Configuration
+
+```typescript
+import { RedisConfig } from '@softkit/redis';
+
+export class RootConfig {
+  @Type(() => RedisConfig)
+  @ValidateNested()
+  public readonly redis!: RedisConfig;
+}
+```
+
+### Environment Configuration
+
+Define Redis configurations in your `.env.yaml` file:
+
+```yaml
+redis:
+  readyLog: true
+  errorLog: true
+  commonConfig:
+    commandTimeout: 5000
+    ...
+  config:
+    - url: 'redis://localhost'
+      ...
+```
+
+## Next Steps
+
+- For a detailed breakdown of configuration options and defaults, proceed to the [Configuration](/libraries/redis/configuration) section.
+- Explore advanced features and practical implementations in the [Features](/libraries/redis/features) section.

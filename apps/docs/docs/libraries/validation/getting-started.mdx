@@ -1,0 +1,96 @@
+---
+title: 'Getting Started'
+---
+
+# Getting Started
+
+---
+
+The Validation Library is a comprehensive wrapper around the [class-validator](https://github.com/typestack/class-validator) package, providing enhanced features and integrations for the Softkit ecosystem.
+
+## Enhanced Integration
+
+This library is closely integrated with [nestjs-i18n](https://www.npmjs.com/package/@softkit/i18n) to facilitate the easy overriding of default translations, streamlining internationalization efforts in your projects.
+
+## Improved Transformers
+
+Beyond the standard class-validator capabilities, the Validation Library offers better transformers for handling types like dates and booleans, which are often mishandled by the default transformers.
+
+## Installation
+
+```bash
+yarn add @softkit/validation
+```
+
+## Basic Usage
+
+Use the Validation Library just as you would with the standard class-validator, with the additional benefit of enhanced features and integrations:
+
+### Dynamic Validator Usage
+
+The library enhances the validation process with dynamic validation schemas and customized error handling:
+
+- To validate enum values and throw an exception if the value does not match the expected enum:
+
+```typescript
+import {
+  validateAndThrow,
+  IsEnumValidatorDefinition,
+} from '@softkit/validation';
+
+validateAndThrow(IsEnumValidatorDefinition, 'fieldName', 'fieldValue', [
+  'enumValue1',
+  'enumValue2',
+]);
+```
+
+- To validate against a regular expression and throw an exception if the value does not comply:
+
+```typescript
+import {
+  MatchesRegexpValidatorDefinition,
+  validateAndThrow,
+} from '@softkit/validation';
+
+const constraint = /^-?(?!0\d)\d+$/;
+
+validateAndThrow(
+  MatchesRegexpValidatorDefinition,
+  'fieldName',
+  'fieldValue',
+  constraint,
+  i18nString('validation.INTEGER'),
+);
+```
+
+- If immediate exception throwing is not desired, use [`validateAndReturnError`](/api/validation/src/functions/validateAndReturnError/) to return a `ValidationError` object for later use:
+
+```typescript
+import {
+  IsEnumValidatorDefinition,
+  validateAndReturnError,
+} from '@softkit/validation';
+
+const error = validateAndReturnError(
+  IsEnumValidatorDefinition,
+  'fieldName',
+  'fieldValue',
+  ['enumValue1', 'enumValue2'],
+);
+
+if (error) {
+  console.log(error);
+}
+```
+
+### Method Validation Rules
+
+The library also enables method-specific validation rules, which you can reference [here](https://github.com/mikeerickson/validatorjs/blob/master/src/rules.js). These rules ensure that your validations are precise and context-aware, providing a richer set of constraints for your data.
+
+### Error Handling
+
+Should a validation not meet the defined schema, the library will throw an exception. This exception is designed to be caught by a filter that returns an [RFC7807-compliant](https://datatracker.ietf.org/doc/html/rfc7807) error response, ensuring consistent error handling throughout your application.
+
+## Next Steps
+
+- For a detailed breakdown of default settings and custom transformers, proceed to the [Transforms & Custom Decorators](/libraries/validation/transforms-and-decorators) section.

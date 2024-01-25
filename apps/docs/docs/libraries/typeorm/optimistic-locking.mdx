@@ -1,0 +1,35 @@
+---
+title: 'Optimistic Locking'
+---
+
+# Optimistic Locking Implementation
+
+---
+
+## Overview
+
+Optimistic locking is a strategy used in applications to handle concurrent data updates. It's particularly useful in scenarios where multiple users interact with the same data resource, such as editing a Jira ticket. The core idea is to allow multiple transactions to proceed without locking the data but detect conflicts before committing the transaction.
+
+## Core Features
+
+- **Version Control**: Each entity has a version number that changes upon each update. This version is used to detect conflicts.
+- **Conflict Detection**: Before an update is committed, the current version of the entity is compared with the version in the database. If they don't match, it indicates that another user has modified the data, and an exception is thrown.
+
+## Simple Example
+
+Imagine two users working on the same Jira ticket. Both see the ticket in version 1:
+
+1. User A makes changes and attempts to save the ticket. The version is checked; it’s still 1 in the database, so the update succeeds, and the version is incremented to 2.
+2. Concurrently, User B also makes changes. When trying to save, the system checks the version, which is now 2 in the database, not 1 as in User B’s view. A conflict is detected, and an error is thrown, preventing User B’s changes from overwriting User A’s updates.
+
+3. **Frontend Handling**: On detecting a conflict, the frontend can handle this gracefully, such as by displaying a notification to User B about the conflict and the need to refresh or reload the page. Optionally, the frontend can automatically reload the ticket with the latest version (version 2 in this case), allowing User B to review the latest changes before attempting to update again.
+
+## Implementation Details
+
+The implementation involves an [`OptimisticLockingSubscriber`](/api/typeorm/src/classes/OptimisticLockingSubscriber/) that intercepts update operations. The subscriber checks if the version number of the entity being updated matches the version in the database. If they differ, an [`OptimisticLockException`](/api/exceptions/src/classes/OptimisticLockException/) from the [`@softkit/exceptions`](/libraries/exceptions/getting-started) library is thrown, indicating a conflict.
+
+## References
+
+For an in-depth understanding of optimistic locking in SQL databases, [the IBM documentation](https://www.ibm.com/docs/en/db2/11.5?topic=overview-optimistic-locking) offers valuable insights into its implementation and use.
+
+This implementation ensures data integrity and provides a user-friendly way to handle conflicts in multi-user environments, making it an indispensable feature for collaborative applications.

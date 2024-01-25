@@ -1,0 +1,41 @@
+---
+title: 'Features'
+---
+
+# Features
+
+---
+
+## Failing Fast
+
+- Ensures immediate detection of configuration errors at startup, leading to more reliable and maintainable applications.
+
+## Configuration Checking
+
+- Facilitates validation and verification of configuration values, ensuring that they meet the application's requirements.
+
+## Independent Configuration Injection
+
+- Allows for flexible and decoupled configuration management by enabling the injection of configurations independently across different modules.
+
+## Variable Substitutions
+
+- Follows the [nestjs-config's variable substitutions](https://github.com/Nikaple/nest-typed-config?tab=readme-ov-file#uses-of-variable-substitutions). Use environment variables and default values in configuration files. Reference other variables within the same configuration for dynamic settings.
+
+## Profiles
+
+- Supports environment-specific configurations through profiles.
+- Utilizes the `NESTJS_PROFILES` environment variable to determine the active profile(s).
+- Enables merging configurations from multiple profiles, resolving conflicts based on the specified order.
+- Simplifies testing by setting a test profile in `jest.preset.js`.
+
+Example `jest.preset.js`:
+
+```javascript
+process.env.NESTJS_PROFILES = 'test';
+module.exports = { testEnvironment: 'node' };
+```
+
+## Next Steps
+
+- **Config File Structure**: Learn about organizing and structuring your configuration files effectively. [Config File Structure Guide](/libraries/config/structure-example).

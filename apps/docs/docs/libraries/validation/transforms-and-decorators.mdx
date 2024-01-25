@@ -1,0 +1,61 @@
+---
+title: 'Transforms & Custom Decorators'
+---
+
+# Transforms & Custom Decorators
+
+---
+
+## Overview
+
+The Validation Library includes a set of transforms and custom decorators that provide additional functionality over the base class-validator features.
+
+### Custom Transforms
+
+The library offers custom transforms that allow for more nuanced type coercion and value transformation.
+
+#### Example Transform Usage
+
+```typescript
+import { Transform } from 'class-transformer';
+import { trim } from '@softkit/validation';
+
+export class CreateUserDto {
+  @Transform(trim)
+  name: string;
+}
+```
+
+### Custom Decorators
+
+Enhance validation with custom decorators for more specific use-cases, such as localized email validation and matching field checks.
+
+When creating a sign-up form, it's crucial to validate that the user has entered the intended password correctly. This often involves having a "repeat password" field. The Validation Library provides decorators to ensure the repeated password matches the original password.
+
+#### Custom Decorator Example
+
+```typescript
+import { IsEmailLocalized, Match } from '@softkit/validation';
+
+export class UserDto {
+  @IsEmailLocalized()
+  email: string;
+
+  @PasswordLocalized()
+  @IsStringCombinedLocalized({
+    minLength: 8,
+    maxLength: 256,
+  })
+  password: string;
+
+  @PasswordLocalized()
+  @MatchesWithProperty('password', {
+    message: 'validation.REPEAT_PASSWORD_DOESNT_MATCH',
+  })
+  repeatedPassword: string;
+}
+```
+
+## Conclusion
+
+By leveraging the Validation Library, your application gains a powerful suite of tools to ensure robust data validation. The additional transforms and decorators enhance the standard class-validator functionality, making your validation logic more concise and maintainable.

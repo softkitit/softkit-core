@@ -1,0 +1,44 @@
+---
+title: 'Configuration'
+---
+
+# Configuration
+
+---
+
+## Default Configuration
+
+- **LoggingInterceptor**: Logs all incoming requests.
+- **Default Logger Configuration**: Logs finish request with request ID and time, and all exceptions with stack trace.
+
+## Advanced Configuration
+
+Customize the logger with various configuration options:
+
+- **colorize**: Toggles colorized logs. Default is `true`.
+- **level**: Sets the logging level. Default is `info`.
+- **prettyPrint**: Enables pretty printing of logs. Useful for development. Default is `true`.
+
+### Example of Logged Requests
+
+When an incoming request is processed, the Logger Library logs details such as the method, URL, and request parameters. For instance, a GET request to `/api/user` might be logged as:
+
+```
+[16:00:00.477] INFO (YourAppModule): Call Endpoint: GET /api/user Params: {}
+```
+
+Upon successful completion, it logs the request's finish time and the request ID:
+
+```
+[16:00:00.477] INFO (YourAppModule): Finished Endpoint: GET /api/user for 500ms ReqId: 12345
+```
+
+In case of an error, it logs the error message and stack trace:
+
+```
+[16:00:00.477] ERROR (YourAppModule): Failed Endpoint: GET /api/user Error - Resource not found.
+```
+
+## Conclusion
+
+Integrating the Logger Library into your NestJS project streamlines logging setup and provides robust, configurable logging solutions tailored to modern application needs.

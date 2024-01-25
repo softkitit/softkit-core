@@ -1,0 +1,40 @@
+---
+title: Features
+---
+
+# Features
+
+---
+
+## AbstractRedisRepository Overview
+
+The Redis Library includes the [`AbstractRedisRepository`](/api/redis/src/classes/AbstractRedisRepository/), a foundational class that facilitates structured and efficient interaction with Redis data in NestJS applications.
+
+### Key Features of AbstractRedisRepository
+
+- **Unique Identifier Management**: It abstracts the process of generating unique Redis keys for stored entities.
+- **Flexible Key Construction**: Developers can define how keys are constructed, making it adaptable to different data structures and requirements.
+
+### Implementing a Custom Repository
+
+To use `AbstractRedisRepository`, create a subclass and define the unique identifier for your data entity. Here's a conceptual example:
+
+```typescript
+class UserRedisRepository extends AbstractRedisRepository<User, number> {
+  protected uniqueIdentifier(user: User): string {
+    return user.id.toString();
+  }
+
+  // Additional repository methods...
+}
+```
+
+In this example, `UserRedisRepository` extends `AbstractRedisRepository` and provides a way to uniquely identify a `User` entity, typically by an ID.
+
+### Practical Use Case
+
+Imagine a scenario where you need to store user sessions in Redis. By extending `AbstractRedisRepository`, you can easily manage session keys and streamline Redis interactions.
+
+## Conclusion for Redis Library
+
+Incorporating the Redis Library into your NestJS project not only streamlines Redis integration but also provides advanced features like `AbstractRedisRepository`. This abstraction simplifies data handling and enhances the overall efficiency of working with Redis, contributing significantly to the robustness of your application's data layer.
