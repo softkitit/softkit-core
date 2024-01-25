@@ -11,19 +11,26 @@ import { ObjectNotFoundException } from '@softkit/exceptions';
 import { PAGINATED_CONFIG, UserEntity } from './app/user.entity';
 import { UserService } from './app/user.service';
 import { UserRepository } from './app/user.repository';
-import { UserDto } from './app/user.dto';
+import { CreateUserDTO, UserDto } from './app/user.dto';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { setupTypeormModule } from '@softkit/typeorm';
+import { AuditService } from './app/audit.service';
+import { AuditRepository } from './app/audit.repository';
+import { AuditEntity } from './app/audit.entity';
 
 describe('base service tests', () => {
   let testBaseService: UserService;
+  let testAuditService: AuditService;
   let db: StartedDb;
+  let recordAudit: jest.SpyInstance;
+  let recordGeneralAction: jest.SpyInstance;
+  let actualSignUpProcess: jest.SpyInstance;
 
   beforeAll(async () => {
     db = await startPostgres({
       runMigrations: false,
       additionalTypeOrmModuleOptions: {
-        entities: [UserEntity],
+        entities: [UserEntity, AuditEntity],
         namingStrategy: new SnakeNamingStrategy(),
       },
     });
@@ -36,7 +43,7 @@ describe('base service tests', () => {
   beforeAll(async () => {
     const module = await Test.createTestingModule({
       imports: [
-        TypeOrmModule.forFeature([UserEntity]),
+        TypeOrmModule.forFeature([UserEntity, AuditEntity]),
         setupTypeormModule({
           optionsFactory: db.TypeOrmConfigService,
         }),
@@ -45,10 +52,93 @@ describe('base service tests', () => {
         }),
       ],
 
-      providers: [UserRepository, UserService],
+      providers: [UserRepository, UserService, AuditRepository, AuditService],
     }).compile();
 
     testBaseService = module.get(UserService);
+    testAuditService = module.get(AuditService);
+    recordAudit = jest.spyOn(testAuditService, 'recordAudit');
+    recordGeneralAction = jest.spyOn(testAuditService, 'recordGeneralAction');
+    actualSignUpProcess = jest.spyOn(testBaseService, 'actualSignUpProcess');
+  });
+
+  describe('Transactional Decorator Test', () => {
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
+    it('should execute all steps correctly on successful sign up', async () => {
+      const testObject = {
+        firstName: 'jh',
+        lastName: 'ksr',
+        password: 'abc',
+      } satisfies CreateUserDTO;
+      const savedEntity = await testBaseService.signUp(testObject);
+      checkAllTestFieldsPresent(testObject, savedEntity);
+
+      const audits = await testAuditService.findAll();
+
+      expect(recordGeneralAction).toHaveBeenNthCalledWith(
+        1,
+        'Signup Initiated',
+        `attempted with first name: ${testObject.firstName}`,
+      );
+
+      expect(actualSignUpProcess).toHaveBeenCalledWith(testObject);
+
+      expect(recordAudit).toHaveBeenCalledWith(
+        savedEntity.id,
+        'Sign up success',
+        `first name: ${savedEntity.firstName}`,
+      );
+
+      expect(recordGeneralAction).toHaveBeenCalledWith(
+        3,
+        'Signup Finished',
+        `finished signup for user: ${testObject.firstName}`,
+      );
+    });
+
+    it('should record a failed signup attempt', async () => {
+      jest
+        .spyOn(testBaseService, 'actualSignUpProcess')
+        .mockImplementation(() => {
+          throw new Error('Signup failed');
+        });
+
+      const testObject = {
+        firstName: 'jh',
+        lastName: 'ksr',
+        password: 'abc',
+      } satisfies CreateUserDTO;
+
+      try {
+        await testBaseService.signUp(testObject);
+      } catch (error) {
+        // eslint-disable-next-line jest/no-conditional-expect
+        expect(error).toEqual(new Error('Signup failed'));
+      }
+
+      const audits = await testAuditService.findAll();
+
+      expect(recordGeneralAction).toHaveBeenNthCalledWith(
+        1,
+        'Signup Initiated',
+        `attempted with first name: ${testObject.firstName}`,
+      );
+
+      expect(recordGeneralAction).toHaveBeenNthCalledWith(
+        2,
+        'Signup Failed',
+        `failed for user: ${testObject.firstName}`,
+      );
+
+      expect(recordGeneralAction).toHaveBeenNthCalledWith(
+        3,
+        'Signup Finished',
+        `finished signup for user: ${testObject.firstName}`,
+      );
+    });
   });
 
   test('create one test', async () => {
