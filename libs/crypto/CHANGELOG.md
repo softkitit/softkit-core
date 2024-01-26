@@ -1,4 +1,6 @@
 Softkit Core Libraries Changelog
+## [0.0.7](https://github.com/softkitit/softkit-core/compare/crypto-0.0.6...crypto-0.0.7) (2024-01-26)
+
 ## [0.0.6](https://github.com/softkitit/softkit-core/compare/crypto-0.0.5...crypto-0.0.6) (2023-11-04)
 
 ## [0.0.6](https://github.com/saas-buildkit/saas-buildkit-core/compare/crypto-0.0.5...crypto-0.0.6) (2023-11-04)
