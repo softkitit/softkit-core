@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.1.2](https://github.com/softkitit/softkit-core/compare/jobs-0.1.1...jobs-0.1.2) (2024-01-26)
+
+
+### Bug Fixes
+
+* **jobs:** removed connectionTimeout option for the queue client, because client must be blocking for as long as needed ([2944305](https://github.com/softkitit/softkit-core/commit/2944305b4fea94ee55ea88c8603611e245239c51))
+
 ## [0.1.1](https://github.com/softkitit/softkit-core/compare/jobs-0.1.0...jobs-0.1.1) (2024-01-24)
 
 ## 0.1.0 (2024-01-24)
