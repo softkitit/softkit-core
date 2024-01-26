@@ -41,7 +41,7 @@ We do support 3 types of jobs:
 ## Installation
 
 ```bash
-yarn add @softkit/jobs
+yarn add @softkit/jobs @nestjs/bullmq @anchan828/nest-redlock bullmq
 ```
 
 ## Setup
@@ -64,18 +64,19 @@ export class RootConfig {
 jobsConfig:
   prefix: my-app
   jobs:
-#   that's place where you can define your user jobs
+    #   that's place where you can define your user jobs
     - name: some-user-job
-#   that's where you can define your system jobs, they will be automatically scheduled on application startup
+  #   that's where you can define your system jobs, they will be automatically scheduled on application startup
   systemJobs:
-    - name: some-system-job
-      repeat:
-        pattern: '*/1 * * * * *'
-#        need to increment when data or config like pattern changed 
-      jobVersion: 1
-#      jobData - may be empty if you don't need to configure anything externally
-      jobData:
-        executeForMillis: 4000
+    jobs:
+      - name: some-system-job
+        repeat:
+          pattern: '*/1 * * * * *'
+        #          need to increment when data or config like pattern changed
+        jobVersion: 1
+        #        jobData - may be empty if you don't need to configure anything externally
+        jobData:
+          executeForMillis: 4000
   redisConfig:
     config:
       - connectionName: ${jobsConfig.prefix}-my-app

@@ -1,13 +1,13 @@
-import { ClassConstructor } from 'class-transformer';
 import { fileLoader, TypedConfigModule } from 'nest-typed-config';
 import * as path from 'node:path';
 import { getProfiles } from './utils/get-profiles';
 import { ROOT_CONFIG_ALIAS_TOKEN } from './constants';
+import type { Type } from '@nestjs/common';
 
 export function setupYamlBaseConfigModule(
   baseDir: string,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  rootSchemaClass: ClassConstructor<unknown>,
+  rootSchemaClass: Type<unknown>,
   folderName = 'assets',
   baseFileName = '.env.yaml',
   profiles = getProfiles(),

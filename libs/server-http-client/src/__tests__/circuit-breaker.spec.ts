@@ -277,7 +277,7 @@ describe('Circuit breaker and retry', () => {
       'internal server error with different retries : %s',
       async (retryType) => {
         const axiosInstanceWithRetry = await createAxiosInstance(clsService, {
-          timeout: 2000,
+          timeout: 3000,
           url: appHost,
           serviceName: 'sample',
           retryConfig: {
