@@ -56,6 +56,7 @@ describe('busy job e2e tests', () => {
     await app.listen(0);
 
     schedulingService = app.get(AbstractSchedulingJobService);
+    fakeJob = app.get(BusyJob);
 
     jobId = generateRandomId();
   });
