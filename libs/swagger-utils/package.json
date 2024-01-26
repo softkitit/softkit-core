@@ -7,9 +7,9 @@
     "setup swagger"
   ],
   "peerDependencies": {
-    "@softkit/validation": "*",
-    "class-validator": "^0.14.0",
-    "@nestjs/common": "^10.2.4",
-    "@nestjs/swagger": "^7.1.10"
+    "@softkit/validation": "^0.3.5",
+    "class-validator": "*",
+    "@nestjs/common": "^10.0.0",
+    "@nestjs/swagger": "^7.0.0"
   }
 }
