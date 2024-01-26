@@ -1,7 +1,15 @@
 {
   "name": "@softkit/jobs",
   "version": "0.1.0",
-  "devDependencies": {},
+  "keywords": [
+    "nestjs",
+    "jobs",
+    "bullmq",
+    "redis",
+    "persistent",
+    "queue",
+    "autoschedule"
+  ],
   "peerDependencies": {
     "@softkit/logger": "^0.1.0",
     "nestjs-pino": "^3.0.0",
