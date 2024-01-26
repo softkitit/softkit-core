@@ -14,12 +14,12 @@ import {
   AbstractJobExecutionService,
   JobExecutionService,
   AbstractJobVersionService,
+  JobVersionService,
 } from './service';
 import { JobDefinition, JobExecution, JobVersion } from './entity';
 import * as Repositories from './repository';
 import { BullModule } from '@nestjs/bullmq';
 import { RegisterQueueOptions } from '@nestjs/bullmq/dist/interfaces/register-queue-options.interface';
-import { JobVersionService } from './service/job-version.service';
 import { setupRedisLockModule, setupRedisModule } from '@softkit/redis';
 
 type JobsConfigOrPromise = JobsConfig | Promise<JobsConfig>;
@@ -142,9 +142,13 @@ export class JobsModule {
     return BullModule.forRootAsync({
       useFactory: (jobsConfig: JobsConfig) => {
         const { redisConfig, ...bullConfig } = jobsConfig;
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { commandTimeout: _, ...redisConfigWithoutTimeout } =
-          redisConfig.config[0];
+        const {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          commandTimeout: _,
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          maxRetriesPerRequest: __,
+          ...redisConfigWithoutTimeout
+        } = redisConfig.config[0];
         return {
           // we are picking up the first connection from the config, because bull do support only one connection
           connection: {
@@ -210,15 +214,22 @@ export class JobsModule {
             throw new Error(message);
           }
 
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const { commandTimeout: _, ...redisConnection } =
-            config.redisConfig.config[0];
+          const {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            commandTimeout: _,
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            enableOfflineQueue: __,
+            ...redisConnection
+          } = config.redisConfig.config[0];
 
           return {
             name: jobConfig.name,
             // defaultJobOptions: jobConfig.defaultJobOptions,
             // connection should be provided each time to prevent redis to hang up with one connection
-            connection: redisConnection,
+            connection: {
+              enableOfflineQueue: false,
+              ...redisConnection,
+            },
           } satisfies RegisterQueueOptions;
         },
         inject: [JOBS_CONFIG_TOKEN],
