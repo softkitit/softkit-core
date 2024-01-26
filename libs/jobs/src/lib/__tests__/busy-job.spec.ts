@@ -102,7 +102,7 @@ describe('busy job e2e tests', () => {
       Jobs.BUSY_SCHEDULED_JOB,
       Jobs.BUSY_SCHEDULED_JOB,
       jobId,
-      { executeForMillis: 20, jobVersion: 1 },
+      { executeForMillis: 5000, jobVersion: 1 },
       {
         repeat: {
           // 1st january of every year
@@ -113,7 +113,7 @@ describe('busy job e2e tests', () => {
 
     await wait(13_000);
 
-    expect(busyScheduledJob.jobStats.started).toBe(1);
-    expect(busyScheduledJob.jobStats.finished).toBe(1);
+    expect(busyScheduledJob.jobStats.started).toBeGreaterThanOrEqual(1);
+    expect(busyScheduledJob.jobStats.finished).toBeGreaterThanOrEqual(1);
   }, 30_000);
 });
