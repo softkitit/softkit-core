@@ -63,7 +63,7 @@ jobs:
         run: docker pull postgres:15.4-alpine
 
       - name: Verify libraries can properly built
-        run: npx nx affected:build --parallel
+        run: npx nx affected:build --base="origin/main"
 
       - name: Tests coverage
         run: npx nx affected:test --base="origin/main" --codeCoverage --parallel=false
