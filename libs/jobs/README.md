@@ -35,7 +35,9 @@ We do support 3 types of jobs:
 - CRUD services to get jobs, job versions and job executions for each job version
 - Ability to run now a scheduled job
 - Advanced logger configuration, that populate a logger context with essential job information like id and name, and this data will be pushed to the log system, where the easy search will be available for debugging and monitoring purposes  
+- Automatically following BullMQ best practices of (creation of redis connection per queue and job), setting proper maxRetriesPerRequest for Worker, disabling enableOfflineQueue by default for queue, automatically subscribing for events in a worker and log errors and warning, Gracefully shut-down within nestjs application lifecycle to wait until job ready before stopping the app, Auto-job removal process,   
 - Controller to get job information, scheduling job (TODO)
+- Describe and test entities customisations (TODO)
 
 
 ## Installation
