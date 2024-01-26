@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.1.3](https://github.com/softkitit/softkit-core/compare/jobs-0.1.2...jobs-0.1.3) (2024-01-26)
+
+
+### Bug Fixes
+
+* **jobs:** applied bullmq best practices in configuration, updated readme ([7372b21](https://github.com/softkitit/softkit-core/commit/7372b211d1d270de16599c603967b1d9f69be413))
+
 ## [0.1.2](https://github.com/softkitit/softkit-core/compare/jobs-0.1.1...jobs-0.1.2) (2024-01-26)
 
 
