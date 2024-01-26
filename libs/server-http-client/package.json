@@ -4,11 +4,11 @@
   "type": "commonjs",
   "dependencies": {
     "opossum": "8.1.0",
-    "axios-retry": "3.7.0"
+    "axios-retry": "4.0.0"
   },
   "peerDependencies": {
     "@softkit/exceptions": "*",
-    "axios": "^1.5.0",
+    "axios": "^1.6.7",
     "fastify": "^4.0.0",
     "@softkit/auth": "^1.0.6",
     "@nestjs/common": "^10.0.0",
