@@ -9,4 +9,4 @@ if [ "$branch" = "main" ]; then
 fi
 
 npx nx affected:lint --fix --parallel
-npx nx affected:build --fix --parallel
+npx nx affected:build --parallel
