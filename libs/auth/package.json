@@ -1,6 +1,6 @@
 {
   "name": "@softkit/auth",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "type": "commonjs",
   "dependencies": {
     "passport-saml": "3.2.4",
