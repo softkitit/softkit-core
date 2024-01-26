@@ -1,4 +1,6 @@
 Softkit Core Libraries Changelog
+## [0.1.4](https://github.com/softkitit/softkit-core/compare/file-storage-0.1.3...file-storage-0.1.4) (2024-01-26)
+
 ## [0.1.3](https://github.com/softkitit/softkit-core/compare/file-storage-0.1.2...file-storage-0.1.3) (2024-01-24)
 
 ## [0.1.2](https://github.com/softkitit/softkit-core/compare/file-storage-0.1.1...file-storage-0.1.2) (2023-12-15)

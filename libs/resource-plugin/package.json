@@ -1,6 +1,6 @@
 {
   "name": "@softkit/resource-plugin",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "type": "commonjs",
   "keywords": [
     "generator",
@@ -10,12 +10,12 @@
   ],
   "generators": "./generators.json",
   "dependencies": {
-    "change-case": "^4.1.2"
+    "change-case": "4.1.2"
   },
   "peerDependencies": {
-    "@nx/devkit": "17.1.2",
-    "@nx/nest": "17.1.2",
-    "nx": "17.1.2",
-    "@nx/js": "17.1.2"
+    "@nx/devkit": "^17.0.0",
+    "@nx/nest": "^17.0.0",
+    "nx": "^17.0.0",
+    "@nx/js": "^17.0.0"
   }
 }

@@ -1,20 +1,33 @@
 {
   "name": "@softkit/test-utils",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "type": "commonjs",
   "keywords": [
     "test",
     "utils"
   ],
   "dependencies": {
-    "testcontainers": "^10.2.1"
+    "testcontainers": "10.2.1",
+    "@testcontainers/postgresql": "10.2.1"
   },
   "peerDependencies": {
-    "@jest/globals": "^29.6.2",
-    "@testcontainers/postgresql": "^10.2.1",
+    "testcontainers": "^10.0.0",
+    "@jest/globals": "^29.6.0",
+    "@testcontainers/postgresql": "^10.0.0",
     "@nestjs/typeorm": "^10.0.0",
-    "@nestjs/common": "^10.2.4",
-    "typeorm": "~0.3.17",
-    "typeorm-transactional": "^0.4.1"
+    "@nestjs/common": "^10.0.0",
+    "typeorm": "*",
+    "typeorm-transactional": "^0.4.0"
+  },
+  "peerDependenciesMeta": {
+    "@testcontainers/postgresql": {
+      "optional": true
+    },
+    "typeorm": {
+      "optional": true
+    },
+    "typeorm-transactional": {
+      "optional": true
+    }
   }
 }

@@ -1,12 +1,12 @@
-import { TypedConfigModule, fileLoader } from 'nest-typed-config';
+import { fileLoader, TypedConfigModule } from 'nest-typed-config';
 import { ROOT_CONFIG_ALIAS_TOKEN } from './constants';
 import { SetupConfigOptions } from './vo/setup-config-options';
 import { getExistingFilePaths } from './utils/get-existing-file-paths';
-import { ClassConstructor } from 'class-transformer';
+import type { Type } from '@nestjs/common';
 
 export function setupYamlBaseConfigModule(
   baseDir: string,
-  rootSchemaClass: ClassConstructor<unknown>,
+  rootSchemaClass: Type<unknown>,
   options?: SetupConfigOptions,
 ) {
   const existingFilePaths = getExistingFilePaths(

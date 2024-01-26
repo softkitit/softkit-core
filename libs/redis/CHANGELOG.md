@@ -1,4 +1,6 @@
 Softkit Core Libraries Changelog
+## [0.2.1](https://github.com/softkitit/softkit-core/compare/redis-0.2.0...redis-0.2.1) (2024-01-26)
+
 ## [0.2.0](https://github.com/softkitit/softkit-core/compare/redis-0.1.3...redis-0.2.0) (2024-01-24)
 
 

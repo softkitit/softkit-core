@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.2.2](https://github.com/softkitit/softkit-core/compare/test-utils-0.2.1...test-utils-0.2.2) (2024-01-26)
+
+
+### Bug Fixes
+
+* **test-utils:** fixed postgres type alignment temporary, need to get rid of postgres test containers library, it's not needed ([f3473df](https://github.com/softkitit/softkit-core/commit/f3473df548cc1e832fcdb88ce15da1055520e14b))
+
 ## [0.2.1](https://github.com/softkitit/softkit-core/compare/test-utils-0.2.0...test-utils-0.2.1) (2024-01-24)
 
 ## [0.2.0](https://github.com/softkitit/softkit-core/compare/test-utils-0.1.2...test-utils-0.2.0) (2023-11-21)

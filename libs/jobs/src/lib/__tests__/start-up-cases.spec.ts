@@ -10,11 +10,11 @@ import * as process from 'node:process';
 import { setupYamlBaseConfigModule } from '@softkit/config';
 import { RootConfig } from './app/config/root.config';
 import * as path from 'node:path';
-import { JobVersionService } from '../service/job-version.service';
 import {
   AbstractJobDefinitionService,
   AbstractJobVersionService,
   JobDefinitionService,
+  JobVersionService,
 } from '../service';
 import { Jobs } from './app/jobs/vo/jobs.enum';
 import { getQueueToken } from '@nestjs/bullmq';

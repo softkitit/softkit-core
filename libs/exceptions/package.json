@@ -1,6 +1,6 @@
 {
   "name": "@softkit/exceptions",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "type": "commonjs",
   "keywords": [
     "exceptions",
@@ -13,9 +13,9 @@
     "problem details"
   ],
   "peerDependencies": {
-    "@saas-buildkit/nestjs-i18n": "11.1.3",
-    "@nestjs/common": "^10.2.4",
-    "@nestjs/core": "^10.2.4",
-    "@nestjs/swagger": "^7.1.10"
+    "@saas-buildkit/nestjs-i18n": "^11.0.0",
+    "@nestjs/common": "^10.0.0",
+    "@nestjs/core": "^10.0.0",
+    "@nestjs/swagger": "^7.0.0"
   }
 }

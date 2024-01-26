@@ -1,4 +1,6 @@
 Softkit Core Libraries Changelog
+## [0.1.4](https://github.com/softkitit/softkit-core/compare/exceptions-0.1.3...exceptions-0.1.4) (2024-01-26)
+
 ## [0.1.3](https://github.com/softkitit/softkit-core/compare/exceptions-0.1.2...exceptions-0.1.3) (2023-12-15)
 
 

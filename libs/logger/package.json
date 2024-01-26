@@ -1,17 +1,21 @@
 {
   "name": "@softkit/logger",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "type": "commonjs",
   "keywords": [
     "log",
     "logger",
     "pino"
   ],
+  "dependencies": {
+    "pino-http": "8.6.1",
+    "pino-pretty": "10.3.1"
+  },
   "peerDependencies": {
     "nestjs-pino": "^3.4.0",
-    "class-validator": "^0.14.0",
-    "@nestjs/common": "^10.2.4",
-    "rxjs": "^7.8.1",
-    "nestjs-cls": "^3.5.1"
+    "class-validator": "*",
+    "@nestjs/common": "^10.2.0",
+    "rxjs": "^7.0.0",
+    "nestjs-cls": "^3.0.0"
   }
 }

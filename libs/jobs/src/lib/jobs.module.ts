@@ -14,12 +14,12 @@ import {
   AbstractJobExecutionService,
   JobExecutionService,
   AbstractJobVersionService,
+  JobVersionService,
 } from './service';
 import { JobDefinition, JobExecution, JobVersion } from './entity';
 import * as Repositories from './repository';
 import { BullModule } from '@nestjs/bullmq';
 import { RegisterQueueOptions } from '@nestjs/bullmq/dist/interfaces/register-queue-options.interface';
-import { JobVersionService } from './service/job-version.service';
 import { setupRedisLockModule, setupRedisModule } from '@softkit/redis';
 
 type JobsConfigOrPromise = JobsConfig | Promise<JobsConfig>;
@@ -142,9 +142,18 @@ export class JobsModule {
     return BullModule.forRootAsync({
       useFactory: (jobsConfig: JobsConfig) => {
         const { redisConfig, ...bullConfig } = jobsConfig;
+        const {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          commandTimeout: _,
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          maxRetriesPerRequest: __,
+          ...redisConfigWithoutTimeout
+        } = redisConfig.config[0];
         return {
           // we are picking up the first connection from the config, because bull do support only one connection
-          connection: redisConfig.config[0],
+          connection: {
+            ...redisConfigWithoutTimeout,
+          },
           ...bullConfig,
         };
       },
@@ -177,7 +186,7 @@ export class JobsModule {
                   Config queues: ${[
                     ...allQueuesConfigs,
                   ]}, provided list to a method: ${sanitizedQueueNames}`;
-            JobsModule.logger.log(message);
+            this.logger.log(message);
             throw new Error(message);
           }
 
@@ -205,11 +214,22 @@ export class JobsModule {
             throw new Error(message);
           }
 
+          const {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            commandTimeout: _,
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            enableOfflineQueue: __,
+            ...redisConnection
+          } = config.redisConfig.config[0];
+
           return {
             name: jobConfig.name,
-            defaultJobOptions: jobConfig.defaultJobOptions,
+            // defaultJobOptions: jobConfig.defaultJobOptions,
             // connection should be provided each time to prevent redis to hang up with one connection
-            connection: config.redisConfig.config[0],
+            connection: {
+              enableOfflineQueue: false,
+              ...redisConnection,
+            },
           } satisfies RegisterQueueOptions;
         },
         inject: [JOBS_CONFIG_TOKEN],

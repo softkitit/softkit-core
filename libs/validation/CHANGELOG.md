@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.3.6](https://github.com/softkitit/softkit-core/compare/validation-0.3.5...validation-0.3.6) (2024-01-26)
+
+
+### Bug Fixes
+
+* **validation:** added proper import for validator.js functions ([bd98317](https://github.com/softkitit/softkit-core/commit/bd98317a258e092bf8128afbef514c2c0edac83f))
+
 ## [0.3.5](https://github.com/softkitit/softkit-core/compare/validation-0.3.4...validation-0.3.5) (2024-01-24)
 
 

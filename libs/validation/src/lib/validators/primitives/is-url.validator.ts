@@ -1,6 +1,6 @@
 import { IValidatorDefinition } from '../dynamic';
 import { IS_URL, isURL, IsUrl, ValidationOptions } from 'class-validator';
-import ValidatorJS from 'validator';
+import * as ValidatorJS from 'validator';
 import { i18n, i18nString } from '../../utils';
 
 const MESSAGE = 'validation.URL';

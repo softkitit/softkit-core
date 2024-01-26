@@ -35,13 +35,19 @@ export function getExistingFilePaths(
     const missingFilesList = missingDetails.join(', ');
     // eslint-disable-next-line no-console
     console.warn(
-      `The following configuration files were not found in "${path.join(baseDir, folderName)}" and will be skipped ${missingFilesList} profile`,
+      `The following configuration files were not found in "${path.join(
+        baseDir,
+        folderName,
+      )}" and will be skipped ${missingFilesList} profile`,
     );
   }
 
   if (existingFilePaths.length === 0) {
     throw new Error(
-      `No configuration files found in "${path.join(baseDir, folderName)}". Please check your configuration.`,
+      `No configuration files found in "${path.join(
+        baseDir,
+        folderName,
+      )}". Please check your configuration.`,
     );
   }
 

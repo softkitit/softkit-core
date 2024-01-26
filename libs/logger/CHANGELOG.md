@@ -1,4 +1,13 @@
 Softkit Core Libraries Changelog
+## [0.1.2](https://github.com/softkitit/softkit-core/compare/logger-0.1.1...logger-0.1.2) (2024-01-26)
+
+
+### Bug Fixes
+
+* **logger:** replace ts-expect-error with ts-ignore for typedoc to properly generate docs ([8e51179](https://github.com/softkitit/softkit-core/commit/8e51179ce075273a9ab3f2bda9f0cc44b7e80c22))
+
+## [0.1.1](https://github.com/softkitit/softkit-core/compare/logger-0.1.0...logger-0.1.1) (2024-01-26)
+
 ## [0.1.0](https://github.com/softkitit/softkit-core/compare/logger-0.0.8...logger-0.1.0) (2024-01-24)
 
 

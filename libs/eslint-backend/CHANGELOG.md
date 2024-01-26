@@ -1,4 +1,6 @@
 Softkit Core Libraries Changelog
+## [0.1.1](https://github.com/softkitit/softkit-core/compare/eslint-backend-0.1.0...eslint-backend-0.1.1) (2024-01-26)
+
 ## [0.1.0](https://github.com/softkitit/softkit-core/compare/eslint-backend-0.0.8...eslint-backend-0.1.0) (2023-12-15)
 
 

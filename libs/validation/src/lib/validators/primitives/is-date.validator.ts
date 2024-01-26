@@ -5,8 +5,8 @@ import {
   isDateString,
   ValidationOptions,
 } from 'class-validator';
-import ValidatorJS from 'validator';
 import { i18n, i18nString } from '../../utils';
+import * as ValidatorJS from 'validator';
 
 const MESSAGE = 'validation.DATE';
 
