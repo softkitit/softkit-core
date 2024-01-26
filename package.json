@@ -59,7 +59,7 @@
     "@songkeys/nestjs-redis": "10.0.0",
     "@testcontainers/postgresql": "10.2.1",
     "@types/jest": "29.5.4",
-    "@types/node": "18.16.9",
+    "@types/node": "20.11.6",
     "@types/opossum": "8.1.1",
     "@types/passport-jwt": "3.0.9",
     "@types/passport-local": "1.0.35",
