@@ -18,14 +18,14 @@ export function WithLoggerContext() {
         ? async function (...args: unknown[]) {
             return storage.run(new Store(PinoLogger.root.child({})), async () =>
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              // @ts-expect-error
+              // @ts-ignore
               methodFunc.apply(this, args),
             );
           }
         : function (...args: unknown[]) {
             return storage.run(new Store(PinoLogger.root.child({})), () =>
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              // @ts-expect-error
+              // @ts-ignore
               methodFunc.apply(this, args),
             );
           };
