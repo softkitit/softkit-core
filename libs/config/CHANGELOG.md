@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.2.0](https://github.com/softkitit/softkit-core/compare/config-0.1.3...config-0.2.0) (2024-01-26)
+
+
+### Features
+
+* **config:** enhance setup config module functionality to skip non-existing config files ([af5e2f6](https://github.com/softkitit/softkit-core/commit/af5e2f6749f0ca6fb93e241944c6d178a3e51129))
+
 ## [0.1.3](https://github.com/softkitit/softkit-core/compare/config-0.1.2...config-0.1.3) (2024-01-26)
 
 ## [0.1.2](https://github.com/softkitit/softkit-core/compare/config-0.1.1...config-0.1.2) (2024-01-24)
