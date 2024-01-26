@@ -1,0 +1,53 @@
+---
+title: 'Getting Started'
+---
+
+# Getting Started
+
+---
+
+This library enhances the [`@softkit/typeorm`](/libraries/typeorm/getting-started) library by providing essential base services for your application. It also integrates seamlessly with the [`@softkit/exceptions`](/libraries/exceptions/getting-started) library for standardized exception handling.
+
+## Installation
+
+To get started, install the library using the following command:
+
+```bash
+yarn add @softkit/typeorm-service
+```
+
+## Quick Overview
+
+The TypeORM Service Library offers two core services:
+
+- [`BaseEntityService`](/api/typeorm-service/src/classes/BaseEntityService/): Facilitates CRUD operations and can be extended for custom business logic.
+- [`BaseTenantEntityService`](/api/typeorm-service/src/classes/BaseTenantEntityService/): Similar to `BaseEntityService`, but tailored for multi-tenant applications.
+
+Both services support generic exclusion of auto-generated fields, enhancing type safety and minimizing development errors.
+
+## Key Features
+
+### Custom Types
+
+- Enhances error detection at the compilation level.
+- The `save` method requires all essential fields to manage an entity effectively.
+
+### Partial Update Method
+
+- Features a separate method for partial updates.
+- Utilizes deep partial type as input, allowing for selective updates.
+
+### Soft Remove Functionality
+
+- Provides `archive` and `unarchive` methods.
+- Marks entities as deleted by setting the `deletedAt` timestamp.
+
+### Transaction Support
+
+- All methods are adorned with the `@Transactional` decorator.
+- Default transaction propagation is set to REQUIRED.
+
+## Usage Examples
+
+- [BaseEntityService Implementation](/libraries/typeorm-service/base-tenant-entity-service/)
+- [BaseTenantEntityService Implementation](/libraries/typeorm-service/base-tenant-entity-service/)

@@ -1,0 +1,82 @@
+---
+title: Features
+---
+
+# Features
+
+---
+
+The `string-utils` library offers a set of functions to handle common string operations.
+
+## toCapitalizedWords
+
+Converts a string to capitalized words. Ideal for formatting headers or titles.
+
+```javascript
+export function toCapitalizedWords(name?: string): string {
+  if (name === undefined) {
+    return '';
+  }
+
+  const words = name.toLowerCase().match(/[A-Za-z][a-z]*/g) || [];
+  return words.map(capitalize).join(' ');
+}
+
+// Usage example
+const title = toCapitalizedWords('hello world'); // 'Hello World'
+```
+
+## capitalize
+
+Capitalizes the first letter of a word. Useful for names or starting sentences.
+
+```javascript
+export function capitalize(word: string) {
+  return word.charAt(0).toUpperCase() + word.slice(1);
+}
+
+// Usage example
+const name = capitalize('john'); // 'John'
+```
+
+## decodeBase64StringObjectFromUrl
+
+Decodes a base64 string to an object. This can be handy for reading encoded data passed in URLs.
+
+```javascript
+export const decodeBase64StringObjectFromUrl = (
+  str?: string,
+): Record<string, unknown> => {
+  if (str === undefined) {
+    return {};
+  }
+
+  try {
+    return JSON.parse(
+      Buffer.from(decodeURIComponent(str), 'base64').toString('utf8'),
+    );
+  } catch {
+    return {};
+  }
+};
+
+// Usage example
+const decodedObj = decodeBase64StringObjectFromUrl('eyJleGFtcGxlIjoiZGF0YSJ9'); // { example: 'data' }
+```
+
+## encodeObjectToBase64ForUrl
+
+Encodes an object to a base64 string for URL usage. Makes object transfer via URL parameters seamless.
+
+```javascript
+export const encodeObjectToBase64ForUrl = (
+  obj: Record<string, unknown>,
+): string => {
+  return encodeURIComponent(
+    Buffer.from(JSON.stringify(obj), 'utf8').toString('base64'),
+  );
+};
+
+// Usage example
+const encodedStr = encodeObjectToBase64ForUrl({ example: 'data' }); // 'eyJleGFtcGxlIjoiZGF0YSJ9'
+```

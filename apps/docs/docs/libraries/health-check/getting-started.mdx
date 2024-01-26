@@ -1,0 +1,74 @@
+---
+title: 'Getting Started'
+---
+
+# Getting Started
+
+---
+
+This library provides a health check endpoint for applications, suitable for Kubernetes and other environments requiring health checks.
+
+:::note
+This module is tight to Softkit ecosystem and there is no point to use it outside.
+:::
+
+## Installation
+
+```bash
+yarn add @softkit/health-check
+```
+
+## Basic Usage in Your Main App Module
+
+- Import `HealthCheckModule` and register it in the imports array.
+- Add `HealthConfig` to your `RootConfig` class.
+
+```typescript
+import { Module } from '@nestjs/common';
+import { HealthCheckModule } from '@softkit/health-check';
+
+@Module({
+  imports: [
+    HealthCheckModule,
+    // other imports
+  ],
+})
+export class AppModule {}
+
+import { HealthConfig } from '@softkit/health-check';
+
+export default class RootConfig implements PlatformClientConfig {
+  @Type(() => HealthConfig)
+  @ValidateNested()
+  public readonly health!: HealthConfig;
+}
+```
+
+- Include health configurations in your `.env.yaml` file:
+
+```yaml
+health:
+  disk:
+    enabled: true
+  db:
+    enabled: true
+```
+
+With these steps, the health endpoint `/health` will be activated in your application.
+
+## Configuration Options and Defaults
+
+Customize the health check configuration to suit your application needs:
+
+- **Disk Health Check**:
+
+  - `path`: The path to check the disk space. Default is `'/'`.
+  - `thresholdPercent`: The minimum disk space threshold as a percentage. Default is `0.8` (80%).
+  - `enabled`: Determines if the disk space check is enabled. Default is `true`.
+
+- **Database Health Check**:
+  - `enabled`: Determines if the database health check is enabled. Default is `true`.
+
+## Behind the Scenes
+
+The library leverages [nestjs/terminus](https://docs.nestjs.com/recipes/terminus) for implementing health checks.

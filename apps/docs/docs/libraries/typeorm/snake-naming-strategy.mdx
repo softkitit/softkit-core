@@ -1,0 +1,49 @@
+---
+title: 'Snake Naming Strategy'
+---
+
+# Snake Naming Strategy
+
+---
+
+## Employing SnakeNamingStrategy for Database Field Naming
+
+In many NestJS applications, especially those interfacing with SQL databases, adopting a consistent and SQL-friendly naming convention for database fields is crucial. The `SnakeNamingStrategy`, a common approach in the NestJS ecosystem, offers a seamless way to handle field naming by converting typical JavaScript camelCase field names into snake_case. This strategy aligns well with the naming conventions often used in SQL databases.
+
+### Advantages of SnakeNamingStrategy
+
+- **SQL Compatibility**: Snake case (`field_name`) is widely used in SQL databases, making `SnakeNamingStrategy` a natural fit for developers.
+- **Consistency**: Provides a uniform naming convention across the database, improving readability and maintainability.
+- **Avoiding Ambiguities**: By not relying on asterisks (\*) for field selection in SQL queries, it reduces the risk of selecting unintended fields, especially in complex queries.
+
+### Implementing SnakeNamingStrategy
+
+When setting up your NestJS project, you can configure TypeORM to use `SnakeNamingStrategy` for all database fields. This ensures that all your entity field names are automatically converted to snake case when interacting with the database.
+
+Here’s a simple illustration:
+
+```javascript
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+
+// In your TypeORM configuration
+@Allow()
+namingStrategy: NamingStrategyInterface = new SnakeNamingStrategy();
+```
+
+In this setup, fields like `tenantId` or `createdAt` in your entities would be represented as `tenant_id` and `created_at` in your database tables, respectively.
+
+### Practical Example
+
+Consider a scenario where you have a `Tenant` entity with a `tenantId` field. Using `SnakeNamingStrategy`, you can confidently write SQL queries like:
+
+```sql
+SELECT tenant_id FROM tenants;
+```
+
+This approach is more explicit and clear compared to using `SELECT *`, ensuring that only the required fields are fetched and reducing the likelihood of errors in data retrieval.
+
+### Conclusion
+
+The `SnakeNamingStrategy` offers a streamlined and effective solution for field naming in SQL databases, enhancing the synergy between your NestJS application and the database. For a cohesive development experience, consider adopting this strategy in your projects.
+
+For more information and advanced usage, refer to the [`typeorm-naming-strategies`](https://www.npmjs.com/package/typeorm-naming-strategies) documentation.

@@ -1,0 +1,40 @@
+---
+title: 'Config File Structure'
+---
+
+# Config File Structure
+
+---
+
+## Config File Structure
+
+The `./assets` directory is where your config files are stored. A typical structure would look like this:
+
+```
+.
+├── assets
+│   ├── .env-test.yaml
+│   └── .env.yaml
+├── config
+│   └── root.config.ts
+└── your-app.module.ts
+```
+
+## Example Config File Structure
+
+Here's `.env.yaml` structure:
+
+```yaml
+isAuthEnabled: ${AUTH_ENABLED:-true}
+database:
+  host: ${DATABASE_HOST:-127.0.0.1}
+  port: ${DATABASE_PORT:-3000}
+  table:
+    name: ${TABLE_NAME:-users}
+
+databaseAlias:
+  host: ${database.host}
+  port: ${database.port}
+  table:
+    name: ${database.table.name}
+```

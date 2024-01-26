@@ -1,0 +1,71 @@
+---
+title: 'Getting Started'
+---
+
+# Getting Started
+
+---
+
+This library has some useful utilities for typeorm, entities, repositories, useful subscribers, interceptors.
+
+It can be useful outside Softkit ecosystem
+
+## Installation
+
+```bash
+yarn add @softkit/typeorm
+```
+
+## Basic Usage
+
+To integrate [`@softkit/typeorm`](https://www.npmjs.com/package/@softkit/typeorm) library into your application:
+
+### Update Root Configuration
+
+```typescript
+import { DbConfig } from '@softkit/typeorm';
+
+export class RootConfig {
+  @Type(() => DbConfig)
+  @ValidateNested()
+  public readonly db!: DbConfig;
+}
+```
+
+### Default Configuration
+
+```typescript
+import { setupTypeormModule } from '@softkit/typeorm';
+import * as Entities from './database/entities';
+
+@Module({
+  imports: [
+    TypeOrmModule.forFeature(Object.values(Entities)),
+    setupTypeormModule(),
+  ],
+})
+class YourAppModule {}
+```
+
+### Environment Configuration
+
+Define database configurations in your `.env.yaml` file:
+
+```yaml
+db:
+  type: 'postgres'
+  host: 'localhost'
+  port: 5432
+  username: postgres
+  password: postgres
+  database: local-db
+  synchronize: false
+  dropSchema: false
+  keepConnectionAlive: true
+  logging: false
+  ssl: false
+```
+
+## Next Steps
+
+- Explore core library features and practical implementations in the [Core Features](/libraries/typeorm/core-features) section.
