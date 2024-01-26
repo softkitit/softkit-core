@@ -1,4 +1,6 @@
 Softkit Core Libraries Changelog
+## [0.1.2](https://github.com/softkitit/softkit-core/compare/typeorm-service-0.1.1...typeorm-service-0.1.2) (2024-01-26)
+
 ## [0.1.1](https://github.com/softkitit/softkit-core/compare/typeorm-service-0.1.0...typeorm-service-0.1.1) (2024-01-26)
 
 ## [0.1.0](https://github.com/softkitit/softkit-core/compare/typeorm-service-0.0.13...typeorm-service-0.1.0) (2024-01-24)
