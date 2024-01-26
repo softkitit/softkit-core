@@ -1,5 +1,4 @@
 import { ClsModule, ClsModuleOptions } from 'nestjs-cls';
-import { FastifyRequest } from 'fastify';
 
 export function setupClsModule(clsOptions?: ClsModuleOptions) {
   return ClsModule.forRoot({
@@ -7,7 +6,7 @@ export function setupClsModule(clsOptions?: ClsModuleOptions) {
     middleware: {
       mount: true,
       generateId: true,
-      idGenerator: (req: FastifyRequest) => req.id.toString(),
+      idGenerator: (req) => req.id.toString(),
     },
     ...clsOptions,
   });
