@@ -6,6 +6,10 @@
     "test",
     "utils"
   ],
+  "dependencies": {
+    "testcontainers": "10.2.1",
+    "@testcontainers/postgresql": "10.2.1"
+  },
   "peerDependencies": {
     "testcontainers": "^10.0.0",
     "@jest/globals": "^29.6.0",

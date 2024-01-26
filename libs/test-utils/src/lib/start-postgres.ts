@@ -7,6 +7,7 @@ import { StartDbOptions, StartedDb } from './vo';
 import { DEFAULT_START_POSTGRES_OPTIONS } from './vo/start-postgres-default-options';
 import { setTestEnvironmentForTypeorm } from './env/set-typeorm-test-env';
 import { PostgresConnectionCredentialsOptions } from 'typeorm/driver/postgres/PostgresConnectionCredentialsOptions';
+import { AbstractStartedContainer } from 'testcontainers';
 
 export async function startPostgres(
   opts?: Partial<StartDbOptions>,
@@ -48,7 +49,7 @@ export async function startPostgres(
   await setTestEnvironmentForTypeorm(typeormOptions);
 
   return {
-    container: pg,
+    container: pg as unknown as AbstractStartedContainer,
     typeormOptions,
     TypeOrmConfigService: buildTypeormConfigService(typeormOptions),
   };
