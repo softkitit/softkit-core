@@ -142,9 +142,14 @@ export class JobsModule {
     return BullModule.forRootAsync({
       useFactory: (jobsConfig: JobsConfig) => {
         const { redisConfig, ...bullConfig } = jobsConfig;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { commandTimeout: _, ...redisConfigWithoutTimeout } =
+          redisConfig.config[0];
         return {
           // we are picking up the first connection from the config, because bull do support only one connection
-          connection: redisConfig.config[0],
+          connection: {
+            ...redisConfigWithoutTimeout,
+          },
           ...bullConfig,
         };
       },
@@ -177,7 +182,7 @@ export class JobsModule {
                   Config queues: ${[
                     ...allQueuesConfigs,
                   ]}, provided list to a method: ${sanitizedQueueNames}`;
-            JobsModule.logger.log(message);
+            this.logger.log(message);
             throw new Error(message);
           }
 
@@ -205,11 +210,15 @@ export class JobsModule {
             throw new Error(message);
           }
 
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const { commandTimeout: _, ...redisConnection } =
+            config.redisConfig.config[0];
+
           return {
             name: jobConfig.name,
-            defaultJobOptions: jobConfig.defaultJobOptions,
+            // defaultJobOptions: jobConfig.defaultJobOptions,
             // connection should be provided each time to prevent redis to hang up with one connection
-            connection: config.redisConfig.config[0],
+            connection: redisConnection,
           } satisfies RegisterQueueOptions;
         },
         inject: [JOBS_CONFIG_TOKEN],

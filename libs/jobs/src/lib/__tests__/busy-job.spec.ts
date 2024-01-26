@@ -17,6 +17,7 @@ import { setupYamlBaseConfigModule } from '@softkit/config';
 import { RootConfig } from './app/config/root.config';
 import path from 'node:path';
 import { AbstractSchedulingJobService } from '../service';
+import { BusyScheduledJob } from './app/jobs/busy-scheduled.job';
 
 describe('busy job e2e tests', () => {
   let startedRedis: StartedRedis;
@@ -54,7 +55,6 @@ describe('busy job e2e tests', () => {
     app = module.createNestApplication(new FastifyAdapter());
     await app.listen(0);
 
-    fakeJob = app.get(BusyJob);
     schedulingService = app.get(AbstractSchedulingJobService);
 
     jobId = generateRandomId();
@@ -93,4 +93,26 @@ describe('busy job e2e tests', () => {
     expect(fakeJob.jobStats.started).toBe(2);
     expect(fakeJob.jobStats.finished).toBe(2);
   });
+
+  it('should schedule a job and run each 10 seconds', async () => {
+    const busyScheduledJob = app.get(BusyScheduledJob);
+
+    await schedulingService.scheduleJob(
+      Jobs.BUSY_SCHEDULED_JOB,
+      Jobs.BUSY_SCHEDULED_JOB,
+      jobId,
+      { executeForMillis: 20, jobVersion: 1 },
+      {
+        repeat: {
+          // 1st january of every year
+          pattern: '*/10 * * * * *',
+        },
+      },
+    );
+
+    await wait(13_000);
+
+    expect(busyScheduledJob.jobStats.started).toBe(1);
+    expect(busyScheduledJob.jobStats.finished).toBe(1);
+  }, 30_000);
 });

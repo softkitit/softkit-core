@@ -24,15 +24,18 @@ export abstract class BaseJobProcessor<JobDataType extends VersionedJobData>
   protected lockDuration = 20_000;
 
   public onApplicationBootstrap() {
-    this.worker.on('error', (error: Error) => {
-      this.logger.error(
-        {
-          jobStatus: 'error',
-        },
-        `Queue: ${this.queue.name} worker error: ${error.message}, %s`,
-        error.stack,
-      );
-    });
+    this.worker.on(
+      'error',
+      /* istanbul ignore next */ (error: Error) => {
+        this.logger.error(
+          {
+            jobStatus: 'error',
+          },
+          `Queue: ${this.queue.name} worker error: ${error.message}, %s`,
+          error.stack,
+        );
+      },
+    );
 
     this.worker.on(
       'failed',
@@ -187,10 +190,10 @@ export abstract class BaseJobProcessor<JobDataType extends VersionedJobData>
       const activeJobs = await this.retrieveActiveJobs(i);
 
       for (const activeJob of activeJobs) {
-        const jobOptions = activeJob.opts;
+        const jobOptions = activeJob?.opts;
         if (
-          jobOptions.repeat?.jobId === currentJobId ||
-          jobOptions.jobId === currentJobId
+          jobOptions?.repeat?.jobId === currentJobId ||
+          jobOptions?.jobId === currentJobId
         ) {
           activeJobsCount += activeJobsCount + 1;
 
