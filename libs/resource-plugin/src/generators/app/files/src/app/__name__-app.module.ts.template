@@ -15,9 +15,9 @@ import <%= pascalCase(name) -%>RootConfig from './config/<%= name -%>-root.confi
 import { APP_GUARD } from '@nestjs/core';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import {
+  AccessGuard,
   JwtAuthGuard,
   JwtStrategy,
-  PermissionsGuard,
   TokenService,
 } from '@softkit/auth';
 <% } %>
@@ -41,14 +41,14 @@ import { HealthCheckModule } from '@softkit/healthcheck';
     setupI18NModule(__dirname),
 <% } %>
     setupLoggerModule(),
-    setupYamlBaseConfigModule(path.join(__dirname, './assets'), <%= pascalCase(name) -%>RootConfig),
+    setupYamlBaseConfigModule(__dirname, <%= pascalCase(name) -%>RootConfig),
     setupClsModule(),
 <% if (health) { %>
     HealthCheckModule,
 <% } %>
 <% if (db) { %>
     TypeOrmModule.forFeature(Object.values(Entities)),
-    setupTypeormModule(__dirname),
+    setupTypeormModule(),
 <% } %>
   ],
   controllers: Object.values(Controllers),
@@ -60,14 +60,14 @@ import { HealthCheckModule } from '@softkit/healthcheck';
     JwtStrategy,
     JwtService,
     TokenService,
-    {
+     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
-    },
-    {
+     },
+     {
       provide: APP_GUARD,
-      useClass: PermissionsGuard,
-    },
+      useClass: AccessGuard,
+     },
 <% } %>
   ],
 })

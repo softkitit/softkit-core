@@ -1,9 +1,7 @@
 import { Module, Provider } from '@nestjs/common';
 import { <%= constantCase(name) -%>_CLIENT_TOKEN as CLIENT_TOKEN } from './constants';
-import {
-  createAxiosInstance,
-  UserRequestClsStore,
-} from '@softkit/server-http-client';
+import { createAxiosInstance } from '@softkit/server-http-client';
+import { IAccessTokenPayload, UserClsStore } from '@softkit/auth';
 import { ClsService } from 'nestjs-cls';
 import * as AllApis from './generated/api';
 import { AxiosInstance } from 'axios';
@@ -20,7 +18,7 @@ const ApiClasses = Object.values(AllApis).filter((a) => {
     {
       provide: CLIENT_TOKEN,
       useFactory: (
-        clsService: ClsService<UserRequestClsStore>,
+        clsService: ClsService<UserClsStore<IAccessTokenPayload>>,
         config: PlatformClientConfig,
       ) => {
         return createAxiosInstance(clsService, config.platformClient);
