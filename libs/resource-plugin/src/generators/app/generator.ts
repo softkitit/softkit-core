@@ -22,6 +22,9 @@ function updateProjectJson(
 ) {
   updateJson(tree, joinPathFragments(appRoot, 'project.json'), (prjJson) => {
     // if scripts is undefined, set it to an empty object
+    prjJson.targets.build.options.main = `apps/${options.name}/src/app/main.ts`;
+
+    prjJson.targets.build.options.assets[0] = `apps/${options.name}/src/app/assets`;
     prjJson.targets.build.options.assets = [
       ...prjJson.targets.build.options.assets,
       {

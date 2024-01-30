@@ -13,7 +13,7 @@ yarn add <%= scope -%><%= name -%>-client
 
 ## Usage
 
-### Add to your .env.yml file
+### Add to your .env.yaml file
 
 ```yaml
 <%= camelCase(name) -%>Client:

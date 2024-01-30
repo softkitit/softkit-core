@@ -39,6 +39,13 @@ export async function httpClientGenerator(
     constantCase,
   });
 
+  tree.delete(
+    path.join(
+      projectRoot,
+      `src/lib/${options.directory}-${options.name}.module.ts`,
+    ),
+  );
+
   if (options.lintCommandName) {
     return /* istanbul ignore next */ () =>
       runLint(options.name, options.lintCommandName);
