@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.6.3](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.2...resource-plugin-0.6.3) (2024-01-30)
+
+
+### Bug Fixes
+
+* **resource-plugin:** update http-client and app generators to make it work properly ([6f1ab9f](https://github.com/softkitit/softkit-core/commit/6f1ab9fe7497f177f4ff72e143a1670cb7045c7f))
+
 ## [0.6.2](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.1...resource-plugin-0.6.2) (2024-01-26)
 
 ## [0.6.1](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.0...resource-plugin-0.6.1) (2023-12-15)
