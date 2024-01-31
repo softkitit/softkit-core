@@ -14,7 +14,7 @@ import {
   OverrideDefaultNotFoundFilter,
 } from '../';
 import { AppModule } from './app/app.module';
-import { I18nValidationExceptionFilter } from '@saas-buildkit/nestjs-i18n';
+import { I18nValidationExceptionFilter } from '@softkit/i18n';
 import { ErrorCodes } from './app/vo/error-codes.enum';
 
 describe('http exception filter', () => {

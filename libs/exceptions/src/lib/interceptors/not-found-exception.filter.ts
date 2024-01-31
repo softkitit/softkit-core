@@ -6,7 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
-import { I18nContext } from '@saas-buildkit/nestjs-i18n';
+import { I18nContext } from '@softkit/i18n';
 import { ErrorResponse } from '../vo/error-response.dto';
 import { I18nTranslations } from '../generated/i18n.generated';
 

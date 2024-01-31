@@ -1,4 +1,4 @@
-import { I18nContext, I18nService } from '@saas-buildkit/nestjs-i18n';
+import { I18nContext, I18nService } from '@softkit/i18n';
 import { ErrorResponse } from '../vo/error-response.dto';
 
 export class AbstractHttpException<ADDITIONAL_DATA extends object = object> {

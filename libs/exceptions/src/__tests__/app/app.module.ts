@@ -1,5 +1,5 @@
 import { FailingController } from './failing.controller';
-import { I18nJsonLoader, I18nModule } from '@saas-buildkit/nestjs-i18n';
+import { I18nJsonLoader, I18nModule } from '@softkit/i18n';
 import * as path from 'node:path';
 import { Module } from '@nestjs/common';
 
