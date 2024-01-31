@@ -12,7 +12,6 @@ import { INestApplication } from '@nestjs/common';
 import { HeroService } from './app/interfaces/hero.interface';
 import { Metadata } from '@grpc/grpc-js';
 
-// todo i18n
 describe.skip('i18n module e2e rpc', () => {
   let app: INestApplication;
   let client: ClientGrpc;

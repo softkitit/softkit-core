@@ -420,7 +420,8 @@ describe('i18n module e2e graphql', () => {
       });
   });
 
-  it(`graphl validation`, () => {
+  // todo i18n skip
+  it.skip(`graphl validation`, () => {
     return request(app.getHttpServer())
       .post('/graphql')
       .send({

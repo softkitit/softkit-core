@@ -283,10 +283,9 @@ export class I18nModule implements OnModuleInit, NestModule {
   configure(consumer: MiddlewareConsumer) {
     if (this.i18nOptions.disableMiddleware) return;
 
+    const nestMiddleware = isNestMiddleware(consumer);
     consumer
       .apply(I18nMiddleware)
-      .forRoutes(
-        isNestMiddleware(consumer) && usingFastify(consumer) ? '(.*)' : '*',
-      );
+      .forRoutes(nestMiddleware && usingFastify(consumer) ? '(.*)' : '*');
   }
 }
