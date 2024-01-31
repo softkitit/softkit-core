@@ -16,15 +16,15 @@ export const convertObjectToTypeDefinition = async (
             );
           }
           if (Array.isArray(object[key])) {
+            const elements = Array.from({ length: object[key].length }).map(
+              () =>
+                ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+            );
             return ts.factory.createPropertySignature(
               undefined,
               ts.factory.createStringLiteral(key),
               undefined,
-              ts.factory.createTupleTypeNode(
-                Array.from({ length: object[key].length }).fill(
-                  ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
-                ),
-              ),
+              ts.factory.createTupleTypeNode(elements),
             );
           }
           return ts.factory.createPropertySignature(

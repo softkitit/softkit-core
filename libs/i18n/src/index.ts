@@ -1,7 +1,6 @@
 export * from './lib/config/i18';
 export * from './lib/setup-i18n-module';
 export * from './lib/utils';
-export * from './lib/utils/default-response-body-formatter';
 /* istanbul ignore file */
 export {
   I18N_LANGUAGES,
