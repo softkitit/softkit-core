@@ -19,7 +19,7 @@ export class CookieResolver implements I18nResolver {
     switch (context.getType() as string) {
       case 'http': {
         req = context.switchToHttp().getRequest();
-        req = req.raw ? req.raw : req;
+        req = req.raw ?? req;
         break;
       }
       case 'graphql': {

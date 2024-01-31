@@ -27,7 +27,9 @@ describe('config file', () => {
   afterEach(() => {
     try {
       fs.unlinkSync(typesOutputPath);
-    } catch {}
+    } catch {
+      console.error(`File not found: ${typesOutputPath}`);
+    }
 
     jest.clearAllMocks();
   });
@@ -58,7 +60,9 @@ describe('config file', () => {
   it('should use nearest package.json file', async () => {
     try {
       fs.unlinkSync(`/tmp/i18n-generated.ts`);
-    } catch {}
+    } catch {
+      console.error(`File not found: /tmp/i18n-generated.ts`);
+    }
 
     const mockCwd = jest.spyOn(process, 'cwd').mockImplementation(() => {
       return __dirname;

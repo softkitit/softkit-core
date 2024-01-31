@@ -31,16 +31,18 @@ import { TestInterceptor } from '../interceptors/test.interceptor';
 @Controller('hello')
 @UseFilters(new TestExceptionFilter())
 export class HelloController {
+  private static readonly TEST_HELLO_KEY = 'test.HELLO';
+
   constructor(private i18n: I18nService<I18nTranslations>) {}
 
   @Get()
   hello(@I18nLang() lang: string): any {
-    return this.i18n.translate('test.HELLO', { lang });
+    return this.i18n.translate(HelloController.TEST_HELLO_KEY, { lang });
   }
 
   @Get('/typed')
   helloTyped(@I18nLang() lang: string): string {
-    return this.i18n.translate('test.HELLO', { lang });
+    return this.i18n.translate(HelloController.TEST_HELLO_KEY, { lang });
   }
 
   @Get('/index')
@@ -59,58 +61,68 @@ export class HelloController {
 
   @Get('/short')
   helloShort(@I18nLang() lang: string): any {
-    return this.i18n.t('test.HELLO', { lang });
+    return this.i18n.t(HelloController.TEST_HELLO_KEY, { lang });
   }
 
   @Get('/short/typed')
   helloShortTyped(@I18nLang() lang: string): string {
-    return this.i18n.t('test.HELLO', { lang });
+    return this.i18n.t(HelloController.TEST_HELLO_KEY, { lang });
   }
 
   @Get('/context')
   helloContext(@I18n() i18n: I18nContext<I18nTranslations>): any {
-    return i18n.translate('test.HELLO');
+    return i18n.translate(HelloController.TEST_HELLO_KEY);
   }
 
   @Get('/context/typed')
   helloContextTyped(@I18n() i18n: I18nContext<I18nTranslations>): string {
-    return i18n.translate('test.HELLO');
+    return i18n.translate(HelloController.TEST_HELLO_KEY);
   }
 
   @Get('/short/context')
   helloShortContext(@I18n() i18n: I18nContext<I18nTranslations>): any {
-    return i18n.t('test.HELLO');
+    return i18n.t(HelloController.TEST_HELLO_KEY);
   }
 
   @Get('/short/context/typed')
   helloShortContextTyped(@I18n() i18n: I18nContext<I18nTranslations>): string {
-    return i18n.t('test.HELLO');
+    return i18n.t(HelloController.TEST_HELLO_KEY);
   }
 
   @Get('/request-scope')
   helloRequestScope(): any {
-    return I18nContext.current<I18nTranslations>().translate('test.HELLO');
+    return I18nContext.current<I18nTranslations>().translate(
+      HelloController.TEST_HELLO_KEY,
+    );
   }
 
   @Get('/request-scope/additional-interceptor')
   @UseInterceptors(TestInterceptor)
   helloRequestScopeAdditionalInterceptor(): any {
-    return I18nContext.current<I18nTranslations>().translate('test.HELLO');
+    return I18nContext.current<I18nTranslations>().translate(
+      HelloController.TEST_HELLO_KEY,
+    );
   }
 
   @Get('/request-scope/typed')
   helloRequestScopeTyped(): string {
-    return I18nContext.current<I18nTranslations>().translate('test.HELLO');
+    return I18nContext.current<I18nTranslations>().translate(
+      HelloController.TEST_HELLO_KEY,
+    );
   }
 
   @Get('/short/request-scope')
   helloShortRequestScope(): any {
-    return I18nContext.current<I18nTranslations>().t('test.HELLO');
+    return I18nContext.current<I18nTranslations>().t(
+      HelloController.TEST_HELLO_KEY,
+    );
   }
 
   @Get('/short/request-scope/typed')
   helloShortRequestScopeTyped(): string {
-    return I18nContext.current<I18nTranslations>().t('test.HELLO');
+    return I18nContext.current<I18nTranslations>().t(
+      HelloController.TEST_HELLO_KEY,
+    );
   }
 
   @Get('/object')
@@ -170,22 +182,25 @@ export class HelloController {
     throw new TestException();
   }
 
+  private static readonly THIS_ACTION_ADDS_NEW_USER =
+    'This action adds a new user';
+
   @Post('/validation')
   @UseFilters(new I18nValidationExceptionFilter())
-  validation(@Body() createUserDto: CreateUserDto): any {
-    return 'This action adds a new user';
+  validation(@Body() _: CreateUserDto): any {
+    return HelloController.THIS_ACTION_ADDS_NEW_USER;
   }
 
   @Post('/validation-without-details')
   @UseFilters(new I18nValidationExceptionFilter({ detailedErrors: false }))
-  validationWithoutDetails(@Body() createUserDto: CreateUserDto): any {
-    return 'This action adds a new user';
+  validationWithoutDetails(@Body() _: CreateUserDto): any {
+    return HelloController.THIS_ACTION_ADDS_NEW_USER;
   }
 
   @Post('/validation-with-custom-http-code')
   @UseFilters(new I18nValidationExceptionFilter({ errorHttpStatusCode: 422 }))
-  validationWithCustomHttpCode(@Body() createUserDto: CreateUserDto): any {
-    return 'This action adds a new user';
+  validationWithCustomHttpCode(@Body() _: CreateUserDto): any {
+    return HelloController.THIS_ACTION_ADDS_NEW_USER;
   }
 
   @Post('/validation-custom-formatter')
@@ -194,8 +209,8 @@ export class HelloController {
       errorFormatter: exampleErrorFormatter,
     }),
   )
-  validationCustomFormatter(@Body() createUserDto: CreateUserDto): any {
-    return 'This action adds a new user';
+  validationCustomFormatter(@Body() _: CreateUserDto): any {
+    return HelloController.THIS_ACTION_ADDS_NEW_USER;
   }
 
   @Post('/validation-custom-response-body-formatter')
@@ -205,8 +220,8 @@ export class HelloController {
       errorFormatter: exampleErrorFormatter,
     }),
   )
-  validationResponseBodyFormatter(@Body() createUserDto: CreateUserDto): any {
-    return 'This action adds a new user';
+  validationResponseBodyFormatter(@Body() _: CreateUserDto): any {
+    return HelloController.THIS_ACTION_ADDS_NEW_USER;
   }
 
   @Post('/custom-validation')

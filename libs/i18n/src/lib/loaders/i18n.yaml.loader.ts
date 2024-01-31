@@ -12,7 +12,7 @@ export class I18nYamlLoader extends I18nAbstractFileLoader {
     };
   }
 
-  formatData(data: any, sourceFileName: string) {
+  formatData(data: any) {
     try {
       return yaml.load(data, { json: true });
     } catch (error) {

@@ -79,7 +79,7 @@ export abstract class I18nAbstractFileLoader extends I18nLoader<I18nAbstractFile
 
       for (const property of Object.keys(data)) {
         for (const lang of global ? languages : [key]) {
-          translations[lang] = translations[lang] ? translations[lang] : {};
+          translations[lang] = translations[lang] ?? {};
 
           if (global) {
             translations[lang][property] = data[property];
@@ -105,9 +105,7 @@ export abstract class I18nAbstractFileLoader extends I18nLoader<I18nAbstractFile
     value: string,
   ) {
     if (prefix.length > 0) {
-      translations[prefix[0]] = translations[prefix[0]]
-        ? translations[prefix[0]]
-        : {};
+      translations[prefix[0]] = translations[prefix[0]] ?? {};
       this.assignPrefixedTranslation(
         translations[prefix[0]],
         prefix.slice(1),

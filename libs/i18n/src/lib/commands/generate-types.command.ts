@@ -124,7 +124,7 @@ export class GenerateTypesCommand implements yargs.CommandModule {
       const p = loader?.options?.path;
 
       loaders.push({
-        path: p ? p : sanitizePath(p),
+        path: p ?? sanitizePath(p),
         loader: loader,
       });
     }
@@ -269,6 +269,7 @@ function handleFileChangeEvents(
     console.log(chalk.blue(`Change detected`));
     console.log(
       chalk.green(
+        // eslint-disable-next-line sonarjs/no-nested-template-literals
         `${events.map((e, idx) => `\t${e} - ${paths[idx]}`).join('\n')}`,
       ),
     );
@@ -339,7 +340,10 @@ async function generateAndSaveTypes(
   let currentFileContent = null;
   try {
     currentFileContent = fs.readFileSync(args.typesOutputPath, 'utf8');
-  } catch {}
+  } catch {
+    //   expected empty line
+    // eslint-disable-next-line no-empty
+  }
 
   if (currentFileContent == outputFile) {
     console.log(`

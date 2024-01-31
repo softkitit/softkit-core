@@ -3,41 +3,38 @@ import ts from 'typescript';
 export const convertObjectToTypeDefinition = async (
   object: any,
 ): Promise<ts.TypeElement[]> => {
-  switch (typeof object) {
-    case 'object': {
-      return Promise.all(
-        Object.keys(object).map(async (key) => {
-          if (typeof object[key] === 'string') {
-            return ts.factory.createPropertySignature(
-              undefined,
-              ts.factory.createStringLiteral(key),
-              undefined,
-              ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
-            );
-          }
-          if (Array.isArray(object[key])) {
-            const elements = Array.from({ length: object[key].length }).map(
-              () =>
-                ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
-            );
-            return ts.factory.createPropertySignature(
-              undefined,
-              ts.factory.createStringLiteral(key),
-              undefined,
-              ts.factory.createTupleTypeNode(elements),
-            );
-          }
+  if (typeof object === 'object') {
+    return Promise.all(
+      Object.keys(object).map(async (key) => {
+        if (typeof object[key] === 'string') {
           return ts.factory.createPropertySignature(
             undefined,
             ts.factory.createStringLiteral(key),
             undefined,
-            ts.factory.createTypeLiteralNode(
-              await convertObjectToTypeDefinition(object[key]),
-            ),
+            ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
           );
-        }),
-      );
-    }
+        }
+        if (Array.isArray(object[key])) {
+          const elements = Array.from({ length: object[key].length }).map(() =>
+            ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+          );
+          return ts.factory.createPropertySignature(
+            undefined,
+            ts.factory.createStringLiteral(key),
+            undefined,
+            ts.factory.createTupleTypeNode(elements),
+          );
+        }
+        return ts.factory.createPropertySignature(
+          undefined,
+          ts.factory.createStringLiteral(key),
+          undefined,
+          ts.factory.createTypeLiteralNode(
+            await convertObjectToTypeDefinition(object[key]),
+          ),
+        );
+      }),
+    );
   }
 
   return [];

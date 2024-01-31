@@ -81,7 +81,7 @@ describe('i18n module without trailing slash in path', () => {
   ],
   exports: ['FALLBACK_LANGUAGE'],
 })
-export class TestModule {}
+class TestModule {}
 
 describe('i18n async module with fallbacks', () => {
   let i18nService: I18nService;

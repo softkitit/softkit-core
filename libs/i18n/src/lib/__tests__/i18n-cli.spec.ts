@@ -29,7 +29,9 @@ describe('generate types test', () => {
   afterEach(() => {
     try {
       fs.unlinkSync(typesOutputPath);
-    } catch {}
+    } catch {
+      console.error('failed to remove file');
+    }
 
     jest.clearAllMocks();
   });
@@ -162,7 +164,9 @@ describe('generate types with watch', () => {
   afterEach(async () => {
     try {
       fs.unlinkSync(typesOutputPath);
-    } catch {}
+    } catch {
+      console.error('failed to remove file');
+    }
     jest.clearAllMocks();
     await generateTypesCommand.stopWatcher();
   });

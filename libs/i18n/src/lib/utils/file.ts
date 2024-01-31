@@ -1,6 +1,7 @@
 import { lstat, readdir, stat } from 'node:fs/promises';
 import type { Dirent } from 'node:fs';
 import path from 'node:path';
+import { logger } from '../i18n.module';
 
 export const exists = async (path: string): Promise<boolean> => {
   return !!(await stat(path));
@@ -21,8 +22,10 @@ export async function filterAsync<T>(
   return array.filter((_, index) => filterMap[index]);
 }
 
-export const isDirectory = async (source: string) =>
-  (await lstat(source)).isDirectory();
+export const isDirectory = async (source: string) => {
+  const stats = await lstat(source);
+  return stats.isDirectory();
+};
 
 export const getDirectories = async (source: string) => {
   const dirs = await readdir(source);
@@ -61,7 +64,9 @@ export const getFiles = async (
           )),
         );
       }
-    } catch {}
+    } catch {
+      logger.warn(`Could not load and read file ${JSON.stringify(f)}`);
+    }
   }
 
   return [

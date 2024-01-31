@@ -12,7 +12,6 @@ import { I18nValidationExceptionFilter } from '../../../filters/i18n-validation-
 export class CatResolver {
   constructor(
     private readonly catService: CatService,
-    private readonly i18nService: I18nService,
     @Inject('PUB_SUB') private readonly pubSub: PubSub,
   ) {}
 
@@ -41,7 +40,7 @@ export class CatResolver {
   }
 
   @Subscription('catAdded', {
-    resolve: async (payload: any, args: any, ctx: any) => {
+    resolve: async (payload: any, _: any, ctx: any) => {
       const { catAdded } = payload;
       const i18nService: I18nService = ctx.i18nService;
 
@@ -57,7 +56,7 @@ export class CatResolver {
 
   @Mutation('validation')
   @UseFilters(new I18nValidationExceptionFilter())
-  validation(@Args('createCatInput') data: CreateCatInput) {
+  validation(@Args('createCatInput') _: CreateCatInput) {
     return;
   }
 }

@@ -1,17 +1,9 @@
 import { Test } from '@nestjs/testing';
 import path from 'node:path';
-import {
-  I18N_LOADERS,
-  I18nJsonLoader,
-  I18nLoader,
-  I18nModule,
-  I18nService,
-} from '../..';
-import { I18nAbstractFileLoader } from '../loaders';
+import { I18nJsonLoader, I18nModule, I18nService } from '../..';
 
 describe('i18n module including subfolders', () => {
   let i18nService: I18nService;
-  let i18nLoader: I18nLoader<I18nAbstractFileLoader>;
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
@@ -29,7 +21,6 @@ describe('i18n module including subfolders', () => {
     }).compile();
 
     i18nService = module.get(I18nService);
-    i18nLoader = module.get(I18N_LOADERS)[0];
   });
 
   it('i18n service should be defined', async () => {
