@@ -6,12 +6,12 @@ import {
   ValidationOptions,
 } from 'class-validator';
 import { i18n, i18nString } from '../../utils';
-import * as ValidatorJS from 'validator';
+import { IsISO8601Options } from 'validator/lib/isISO8601';
 
 const MESSAGE = 'validation.DATE';
 
 export const IsDateLocalized = (
-  dateOptions: ValidatorJS.IsISO8601Options = {},
+  dateOptions: IsISO8601Options = {},
   validationOptions: ValidationOptions = {},
 ) =>
   IsDateString(
@@ -31,4 +31,4 @@ export const IsDateValidatorDefinition = {
   validator: isDateString,
   defaultValidationMessage: i18nString(MESSAGE),
   decorator: IsDateLocalized,
-} satisfies IValidatorDefinition<string, ValidatorJS.IsISO8601Options>;
+} satisfies IValidatorDefinition<string, IsISO8601Options>;
