@@ -1,10 +1,8 @@
-import {
-  HeaderResolver,
-  I18nJsonLoader,
-  I18nModule,
-} from '@saas-buildkit/nestjs-i18n';
 import { I18Config } from './config/i18';
 import * as path from 'node:path';
+import { I18nModule } from './i18n.module';
+import { I18nJsonLoader } from './loaders';
+import { HeaderResolver } from './resolvers';
 
 /**
  * @link https://github.com/Nikaple/nest-typed-config
@@ -22,6 +20,7 @@ export function setupI18NModule(
   } = {},
 ) {
   return I18nModule.forRootAsync({
+    imports: undefined,
     useFactory: (config: I18Config) => {
       return {
         fallbackLanguage,

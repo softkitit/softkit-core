@@ -1,0 +1,26 @@
+type Cat {
+  id: Int
+  name: String
+  age: Int
+  description: String
+}
+
+type Query {
+  cats: [Cat]
+  cat(id: Int!): Cat
+  catUsingContext(id: Int!): Cat
+}
+
+type Mutation {
+  createCat(createCatInput: CreateCatInput): Cat
+  validation(createCatInput: CreateCatInput): Cat
+}
+
+type Subscription {
+  catAdded: String
+}
+
+input CreateCatInput {
+  name: String
+  age: Int
+}

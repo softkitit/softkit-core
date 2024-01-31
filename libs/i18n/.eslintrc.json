@@ -26,7 +26,8 @@
             "checkObsoleteDependencies": true,
             "checkVersionMismatches": true,
             "ignoredDependencies": [
-              "tslib"
+              "tslib",
+              "typescript"
             ]
           }
         ]

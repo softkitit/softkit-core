@@ -1,0 +1,27 @@
+{
+  "HELLO": "Olá",
+  "PRODUCT": {
+    "NEW": "Novo Produto: {name}"
+  },
+  "ARRAY": [
+    "UM",
+    "DOIS",
+    "TRÊS"
+  ],
+  "cat": "Gato",
+  "cat_name": "Gato: {name}",
+  "set-up-password": {
+    "heading": "Olá, {username}",
+    "title": "Esqueceu a senha",
+    "followLink": "Por favor, siga o link para configurar sua senha"
+  },
+  "dot.test": "test",
+  "day_interval": {
+    "one": "Todos os dias",
+    "other": "A cada {count} dias",
+    "zero": "Nunca"
+  },
+  "nested": "Mensagem: $t(test.set-up-password.heading, {{\"username\":  \"{username}\" }})",
+  "nested-no-args": "Vamos fazer compras: $t(dot.test)",
+  "CURRENT_LANGUAGE": "idioma atual: {lang}"
+}
