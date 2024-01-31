@@ -5,7 +5,7 @@ import {
   ValidationOptions,
 } from 'class-validator';
 import { IValidatorDefinition } from '../dynamic';
-import { i18nValidationMessage } from '@saas-buildkit/nestjs-i18n';
+import { i18nValidationMessage } from '@softkit/i18n';
 import { i18nString } from '../../utils';
 
 const MESSAGE = 'validation.MIN_STRING_LENGTH';

@@ -1,8 +1,8 @@
 import {
   i18nValidationMessage,
   i18nValidationMessageString,
-} from '@saas-buildkit/nestjs-i18n';
-import { Path } from '@saas-buildkit/nestjs-i18n/dist/types';
+  Path,
+} from '@softkit/i18n';
 import { I18nTranslations } from '../generated/i18n.generated';
 
 export function i18nString(key: Path<I18nTranslations>) {
