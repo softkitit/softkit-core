@@ -1,7 +1,6 @@
 import { ArgumentsHost } from '@nestjs/common';
-import { ErrorResponse, GeneralBadRequestException } from '@softkit/exceptions';
-import { I18nValidationException } from '../interfaces';
-import { I18nContext } from '../i18n.context';
+import { ErrorResponse, GeneralBadRequestException } from '../../index';
+import { I18nContext, I18nValidationException } from '@softkit/i18n';
 
 export function responseBodyFormatter(
   host: ArgumentsHost,
