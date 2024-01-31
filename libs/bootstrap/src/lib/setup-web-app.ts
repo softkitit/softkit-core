@@ -35,7 +35,7 @@ import {
   TYPEORM_SEEDERS_TOKEN,
 } from '@softkit/typeorm';
 import { LoggingInterceptor } from '@softkit/logger';
-import { responseBodyFormatter } from '@softkit/i18n';
+import { responseBodyFormatter } from '@softkit/exceptions';
 import { REQUEST_ID_HEADER } from '@softkit/server-http-client';
 import { fastifyHelmet } from '@fastify/helmet';
 import { DataSource } from 'typeorm';
