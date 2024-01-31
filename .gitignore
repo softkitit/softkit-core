@@ -19,6 +19,8 @@ tmp
 
 .nx
 
+apps/docs/docs/api
+
 # dependencies
 node_modules
 

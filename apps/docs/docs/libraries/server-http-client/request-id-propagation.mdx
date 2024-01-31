@@ -1,0 +1,35 @@
+---
+title: 'Request ID Propagation'
+---
+
+# Request ID Propagation
+
+---
+
+## Overview
+
+The `server-http-client` library leverages NestJS's continuation-local storage (CLS) feature from [`nestjs-cls library`](https://papooch.github.io/nestjs-cls/) to ensure consistent logging and tracing across microservices.
+
+## Continuation-Local Storage in NestJS
+
+- NestJS's CLS provides a method to maintain request-specific data across asynchronous calls and callbacks.
+- This feature is essential for tracking the context of each request in an application that operates on a microservices architecture.
+
+## Request ID Propagation
+
+- The library uses CLS to propagate request IDs from one service to another.
+- This mechanism allows each request to carry its unique identifier, enhancing logging and monitoring capabilities.
+
+## Enhancements in Debugging and Monitoring
+
+- By preserving request IDs across different service calls, the library aids in debugging and understanding the flow of requests.
+- This functionality is critical in microservices-based applications for maintaining traceability and accountability of requests.
+
+## Seamless Integration
+
+- The integration of request ID propagation with CLS in the `server-http-client` library is automatic and requires minimal configuration.
+- Developers can benefit from this feature without the need for extensive setup or custom coding.
+
+The use of CLS for request ID propagation is a significant aspect of the `server-http-client` library, contributing to the development of robust, maintainable, and traceable microservices applications.
+
+For more information on CLS in NestJS, refer to the [official NestJS documentation](https://docs.nestjs.com/recipes/async-local-storage#nestjs-cls).

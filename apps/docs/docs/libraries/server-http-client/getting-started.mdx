@@ -1,0 +1,73 @@
+---
+title: 'Getting Started'
+---
+
+# Getting Started
+
+---
+
+## Overview
+
+The [`server-http-client`](https://www.npmjs.com/package/@softkit/server-http-client) library is an advanced HTTP client tailored for NestJS applications, designed to streamline communication with other NestJS services or any HTTP-based services.
+
+## Key Features
+
+- **Automatic Client Generation with Swagger**: Integrates with Swagger to automatically generate HTTP clients.
+- **Axios Integration**: A wrapper over Axios, providing additional functionalities while working within the NestJS infrastructure.
+- **Retry Mechanism**: Configurable retry mechanisms (linear, static, or exponential) for robust request handling.
+- **Circuit Breaker**: A built-in circuit breaker mechanism with local memory cache for state management.
+- **Exception Handling**: Converts exceptions to [`InternalProxyHttpException`](/api/server-http-client/src/classes/InternalProxyHttpException/) for simplified error handling between microservices.
+- **Timeout Mechanism**: Configurable timeout settings to avoid prolonged waiting periods for server responses.
+- **CLS Integration**: Utilizes `ClsService` for seamless propagation of auth tokens and request IDs between services. Read more about this in the [dedicated section on Request ID Propagation using CLS](/libraries/server-http-client/request-id-propagation)
+
+## Installation
+
+To get started, install the library using the following command:
+
+```bash
+yarn add @softkit/server-http-client
+```
+
+## Usage
+
+### Creating an HTTP Client
+
+Set up the HTTP client in your NestJS module:
+
+```typescript
+@Module({
+  providers: [
+    {
+      provide: 'AXIOS',
+      useFactory: (cls: ClsService<UserClsStore<IAccessTokenPayload>>) => {
+        return createAxiosInstance(cls, {
+          url: 'http://localhost:54345',
+          timeout: 1000,
+          serviceName: 'sample',
+        });
+      },
+      inject: [ClsService],
+    },
+  ],
+  imports: [ClsModule],
+})
+export class YourAppModule {}
+```
+
+### Injecting and Using the Client
+
+Inject and use the client in your controllers:
+
+```typescript
+@Controller('sample')
+export class SampleController {
+  constructor(@Inject('AXIOS') private readonly axios: AxiosInstance) {}
+}
+```
+
+## Next Steps
+
+Enhance your understanding of the server-http-client library by exploring these key areas:
+
+- [**Error Handling**](/libraries/server-http-client/error-handling): Delve into error handling, including rethrowing errors to clients.
+- [**Request ID Propagation**](/libraries/server-http-client/request-id-propagation): Learn about seamless request ID propagation across services using CLS.

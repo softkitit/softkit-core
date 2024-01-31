@@ -281,6 +281,24 @@ const sidebars = {
             },
           ],
         },
+         {
+          type: 'category',
+          label: 'Server HTTP Client Library',
+          link: {
+            type: 'doc',
+            id: 'libraries/server-http-client/getting-started',
+          },
+          items: [
+            'libraries/server-http-client/getting-started',
+            'libraries/server-http-client/error-handling',
+            'libraries/server-http-client/request-id-propagation',
+            {
+              type: 'doc',
+              label: 'API',
+              id: 'api/server-http-client/src/index',
+            },
+          ],
+        },
         {
           type: 'category',
           label: 'String Utils Library',
