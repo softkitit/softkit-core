@@ -7338,6 +7338,7 @@ __metadata:
     fast-deep-equal: 3.1.3
     form-data: 4.0.0
     fs-extra: 11.1.1
+    graphql: ^16.8.1
     graphql-subscriptions: 2.0.0
     graphql-tag: 2.12.6
     hbs: 4.2.0
@@ -15552,6 +15553,13 @@ __metadata:
   peerDependencies:
     graphql: ">=0.11 <=16"
   checksum: bdb77b3e44be53d2d8d0c395066e62e74efe1123d9b5be7cc69b60d28229974e32abc79c5997095d038d169d4135cb2bcb98f0e666aa8cfeb3bb9857b960d803
+  languageName: node
+  linkType: hard
+
+"graphql@npm:^16.8.1":
+  version: 16.8.1
+  resolution: "graphql@npm:16.8.1"
+  checksum: 8d304b7b6f708c8c5cc164b06e92467dfe36aff6d4f2cf31dd19c4c2905a0e7b89edac4b7e225871131fd24e21460836b369de0c06532644d15b461d55b1ccc0
   languageName: node
   linkType: hard
 
