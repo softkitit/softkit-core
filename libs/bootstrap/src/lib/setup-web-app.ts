@@ -13,7 +13,7 @@ import { FastifyInstance } from 'fastify/types/instance';
 import {
   I18nValidationExceptionFilter,
   I18nValidationPipe,
-} from '@saas-buildkit/nestjs-i18n';
+} from '@softkit/i18n';
 import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
 import { initializeTransactionalContext } from 'typeorm-transactional';
 import { getTransactionalContext } from 'typeorm-transactional/dist/common';
