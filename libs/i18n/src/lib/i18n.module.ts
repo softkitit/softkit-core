@@ -162,24 +162,33 @@ export class I18nModule implements OnModuleInit, NestModule {
     options: I18nAsyncOptions,
   ): Provider {
     if (options.useFactory) {
+      const factory = options.useFactory;
+
       return {
         provide: I18N_OPTIONS,
         useFactory: async (...args) => {
-          return this.sanitizeI18nOptions(
-            (await options.useFactory(...args)) as any,
-          );
+          const resolvers = await factory(...args);
+          return this.sanitizeI18nOptions(resolvers);
         },
         inject: options.inject || [],
       };
     }
-    return {
-      provide: I18N_OPTIONS,
-      useFactory: async (optionsFactory: I18nOptionsFactory) =>
-        this.sanitizeI18nOptions(
-          (await optionsFactory.createI18nOptions()) as any,
-        ),
-      inject: [options.useClass || options.useExisting],
-    };
+
+    const existingOrClass = options.useClass || options.useExisting;
+    if (existingOrClass) {
+      return {
+        provide: I18N_OPTIONS,
+        useFactory: async (optionsFactory: I18nOptionsFactory) =>
+          this.sanitizeI18nOptions(
+            (await optionsFactory.createI18nOptions()) as any,
+          ),
+        inject: [existingOrClass],
+      };
+    }
+
+    throw new Error(
+      'Invalid I18n async options, useClass or useExisting or useFactory must be provided',
+    );
   }
 
   private static createAsyncTranslationProvider(): Provider {
@@ -272,7 +281,10 @@ export class I18nModule implements OnModuleInit, NestModule {
       }
     }
 
-    if (['pug', 'ejs'].includes(this.i18nOptions.viewEngine)) {
+    if (
+      this.i18nOptions.viewEngine &&
+      ['pug', 'ejs'].includes(this.i18nOptions.viewEngine)
+    ) {
       const app = this.adapter.httpAdapter.getInstance();
       app.locals['t'] = (key: string, lang: any, args: any) => {
         return this.i18n.t(key, { lang, args });
