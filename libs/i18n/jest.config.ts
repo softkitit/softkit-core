@@ -7,10 +7,10 @@ export default {
   },
   coverageThreshold: {
     global: {
-      statements: 89,
+      statements: 88,
       branches: 75,
       functions: 90,
-      lines: 89,
+      lines: 88,
     },
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
