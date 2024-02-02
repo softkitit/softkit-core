@@ -12,7 +12,7 @@ import { pathExists, realpath } from 'fs-extra';
 import { importOrRequireFile } from '../utils/import';
 
 export interface GenerateTypesArguments {
-  typesOutputPath?: string;
+  typesOutputPath: string;
   watch: boolean;
   debounce: number;
   loaderType: string[];
@@ -352,9 +352,6 @@ async function generateAndSaveTypes(
   translations: I18nTranslation,
   args: GenerateTypesArguments,
 ) {
-  if (!args.typesOutputPath) {
-    throw new Error('typesOutputPath is undefined.');
-  }
   const object = Object.keys(translations).reduce(
     (result, key) => mergeDeep(result, translations[key]),
     {},
@@ -388,29 +385,30 @@ async function generateAndSaveTypes(
   }
 }
 
-function customDebounce<T extends Array<unknown>, R>(
-  func: (...args: T) => R,
-  wait: number,
-): (...args: T) => void {
-  let args: T[] = [];
-  let timeoutId: NodeJS.Timeout | undefined;
+function customDebounce(func: (...args: any[]) => void, wait: number) {
+  let args: any[] = [];
+  let timeoutId: NodeJS.Timeout;
 
-  return function (this: ThisParameterType<typeof func>, ...rest: T): void {
+  return function (...rest: any[]) {
     // User formal parameters to make sure we add a slot even if a param
     // is not passed in
     if (func.length > 0) {
       for (let i = 0; i < func.length; i++) {
-        args[i] = args[i] || ([] as unknown as T);
+        if (!args[i]) {
+          args[i] = [];
+        }
         args[i].push(rest[i]);
       }
-    } else {
-      // No formal parameters, just track the whole argument list
-      args = [rest];
+    }
+    // No formal parameters, just track the whole argument list
+    else {
+      args.push(...rest);
     }
     clearTimeout(timeoutId);
 
-    timeoutId = setTimeout(() => {
-      func.apply(this, args.flat() as unknown as T);
+    timeoutId = setTimeout(function () {
+      // @ts-ignore
+      func.apply(this, args);
       args = [];
     }, wait);
   };

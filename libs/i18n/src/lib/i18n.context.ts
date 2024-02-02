@@ -34,7 +34,7 @@ export class I18nContext<K = Record<string, unknown>>
 
   static current<K = Record<string, unknown>>(
     context?: ArgumentsHost,
-  ): I18nContext<K> {
+  ): I18nContext<K> | undefined {
     const i18n = this.storage.getStore() as I18nContext<K> | undefined;
 
     if (!i18n && !!context) {
@@ -42,7 +42,7 @@ export class I18nContext<K = Record<string, unknown>>
     }
 
     if (!i18n) {
-      throw new Error('I18nContext not available');
+      return undefined;
     }
 
     return i18n;

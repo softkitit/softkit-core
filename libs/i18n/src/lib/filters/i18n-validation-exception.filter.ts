@@ -30,8 +30,8 @@ export class I18nValidationExceptionFilter implements ExceptionFilter {
   catch(exception: I18nValidationException, host: ArgumentsHost) {
     const i18n = I18nContext.current();
 
-    const errors = formatI18nErrors(exception.errors ?? [], i18n.service, {
-      lang: i18n.lang,
+    const errors = formatI18nErrors(exception.errors ?? [], i18n?.service, {
+      lang: i18n?.lang,
     });
 
     const normalizedErrors = this.normalizeValidationErrors(errors);
@@ -47,15 +47,15 @@ export class I18nValidationExceptionFilter implements ExceptionFilter {
         normalizedErrors,
       );
 
-      response
-        .status(this.options.errorHttpStatusCode || exception.getStatus())
+      return response
+        .status(this.options.errorHttpStatusCode ?? exception.getStatus())
         .send(responseBody);
     } else if (hostType === 'graphql') {
       exception.errors = normalizedErrors as I18nValidationError[];
       return exception;
+    } else {
+      return new Error(`Unsupported host type: ${host.getType()}`);
     }
-
-    throw new Error(`Unsupported host type: ${host.getType()}`);
   }
 
   protected buildResponseBody(

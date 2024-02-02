@@ -222,13 +222,11 @@ export class I18nService<K = Record<string, unknown>>
     if (translations instanceof Object && translations[key]) {
       translation = translations[key];
     } else {
-      this.logger.warn(
-        "Warning: Translation key not found. Falling back to default 'English'.",
-      );
-      translation = options?.defaultValue ?? 'English';
+      this.logger.warn('Warning: Translation key not found');
+      translation = options?.defaultValue ?? key;
     }
 
-    if (translation && args && Array.isArray(args) && args.length > 0) {
+    if (translation && args !== undefined && args !== null) {
       const pluralObject = this.getPluralObject(translation);
       if (pluralObject && !Array.isArray(args) && args['count'] !== undefined) {
         const count = Number(args['count']);
@@ -300,15 +298,18 @@ export class I18nService<K = Record<string, unknown>>
             translation =
               translation.slice(
                 0,
+                // @ts-ignore
                 Math.max(0, nestedTranslation.index - offset),
               ) +
               result +
               translation.slice(
                 Math.max(
                   0,
+                  // @ts-ignore
                   nestedTranslation.index + nestedTranslation.length - offset,
                 ),
               );
+            // @ts-ignore
             offset = offset + (nestedTranslation.length - result.length);
           }
         }
@@ -330,16 +331,17 @@ export class I18nService<K = Record<string, unknown>>
 
   private getNestedTranslations(
     translation: string,
-  ): NestedTranslation[] | undefined {
-    const list: NestedTranslation[] = [];
+  ): { index?: number; length?: number; key: string; args: any }[] | undefined {
+    const list = [];
     const regex = /\$t\((.*?)(,(.*?))?\)/g;
-    let result: RegExpExecArray | undefined;
 
-    while ((result = regex.exec(translation) ?? undefined)) {
-      let key: string | undefined = undefined;
+    let result: RegExpExecArray | undefined | null;
+    while ((result = regex.exec(translation))) {
+      let key = undefined;
       let args = {};
-      let index: number | undefined = undefined;
-      let length: number | undefined = undefined;
+      let index = undefined;
+      let length = undefined;
+
       if (result && result.length > 0) {
         key = result[1].trim();
         index = result.index;
@@ -352,7 +354,7 @@ export class I18nService<K = Record<string, unknown>>
           }
         }
       }
-      if (key && index && length) {
+      if (key) {
         list.push({ index, length, key, args });
       }
       result = undefined;

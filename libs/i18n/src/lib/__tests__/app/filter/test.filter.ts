@@ -21,7 +21,7 @@ export class TestExceptionFilter implements ExceptionFilter {
     const response = host.switchToHttp().getResponse<any>();
 
     response.status(500).send({
-      lang: i18n.lang,
+      lang: i18n?.lang,
     });
   }
 }

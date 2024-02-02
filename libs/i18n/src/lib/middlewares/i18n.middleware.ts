@@ -48,11 +48,9 @@ export class I18nMiddleware implements NestMiddleware {
     for (const r of this.i18nResolvers) {
       const resolver = await this.getResolver(r);
 
-      language = resolver.resolve(new MiddlewareHttpContext(req, res, next));
-
-      if (language instanceof Promise) {
-        language = await (language as Promise<string>);
-      }
+      language = await resolver.resolve(
+        new MiddlewareHttpContext(req, res, next),
+      );
 
       if (language !== undefined) {
         break;

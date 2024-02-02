@@ -7,10 +7,11 @@ import path from 'node:path';
 import yargs from 'yargs';
 import fs from 'node:fs';
 import { VersionCommand } from '../commands/version.command';
+import SpyInstance = jest.SpyInstance;
 
 describe('generate types test', () => {
   const generateTypesCommand = new GenerateTypesCommand();
-  let mockExit;
+  let mockExit: SpyInstance;
   let typesOutputPath: string;
 
   beforeEach(() => {

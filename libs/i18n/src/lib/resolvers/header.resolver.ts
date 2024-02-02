@@ -25,7 +25,7 @@ export class HeaderResolver implements I18nResolver {
       }
     }
 
-    let lang = '';
+    let lang;
 
     if (req) {
       for (const key of this.keys) {

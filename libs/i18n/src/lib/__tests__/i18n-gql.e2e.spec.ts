@@ -61,12 +61,12 @@ describe('i18n module e2e graphql', () => {
           subscriptions: {
             'graphql-ws': true,
             'subscriptions-transport-ws': {
-              onConnect: (params) => ({ connectionParams: params }),
+              onConnect: (params: any) => ({ connectionParams: params }),
               path: '/graphql',
             },
           },
           typePaths: ['*/**/*.graphql'],
-          context: (ctx) => ctx,
+          context: (ctx: any) => ctx,
           path: '/graphql',
         }),
         CatModule,

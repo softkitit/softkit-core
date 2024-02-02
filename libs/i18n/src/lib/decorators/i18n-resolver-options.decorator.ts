@@ -6,16 +6,8 @@ export function getI18nResolverOptionsToken(target: () => void) {
 }
 
 export function I18nResolverOptions(): any {
-  return (
-    target: () => void,
-    key: string | symbol,
-    index?: number,
-  ): unknown => {
+  return (target: () => void, key: string | symbol, index: number): unknown => {
     const token = getI18nResolverOptionsToken(target);
-
-    if (!index) {
-      return Inject(token)(target, key);
-    }
 
     return Inject(token)(target, key, index);
   };

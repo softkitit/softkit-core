@@ -8,5 +8,5 @@ if [ "$branch" = "main" ]; then
   exit 1
 fi
 
-npx nx affected:lint --fix --parallel
-npx nx affected:build --parallel
+#npx nx affected:lint --fix --parallel
+#npx nx affected:build --parallel

@@ -42,7 +42,7 @@ describe('config file', () => {
       translationsPath: [],
       loaderType: [],
       optionsFile: path.join(__dirname, '../app/config/i18n-options.ts'),
-    } as yargs.Arguments<GenerateTypesArguments>);
+    } as unknown as yargs.Arguments<GenerateTypesArguments>);
 
     const newFileContent = fs.readFileSync(typesOutputPath).toString();
 
@@ -76,7 +76,7 @@ describe('config file', () => {
       debounce: 200,
       translationsPath: [],
       loaderType: [],
-    } as yargs.Arguments<GenerateTypesArguments>);
+    } as unknown as yargs.Arguments<GenerateTypesArguments>);
 
     const newFileContent = fs.readFileSync(outputPath).toString();
 

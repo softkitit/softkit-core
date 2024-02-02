@@ -31,7 +31,7 @@ export class CatService {
     }
 
     cat.description =
-      I18nContext.current<I18nTranslations>().translate('test.cat');
+      I18nContext.current<I18nTranslations>()?.translate('test.cat');
     return cat;
   }
 }

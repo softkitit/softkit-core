@@ -91,36 +91,35 @@ export class HelloController {
 
   @Get('/request-scope')
   helloRequestScope(): any {
-    return I18nContext.current<I18nTranslations>().translate(
-      HelloController.TEST_HELLO_KEY,
-    );
+    const current = I18nContext.current<I18nTranslations>();
+    return current?.translate(HelloController.TEST_HELLO_KEY);
   }
 
   @Get('/request-scope/additional-interceptor')
   @UseInterceptors(TestInterceptor)
   helloRequestScopeAdditionalInterceptor(): any {
-    return I18nContext.current<I18nTranslations>().translate(
+    return I18nContext.current<I18nTranslations>()?.translate(
       HelloController.TEST_HELLO_KEY,
     );
   }
 
   @Get('/request-scope/typed')
-  helloRequestScopeTyped(): string {
-    return I18nContext.current<I18nTranslations>().translate(
+  helloRequestScopeTyped(): string | undefined {
+    return I18nContext.current<I18nTranslations>()?.translate(
       HelloController.TEST_HELLO_KEY,
     );
   }
 
   @Get('/short/request-scope')
-  helloShortRequestScope(): any {
-    return I18nContext.current<I18nTranslations>().t(
+  helloShortRequestScope(): string | undefined {
+    return I18nContext.current<I18nTranslations>()?.translate(
       HelloController.TEST_HELLO_KEY,
     );
   }
 
   @Get('/short/request-scope/typed')
-  helloShortRequestScopeTyped(): string {
-    return I18nContext.current<I18nTranslations>().t(
+  helloShortRequestScopeTyped(): string | undefined {
+    return I18nContext.current<I18nTranslations>()?.translate(
       HelloController.TEST_HELLO_KEY,
     );
   }
@@ -139,7 +138,7 @@ export class HelloController {
 
   @Get('/plurarization')
   plurarization(@Query('count') count: string): any {
-    return I18nContext.current<I18nTranslations>().translate(
+    return I18nContext.current<I18nTranslations>()?.translate(
       'test.day_interval',
       {
         args: { count: Number.parseInt(count) },
@@ -149,21 +148,21 @@ export class HelloController {
 
   @Get('/nested')
   nested(@Query('username') username: string): any {
-    return I18nContext.current<I18nTranslations>().translate('test.nested', {
+    return I18nContext.current<I18nTranslations>()?.translate('test.nested', {
       args: { username },
     });
   }
 
   @Get('/nested-no-args')
   nestedNoArgs(): any {
-    return I18nContext.current<I18nTranslations>().translate(
+    return I18nContext.current<I18nTranslations>()?.translate(
       'test.nested-no-args',
     );
   }
 
   @Get('/deeply-nested')
   deeplyNested(@Query('count') count: number): any {
-    return I18nContext.current<I18nTranslations>().translate(
+    return I18nContext.current<I18nTranslations>()?.translate(
       'test.nest1.nest2.nest3',
       {
         args: { count },

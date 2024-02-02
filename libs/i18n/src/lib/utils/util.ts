@@ -69,7 +69,7 @@ export function i18nValidationMessageString<K = Record<string, unknown>>(
 
 export function formatI18nErrors<K = Record<string, unknown>>(
   errors: I18nValidationError[],
-  i18n: I18nService<K>,
+  i18n?: I18nService<K>,
   options?: TranslateOptions,
 ): I18nValidationError[] {
   return errors.map((error) => {
@@ -99,17 +99,18 @@ export function formatI18nErrors<K = Record<string, unknown>>(
       const [translationKey, argsString] = errorConstraints[key].split('|');
       const args = argsString ? JSON.parse(argsString) : {};
 
-      result[key] = i18n.translate(translationKey as Path<K>, {
-        ...options,
-        args: {
-          property: error.property,
-          value: error.value,
-          target: error.target,
-          contexts: error.contexts,
-          constraints: constraints,
-          ...args,
-        },
-      });
+      result[key] =
+        i18n?.translate(translationKey as Path<K>, {
+          ...options,
+          args: {
+            property: error.property,
+            value: error.value,
+            target: error.target,
+            contexts: error.contexts,
+            constraints: constraints,
+            ...args,
+          },
+        }) || error.property;
       return result;
     }, {});
     return error;
