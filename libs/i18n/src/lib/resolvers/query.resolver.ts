@@ -20,7 +20,7 @@ export class QueryResolver implements I18nResolver {
       }
     }
 
-    let lang: string;
+    let lang = '';
 
     if (req) {
       for (const key of this.keys) {

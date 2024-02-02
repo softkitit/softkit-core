@@ -5,6 +5,10 @@ const logger = new Logger('I18nService');
 export function getContextObject(
   context?: ExecutionContext | ArgumentsHost,
 ): any {
+  if (!context) {
+    logger.warn('The context is undefined');
+    return undefined;
+  }
   const contextType = context?.getType<string>() ?? 'undefined';
 
   switch (contextType) {

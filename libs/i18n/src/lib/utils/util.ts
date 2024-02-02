@@ -11,24 +11,26 @@ import {
 import { I18nService, TranslateOptions } from '../services/i18n.service';
 import { MiddlewareConsumer } from '@nestjs/common';
 import { NestMiddlewareConsumer, Path } from '../types';
+import { isResolverWithOptions } from './typescript';
 
 export function shouldResolve(e: I18nOptionResolver) {
-  return typeof e === 'function' || e['use'];
+  return typeof e === 'function' || isResolverWithOptions(e);
 }
 
 function validationErrorToI18n(e: ValidationError): I18nValidationError {
+  const errorConstraints = e.constraints ?? {};
   return {
     property: e.property,
     value: e.value,
     target: e.target,
     contexts: e.contexts,
     children: e?.children?.map(validationErrorToI18n),
-    constraints: e.constraints
-      ? Object.keys(e.constraints).reduce((result, key) => {
-          result[key] = e.constraints[key];
-          return result;
-        }, {})
-      : {},
+    constraints: Object.keys(errorConstraints).reduce<{
+      [type: string]: string;
+    }>((result, key) => {
+      result[key] = errorConstraints[key];
+      return result;
+    }, {}),
   };
 }
 
@@ -71,23 +73,32 @@ export function formatI18nErrors<K = Record<string, unknown>>(
   options?: TranslateOptions,
 ): I18nValidationError[] {
   return errors.map((error) => {
+    const errorTarget = error?.target;
+    const errorConstraints = error?.constraints;
+    if (!errorTarget || !errorConstraints) {
+      return error;
+    }
+
     const limits = getMetadataStorage()
       .getTargetValidationMetadatas(
-        error.target.constructor,
-        error.target.constructor.name,
+        errorTarget.constructor,
+        errorTarget.constructor.name,
         true,
         false,
       )
       .find(
         (meta) =>
-          meta.target === error.target.constructor &&
+          meta.target === errorTarget.constructor &&
           meta.propertyName === error.property,
       );
     const constraints = Object.assign({}, limits?.constraints);
     error.children = formatI18nErrors(error.children ?? [], i18n, options);
-    error.constraints = Object.keys(error.constraints).reduce((result, key) => {
-      const [translationKey, argsString] = error.constraints[key].split('|');
+    error.constraints = Object.keys(errorConstraints).reduce<{
+      [type: string]: string;
+    }>((result, key) => {
+      const [translationKey, argsString] = errorConstraints[key].split('|');
       const args = argsString ? JSON.parse(argsString) : {};
+
       result[key] = i18n.translate(translationKey as Path<K>, {
         ...options,
         args: {

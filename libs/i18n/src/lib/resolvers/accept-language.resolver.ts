@@ -45,16 +45,20 @@ export class AcceptLanguageResolver implements I18nResolver {
 
     if (lang) {
       const supportedLangs = service.getSupportedLanguages();
+
+      let pickedLang: string | string[] | null;
       if (this.options.matchType === 'strict') {
-        return pick(supportedLangs, lang);
+        pickedLang = pick(supportedLangs, lang);
       } else if (this.options.matchType === 'loose') {
-        return pick(supportedLangs, lang, { loose: true });
+        pickedLang = pick(supportedLangs, lang, { loose: true });
+      } else {
+        pickedLang =
+          pick(supportedLangs, lang) ??
+          pick(supportedLangs, lang, { loose: true });
       }
-      return (
-        pick(supportedLangs, lang) ??
-        pick(supportedLangs, lang, { loose: true })
-      );
+
+      return pickedLang ?? undefined;
     }
-    return lang;
+    return undefined;
   }
 }

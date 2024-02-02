@@ -24,5 +24,6 @@ export class GrpcMetadataResolver implements I18nResolver {
         }
       }
     }
+    return undefined;
   }
 }

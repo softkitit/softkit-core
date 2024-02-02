@@ -12,7 +12,7 @@ import { pathExists, realpath } from 'fs-extra';
 import { importOrRequireFile } from '../utils/import';
 
 export interface GenerateTypesArguments {
-  typesOutputPath: string;
+  typesOutputPath?: string;
   watch: boolean;
   debounce: number;
   loaderType: string[];
@@ -20,12 +20,20 @@ export interface GenerateTypesArguments {
   translationsPath: string[];
 }
 
-export class GenerateTypesCommand implements yargs.CommandModule {
+type TranslationsType = {
+  translations: I18nTranslation;
+  error: (I18nTranslation & Error) | null;
+  path: string;
+};
+
+export class GenerateTypesCommand
+  implements yargs.CommandModule<object, GenerateTypesArguments>
+{
   fsWatcher: chokidar.FSWatcher | undefined;
   command = 'generate-types';
   describe = 'Generate types for translations. Supports json and yaml files.';
 
-  builder(args: yargs.Argv<GenerateTypesArguments>) {
+  builder(args: yargs.Argv<object>) {
     return args
       .option('debounce', {
         alias: 'd',
@@ -77,21 +85,21 @@ export class GenerateTypesCommand implements yargs.CommandModule {
     const { packageConfig = {}, packageJsonFilePath } =
       (await getPackageConfig()) || {};
 
-    packageConfig.i18n = packageConfig.i18n || {};
+    packageConfig['i18n'] = packageConfig['i18n'] ?? {};
 
-    if (!args.typesOutputPath && packageConfig.i18n.typesOutputPath) {
-      args.typesOutputPath = packageConfig.i18n.typesOutputPath;
+    if (!args.typesOutputPath && packageConfig['i18n'].typesOutputPath) {
+      args.typesOutputPath = packageConfig['i18n'].typesOutputPath;
     }
 
     if (args.optionsFile) {
       args.optionsFile = path.resolve(process.cwd(), args.optionsFile);
     }
 
-    if (!args.optionsFile && packageConfig.i18n.optionsFile) {
+    if (!args.optionsFile && packageConfig['i18n'].optionsFile) {
       const packageJsonFolder = path.dirname(packageJsonFilePath);
       args.optionsFile = path.join(
         packageJsonFolder,
-        packageConfig.i18n.optionsFile,
+        packageConfig['i18n'].optionsFile,
       );
     }
 
@@ -130,6 +138,9 @@ export class GenerateTypesCommand implements yargs.CommandModule {
     }
 
     const translationsWithPaths = await loadTranslations(loaders);
+    const validTranslationsWithPaths = translationsWithPaths.filter(
+      (item): item is TranslationsType => Boolean(item.path),
+    );
 
     let hasError = false;
 
@@ -147,8 +158,13 @@ export class GenerateTypesCommand implements yargs.CommandModule {
       },
     );
 
-    if (!hasError) {
-      const mergedTranslations = reduceTranslations(translationsMapped);
+    const validTranslations = translationsMapped.filter(
+      (translation): translation is I18nTranslation =>
+        translation !== null && translation !== undefined,
+    );
+
+    if (!hasError && validTranslations.length > 0) {
+      const mergedTranslations = reduceTranslations(validTranslations);
       await generateAndSaveTypes(mergedTranslations, args);
     } else if (!args.watch) {
       process.exit(1);
@@ -163,7 +179,7 @@ export class GenerateTypesCommand implements yargs.CommandModule {
       if (this.fsWatcher === undefined) {
         this.fsWatcher = await listenForChanges(
           loaders,
-          translationsWithPaths,
+          validTranslationsWithPaths,
           args,
         );
       }
@@ -281,7 +297,9 @@ function handleFileChangeEvents(
       const foundPath = listenToPaths.find((path) =>
         changePath.startsWith(path),
       );
-      uniquePaths.add(foundPath);
+      if (foundPath) {
+        uniquePaths.add(foundPath);
+      }
       if (uniquePaths.size === paths.length) {
         break;
       }
@@ -300,11 +318,21 @@ function handleFileChangeEvents(
         }
       } catch (error) {
         hasError = true;
-        console.log(
-          chalk.red(
-            `Error while loading translations from ${path}. Error: ${error.message}`,
-          ),
-        );
+        if (error instanceof Error) {
+          console.log(
+            chalk.red(
+              `Error while loading translations from ${path}. Error: ${error.message}`,
+            ),
+          );
+        } else {
+          console.log(
+            chalk.red(
+              `Error while loading translations from ${path}. Error: ${JSON.stringify(
+                error,
+              )}`,
+            ),
+          );
+        }
       }
     }
 
@@ -324,6 +352,9 @@ async function generateAndSaveTypes(
   translations: I18nTranslation,
   args: GenerateTypesArguments,
 ) {
+  if (!args.typesOutputPath) {
+    throw new Error('typesOutputPath is undefined.');
+  }
   const object = Object.keys(translations).reduce(
     (result, key) => mergeDeep(result, translations[key]),
     {},
@@ -357,27 +388,29 @@ async function generateAndSaveTypes(
   }
 }
 
-function customDebounce(func: (...args) => void, wait: number) {
-  let args = [];
-  let timeoutId;
-  return function (...rest) {
+function customDebounce<T extends Array<unknown>, R>(
+  func: (...args: T) => R,
+  wait: number,
+): (...args: T) => void {
+  let args: T[] = [];
+  let timeoutId: NodeJS.Timeout | undefined;
+
+  return function (this: ThisParameterType<typeof func>, ...rest: T): void {
     // User formal parameters to make sure we add a slot even if a param
     // is not passed in
     if (func.length > 0) {
       for (let i = 0; i < func.length; i++) {
-        if (!args[i]) {
-          args[i] = [];
-        }
+        args[i] = args[i] || ([] as unknown as T);
         args[i].push(rest[i]);
       }
-    }
-    // No formal parameters, just track the whole argument list
-    else {
-      args.push(...rest);
+    } else {
+      // No formal parameters, just track the whole argument list
+      args = [rest];
     }
     clearTimeout(timeoutId);
-    timeoutId = setTimeout(function () {
-      func.apply(this, args);
+
+    timeoutId = setTimeout(() => {
+      func.apply(this, args.flat() as unknown as T);
       args = [];
     }, wait);
   };
@@ -389,15 +422,15 @@ async function loadTranslations(
     path?: string;
   }[],
 ) {
-  const loadedTranslations = (await Promise.all(
+  const loadedTranslations: I18nTranslation[] = await Promise.all(
     loaders.map(({ loader }) => loader.load().catch((error) => error)),
-  )) as I18nTranslation[];
+  );
 
-  return loadedTranslations.map((translations, index) => {
-    const error = translations instanceof Error;
+  return loadedTranslations.map((result, index) => {
+    const isError = result instanceof Error;
     return {
-      translations: error ? null : translations,
-      error: error ? translations : null,
+      translations: isError ? null : result,
+      error: isError ? result : null,
       path: loaders[index].path,
     };
   });
@@ -409,9 +442,9 @@ async function validateAndGetOptionsFile(optionsFile?: string) {
     try {
       optionsFileExport = await importOrRequireFile(optionsFile);
     } catch (error) {
-      throw new Error(
-        `Unable to open file: "${optionsFile}". ${error.message}`,
-      );
+      throw error instanceof Error
+        ? new Error(`Unable to open file: "${optionsFile}". ${error.message}`)
+        : new Error(`Unable to open file: "${optionsFile}". `);
     }
 
     if (!optionsFileExport || typeof optionsFileExport !== 'object') {
@@ -496,7 +529,7 @@ async function getPackageConfig(basePath = process.cwd()): Promise<{
         packageConfig,
       };
     } catch {
-      return undefined;
+      throw new Error(`Failed to load package.json`);
     }
   }
 
@@ -504,10 +537,12 @@ async function getPackageConfig(basePath = process.cwd()): Promise<{
 
   // we reached the root folder
   if (basePath === parentFolder) {
-    return undefined;
+    throw new Error(
+      `Reached the root folder without finding package.json in ${basePath}`,
+    );
   }
 
-  return this.getPackageConfig(parentFolder);
+  return getPackageConfig(parentFolder);
 }
 
 function getLoaderByType(loaderType: string, path: string) {

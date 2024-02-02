@@ -8,7 +8,7 @@ import {
   WsArgumentsHost,
 } from '@nestjs/common/interfaces';
 import { ModuleRef } from '@nestjs/core';
-import { shouldResolve } from '../utils';
+import { isResolverWithOptions, shouldResolve } from '../utils';
 import { I18N_OPTIONS, I18N_RESOLVERS } from '../i18n.constants';
 import {
   I18nOptions,
@@ -77,7 +77,7 @@ export class I18nMiddleware implements NestMiddleware {
 
   private async getResolver(r: I18nOptionResolver): Promise<I18nResolver> {
     if (shouldResolve(r)) {
-      if (r['use']) {
+      if (isResolverWithOptions(r)) {
         const resolver = r as ResolverWithOptions;
         return this.moduleRef.get(resolver.use);
       } else {

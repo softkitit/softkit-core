@@ -9,7 +9,7 @@ export class CreateCatInput {
   @IsNotEmpty({
     message: i18nValidationMessage<I18nTranslations>('validation.NOT_EMPTY'),
   })
-  name: string;
+  name!: string;
 
   @Field(() => Int)
   @Min(10, {
@@ -17,5 +17,5 @@ export class CreateCatInput {
       message: 'COOL',
     }),
   })
-  age: number;
+  age!: number;
 }

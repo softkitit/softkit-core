@@ -13,33 +13,33 @@ import { i18nValidationMessage } from '../../../utils';
 
 export class ExtraUserDto {
   @IsBoolean({ message: 'validation.INVALID_BOOLEAN' })
-  subscribeToEmail: string;
+  subscribeToEmail!: string;
 
   @Min(5, {
     message: i18nValidationMessage<I18nTranslations>('validation.MIN', {
       message: 'COOL',
     }),
   })
-  min: number;
+  min!: number;
 
   @Max(10, {
     message: i18nValidationMessage<I18nTranslations>('validation.MAX', {
       message: 'SUPER',
     }),
   })
-  max: number;
+  max!: number;
 }
 
 export class CreateUserDto {
   @IsNotEmpty({ message: 'validation.NOT_EMPTY' })
   @IsEmail({}, { message: 'validation.INVALID_EMAIL' })
-  email: string;
+  email!: string;
 
   @IsNotEmpty({ message: 'validation.NOT_EMPTY' })
-  password: string;
+  password!: string;
 
   @ValidateNested()
   @IsDefined()
   @Type(() => ExtraUserDto)
-  extra: ExtraUserDto;
+  extra!: ExtraUserDto;
 }

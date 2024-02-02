@@ -6,7 +6,7 @@ export class CreateCatDto {
   @IsNotEmpty({
     message: i18nValidationMessage<I18nTranslations>('validation.NOT_EMPTY'),
   })
-  name: string;
+  name!: string;
 
   @Min(10, {
     message: i18nValidationMessage<I18nTranslations>('validation.MIN', {
@@ -17,5 +17,5 @@ export class CreateCatDto {
       },
     }),
   })
-  age: number;
+  age!: number;
 }

@@ -15,7 +15,11 @@ import {
 } from '../interfaces';
 import { I18nService } from '../services/i18n.service';
 import { ModuleRef } from '@nestjs/core';
-import { shouldResolve, getContextObject } from '../utils';
+import {
+  shouldResolve,
+  getContextObject,
+  isResolverWithOptions,
+} from '../utils';
 import { Observable } from 'rxjs';
 import { I18nContext } from '../i18n.context';
 
@@ -88,7 +92,7 @@ export class I18nLanguageInterceptor implements NestInterceptor {
 
   private async getResolver(r: I18nOptionResolver): Promise<I18nResolver> {
     if (shouldResolve(r)) {
-      if (r['use']) {
+      if (isResolverWithOptions(r)) {
         const resolver = r as ResolverWithOptions;
         return this.moduleRef.get(resolver.use);
       } else {

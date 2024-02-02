@@ -5,14 +5,15 @@ import {
 } from '../../../../';
 import { ArgumentsHost } from '@nestjs/common/interfaces';
 
-export const exampleErrorFormatter = (errors: ValidationError[]): object => {
-  const errorMessages = {};
+export const exampleErrorFormatter = (errors: ValidationError[]) => {
+  const errorMessages: Record<string, string[]> = {};
 
   for (const error_ of errors) {
     const mappedErrors = mapChildrenToValidationErrors(error_);
 
     for (const error of mappedErrors) {
-      errorMessages[error.property] = Object.values(error.constraints);
+      const constraints = error.constraints ?? {};
+      errorMessages[error.property] = Object.values(constraints);
     }
   }
 

@@ -26,6 +26,10 @@ export class CatService {
 
   findById(id: number): CatModel {
     const cat = this.cats.find((cat) => cat.id === id);
+    if (!cat) {
+      throw new Error('Cat not found');
+    }
+
     cat.description =
       I18nContext.current<I18nTranslations>().translate('test.cat');
     return cat;

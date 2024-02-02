@@ -22,7 +22,7 @@ const prependConstraintsWithParentProp = (
   parentPath: string,
   error: ValidationError,
 ): ValidationError => {
-  const constraints = {};
+  const constraints: { [type: string]: string } = {};
   for (const key in error.constraints) {
     constraints[key] = `${parentPath}.${error.constraints[key]}`;
   }

@@ -13,6 +13,7 @@ import {
   I18nValidationException,
 } from '../interfaces';
 import { mapChildrenToValidationErrors, formatI18nErrors } from '../utils';
+import { GqlContextType } from '@nestjs/graphql';
 
 type I18nValidationExceptionFilterOptions =
   | I18nValidationExceptionFilterDetailedErrorsOption
@@ -35,26 +36,26 @@ export class I18nValidationExceptionFilter implements ExceptionFilter {
 
     const normalizedErrors = this.normalizeValidationErrors(errors);
 
-    switch (host.getType() as string) {
-      case 'http': {
-        const response = host.switchToHttp().getResponse();
+    const hostType = host.getType<GqlContextType>();
 
-        const responseBody = this.buildResponseBody(
-          host,
-          exception,
-          normalizedErrors,
-        );
+    if (hostType === 'http') {
+      const response = host.switchToHttp().getResponse();
 
-        response
-          .status(this.options.errorHttpStatusCode || exception.getStatus())
-          .send(responseBody);
-        break;
-      }
-      case 'graphql': {
-        exception.errors = normalizedErrors as I18nValidationError[];
-        return exception;
-      }
+      const responseBody = this.buildResponseBody(
+        host,
+        exception,
+        normalizedErrors,
+      );
+
+      response
+        .status(this.options.errorHttpStatusCode || exception.getStatus())
+        .send(responseBody);
+    } else if (hostType === 'graphql') {
+      exception.errors = normalizedErrors as I18nValidationError[];
+      return exception;
     }
+
+    throw new Error(`Unsupported host type: ${host.getType()}`);
   }
 
   protected buildResponseBody(
@@ -62,7 +63,8 @@ export class I18nValidationExceptionFilter implements ExceptionFilter {
     exc: I18nValidationException,
     errors: string[] | I18nValidationError[] | object,
   ) {
-    return 'responseBodyFormatter' in this.options
+    return 'responseBodyFormatter' in this.options &&
+      this.options.responseBodyFormatter
       ? this.options.responseBodyFormatter(host, exc, errors)
       : {
           statusCode:
@@ -79,15 +81,18 @@ export class I18nValidationExceptionFilter implements ExceptionFilter {
   ): string[] | I18nValidationError[] | object {
     if (
       this.isWithErrorFormatter(this.options) &&
-      !('detailedErrors' in this.options)
-    )
+      !('detailedErrors' in this.options) &&
+      this.options.errorFormatter
+    ) {
       return this.options.errorFormatter(validationErrors);
+    }
 
     if (
       !this.isWithErrorFormatter(this.options) &&
       !this.options.detailedErrors
-    )
+    ) {
       return this.flattenValidationErrors(validationErrors);
+    }
 
     return validationErrors;
   }
@@ -99,7 +104,7 @@ export class I18nValidationExceptionFilter implements ExceptionFilter {
       .map((error) => mapChildrenToValidationErrors(error))
       .flatten()
       .filter((item) => !!item.constraints)
-      .map((item) => Object.values(item.constraints))
+      .map((item) => Object.values(item.constraints ?? {}))
       .flatten()
       .toArray();
   }

@@ -11,6 +11,12 @@ export function I18nResolverOptions(): any {
     key: string | symbol,
     index?: number,
   ): unknown => {
-    return Inject(getI18nResolverOptionsToken(target))(target, key, index);
+    const token = getI18nResolverOptionsToken(target);
+
+    if (!index) {
+      return Inject(token)(target, key);
+    }
+
+    return Inject(token)(target, key, index);
   };
 }

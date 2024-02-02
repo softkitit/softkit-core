@@ -19,7 +19,7 @@ export class I18nValidationPipe extends ValidationPipe {
     });
   }
 
-  protected toValidate(metadata: ArgumentMetadata): boolean {
+  protected override toValidate(metadata: ArgumentMetadata): boolean {
     const { metatype } = metadata;
     return metatype !== I18nContext && super.toValidate(metadata);
   }

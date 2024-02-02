@@ -21,6 +21,13 @@ import { I18nError } from '../i18n.error';
 
 const pluralKeys = ['zero', 'one', 'two', 'few', 'many', 'other'];
 
+type NestedTranslation = {
+  index: number;
+  length: number;
+  key: string;
+  args: any;
+};
+
 export type TranslateOptions = {
   lang?: string;
   args?: ({ [k: string]: any } | string)[] | { [k: string]: any };
@@ -192,7 +199,11 @@ export class I18nService<K = Record<string, unknown>>
 
     const args = options?.args;
 
-    if (keys.length > 1 && !translations[key]) {
+    if (
+      keys.length > 1 &&
+      translations instanceof Object &&
+      !translations[key]
+    ) {
       const newKey = keys.slice(1, keys.length).join('.');
 
       if (translations && translations[firstKey]) {
@@ -206,11 +217,16 @@ export class I18nService<K = Record<string, unknown>>
       }
     }
 
-    let translation = translations[key] ?? options?.defaultValue;
+    let translation: string | I18nTranslation;
 
-    if (translation && (args || (Array.isArray(args) && args.length > 0))) {
+    translation =
+      translations instanceof Object && translations[key]
+        ? translations[key]
+        : options?.defaultValue ?? 'Unknown';
+
+    if (translation && args && Array.isArray(args) && args.length > 0) {
       const pluralObject = this.getPluralObject(translation);
-      if (pluralObject && args && args['count'] !== undefined) {
+      if (pluralObject && !Array.isArray(args) && args['count'] !== undefined) {
         const count = Number(args['count']);
 
         if (!this.pluralRules.has(lang)) {
@@ -218,20 +234,24 @@ export class I18nService<K = Record<string, unknown>>
         }
 
         const pluralRules = this.pluralRules.get(lang);
-        const pluralCategory = pluralRules.select(count);
+        if (pluralRules) {
+          const pluralCategory = pluralRules.select(count);
+          const translationValue = pluralObject[pluralCategory];
 
-        if (count === 0 && pluralObject['zero']) {
-          translation = pluralObject['zero'];
-        } else if (pluralObject[pluralCategory]) {
-          translation = pluralObject[pluralCategory];
+          if (count === 0 && pluralObject['zero']) {
+            translation = pluralObject['zero'];
+          } else if (translationValue) {
+            translation = translationValue;
+          }
         }
       } else if (translation instanceof Object) {
+        const translations = translation;
         const result = Object.keys(translation).reduce((obj, nestedKey) => {
           return {
             ...obj,
             [nestedKey]: this.translateObject(
               nestedKey,
-              translation,
+              translations,
               lang,
               options,
               rootTranslations,
@@ -245,38 +265,48 @@ export class I18nService<K = Record<string, unknown>>
 
         return result;
       }
-      translation = this.i18nOptions.formatter(
-        translation,
-        ...(Array.isArray(args) ? args || [] : [args]),
-      );
-      const nestedTranslations = this.getNestedTranslations(translation);
-      if (nestedTranslations && nestedTranslations.length > 0) {
-        let offset = 0;
-        for (const nestedTranslation of nestedTranslations) {
-          const result = rootTranslations
-            ? (this.translateObject(
-                nestedTranslation.key,
-                rootTranslations,
-                lang,
-                {
-                  ...options,
-                  args: { parent: options.args, ...nestedTranslation.args },
-                },
-              ) as string) ?? ''
-            : '';
-          translation =
-            translation.slice(
-              0,
-              Math.max(0, nestedTranslation.index - offset),
-            ) +
-            result +
-            translation.slice(
-              Math.max(
+      if (typeof translation === 'string') {
+        const formatter = this.i18nOptions.formatter;
+        if (formatter) {
+          translation = formatter(
+            translation,
+            ...(Array.isArray(args) ? args : [args]),
+          );
+        }
+      }
+      if (typeof translation === 'string') {
+        const nestedTranslations = this.getNestedTranslations(translation);
+        if (nestedTranslations && nestedTranslations.length > 0) {
+          let offset = 0;
+          for (const nestedTranslation of nestedTranslations) {
+            const result = rootTranslations
+              ? (this.translateObject(
+                  nestedTranslation.key,
+                  rootTranslations,
+                  lang,
+                  {
+                    ...options,
+                    args: {
+                      parent: options && options.args,
+                      ...nestedTranslation.args,
+                    },
+                  },
+                ) as string) ?? ''
+              : '';
+            translation =
+              translation.slice(
                 0,
-                nestedTranslation.index + nestedTranslation.length - offset,
-              ),
-            );
-          offset = offset + (nestedTranslation.length - result.length);
+                Math.max(0, nestedTranslation.index - offset),
+              ) +
+              result +
+              translation.slice(
+                Math.max(
+                  0,
+                  nestedTranslation.index + nestedTranslation.length - offset,
+                ),
+              );
+            offset = offset + (nestedTranslation.length - result.length);
+          }
         }
       }
     }
@@ -296,15 +326,16 @@ export class I18nService<K = Record<string, unknown>>
 
   private getNestedTranslations(
     translation: string,
-  ): { index: number; length: number; key: string; args: any }[] | undefined {
-    const list = [];
+  ): NestedTranslation[] | undefined {
+    const list: NestedTranslation[] = [];
     const regex = /\$t\((.*?)(,(.*?))?\)/g;
-    let result: RegExpExecArray;
-    while ((result = regex.exec(translation))) {
-      let key = undefined;
+    let result: RegExpExecArray | undefined;
+
+    while ((result = regex.exec(translation) ?? undefined)) {
+      let key: string | undefined = undefined;
       let args = {};
-      let index = undefined;
-      let length = undefined;
+      let index: number | undefined = undefined;
+      let length: number | undefined = undefined;
       if (result && result.length > 0) {
         key = result[1].trim();
         index = result.index;
@@ -317,7 +348,7 @@ export class I18nService<K = Record<string, unknown>>
           }
         }
       }
-      if (key) {
+      if (key && index && length) {
         list.push({ index, length, key, args });
       }
       result = undefined;

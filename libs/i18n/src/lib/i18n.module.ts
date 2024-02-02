@@ -33,6 +33,7 @@ import { I18nLoader } from './loaders/i18n.loader';
 import format from 'string-format';
 import { I18nMiddleware } from './middlewares/i18n.middleware';
 import { processLanguages, processTranslations } from './utils/loaders-utils';
+import { isResolverWithOptions } from './utils';
 
 export const logger = new Logger('I18nService');
 
@@ -229,7 +230,7 @@ export class I18nModule implements OnModuleInit, NestModule {
     return (resolvers || [])
       .filter(shouldResolve)
       .reduce<Provider[]>((providers, r) => {
-        if (r['use']) {
+        if (isResolverWithOptions(r)) {
           const { use: resolver, options, ...rest } = r as any;
           const optionsToken = getI18nResolverOptionsToken(
             resolver as unknown as () => void,

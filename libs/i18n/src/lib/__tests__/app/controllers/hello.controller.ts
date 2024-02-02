@@ -244,6 +244,12 @@ export class HelloController {
       },
       { id: 2, name: 'Doe' },
     ];
-    return items.find(({ id }) => id === data.id);
+    const result = items.find(({ id }) => id === data.id);
+
+    if (!result) {
+      throw new Error('Hero did not found');
+    }
+
+    return result;
   }
 }
