@@ -21,13 +21,6 @@ import { I18nError } from '../i18n.error';
 
 const pluralKeys = ['zero', 'one', 'two', 'few', 'many', 'other'];
 
-type NestedTranslation = {
-  index: number;
-  length: number;
-  key: string;
-  args: any;
-};
-
 export type TranslateOptions = {
   lang?: string;
   args?: ({ [k: string]: any } | string)[] | { [k: string]: any };
@@ -193,7 +186,7 @@ export class I18nService<K = Record<string, unknown>>
     lang: string,
     options?: TranslateOptions,
     rootTranslations?: I18nTranslation | string,
-  ): I18nTranslation | string {
+  ): I18nTranslation | string | undefined {
     const keys = key.split('.');
     const [firstKey] = keys;
 
@@ -217,13 +210,12 @@ export class I18nService<K = Record<string, unknown>>
       }
     }
 
-    let translation: string | I18nTranslation;
-
-    if (translations instanceof Object && translations[key]) {
+    let translation: string | I18nTranslation | undefined;
+    if (typeof translations === 'object' && translations[key]) {
       translation = translations[key];
     } else {
       this.logger.warn('Warning: Translation key not found');
-      translation = options?.defaultValue ?? key;
+      translation = options?.defaultValue;
     }
 
     if (translation && args !== undefined && args !== null) {
