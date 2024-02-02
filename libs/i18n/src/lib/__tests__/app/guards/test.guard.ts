@@ -13,6 +13,7 @@ export class TestGuard implements CanActivate {
     const i18n = I18nContext.current<I18nTranslations>();
     response.header(
       'X-Test',
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       i18n.t('test.CURRENT_LANGUAGE', { args: { lang: i18n.lang } }),
     );

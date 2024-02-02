@@ -407,6 +407,7 @@ function customDebounce(func: (...args: any[]) => void, wait: number) {
     clearTimeout(timeoutId);
 
     timeoutId = setTimeout(function () {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       func.apply(this, args);
       args = [];

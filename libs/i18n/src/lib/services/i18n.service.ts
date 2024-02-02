@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import {
   I18N_OPTIONS,
