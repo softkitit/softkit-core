@@ -7467,6 +7467,7 @@ __metadata:
     "@testcontainers/postgresql": 10.2.1
     "@types/accept-language-parser": 1.5.3
     "@types/cookie": 0.5.2
+    "@types/fs-extra": ^11.0.4
     "@types/hbs": 4.0.2
     "@types/jest": 29.5.4
     "@types/js-yaml": 4.0.6
@@ -7526,7 +7527,7 @@ __metadata:
     jest-extended: 4.0.2
     js-yaml: 4.1.0
     mailgun.js: 9.3.0
-    mergician: 1.1.0
+    mergician: 2.0.0
     nanoid: 3.3.6
     nest-typed-config: 2.9.1
     nestjs-cls: 3.5.1
@@ -8134,6 +8135,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/fs-extra@npm:^11.0.4":
+  version: 11.0.4
+  resolution: "@types/fs-extra@npm:11.0.4"
+  dependencies:
+    "@types/jsonfile": "*"
+    "@types/node": "*"
+  checksum: 242cb84157631f057f76495c8220707541882c00a00195b603d937fb55e471afecebcb089bab50233ed3a59c69fd68bf65c1f69dd7fafe2347e139cc15b9b0e5
+  languageName: node
+  linkType: hard
+
 "@types/graceful-fs@npm:^4.1.3":
   version: 4.1.9
   resolution: "@types/graceful-fs@npm:4.1.9"
@@ -8262,6 +8273,15 @@ __metadata:
   version: 7.0.15
   resolution: "@types/json-schema@npm:7.0.15"
   checksum: 97ed0cb44d4070aecea772b7b2e2ed971e10c81ec87dd4ecc160322ffa55ff330dace1793489540e3e318d90942064bb697cc0f8989391797792d919737b3b98
+  languageName: node
+  linkType: hard
+
+"@types/jsonfile@npm:*":
+  version: 6.1.4
+  resolution: "@types/jsonfile@npm:6.1.4"
+  dependencies:
+    "@types/node": "*"
+  checksum: 309fda20eb5f1cf68f2df28931afdf189c5e7e6bec64ac783ce737bb98908d57f6f58757ad5da9be37b815645a6f914e2d4f3ac66c574b8fe1ba6616284d0e97
   languageName: node
   linkType: hard
 
@@ -19315,10 +19335,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mergician@npm:1.1.0":
-  version: 1.1.0
-  resolution: "mergician@npm:1.1.0"
-  checksum: adefcac55ff67f118958ebbc10c30780ccd43ee45bd1e3cc80b73bb80e3fbcec31f02188e120a60a05ce7bf8ea63cc1769070369d44efaa27e2b5f047dcc7dda
+"mergician@npm:2.0.0":
+  version: 2.0.0
+  resolution: "mergician@npm:2.0.0"
+  checksum: da57223fb0bd2fc8f4abf294e714461f0d2b6cc0006e27d5b4d7b54bb63e47144a3bc23ed06fd2418a21a9919ecea6db345a34157fe151180bf98c140912d452
   languageName: node
   linkType: hard
 
