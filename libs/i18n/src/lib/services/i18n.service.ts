@@ -219,10 +219,14 @@ export class I18nService<K = Record<string, unknown>>
 
     let translation: string | I18nTranslation;
 
-    translation =
-      translations instanceof Object && translations[key]
-        ? translations[key]
-        : options?.defaultValue ?? 'Unknown';
+    if (translations instanceof Object && translations[key]) {
+      translation = translations[key];
+    } else {
+      this.logger.warn(
+        "Warning: Translation key not found. Falling back to default 'English'.",
+      );
+      translation = options?.defaultValue ?? 'English';
+    }
 
     if (translation && args && Array.isArray(args) && args.length > 0) {
       const pluralObject = this.getPluralObject(translation);
