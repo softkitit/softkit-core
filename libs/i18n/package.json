@@ -14,7 +14,7 @@
     "locale"
   ],
   "bin": {
-    "i18n": "./dist/cli.js"
+    "i18n": "./src/lib/cli.js"
   },
   "dependencies": {
     "yargs": "17.7.2",
