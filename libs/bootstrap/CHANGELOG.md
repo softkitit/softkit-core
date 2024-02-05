@@ -1,4 +1,12 @@
 Softkit Core Libraries Changelog
+## [0.2.8](https://github.com/softkitit/softkit-core/compare/bootstrap-0.2.7...bootstrap-0.2.8) (2024-02-05)
+
+
+### Bug Fixes
+
+* **bootstrap:** removed dependency on saas-buildkit/i18n library ([cfe4e40](https://github.com/softkitit/softkit-core/commit/cfe4e40ec39afcfa88e565ff663af47e468fa817))
+* **bootstrap:** started using default-response-body-formatter.ts from exceptions library after refactoring ([35f2bb1](https://github.com/softkitit/softkit-core/commit/35f2bb117625acb8416feb03bda4e05677cd66b9))
+
 ## [0.2.7](https://github.com/softkitit/softkit-core/compare/bootstrap-0.2.6...bootstrap-0.2.7) (2024-01-26)
 
 ## [0.2.6](https://github.com/softkitit/softkit-core/compare/bootstrap-0.2.5...bootstrap-0.2.6) (2024-01-26)
