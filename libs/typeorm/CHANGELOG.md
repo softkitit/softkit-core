@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.5.3](https://github.com/softkitit/softkit-core/compare/typeorm-0.5.2...typeorm-0.5.3) (2024-02-05)
+
+
+### Bug Fixes
+
+* **typeorm:** removed dependency on saas-buildkit/i18n library ([202dd56](https://github.com/softkitit/softkit-core/commit/202dd56f179c5ee944fae785ea685dc712334903))
+
 ## [0.5.2](https://github.com/softkitit/softkit-core/compare/typeorm-0.5.1...typeorm-0.5.2) (2024-01-26)
 
 ## [0.5.1](https://github.com/softkitit/softkit-core/compare/typeorm-0.5.0...typeorm-0.5.1) (2024-01-26)
