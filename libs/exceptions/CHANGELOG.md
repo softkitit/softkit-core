@@ -1,4 +1,12 @@
 Softkit Core Libraries Changelog
+## [0.1.5](https://github.com/softkitit/softkit-core/compare/exceptions-0.1.4...exceptions-0.1.5) (2024-02-05)
+
+
+### Bug Fixes
+
+* **exceptions:** moved default-response-body-formatter.ts to exceptions library to avoid cycle deps ([4f5a4c4](https://github.com/softkitit/softkit-core/commit/4f5a4c4a0dfc448763b568407e085645b4389211))
+* **exceptions:** removed dependency on saas-buildkit/i18n library ([b76553b](https://github.com/softkitit/softkit-core/commit/b76553b1afdbf03764b01e45fe9718a556030d20))
+
 ## [0.1.4](https://github.com/softkitit/softkit-core/compare/exceptions-0.1.3...exceptions-0.1.4) (2024-01-26)
 
 ## [0.1.3](https://github.com/softkitit/softkit-core/compare/exceptions-0.1.2...exceptions-0.1.3) (2023-12-15)
