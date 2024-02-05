@@ -1,4 +1,6 @@
 Softkit Core Libraries Changelog
+## [0.2.3](https://github.com/softkitit/softkit-core/compare/test-utils-0.2.2...test-utils-0.2.3) (2024-02-05)
+
 ## [0.2.2](https://github.com/softkitit/softkit-core/compare/test-utils-0.2.1...test-utils-0.2.2) (2024-01-26)
 
 
