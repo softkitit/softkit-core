@@ -3,6 +3,7 @@ import {
   ForbiddenException,
   Post,
   ServiceUnavailableException,
+  UseFilters,
 } from '@nestjs/common';
 import { GeneralNotFoundException } from '../../lib/exceptions/general-not-found.exception';
 import { GeneralForbiddenException } from '../../lib/exceptions/general-forbidden.exception';
@@ -24,6 +25,8 @@ import {
 import { GeneralBadRequestException } from '../../lib/exceptions/general-bad-request.exception';
 import { GeneralUnprocessableEntityException } from '../../lib/exceptions/general-unprocessable-entity.exception';
 import { ErrorCodes } from './vo/error-codes.enum';
+import { I18nValidationExceptionFilter } from '@softkit/i18n';
+import { responseBodyFormatter } from '../../lib/utils/default-response-body-formatter';
 
 @Controller({
   path: 'failing-http',
@@ -47,6 +50,29 @@ export class FailingController {
         children: [],
         value: 'fieldValue',
         property: 'fieldName',
+      },
+    ]);
+  }
+
+  @Post('/bad-request-with-response-body-formatter')
+  @ApiConflictEntityCreation()
+  @UseFilters(
+    new I18nValidationExceptionFilter({
+      detailedErrors: true,
+      responseBodyFormatter,
+    }),
+  )
+  public async badRequestWithResponseBodyFormatter() {
+    throw new GeneralBadRequestException([
+      {
+        target: {},
+        constraints: {
+          isNotEmpty: 'field is required',
+        },
+        contexts: {},
+        children: [],
+        value: 'fieldValue',
+        property: 'fieldProperty',
       },
     ]);
   }

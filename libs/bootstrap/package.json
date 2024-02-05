@@ -31,7 +31,6 @@
     "@nestjs/common": "^10.0.0",
     "@nestjs/core": "^10.0.0",
     "@nestjs/platform-fastify": "^10.0.0",
-    "@saas-buildkit/nestjs-i18n": "^11.0.0",
     "@fastify/helmet": "^11.0.0",
     "typeorm-transactional": "^0.4.0",
     "typeorm-extension": "^3.0.0",

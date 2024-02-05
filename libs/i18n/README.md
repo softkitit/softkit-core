@@ -73,8 +73,8 @@ nestjs-i18n generate-types -t json -p ./src/lib/i18n -o ./src/lib/generated/i18n
 import {
   i18nValidationMessage,
   i18nValidationMessageString,
-} from '@saas-buildkit/nestjs-i18n';
-import { Path } from '@saas-buildkit/nestjs-i18n/dist/types';
+} from '@softkit/i18n';
+import { Path } from '@softkit/i18n/dist/types';
 import { I18nTranslations } from '../generated/i18n.generated';
 
 export function i18nString(key: Path<I18nTranslations>) {

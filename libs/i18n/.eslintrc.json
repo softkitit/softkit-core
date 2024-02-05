@@ -26,7 +26,8 @@
             "checkObsoleteDependencies": true,
             "checkVersionMismatches": true,
             "ignoredDependencies": [
-              "tslib"
+              "tslib",
+              "typescript"
             ]
           }
         ]
@@ -46,7 +47,19 @@
         "*.ts",
         "*.tsx"
       ],
-      "rules": {}
+      "rules": {
+        "@typescript-eslint/no-explicit-any": "off",
+        "unicorn/no-null": "off",
+        "security/detect-non-literal-fs-filename": "off",
+        "sonarjs/cognitive-complexity": "off",
+        "complexity": "off",
+        "unicorn/no-unreadable-array-destructuring": "off",
+        "unicorn/no-await-expression-member": "off",
+        "no-console": "off",
+        "unicorn/no-process-exit": "off",
+        "sonarjs/no-identical-expressions": "off",
+        "sonarjs/no-identical-functions": "off"
+      }
     },
     {
       "files": [

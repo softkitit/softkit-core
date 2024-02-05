@@ -5,7 +5,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
-import { I18nContext } from '@saas-buildkit/nestjs-i18n';
+import { I18nContext } from '@softkit/i18n';
 import { QueryFailedError } from 'typeorm';
 import { toCapitalizedWords } from '@softkit/string-utils';
 import { ErrorResponse } from '@softkit/exceptions';

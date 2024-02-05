@@ -1,11 +1,11 @@
 import { IValidatorDefinition } from './validator-definition.interface';
 import {
   I18nValidationError,
+  Path,
   i18nValidationMessage,
-} from '@saas-buildkit/nestjs-i18n';
+} from '@softkit/i18n';
 import { TransformFnParams } from 'class-transformer';
 import { GeneralBadRequestException } from '@softkit/exceptions';
-import { Path } from '@saas-buildkit/nestjs-i18n/dist/types';
 import { I18nTranslations } from '../../generated/i18n.generated';
 
 type TransformFnParamsEssentials = Omit<

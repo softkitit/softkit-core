@@ -19,7 +19,16 @@ module.exports = {
       rules: {
         'unused-imports/no-unused-imports': 'error',
         'unused-imports/no-unused-vars': [
-          'warn',
+          'off',
+          {
+            vars: 'all',
+            varsIgnorePattern: '^_',
+            args: 'after-used',
+            argsIgnorePattern: '^_',
+          },
+        ],
+        '@typescript-eslint/no-unused-vars': [
+          'off',
           {
             vars: 'all',
             varsIgnorePattern: '^_',
@@ -71,7 +80,8 @@ module.exports = {
         '@typescript-eslint/interface-name-prefix': 'off',
         '@typescript-eslint/no-unused-vars': ['error'],
         '@typescript-eslint/no-explicit-any': ['error'],
-        'security/detect-object-injection': ['error'],
+        'security/detect-object-injection': ['off'],
+        'unicorn/no-array-reduce': ['off'],
         'simple-import-sort/exports': 'error',
         'max-len': [
           'error',

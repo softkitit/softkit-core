@@ -14,4 +14,5 @@ export * from './lib/interceptors/forbidden-exception.filter';
 export * from './lib/interceptors/http-exception.filter';
 export * from './lib/interceptors/not-found-exception.filter';
 export * from './lib/swagger';
+export * from './lib/utils/default-response-body-formatter';
 export * from './lib/vo/error-response.dto';

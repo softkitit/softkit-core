@@ -1,0 +1,27 @@
+{
+  "HELLO": "Bonjour",
+  "PRODUCT": {
+    "NEW": "Nouveau Produit: {name}"
+  },
+  "ARRAY": [
+    "UN",
+    "DEUX",
+    "TROIS"
+  ],
+  "cat": "Chat",
+  "cat_name": "Chat: {name}",
+  "set-up-password": {
+    "heading": "Bonjour, {username}",
+    "title": "Mot de passe oublié",
+    "followLink": "Veuillez suivre le lien pour configurer votre mot de passe"
+  },
+  "dot.test": "test",
+  "day_interval": {
+    "one": "Tous les jours",
+    "other": "Tous les {count} jours",
+    "zero": "Jamais"
+  },
+  "nested": "Un message: $t(test.set-up-password.heading, {{\"username\":  \"{username}\" }})",
+  "nested-no-args": "Nous allons faire du shopping: $t(test.dot.test)",
+  "CURRENT_LANGUAGE": "Langue courante: {lang}"
+}

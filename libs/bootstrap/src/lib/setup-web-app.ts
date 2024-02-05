@@ -13,7 +13,7 @@ import { FastifyInstance } from 'fastify/types/instance';
 import {
   I18nValidationExceptionFilter,
   I18nValidationPipe,
-} from '@saas-buildkit/nestjs-i18n';
+} from '@softkit/i18n';
 import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
 import { initializeTransactionalContext } from 'typeorm-transactional';
 import { getTransactionalContext } from 'typeorm-transactional/dist/common';
@@ -35,7 +35,7 @@ import {
   TYPEORM_SEEDERS_TOKEN,
 } from '@softkit/typeorm';
 import { LoggingInterceptor } from '@softkit/logger';
-import { responseBodyFormatter } from '@softkit/i18n';
+import { responseBodyFormatter } from '@softkit/exceptions';
 import { REQUEST_ID_HEADER } from '@softkit/server-http-client';
 import { fastifyHelmet } from '@fastify/helmet';
 import { DataSource } from 'typeorm';

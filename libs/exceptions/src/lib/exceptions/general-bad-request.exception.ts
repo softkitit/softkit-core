@@ -1,8 +1,5 @@
 import { HttpStatus } from '@nestjs/common';
-import {
-  I18nValidationError,
-  I18nValidationException,
-} from '@saas-buildkit/nestjs-i18n';
+import { I18nValidationError, I18nValidationException } from '@softkit/i18n';
 import { ErrorResponse } from '../vo/error-response.dto';
 import { i18nString } from '../utils/i18n';
 
