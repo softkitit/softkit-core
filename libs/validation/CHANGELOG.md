@@ -1,4 +1,12 @@
 Softkit Core Libraries Changelog
+## [0.3.7](https://github.com/softkitit/softkit-core/compare/validation-0.3.6...validation-0.3.7) (2024-02-05)
+
+
+### Bug Fixes
+
+* **validation:** removed dependency on saas-buildkit/i18n library ([78e0e54](https://github.com/softkitit/softkit-core/commit/78e0e5407fffb0d86b76389150b3f70ff56c500c))
+* **validation:** updated types according to new validator.js version ([0cededb](https://github.com/softkitit/softkit-core/commit/0cededbd9a1611e245014bfd95909ece4c252b88))
+
 ## [0.3.6](https://github.com/softkitit/softkit-core/compare/validation-0.3.5...validation-0.3.6) (2024-01-26)
 
 
