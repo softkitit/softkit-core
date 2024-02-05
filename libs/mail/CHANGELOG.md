@@ -1,4 +1,6 @@
 Softkit Core Libraries Changelog
+## [0.2.4](https://github.com/softkitit/softkit-core/compare/mail-0.2.3...mail-0.2.4) (2024-02-05)
+
 ## [0.2.3](https://github.com/softkitit/softkit-core/compare/mail-0.2.2...mail-0.2.3) (2024-01-26)
 
 ## [0.2.2](https://github.com/softkitit/softkit-core/compare/mail-0.2.1...mail-0.2.2) (2024-01-24)
