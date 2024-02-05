@@ -1,4 +1,26 @@
 Softkit Core Libraries Changelog
+## [0.2.0](https://github.com/softkitit/softkit-core/compare/i18n-0.1.2...i18n-0.2.0) (2024-02-05)
+
+
+### Features
+
+* **i18n:** moved i18n library code completely to this repo ([bfc32c8](https://github.com/softkitit/softkit-core/commit/bfc32c876fcf5f2b452228f81cba41d1e9773796))
+
+
+### Bug Fixes
+
+* **exceptions:** moved default-response-body-formatter.ts to exceptions library to avoid cycle deps ([4f5a4c4](https://github.com/softkitit/softkit-core/commit/4f5a4c4a0dfc448763b568407e085645b4389211))
+* **i18n:** add eslint-disable for ts-ignore ([045b4cd](https://github.com/softkitit/softkit-core/commit/045b4cd97d582983802f83f0ef6860d00d51c187))
+* **i18n:** added chmod +x for cli ([7fe2867](https://github.com/softkitit/softkit-core/commit/7fe28673bb516a410414fefba97705a27c7022ca))
+* **i18n:** fixed tests ([11c804c](https://github.com/softkitit/softkit-core/commit/11c804cd378a671dfa4b22312fb04e511886c4b6))
+* **i18n:** moved back ts config ([784dad8](https://github.com/softkitit/softkit-core/commit/784dad86c0abed8cb68c1a89cdf7600c3f10a9a3))
+* **i18n:** moved default-response-body-formatter.ts to exceptions library to avoid cycle deps ([3f1f566](https://github.com/softkitit/softkit-core/commit/3f1f5661fedeede2eafe4897111d695c28b84b91))
+* **i18n:** resolve ts errors for test compatibility ([065ff88](https://github.com/softkitit/softkit-core/commit/065ff88e94ec91a431ff800d2baf53ee33d6af81))
+* **i18n:** resolve typescript errors ([c2f9c4f](https://github.com/softkitit/softkit-core/commit/c2f9c4fcdcc589076138c5f4279e9f4393c91d3b))
+* **i18n:** temporary disabled tests for grpc and one for graphql ([73ccf93](https://github.com/softkitit/softkit-core/commit/73ccf9391bf28bf9efd030b733a329bd7cd883d3))
+* **i18n:** update default translations value ([c9d6bbc](https://github.com/softkitit/softkit-core/commit/c9d6bbc7a9e5bce057ad47f58a25fc2ad72be5ed))
+* **i18n:** update eslint rules and fixed some of them ([d8b2597](https://github.com/softkitit/softkit-core/commit/d8b2597e68f1dd059cb179bb902546e4ada4bc2a))
+
 ## [0.1.2](https://github.com/softkitit/softkit-core/compare/i18n-0.1.1...i18n-0.1.2) (2024-01-26)
 
 ## [0.1.1](https://github.com/softkitit/softkit-core/compare/i18n-0.1.0...i18n-0.1.1) (2023-11-15)
