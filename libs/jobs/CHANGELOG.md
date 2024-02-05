@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.1.5](https://github.com/softkitit/softkit-core/compare/jobs-0.1.4...jobs-0.1.5) (2024-02-05)
+
+
+### Bug Fixes
+
+* **jobs:** removed dependency on saas-buildkit/i18n library ([023846e](https://github.com/softkitit/softkit-core/commit/023846ec132c837f0bedc66754d190945b9b6d95))
+
 ## [0.1.4](https://github.com/softkitit/softkit-core/compare/jobs-0.1.3...jobs-0.1.4) (2024-01-26)
 
 ## [0.1.3](https://github.com/softkitit/softkit-core/compare/jobs-0.1.2...jobs-0.1.3) (2024-01-26)
