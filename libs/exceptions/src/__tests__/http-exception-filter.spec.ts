@@ -1,4 +1,4 @@
-import { HttpStatus } from '@nestjs/common';
+import { ArgumentsHost, HttpException, HttpStatus } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 import {
   FastifyAdapter,
@@ -12,10 +12,24 @@ import {
   HttpExceptionFilter,
   OverrideDefaultForbiddenExceptionFilter,
   OverrideDefaultNotFoundFilter,
+  responseBodyFormatter,
 } from '../';
 import { AppModule } from './app/app.module';
-import { I18nValidationExceptionFilter } from '@softkit/i18n';
+import {
+  I18nValidationException,
+  I18nValidationExceptionFilter,
+} from '@softkit/i18n';
 import { ErrorCodes } from './app/vo/error-codes.enum';
+
+const mockRequest = {
+  requestId: 'mock-request-id',
+};
+
+const mockArgumentsHost = {
+  switchToHttp: () => ({
+    getRequest: <T = any>() => mockRequest as T,
+  }),
+} as ArgumentsHost;
 
 describe('http exception filter', () => {
   let app: NestFastifyApplication;
@@ -39,6 +53,10 @@ describe('http exception filter', () => {
     );
 
     await app.listen(0);
+  });
+
+  afterAll(() => {
+    app.close();
   });
 
   it('not found exception filter', async () => {
@@ -268,6 +286,32 @@ describe('http exception filter', () => {
     expect(errorResponse.detail).toContain(
       'exception.BAD_REQUEST.GENERAL_DETAIL',
     );
+  });
+
+  it('response body formatter test', async () => {
+    const response = await app.inject({
+      method: 'POST',
+      url: '/failing-http/bad-request-with-response-body-formatter',
+    });
+
+    const errorBody = JSON.parse(response.body);
+
+    expect(response.statusCode).toBe(HttpStatus.BAD_REQUEST);
+    expect(errorBody.title).toBe('exception.BAD_REQUEST.TITLE');
+    expect(errorBody.detail).toBe('exception.BAD_REQUEST.GENERAL_DETAIL');
+
+    const exception = new HttpException('Conflict', 409);
+
+    const responseBody = responseBodyFormatter(
+      mockArgumentsHost,
+      exception as unknown as I18nValidationException,
+      [],
+    ) as unknown as ErrorResponse;
+
+    expect(responseBody.title).toBe('Bad Request');
+    expect(responseBody.status).toBe(HttpStatus.CONFLICT);
+    expect(responseBody.type).toBeDefined();
+    expect(responseBody.detail).toBe('Can not validate inbound request body');
   });
 
   it('unprocessable entity request', async () => {
