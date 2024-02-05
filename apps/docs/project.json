@@ -9,7 +9,7 @@
       "options": {
         "commands": [
           "docusaurus build apps/docs",
-          "find ./apps/docs/docs/api -type f -name 'index.md' -exec sed -i '' -E 's/([a-zA-Z]+)\\/src/\\1/g' {} +"
+          "find ./apps/docs/build/api -type f -name 'index.md' -exec sed -i '' -E 's/([a-zA-Z]+)\\/src/\\1/g' {} +"
         ],
         "parallel": false
       },
