@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.4.0](https://github.com/softkitit/softkit-core/compare/i18n-0.3.0...i18n-0.4.0) (2024-02-05)
+
+
+### Features
+
+* **i18n:** fixed the build process for i18n library ([0ad09ac](https://github.com/softkitit/softkit-core/commit/0ad09acd91a645bc1bde1c9f7d15a9948a8c13f6))
+
 ## [0.3.0](https://github.com/softkitit/softkit-core/compare/i18n-0.2.0...i18n-0.3.0) (2024-02-05)
 
 
