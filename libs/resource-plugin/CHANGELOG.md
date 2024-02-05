@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.6.4](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.3...resource-plugin-0.6.4) (2024-02-05)
+
+
+### Bug Fixes
+
+* **resource-plugin:** removed dependency on saas-buildkit/i18n library ([cdec535](https://github.com/softkitit/softkit-core/commit/cdec535d8b06c0074e2012d159edff9b81ba97af))
+
 ## [0.6.3](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.2...resource-plugin-0.6.3) (2024-01-30)
 
 
