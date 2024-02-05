@@ -5,6 +5,29 @@
   "projectType": "library",
   "targets": {
     "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "nx build i18n:build-internal",
+          "chmod +x dist/libs/i18n/src/lib/cli.js"
+        ],
+        "parallel": false,
+        "outputPath": "dist/libs/i18n",
+        "tsConfig": "libs/i18n/tsconfig.lib.json",
+        "packageJson": "libs/i18n/package.json",
+        "main": "libs/i18n/src/index.ts",
+        "assets": [
+          "libs/i18n/*.md"
+        ]
+      },
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "dependsOn": [
+        { "projects": "self", "target": "build" }
+      ]
+    },
+    "build-internal": {
       "executor": "@nx/js:tsc",
       "outputs": [
         "{options.outputPath}"
@@ -18,18 +41,6 @@
           "libs/i18n/*.md"
         ]
       }
-    },
-    "change-cli-permissions": {
-      "executor": "nx:run-commands",
-      "options": {
-        "commands": [
-          "chmod +x dist/libs/i18n/src/lib/cli.js"
-        ],
-        "parallel": false
-      },
-      "dependsOn": [
-        { "projects": "self", "target": "build" }
-      ]
     },
     "lint": {
       "executor": "@nx/linter:eslint",
@@ -67,7 +78,6 @@
       ],
       "options": {
         "postTargets": [
-          "i18n:change-cli-permissions",
           "i18n:npm",
           "i18n:github"
         ],
