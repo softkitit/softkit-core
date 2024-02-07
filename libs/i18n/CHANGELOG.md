@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.4.1](https://github.com/softkitit/softkit-core/compare/i18n-0.4.0...i18n-0.4.1) (2024-02-07)
+
+
+### Bug Fixes
+
+* **i18n:** update readme ([e7af6cf](https://github.com/softkitit/softkit-core/commit/e7af6cfc88fb391c945792403fb1c86f373ca919))
+
 ## [0.4.0](https://github.com/softkitit/softkit-core/compare/i18n-0.3.0...i18n-0.4.0) (2024-02-05)
 
 
