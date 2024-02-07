@@ -213,6 +213,72 @@ const sidebars = {
         },
         {
           type: 'category',
+          label: 'I18n Library',
+          link: {
+            type: 'doc',
+            id: 'libraries/i18n/getting-started',
+          },
+          items: [
+            'libraries/i18n/getting-started',
+            'libraries/i18n/quick-start',
+            {
+              type: 'category',
+              label: 'Guides',
+              items: [
+                'libraries/i18n/guides/type-safety',
+                'libraries/i18n/guides/fallback-languages',
+                'libraries/i18n/guides/array',
+                'libraries/i18n/guides/debugging',
+                {
+                  type: 'category',
+                  label: 'DTO Validation',
+                  items: [
+                    'libraries/i18n/guides/dto_validation/global-validation',
+                    'libraries/i18n/guides/dto_validation/manual-validation',
+                  ],
+                },
+                'libraries/i18n/guides/exception-filters',
+                'libraries/i18n/guides/formatting',
+                'libraries/i18n/guides/graphql',
+                'libraries/i18n/guides/grpc',
+                'libraries/i18n/guides/guard',
+                'libraries/i18n/guides/mailer',
+                'libraries/i18n/guides/nested',
+                'libraries/i18n/guides/plurals',
+                {
+                  type: 'category',
+                  label: 'View engines',
+                  items: [
+                    'libraries/i18n/guides/view_engines/ejs',
+                    'libraries/i18n/guides/view_engines/handlebars',
+                    'libraries/i18n/guides/view_engines/pug',
+                  ],
+                },
+              ],
+            },
+            {
+              type: 'category',
+              label: 'Concepts',
+              items: [
+                'libraries/i18n/concepts/i18n-context',
+                'libraries/i18n/concepts/loader',
+                'libraries/i18n/concepts/resolver',
+              ],
+            },
+            {
+              type: 'category',
+              label: 'FAQ',
+              items: ['libraries/i18n/faq/common'],
+            },
+            {
+              type: 'doc',
+              label: 'API',
+              id: 'api/i18n/src/index',
+            },
+          ],
+        },
+        {
+          type: 'category',
           label: 'Logger Library',
           link: {
             type: 'doc',
