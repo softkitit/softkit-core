@@ -10,8 +10,6 @@ import {
 } from '../../../service';
 import { RedlockService } from '@anchan828/nest-redlock';
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 @Processor(Jobs.BUSY_SYSTEM_JOB, {
   concurrency: 10,
   maxStalledCount: 10,

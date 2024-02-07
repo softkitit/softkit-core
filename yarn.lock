@@ -5609,29 +5609,29 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nestjs/bull-shared@npm:^10.0.1":
-  version: 10.0.1
-  resolution: "@nestjs/bull-shared@npm:10.0.1"
+"@nestjs/bull-shared@npm:^10.1.0":
+  version: 10.1.0
+  resolution: "@nestjs/bull-shared@npm:10.1.0"
   dependencies:
-    tslib: 2.6.0
+    tslib: 2.6.2
   peerDependencies:
     "@nestjs/common": ^8.0.0 || ^9.0.0 || ^10.0.0
     "@nestjs/core": ^8.0.0 || ^9.0.0 || ^10.0.0
-  checksum: d2b1e91e8afe797e34a23db5bc6fe49da3e423b120b42267503f50c4675957d3c15aec4b5e976e20096eab7743f9155f05f2282ca3a5e914292ae525c4f08683
+  checksum: b71cef811475e5c59f20ab935146619987d4957d3635b7fb7a95231f5d4417f79721cbf02b3789111da5e929f485077815d3abce993f1dab2adbc451a827483b
   languageName: node
   linkType: hard
 
-"@nestjs/bullmq@npm:10.0.1":
-  version: 10.0.1
-  resolution: "@nestjs/bullmq@npm:10.0.1"
+"@nestjs/bullmq@npm:10.1.0":
+  version: 10.1.0
+  resolution: "@nestjs/bullmq@npm:10.1.0"
   dependencies:
-    "@nestjs/bull-shared": ^10.0.1
-    tslib: 2.6.0
+    "@nestjs/bull-shared": ^10.1.0
+    tslib: 2.6.2
   peerDependencies:
     "@nestjs/common": ^8.0.0 || ^9.0.0 || ^10.0.0
     "@nestjs/core": ^8.0.0 || ^9.0.0 || ^10.0.0
-    bullmq: ^3.0.0 || ^4.0.0
-  checksum: c36ce76c9de74e8a99c2c7987aabad18ae3d01769b71ee9bd47f2ef212d544912e5d0aaf17550233676d3072759ffc7e150b2f9f6222b069c718e5c5db242efd
+    bullmq: ^3.0.0 || ^4.0.0 || ^5.0.0
+  checksum: f85a8e111227a030d18624516365dd5090c0c2ac644e3f073d2b25b96c54676903fd769fce411ede18dea61e7513cbd44caf215fe792535e66397009e15326c7
   languageName: node
   linkType: hard
 
@@ -7438,7 +7438,7 @@ __metadata:
     "@jscutlery/semver": 4.0.0
     "@mdx-js/react": 3.0.0
     "@nestjs/apollo": 12.0.11
-    "@nestjs/bullmq": 10.0.1
+    "@nestjs/bullmq": 10.1.0
     "@nestjs/common": 10.2.4
     "@nestjs/core": 10.2.4
     "@nestjs/graphql": 12.0.11
