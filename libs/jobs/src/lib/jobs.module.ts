@@ -219,6 +219,8 @@ export class JobsModule {
             commandTimeout: _,
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             enableOfflineQueue: __,
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            maxRetriesPerRequest: ___,
             ...redisConnection
           } = config.redisConfig.config[0];
 
