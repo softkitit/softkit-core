@@ -21,7 +21,7 @@ import { I18nError } from '../i18n.error';
 import { I18nContext } from '../i18n.context';
 
 const ExecutionContextMethodNotImplemented = new I18nError(
-  "Method not implemented. nestjs-i18n creates a fake Http context since it's using middleware to resolve your language. Nestjs middlewares don't have access to the ExecutionContext.",
+  "Method not implemented. @softkit/i18n creates a fake Http context since it's using middleware to resolve your language. Nestjs middlewares don't have access to the ExecutionContext.",
 );
 
 @Injectable()
