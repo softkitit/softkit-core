@@ -8,7 +8,7 @@ export class DiskHealthConfig {
   @IsNumber()
   @Max(1)
   @Min(0)
-  public thresholdPercent = 0.8;
+  public thresholdPercent = 0.95;
 
   @BooleanType
   @IsBoolean()
