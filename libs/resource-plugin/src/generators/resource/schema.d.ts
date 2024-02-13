@@ -7,5 +7,7 @@ export interface ResourceGeneratorSchema {
   generateRepository: boolean;
   generateService: boolean;
   generateController: boolean;
+  entityIncludesIdField?: boolean;
+  entityIncludesVersionField?: boolean;
   lintCommandName?: string;
 }

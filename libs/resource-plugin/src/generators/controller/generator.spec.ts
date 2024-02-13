@@ -20,6 +20,8 @@ describe('controller generator', () => {
     entityName: 'test-entity',
     basePath: 'api/test-project',
     tenantBaseEntity: true,
+    entityIncludesIdField: true,
+    entityIncludesVersionField: true,
     groupName: 'test',
   };
   const newPermissionsCategory = {

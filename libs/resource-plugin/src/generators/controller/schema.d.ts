@@ -5,6 +5,8 @@ export interface ControllerGeneratorSchema {
   serviceName: string;
   entityName: string;
   tenantBaseEntity: boolean;
+  entityIncludesIdField?: boolean;
+  entityIncludesVersionField?: boolean;
   groupName: string;
   lintCommandName?: string;
 }

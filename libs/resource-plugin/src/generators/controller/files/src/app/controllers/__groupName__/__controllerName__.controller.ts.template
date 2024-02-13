@@ -82,10 +82,19 @@ export class <%= pascalCase(controllerName) -%>Controller {
 
   @Put(':id')
   @Permissions('<%= projectName -%>.<%= controllerName -%>.update')
-  async updateOne(@Param() param: IdParamUUID, @Body() dto: Update<%= pascalCase(entityName) -%>Request): Promise<<%= pascalCase(entityName) -%>DTO> {
+  async updateOne(
+    @Param() param: IdParamUUID, 
+<% if (entityIncludesVersionField) { %>
+    @Query() query: VersionNumberParam,
+<% } %>
+    @Body() dto: Update<%= pascalCase(entityName) -%>Request
+    ): Promise<<%= pascalCase(entityName) -%>DTO> {
     return this.service
       .createOrUpdateEntity({
         id: param.id,
+<% if (entityIncludesVersionField) { %>
+        version: query.version,
+<% } %>
         ...dto,
       })
       .then((item) => {

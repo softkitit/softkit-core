@@ -16,6 +16,8 @@ describe('resource generator', () => {
     generateRepository: true,
     generateService: true,
     generateController: true,
+    entityIncludesIdField: true,
+    entityIncludesVersionField: true,
   };
 
   beforeEach(() => {
