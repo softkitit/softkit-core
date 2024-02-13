@@ -1,7 +1,10 @@
 import {
   Entity,
   PrimaryGeneratedColumn,
+  VersionColumn,
 } from 'typeorm';
+import { IsNumberLocalized } from '@softkit/validation';
+import { Expose } from 'class-transformer';
 
 import {
 <% if (tenantBaseEntity) { %>
