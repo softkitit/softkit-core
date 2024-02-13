@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.6.5](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.4...resource-plugin-0.6.5) (2024-02-13)
+
+
+### Bug Fixes
+
+* **resource-plugin:** update generators to accept optional id and version fields ([71c28e1](https://github.com/softkitit/softkit-core/commit/71c28e1d92b208d701f4bf30b63e4f7cba49bd1f))
+
 ## [0.6.4](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.3...resource-plugin-0.6.4) (2024-02-05)
 
 
