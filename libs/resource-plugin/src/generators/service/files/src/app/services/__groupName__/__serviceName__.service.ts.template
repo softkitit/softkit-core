@@ -27,7 +27,9 @@ export class <%= pascalCase(entityName) -%>Service extends BaseService<
 @Injectable()
 export class <%= pascalCase(entityName) -%>Service extends BaseService<
     <%= pascalCase(entityName) -%>,
-    <%= pascalCase(repositoryName) -%>Repository
+    'id',
+    <%= pascalCase(repositoryName) -%>Repository,
+    Pick<<%= pascalCase(repositoryName) -%>, 'id' | 'version'>
     > {
       constructor(repository: <%= pascalCase(repositoryName) -%>Repository) {
       super(repository);
