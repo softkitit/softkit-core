@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.6.6](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.5...resource-plugin-0.6.6) (2024-02-13)
+
+
+### Bug Fixes
+
+* **resource-plugin:** add missing imports and accept optional and version fields in base service template ([8e8ba39](https://github.com/softkitit/softkit-core/commit/8e8ba393024833cca4f465d9c8f66b8d352496e2))
+
 ## [0.6.5](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.4...resource-plugin-0.6.5) (2024-02-13)
 
 
