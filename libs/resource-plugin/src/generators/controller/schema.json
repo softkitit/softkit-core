@@ -51,11 +51,30 @@
       "description": "It's indicating that this controller is tenant base",
       "x-prompt": "Is this a tenant base controller? (y/n). (Useful for DTO generation, to exclude tenant id from DTOs)"
     },
+    "entityIncludesIdField": {
+      "type": "boolean",
+      "default": true,
+      "description": "Indicates if the entity has an 'id' field. If yes, then it will be excluded from the generated DTOs.",
+      "x-prompt": "Does your entity include an 'id' field that should be excluded from DTOs? (y/n)"
+    },
+    "entityIncludesVersionField": {
+      "type": "boolean",
+      "default": true,
+      "description": "Indicates if the entity has a 'version' field. If yes, then it will be excluded from the generated DTOs.",
+      "x-prompt": "Does your entity include a 'version' field that should be excluded from DTOs? (y/n)"
+    },
     "lintCommandName": {
       "type": "string",
       "default": "lint",
       "description": "The name of lint nx command in project.json"
     }
   },
-  "required": ["projectName", "controllerName", "serviceName", "entityName", "groupName", "tenantBaseEntity"]
+  "required": [
+    "projectName",
+    "controllerName",
+    "serviceName",
+    "entityName",
+    "groupName",
+    "tenantBaseEntity"
+  ]
 }

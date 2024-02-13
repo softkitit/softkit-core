@@ -13,6 +13,8 @@ export class <%= pascalCase(entityName) -%>DTO extends OmitType(<%= pascalCase(e
 
 export class Create<%= pascalCase(entityName) -%>Request extends OmitType(<%= pascalCase(entityName) -%>, [
   ...DEFAULT_CREATE_ENTITY_EXCLUDE_LIST,
+<% if (entityIncludesIdField) { %>'id',<% } %>
+<% if (entityIncludesVersionField) { %>'version',<% } %>
 <% if (tenantBaseEntity) { %>'tenantId',<% } %>
 ] as const) {}
 

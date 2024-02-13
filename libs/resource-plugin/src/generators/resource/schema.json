@@ -57,6 +57,18 @@
       "description": "It's indicating that you want to generate controller or not, by default it's true because it's easier to do all in once usually",
       "x-prompt": "Do you want to generate controller for entity? (y/n)"
     },
+    "entityIncludesIdField": {
+      "type": "boolean",
+      "default": true,
+      "description": "It's indicating that you want to include 'id' field or not, by default it's true",
+      "x-prompt": "Do you want to include 'id' field for entity? (y/n)"
+    },
+    "entityIncludesVersionField": {
+      "type": "boolean",
+      "default": true,
+      "description": "It's indicating that you want to include 'version' field or not, by default it's true",
+      "x-prompt": "Do you want to include 'version' field for entity? (y/n)"
+    },
     "lintCommandName": {
       "type": "string",
       "default": "lint",

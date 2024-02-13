@@ -13,6 +13,15 @@ import {
 
 @Entity('<%= snakeCase(entityName) -%>')
 export class <%= pascalCase(entityName) -%> extends BaseEntity {
+<% if (entityIncludesIdField) { %>
   @PrimaryGeneratedColumn('uuid')
   id!: string;
+<% } %>
+
+<% if (entityIncludesVersionField) { %>
+  @VersionColumn()
+  @IsNumberLocalized()
+  @Expose()
+  version!: number;
+<% } %>
 }

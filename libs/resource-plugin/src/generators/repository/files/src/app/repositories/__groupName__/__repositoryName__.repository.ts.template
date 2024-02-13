@@ -17,24 +17,24 @@ import { ClsService } from 'nestjs-cls';
 
 <% if (tenantBaseRepository) { %>
 @Injectable()
-export class <%= pascalCase(repositoryName) -%>Repository extends BaseRepository<<%= pascalCase(entityName) -%>> {
+export class <%= pascalCase(repositoryName) -%>Repository extends BaseRepository<<%= pascalCase(entityName) -%>, 'id'> {
   constructor(
   @InjectDataSource()
   ds: DataSource,
   clsService: ClsService<TenantClsStore>,
   ) {
-    super(<%= pascalCase(entityName) -%>, ds, clsService);
+    super(<%= pascalCase(entityName) -%>, ds, 'id', clsService);
   }
 }
 
 <% } else { %>
  @Injectable()
- export class <%= pascalCase(repositoryName) -%>Repository extends BaseRepository<<%= pascalCase(entityName) -%>> {
+ export class <%= pascalCase(repositoryName) -%>Repository extends BaseRepository<<%= pascalCase(entityName) -%>, 'id'> {
    constructor(
    @InjectDataSource()
    ds: DataSource,
    ) {
-     super(<%= pascalCase(entityName) -%>, ds);
+     super(<%= pascalCase(entityName) -%>, ds, 'id');
    }
  }
 <% } %>
