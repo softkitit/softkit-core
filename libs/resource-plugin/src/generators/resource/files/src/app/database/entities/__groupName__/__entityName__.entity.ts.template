@@ -18,6 +18,7 @@ import {
 export class <%= pascalCase(entityName) -%> extends BaseEntity {
 <% if (entityIncludesIdField) { %>
   @PrimaryGeneratedColumn('uuid')
+  @Expose()
   id!: string;
 <% } %>
 
