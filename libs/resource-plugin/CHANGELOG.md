@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.6.7](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.6...resource-plugin-0.6.7) (2024-02-16)
+
+
+### Bug Fixes
+
+* **resource-plugin:** update templates for controller and resource ([6805687](https://github.com/softkitit/softkit-core/commit/6805687e8c0ba4b61718b493757c8531972b1e42))
+
 ## [0.6.6](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.5...resource-plugin-0.6.6) (2024-02-13)
 
 
