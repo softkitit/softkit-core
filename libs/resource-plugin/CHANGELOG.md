@@ -1,4 +1,25 @@
 Softkit Core Libraries Changelog
+## [0.6.7](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.6...resource-plugin-0.6.7) (2024-02-16)
+
+
+### Bug Fixes
+
+* **resource-plugin:** update templates for controller and resource ([6805687](https://github.com/softkitit/softkit-core/commit/6805687e8c0ba4b61718b493757c8531972b1e42))
+
+## [0.6.6](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.5...resource-plugin-0.6.6) (2024-02-13)
+
+
+### Bug Fixes
+
+* **resource-plugin:** add missing imports and accept optional and version fields in base service template ([8e8ba39](https://github.com/softkitit/softkit-core/commit/8e8ba393024833cca4f465d9c8f66b8d352496e2))
+
+## [0.6.5](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.4...resource-plugin-0.6.5) (2024-02-13)
+
+
+### Bug Fixes
+
+* **resource-plugin:** update generators to accept optional id and version fields ([71c28e1](https://github.com/softkitit/softkit-core/commit/71c28e1d92b208d701f4bf30b63e4f7cba49bd1f))
+
 ## [0.6.4](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.3...resource-plugin-0.6.4) (2024-02-05)
 
 
