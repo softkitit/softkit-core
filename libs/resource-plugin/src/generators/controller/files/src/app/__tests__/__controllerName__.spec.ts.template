@@ -168,7 +168,7 @@ describe('<%= controllerName -%> e2e test', () => {
 
     const updateResponse = await app.inject({
       method: 'PUT',
-      url: `${baseControllerUrl}/${createResponseBody.id}?version=${createResponseBody.version}`,
+      url: `${baseControllerUrl}/${createResponseBody.id}<% if (entityIncludesVersionField) { %>?version=${createResponseBody.version}<% } %>`,
       payload: {
         ...dataToUpdate,
       },
