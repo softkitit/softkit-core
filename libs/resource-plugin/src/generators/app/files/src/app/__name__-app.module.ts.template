@@ -29,7 +29,7 @@ import { setupLoggerModule } from '@softkit/logger';
 import { setupYamlBaseConfigModule } from '@softkit/config';
 import { setupClsModule } from '@softkit/async-storage';
 <% if (health) { %>
-import { HealthCheckModule } from '@softkit/healthcheck';
+import { HealthCheckModule } from '@softkit/health-check';
 <% } %>
 
 @Module({
