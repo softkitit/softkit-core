@@ -1,4 +1,13 @@
 Softkit Core Libraries Changelog
+## [0.6.8](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.7...resource-plugin-0.6.8) (2024-02-20)
+
+
+### Bug Fixes
+
+* **resource-plugin:** update app and controller templates ([7afcead](https://github.com/softkitit/softkit-core/commit/7afceadae70e2543093c7f67d20b4d49268def7e))
+* **resource-plugin:** update controller test to accept optional version field ([b173dc1](https://github.com/softkitit/softkit-core/commit/b173dc1dd6fb344bc41834314e74e2967d945299))
+* **resource-plugin:** update index.ts files to  index.ts.template to avoid build process ([0b1eb20](https://github.com/softkitit/softkit-core/commit/0b1eb20dce8da978ed476922f0bcd8e8eb463ac8))
+
 ## [0.6.7](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.6...resource-plugin-0.6.7) (2024-02-16)
 
 
