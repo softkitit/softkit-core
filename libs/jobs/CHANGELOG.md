@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.2.0](https://github.com/softkitit/softkit-core/compare/jobs-0.1.5...jobs-0.2.0) (2024-02-07)
+
+
+### Features
+
+* **jobs:** updated nestjs bullmq version, to support bullmq 5 properly ([7d21892](https://github.com/softkitit/softkit-core/commit/7d21892473e3b17ae9ff7f1824b9857ddb716946))
+
 ## [0.1.5](https://github.com/softkitit/softkit-core/compare/jobs-0.1.4...jobs-0.1.5) (2024-02-05)
 
 

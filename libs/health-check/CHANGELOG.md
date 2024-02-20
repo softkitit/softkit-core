@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.0.10](https://github.com/softkitit/softkit-core/compare/health-check-0.0.9...health-check-0.0.10) (2024-02-09)
+
+
+### Bug Fixes
+
+* **health-check:** update thresholdPercent for disk health config ([95a8fba](https://github.com/softkitit/softkit-core/commit/95a8fba8841d1a92375851625b0e1f711b598466))
+
 ## [0.0.9](https://github.com/softkitit/softkit-core/compare/health-check-0.0.8...health-check-0.0.9) (2024-01-26)
 
 ## [0.0.8](https://github.com/softkitit/softkit-core/compare/health-check-0.0.7...health-check-0.0.8) (2024-01-26)
