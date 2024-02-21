@@ -21,6 +21,7 @@ export class Create<%= pascalCase(entityName) -%>Request extends OmitType(<%= pa
 export class Update<%= pascalCase(entityName) -%>Request extends OmitType(<%= pascalCase(entityName) -%>, [
   ...DEFAULT_UPDATE_ENTITY_EXCLUDE_LIST,
 <% if (tenantBaseEntity) { %>'tenantId',<% } %>
+<% if (entityIncludesVersionField) { %>'version',<% } %>
 ] as const) {}
 
 export const <%= constantCase(entityName) -%>_PAGINATION_CONFIG: PaginateConfig<<%= pascalCase(entityName) -%>DTO> = {
