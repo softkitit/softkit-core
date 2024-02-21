@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.6.9](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.8...resource-plugin-0.6.9) (2024-02-21)
+
+
+### Bug Fixes
+
+* **resource-plugin:** update controller dto template ([d4d60de](https://github.com/softkitit/softkit-core/commit/d4d60de8cf6267b93f12461f3f413736add3ac65))
+
 ## [0.6.8](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.7...resource-plugin-0.6.8) (2024-02-20)
 
 
