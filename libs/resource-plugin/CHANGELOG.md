@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.6.11](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.10...resource-plugin-0.6.11) (2024-02-22)
+
+
+### Bug Fixes
+
+* **resource-plugin:** update service template to use correct namings according to schema ([aef4c48](https://github.com/softkitit/softkit-core/commit/aef4c486c672ca4cc593e2e9b670f1ccc1011b2e))
+
 ## [0.6.10](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.9...resource-plugin-0.6.10) (2024-02-22)
 
 
