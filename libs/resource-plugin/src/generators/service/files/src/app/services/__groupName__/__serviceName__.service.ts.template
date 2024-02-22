@@ -11,7 +11,7 @@ import {
 
 <% if (tenantBaseService) { %>
 @Injectable()
-export class <%= pascalCase(entityName) -%>Service extends BaseService<
+export class <%= pascalCase(serviceName) -%>Service extends BaseService<
  <%= pascalCase(entityName) -%>,
  'id',
  <%= pascalCase(repositoryName) -%>Repository,
