@@ -29,7 +29,7 @@ export class <%= pascalCase(entityName) -%>Service extends BaseService<
     <%= pascalCase(entityName) -%>,
     'id',
     <%= pascalCase(repositoryName) -%>Repository,
-    Pick<<%= pascalCase(repositoryName) -%>, 'id' | 'version'>
+    Pick<<%= pascalCase(entityName) -%>, 'id' | 'version'>
     > {
       constructor(repository: <%= pascalCase(repositoryName) -%>Repository) {
       super(repository);
