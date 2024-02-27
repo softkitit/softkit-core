@@ -7485,7 +7485,7 @@ __metadata:
     apollo-cache-inmemory: 1.6.6
     apollo-client: 2.6.10
     apollo-link-ws: 1.0.20
-    apollo-server-core: 3.9.0
+    apollo-server-core: 3.13.0
     apollo-server-express: 3.9.0
     argon2: 0.31.0
     axios: 1.6.7
@@ -10014,7 +10014,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"apollo-reporting-protobuf@npm:^3.3.1, apollo-reporting-protobuf@npm:^3.4.0":
+"apollo-reporting-protobuf@npm:^3.4.0":
   version: 3.4.0
   resolution: "apollo-reporting-protobuf@npm:3.4.0"
   dependencies:
@@ -10023,39 +10023,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"apollo-server-core@npm:3.9.0":
-  version: 3.9.0
-  resolution: "apollo-server-core@npm:3.9.0"
-  dependencies:
-    "@apollo/utils.keyvaluecache": ^1.0.1
-    "@apollo/utils.logger": ^1.0.0
-    "@apollo/utils.usagereporting": ^1.0.0
-    "@apollographql/apollo-tools": ^0.5.3
-    "@apollographql/graphql-playground-html": 1.6.29
-    "@graphql-tools/mock": ^8.1.2
-    "@graphql-tools/schema": ^8.0.0
-    "@josephg/resolvable": ^1.0.0
-    apollo-datasource: ^3.3.2
-    apollo-reporting-protobuf: ^3.3.1
-    apollo-server-env: ^4.2.1
-    apollo-server-errors: ^3.3.1
-    apollo-server-plugin-base: ^3.6.1
-    apollo-server-types: ^3.6.1
-    async-retry: ^1.2.1
-    fast-json-stable-stringify: ^2.1.0
-    graphql-tag: ^2.11.0
-    loglevel: ^1.6.8
-    lru-cache: ^6.0.0
-    sha.js: ^2.4.11
-    uuid: ^8.0.0
-    whatwg-mimetype: ^3.0.0
-  peerDependencies:
-    graphql: ^15.3.0 || ^16.0.0
-  checksum: 161401b7081ff69415999dcfb010d410ef8b1f8ee63368b54dddd0a24b8803b4c269dde0844e0a4fc5963169101f12749d9d9ae3c5cf4f0ac7fdd60b43eda43c
-  languageName: node
-  linkType: hard
-
-"apollo-server-core@npm:^3.9.0":
+"apollo-server-core@npm:3.13.0, apollo-server-core@npm:^3.9.0":
   version: 3.13.0
   resolution: "apollo-server-core@npm:3.13.0"
   dependencies:
@@ -10128,7 +10096,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"apollo-server-plugin-base@npm:^3.6.1, apollo-server-plugin-base@npm:^3.7.2":
+"apollo-server-plugin-base@npm:^3.7.2":
   version: 3.7.2
   resolution: "apollo-server-plugin-base@npm:3.7.2"
   dependencies:
@@ -16789,9 +16757,9 @@ __metadata:
   linkType: hard
 
 "ip@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "ip@npm:2.0.0"
-  checksum: cfcfac6b873b701996d71ec82a7dd27ba92450afdb421e356f44044ed688df04567344c36cbacea7d01b1c39a4c732dc012570ebe9bebfb06f27314bca625349
+  version: 2.0.1
+  resolution: "ip@npm:2.0.1"
+  checksum: d765c9fd212b8a99023a4cde6a558a054c298d640fec1020567494d257afd78ca77e37126b1a3ef0e053646ced79a816bf50621d38d5e768cdde0431fa3b0d35
   languageName: node
   linkType: hard
 
@@ -27158,7 +27126,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uuid@npm:^8.0.0, uuid@npm:^8.3.2":
+"uuid@npm:^8.3.2":
   version: 8.3.2
   resolution: "uuid@npm:8.3.2"
   bin:
