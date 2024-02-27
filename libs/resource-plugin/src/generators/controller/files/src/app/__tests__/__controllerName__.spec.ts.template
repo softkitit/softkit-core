@@ -68,7 +68,7 @@ describe('<%= controllerName -%> e2e test', () => {
 
     defaultHeaders = {
       Authorization: `Bearer ${adminAccessToken}`,
-      <% if (tenantBaseEntity) { %>[authConfig.headerTenantId]: tenant.id,<% } %>
+      [authConfig.headerTenantId]: tenant.id,
     };
   });
 
