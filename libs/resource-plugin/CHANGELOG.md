@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.6.12](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.11...resource-plugin-0.6.12) (2024-02-27)
+
+
+### Bug Fixes
+
+* **resource-plugin:** add headerTenantId to default headers in controller tests ([951b9da](https://github.com/softkitit/softkit-core/commit/951b9dae368a68e5ddd4400ad404011edd0648bd))
+
 ## [0.6.11](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.10...resource-plugin-0.6.11) (2024-02-22)
 
 
