@@ -1,27 +1,40 @@
-import { logger } from '@nx/devkit';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import { spawnAsync } from './spawn-async';
-import { FsTree } from 'nx/src/generators/tree';
+import fs from 'node:fs';
 
 export async function cloneRepo(root: string, tag: string, repository: string) {
-  await spawnAsync('git', [
-    'clone',
-    '--depth',
-    '1',
-    '--branch',
-    tag,
-    repository,
-    root,
-  ]);
+  try {
+    await spawnAsync('git', [
+      'config',
+      '--global',
+      'http.postBuffer',
+      '1048576000',
+    ]);
+    await spawnAsync('git', [
+      'clone',
+      '--depth',
+      '1',
+      '--branch',
+      tag,
+      repository,
+      root,
+    ]);
+    await spawnAsync('git', ['config', '--global', 'http.postBuffer', '1M']);
 
-  const gitFolderPath = '.git';
-
-  const fsTree = new FsTree(root, true);
-
-  /* istanbul ignore next */ if (!fsTree.exists(gitFolderPath)) {
-    logger.warn(`The .git directory does not exist at ${gitFolderPath}`);
+    const gitFolderPath = join(root, '.git');
+    if (existsSync(gitFolderPath)) {
+      fs.rm(gitFolderPath, { recursive: true, force: true }, (err) => {
+        if (err) {
+          throw err;
+        }
+        // eslint-disable-next-line no-console
+        console.log(`${gitFolderPath} is deleted`);
+      });
+    }
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error(`Error cloning repository: ${JSON.stringify(error)}`);
+    throw error;
   }
-
-  fsTree.delete(gitFolderPath);
-
-  return fsTree;
 }
