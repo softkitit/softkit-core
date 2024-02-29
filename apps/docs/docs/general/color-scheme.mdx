@@ -1,0 +1,250 @@
+---
+id: color-scheme
+title: Color Scheme
+sidebar_label: Color Scheme
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+### Light Theme Colors
+
+- **Primary Color (`--primary`):** <span style={{ backgroundColor: '#f86b00', color: '#fff', padding: '3px 8px', borderRadius: '4px' }}>#f86b00</span> - Vibrant orange, used for primary actions and highlights.
+- **Secondary Color (`--secondary`):** <span style={{ backgroundColor: '#df6000', color: '#fff', padding: '3px 8px', borderRadius: '4px' }}>#df6000</span> - Darker shade of orange for secondary elements.
+- **Tertiary Color (`--secondary-light`):** <span style={{ backgroundColor: '#ff9443', color: '#fff', padding: '3px 8px', borderRadius: '4px' }}>#ff9443</span> - Lighter orange for background accents.
+- **Dark Orange (`--dark-orange`):** <span style={{ backgroundColor: '#d35b00', color: '#fff', padding: '3px 8px', borderRadius: '4px' }}>#d35b00</span> - For darker accents.
+
+### Dark Theme Colors
+
+- **Background Color (`--ifm-background-color`):** <span style={{ backgroundColor: '#1A1818', color: '#fff', padding: '3px 8px', borderRadius: '4px' }}>#1A1818</span> - Main background color.
+- **Navbar Background (`--ifm-navbar-background-color`):** <span style={{ backgroundColor: '#1f1d1e', color: '#fff', padding: '3px 8px', borderRadius: '4px' }}>#1f1d1e</span> - Navbar background.
+- **Text Color (`--ifm-font-color-base`):** <span style={{ backgroundColor: '#ffffff', color: '#000', padding: '3px 8px', borderRadius: '4px' }}>#ffffff</span> - Primary text color.
+- **Heading Color (`--ifm-heading-color`):** <span style={{ backgroundColor: '#ffffff', color: '#000', padding: '3px 8px', borderRadius: '4px' }}>#ffffff</span> - Color for headings.
+
+### Neutral and Text Colors
+
+- **Primary Text Color (`--black100`):** <span style={{ backgroundColor: '#1f1d1e', color: '#fff', padding: '3px 8px', borderRadius: '4px' }}>#1f1d1e</span> - Used for primary text.
+- **Secondary Text Color (`--black60`):** <span style={{ backgroundColor: '#d35b00', color: '#fff', padding: '3px 8px', borderRadius: '4px' }}>#d35b00</span> - Used for secondary text.
+- **Backgrounds and Borders (`--black10`):** <span style={{ backgroundColor: '#FEE1CC', color: '#000', padding: '3px 8px', borderRadius: '4px' }}>#FEE1CC</span> - Used for backgrounds and borders.
+
+### Accent Colors
+
+- **Secondary Light Blue (`--secondary-light-blue`):** <span style={{ backgroundColor: '#20a4f3', color: '#fff', padding: '3px 8px', borderRadius: '4px' }}>#20a4f3</span> - Bright blue for links and interactive elements.
+- **Positive Default (`--positive-default`):** <span style={{ backgroundColor: '#31c587', color: '#fff', padding: '3px 8px', borderRadius: '4px' }}>#31c587</span> - Green for success messages.
+- **Warning Default (`--warning-default`):** <span style={{ backgroundColor: '#f6aa50', color: '#fff', padding: '3px 8px', borderRadius: '4px' }}>#f6aa50</span> - Amber for warnings.
+- **Negative (`--negative`):** <span style={{ backgroundColor: '#e93c51', color: '#fff', padding: '3px 8px', borderRadius: '4px' }}>#e93c51</span> - Red for errors.
+
+These colors are integral to our design system, ensuring a cohesive and accessible user experience in both light and dark modes.
+
+---
+
+You can write content using [GitHub-flavored Markdown syntax](https://github.github.com/gfm/).
+
+## Markdown Syntax
+
+To serve as an example page when styling markdown based Docusaurus sites.
+
+## Headers
+
+# H1 - Create the best documentation
+
+## H2 - Create the best documentation
+
+### H3 - Create the best documentation
+
+#### H4 - Create the best documentation
+
+##### H5 - Create the best documentation
+
+###### H6 - Create the best documentation
+
+---
+
+## Collapsible Sections
+
+Our documentation features collapsible sections for efficient navigation and concise presentation of detailed information.
+
+<details>
+<summary>Section 1 Title</summary>
+
+Content for Section 1.
+
+</details>
+
+---
+
+## Tabs
+
+Our documentation uses tabs to effectively organize and display content in a clear, segmented format.
+
+<Tabs>
+  <TabItem value="apple" label="Apple" default>
+    This is an apple 🍎
+  </TabItem>
+  <TabItem value="orange" label="Orange">
+    This is an orange 🍊
+  </TabItem>
+  <TabItem value="banana" label="Banana">
+    This is a banana 🍌
+  </TabItem>
+</Tabs>
+
+---
+
+## Emphasis
+
+Emphasis, aka italics, with _asterisks_ or _underscores_.
+
+Strong emphasis, aka bold, with **asterisks** or **underscores**.
+
+Combined emphasis with **asterisks and _underscores_**.
+
+Strikethrough uses two tildes. ~~Scratch this.~~
+
+---
+
+## Lists
+
+1. First ordered list item
+1. Another item
+   - Unordered sub-list.
+1. Actual numbers don't matter, just that it's a number
+   1. Ordered sub-list
+1. And another item.
+
+- Unordered list can use asterisks
+
+* Or minuses
+
+- Or pluses
+
+---
+
+## Links
+
+[I'm an inline-style link](https://www.google.com/)
+
+[I'm an inline-style link with title](https://www.google.com/ "Google's Homepage")
+
+[I'm a reference-style link][arbitrary case-insensitive reference text]
+
+[You can use numbers for reference-style link definitions][1]
+
+Or leave it empty and use the [link text itself].
+
+Some text to show that the reference links can follow later.
+
+[arbitrary case-insensitive reference text]: https://www.mozilla.org/
+[1]: http://slashdot.org/
+[link text itself]: http://www.reddit.com/
+
+---
+
+## Code
+
+```javascript
+var s = 'JavaScript syntax highlighting';
+alert(s);
+```
+
+```python
+s = "Python syntax highlighting"
+print(s)
+```
+
+```
+No language indicated, so no syntax highlighting.
+```
+
+```js {2}
+function highlightMe() {
+  console.log('This line can be highlighted!');
+}
+```
+
+---
+
+## Tables
+
+Colons can be used to align columns.
+
+| Tables        |      Are      |   Cool |
+| ------------- | :-----------: | -----: |
+| col 3 is      | right-aligned | \$1600 |
+| col 2 is      |   centered    |   \$12 |
+| zebra stripes |   are neat    |    \$1 |
+
+---
+
+There must be at least 3 dashes separating each header cell. The outer pipes (|) are optional, and you don't need to make the raw Markdown line up prettily. You can also use inline Markdown.
+
+| Markdown | Less      | Pretty     |
+| -------- | --------- | ---------- |
+| _Still_  | `renders` | **nicely** |
+| 1        | 2         | 3          |
+
+---
+
+## Blockquotes
+
+> Blockquotes are very handy in email to emulate reply text. This line is part of the same quote.
+
+Quote break.
+
+> This quote demonstrates how a lengthy sentence can be effectively wrapped within a blockquote. It serves as a practical example of Markdown's versatility in formatting text, allowing for both _italic_ and **bold** styles within the same quote.
+
+---
+
+## Inline HTML
+
+<dl>
+  <dt>Definition list</dt>
+  <dd>Is something people use sometimes.</dd>
+
+  <dt>Markdown in HTML</dt>
+  <dd>Does *not* work **very** well. Use HTML <em>tags</em>.</dd>
+</dl>
+
+---
+
+## Line Breaks
+
+Here's a line for us to start with.
+
+This line is separated from the one above by two newlines, so it will be a _separate paragraph_.
+
+This line is also a separate paragraph, but... This line is only separated by a single newline, so it's a separate line in the _same paragraph_.
+
+---
+
+## Admonitions
+
+:::note
+
+This is a note component
+
+:::
+
+:::tip
+
+This is a tip component
+
+:::
+
+:::important
+
+This is important/info component
+
+:::
+
+:::caution
+
+This is a caution/warning component
+
+:::
+
+:::danger
+
+This is a danger component
+
+:::
