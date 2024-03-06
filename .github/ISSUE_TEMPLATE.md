@@ -36,7 +36,6 @@ Check one of the following options with "x" -->
 
 <pre><code>
 Nest version: X.Y.Z
-Nest-Typed-Config version: X.Y.Z
 <!-- Check whether this is still an issue in the most recent Nest version -->
  
 For Tooling issues:
