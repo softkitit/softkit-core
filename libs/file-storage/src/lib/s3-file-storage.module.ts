@@ -100,7 +100,7 @@ export class S3FileStorageModule {
           inject: [S3_SERVICE_CONFIG_TOKEN],
         },
       ],
-      exports: [AbstractFileService, S3_CLIENT_TOKEN],
+      exports: [AbstractFileService, S3FileService, S3_CLIENT_TOKEN],
     };
   }
 
