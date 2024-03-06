@@ -207,7 +207,7 @@ export class S3FileService extends AbstractFileService {
     file: FileDefinition,
     body: NodeJsRuntimeStreamingBlobPayloadInputTypes,
     folder?: string,
-    options?: PutObjectCommandInput,
+    options?: Omit<PutObjectCommandInput, 'Bucket' | 'Key'>,
   ): Promise<UploadedFileInfo> {
     const randomId = generateRandomId();
     const fullFilePath = this.generateFileKey(randomId, file, folder);

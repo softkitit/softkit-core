@@ -1,6 +1,6 @@
 import { Test } from '@nestjs/testing';
 import { S3_CLIENT_TOKEN } from '../constants';
-import { AbstractFileService } from '../services';
+import { AbstractFileService, S3FileService } from '../services';
 import { faker } from '@faker-js/faker';
 import { NoSuchKey, S3 } from '@aws-sdk/client-s3';
 import axios from 'axios';
@@ -19,6 +19,7 @@ describe('file upload e2e test', () => {
   let s3: S3;
   let localstack: StartedLocalstack;
   let fileService: AbstractFileService;
+  let s3FileService: S3FileService;
   const bucketName: string =
     'private-bucket-' + faker.string.alpha(10).toLowerCase();
 
@@ -33,6 +34,7 @@ describe('file upload e2e test', () => {
 
     s3 = module.get<S3>(S3_CLIENT_TOKEN);
     fileService = module.get<AbstractFileService>(AbstractFileService);
+    s3FileService = module.get<S3FileService>(S3FileService);
 
     await s3.createBucket({
       Bucket: bucketName,
@@ -55,6 +57,28 @@ describe('file upload e2e test', () => {
         originalFileName: 'test.txt',
       },
       fileContent,
+    );
+
+    const downloadedFile = await fileService.downloadFile(
+      bucketName,
+      uploadResult.key,
+    );
+
+    expect(fileContent).toBe(downloadedFile);
+  });
+
+  it('should upload and download file successfully with the options', async () => {
+    const fileContent = 'test file content';
+    const uploadResult = await s3FileService.uploadFile(
+      bucketName,
+      {
+        originalFileName: 'test.pdf',
+      },
+      fileContent,
+      undefined,
+      {
+        ContentType: 'application/pdf',
+      },
     );
 
     const downloadedFile = await fileService.downloadFile(
