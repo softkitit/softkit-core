@@ -7,16 +7,15 @@
 
 /* You can override the default Infima variables here. */
 
-
 :root {
-
   --white: #ffffff;
-  --primary-font-family: "Poppins", -apple-system, BlinkMacSystemFont,
-  "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
-  "Droid Sans", "Helvetica Neue", sans-serif;
+  --primary-font-family: 'Poppins', -apple-system, BlinkMacSystemFont,
+    'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
+    'Droid Sans', 'Helvetica Neue', sans-serif;
   --primary: #f86b00;
   --secondary: #df6000;
   --secondary-light: #ff9443;
+  --tertiary: #ff7b42;
   --dark-orange: #d35b00;
   --mdc-theme-primary: var(--primary);
   --mdc-theme-secondary: (--dark-orange);
@@ -25,15 +24,16 @@
     --mdc-typography-body2-font-family
   );
   --black100: #1f1d1e;
-  --black90: #1A1818;
+  --black90: #1a1818;
   --black80: #1e0e01;
   --black60: #d35b00;
   --black40: #eca066;
   --black30: #f2bf99;
   --black20: #f9dfcc;
-  --black10: #FEE1CC;
-  --black5: #FEE9D9;
-  --black2: #FEF0E6;
+  --black10: #fee1cc;
+  --black5: #fee9d9;
+  --black2: #fef0e6;
+  --black1: #fff6e7;
   --secondary-light-blue: #20a4f3;
   --positive-default: #31c587;
   --warning-default: #f6aa50;
@@ -48,15 +48,16 @@
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizelegibility;
 
-  --ifm-font-family-base: "Prompt", -apple-system, BlinkMacSystemFont,
-  "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
-  "Droid Sans", "Helvetica Neue", sans-serif;
+  --ifm-font-family-base: 'Prompt', -apple-system, BlinkMacSystemFont,
+    'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
+    'Droid Sans', 'Helvetica Neue', sans-serif;
   --ifm-color-primary: var(--primary);
   --ifm-code-font-size: 95%;
   --ifm-toc-border-color: var(--black10);
   --ifm-menu-color: var(--black80);
   --ifm-font-color-base: var(--black80);
   --ifm-heading-color: var(--black100);
+  --ifm-link-color: var(--tertiary);
 
   --ifm-heading-font-weight: 600;
   --docusaurus-highlighted-code-line-bg: rgb(0, 0, 0);
@@ -73,7 +74,10 @@
   --ifm-table-head-color: var(--black100);
   --ifm-table-head-font-weight: 600;
 
-  --ifm-blockquote-color: var(--black80);
+  --ifm-tabs-color-active-border: var(--tertiary);
+  --ifm-tabs-color-active: var(--tertiary);
+
+  --ifm-blockquote-color: var(--black10);
   --ifm-alert-color: var(--black80);
   --ra-color-text-dark: var(--black100);
 }
@@ -119,9 +123,7 @@ hr {
   --ifm-h3-font-size: 1.3rem;
 }
 
-
-html[data-theme="dark"] {
-
+html[data-theme='dark'] {
   --ifm-background-color: var(--black90);
   --ifm-navbar-background-color: var(--black100);
 
@@ -141,9 +143,11 @@ html[data-theme="dark"] {
   --ifm-table-head-background: var(--black70);
   --ifm-table-head-color: var(--white);
 
-  --ifm-blockquote-color: var(--black10);
+  --ifm-blockquote-color: var(--black1);
   --ifm-alert-color: var(--black10);
   --ra-color-text-dark: var(--black100);
+
+  --default-info-background: rgba(255, 255, 255, 0.15);
 
   --alert-secondary-background: var(--black80);
   --alert-secondary-border-color: var(--black60);
@@ -169,21 +173,28 @@ html[data-theme="dark"] {
   border-top: 1px solid var(--black70);
 }
 
-html[data-theme="dark"] .navbar {
+html[data-theme='dark'] .navbar {
   box-shadow: none;
   border-bottom: 1px solid var(--black70);
 }
 
-html[data-theme="dark"] .main-wrapper div[class^="docSidebarContainer"] {
+html[data-theme='dark'] .main-wrapper div[class^='docSidebarContainer'] {
   background-color: var(--black100);
 }
 
-html[data-theme="dark"] blockquote {
+html[data-theme='dark'] blockquote {
   border-left-color: var(--primary-new);
-  background-color: var(--black80);
+  background-color: var(--default-info-background);
 }
 
-html[data-theme="dark"] .alert {
+html[data-theme='dark'] details {
+  --docusaurus-details-decoration-color: var(--white);
+  --ifm-color-info-dark: var(--tertiary);
+  --ifm-alert-background-color: var(--default-info-background);
+  border: 1px solid var(--white);
+}
+
+html[data-theme='dark'] .alert {
   --ifm-alert-background-color: var(--alert-note-background);
   --ifm-alert-color: var(--black10);
   --ra-admonition-icon-color: var(--alert-note-border-color);
@@ -191,35 +202,36 @@ html[data-theme="dark"] .alert {
   margin-top: 2rem;
 }
 
-html[data-theme="dark"] .alert--secondary {
+html[data-theme='dark'] .alert--secondary {
   --ifm-alert-background-color: var(--alert-secondary-background);
   --ifm-alert-color: var(--black10);
   --ra-admonition-icon-color: var(--alert-secondary-border-color);
   border: 1px solid var(--alert-secondary-border-color);
 }
 
-html[data-theme="dark"] .alert--success {
+html[data-theme='dark'] .alert--success {
   --ifm-alert-background-color: var(--alert-success-background);
   --ifm-alert-color: var(--black10);
   --ra-admonition-icon-color: var(--alert-success-border-color);
   border: 1px solid var(--alert-success-border-color);
 }
 
-html[data-theme="dark"] .alert--info {
+html[data-theme='dark'] .alert--info {
   --ifm-alert-background-color: var(--alert-info-background);
   --ifm-alert-color: var(--black10);
+  --ifm-color-info-dark: var(--tertiary);
   --ra-admonition-icon-color: var(--alert-info-border-color);
   border: 1px solid var(--alert-info-border-color);
 }
 
-html[data-theme="dark"] .alert--warning {
+html[data-theme='dark'] .alert--warning {
   --ifm-alert-background-color: var(--alert-warning-background);
   --ifm-alert-color: var(--black10);
   --ra-admonition-icon-color: var(--alert-warning-border-color);
   border: 1px solid var(--alert-warning-border-color);
 }
 
-html[data-theme="dark"] .alert--danger {
+html[data-theme='dark'] .alert--danger {
   --ifm-alert-background-color: var(--alert-danger-background);
   --ifm-alert-color: var(--black10);
   --ra-admonition-icon-color: var(--alert-danger-border-color);
@@ -242,8 +254,8 @@ html[data-theme="dark"] .alert--danger {
   /* Footer */
   --docsearch-footer-background: var(--ifm-background-surface-color);
   --docsearch-key-gradient: linear-gradient(
-          -26.5deg,
-          var(--ifm-color-emphasis-200) 0%,
-          var(--ifm-color-emphasis-100) 100%
+    -26.5deg,
+    var(--ifm-color-emphasis-200) 0%,
+    var(--ifm-color-emphasis-100) 100%
   );
 }
