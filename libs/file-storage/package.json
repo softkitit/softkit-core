@@ -1,6 +1,6 @@
 {
   "name": "@softkit/file-storage",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "peerDependencies": {
     "@nestjs/common": "^10.0.0",
     "@softkit/crypto": "^0.0.6",

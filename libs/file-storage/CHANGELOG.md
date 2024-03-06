@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.1.7](https://github.com/softkitit/softkit-core/compare/file-storage-0.1.6...file-storage-0.1.7) (2024-03-06)
+
+
+### Bug Fixes
+
+* **file-storage:** updated the package json ([8ae4397](https://github.com/softkitit/softkit-core/commit/8ae43976b9ea16f6341afc4ff4f11e2945dceaea))
+
 ## [0.1.6](https://github.com/softkitit/softkit-core/compare/file-storage-0.1.5...file-storage-0.1.6) (2024-03-06)
 
 
