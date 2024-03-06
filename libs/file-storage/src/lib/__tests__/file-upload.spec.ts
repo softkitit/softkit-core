@@ -1,6 +1,6 @@
 import { Test } from '@nestjs/testing';
 import { S3_CLIENT_TOKEN } from '../constants';
-import {AbstractFileService, S3FileService} from '../services';
+import { AbstractFileService, S3FileService } from '../services';
 import { faker } from '@faker-js/faker';
 import { NoSuchKey, S3 } from '@aws-sdk/client-s3';
 import axios from 'axios';
@@ -78,7 +78,7 @@ describe('file upload e2e test', () => {
       undefined,
       {
         ContentType: 'application/pdf',
-      }
+      },
     );
 
     const downloadedFile = await fileService.downloadFile(
