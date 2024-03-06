@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.1.8](https://github.com/softkitit/softkit-core/compare/file-storage-0.1.7...file-storage-0.1.8) (2024-03-06)
+
+
+### Bug Fixes
+
+* **file-storage:** added s3 file service to exports list ([78ae619](https://github.com/softkitit/softkit-core/commit/78ae61965fd08958e310f64b6f9fdf1c01612a38))
+
 ## [0.1.7](https://github.com/softkitit/softkit-core/compare/file-storage-0.1.6...file-storage-0.1.7) (2024-03-06)
 
 
