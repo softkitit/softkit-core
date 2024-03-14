@@ -2,7 +2,6 @@ import { INestApplication } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import { SwaggerConfig } from './config/swagger';
-import * as fs from 'node:fs';
 
 /**
  * we can have a multiple swagger setups also, one public and private for example
@@ -28,10 +27,6 @@ export function setupSwagger(
   }
 
   const document = SwaggerModule.createDocument(app, options.build());
-
-  if (c.docsOutputPath) {
-    fs.writeFileSync(c.docsOutputPath, JSON.stringify(document, undefined, 2));
-  }
 
   const swaggerPath = appPrefix
     ? `/${appPrefix}/${c.swaggerPath}`.replaceAll('//', '/')
