@@ -55,7 +55,6 @@ swagger:
   title: 'some useful name'
   swaggerPath: /swagger
   enabled: true
-  docsOutputPath: apps/app/resources/openapi-docs.json
   description: 'some useful description'
   version: 1.0.0
   contactName: 'John Doe'
