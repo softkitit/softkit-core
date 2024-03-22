@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.6.13](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.12...resource-plugin-0.6.13) (2024-03-22)
+
+
+### Bug Fixes
+
+* **resource-plugin:** update i18n paths for app generator ([5fc28ea](https://github.com/softkitit/softkit-core/commit/5fc28eab220525a5c89c155b5cd3e8daac3c9f1a))
+
 ## [0.6.12](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.11...resource-plugin-0.6.12) (2024-02-27)
 
 
