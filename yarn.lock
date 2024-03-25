@@ -7471,7 +7471,7 @@ __metadata:
     "@types/hbs": 4.0.2
     "@types/jest": 29.5.4
     "@types/js-yaml": 4.0.6
-    "@types/node": 18.16.9
+    "@types/node": 20.11.30
     "@types/opossum": 8.1.1
     "@types/passport-jwt": 3.0.9
     "@types/passport-local": 1.0.35
@@ -8396,10 +8396,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:18.16.9":
-  version: 18.16.9
-  resolution: "@types/node@npm:18.16.9"
-  checksum: 7fe0ef372ba8b157bd646efe29b0ece92ccb9f455171a7ceb4c92d6b490789ff0f14411b1dc6ad203351a0efa2b435072dfab5566fb6eaaaa5cd549e1fb22afa
+"@types/node@npm:20.11.30":
+  version: 20.11.30
+  resolution: "@types/node@npm:20.11.30"
+  dependencies:
+    undici-types: ~5.26.4
+  checksum: 7597767aa3e44b0f1bf62efa522dd17741135f283c11de6a20ead8bb7016fb4999cc30adcd8f2bb29ebb216906c92894346ccd187de170927dc1e212d2c07c81
   languageName: node
   linkType: hard
 
