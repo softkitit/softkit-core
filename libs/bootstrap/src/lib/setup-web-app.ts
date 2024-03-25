@@ -50,6 +50,7 @@ export function buildFastifyAdapter() {
       const requestId = req.headers[REQUEST_ID_HEADER];
       return requestId || generateRandomId();
     },
+    bodyLimit: 10_485_760,
   });
 }
 
