@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.2.9](https://github.com/softkitit/softkit-core/compare/bootstrap-0.2.8...bootstrap-0.2.9) (2024-03-25)
+
+
+### Bug Fixes
+
+* **bootstrap:** update body limit for fastify adapter ([545c8fa](https://github.com/softkitit/softkit-core/commit/545c8fae225950ecc3122b4fc9edecd5eee1dc3b))
+
 ## [0.2.8](https://github.com/softkitit/softkit-core/compare/bootstrap-0.2.7...bootstrap-0.2.8) (2024-02-05)
 
 
