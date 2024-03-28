@@ -7,9 +7,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
 import chokidar, { FSWatcher } from 'chokidar';
-import { annotateSourceCode, createTypesFile } from '../utils';
 import { pathExists, realpath } from 'fs-extra';
 import { importOrRequireFile } from '../utils/import';
+import { annotateSourceCode, createTypesFile } from '../utils/typescript';
 
 export interface GenerateTypesArguments {
   typesOutputPath: string;
