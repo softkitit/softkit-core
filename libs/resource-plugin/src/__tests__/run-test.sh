@@ -18,6 +18,7 @@ fi
 handle_exit() {
     docker stop testdb &>/dev/null
     docker rm testdb &>/dev/null
+
     rm -rf "$WORK_DIR"
     echo "Deleted temp working directory $WORK_DIR and removed docker container testdb"
     exit 1
@@ -220,7 +221,6 @@ test_uppercase_endpoint() {
 
     local route="${entity_name}/uppercase"
     local url="http://localhost:${port}/$base_path/$route"
-    local nx_serve_cmd="nx run platform:serve"
 
     echo "Testing endpoint: $url"
     local response=$(curl "$url")
@@ -228,9 +228,10 @@ test_uppercase_endpoint() {
     echo "$response" | grep -q '"TEST STRING"'
     if [ $? -eq 0 ]; then
         echo "Test for $url Passed. Response: $response'"
-        # set +euo
-        # pkill -f "$nx_serve_cmd"
-        # exit 0
+        trap - EXIT
+        pkill -f "nx run"
+        handle_exit
+        exit 0
     else
         echo "Test for $url Failed: Response does not contain 'TEST STRING'"
     fi
@@ -257,9 +258,6 @@ run_tests() {
     run_app "$SECOND_APP_NAME" 9000 "SECOND_APP_PID" false
 
     test_uppercase_endpoint
-
-    wait $FIRST_APP_PID
-    wait $SECOND_APP_PID
 }
 
 main() {
