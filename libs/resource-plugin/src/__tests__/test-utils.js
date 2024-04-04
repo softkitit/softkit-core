@@ -5,23 +5,30 @@ const yaml = require('js-yaml');
 const yargs = require('yargs');
 const { hideBin } = require('yargs/helpers');
 
+const functionMappings = {
+  updateMigrationsIndexFile,
+  addUppercaseEndpointToController,
+  addUppercaseFunctionToLib,
+  updateDatabaseConfig,
+};
+
 const argv = yargs(hideBin(process.argv))
-  .option('migrationsDir', {
+  .option('updateMigrationsIndexFile', {
     alias: 'm',
     describe: 'Path to the migrations directory',
     type: 'string',
   })
-  .option('controllersDir', {
+  .option('addUppercaseEndpointToController', {
     alias: 'c',
     describe: 'Path to the controllers directory',
     type: 'string',
   })
-  .option('libsDir', {
+  .option('addUppercaseFunctionToLib', {
     alias: 'l',
     describe: 'Path to the libraries directory',
     type: 'string',
   })
-  .option('assetsDir', {
+  .option('updateDatabaseConfig', {
     alias: 'a',
     describe: 'Path to the assets directory',
     type: 'string',
@@ -204,26 +211,25 @@ async function updateDatabaseConfig(assetsDir) {
   }
 }
 
-async function executeUpdates(
-  migrationsDir,
-  libsDir,
-  assetsDir,
-  controllersDir,
-) {
+async function executeUpdates(argv) {
   try {
-    if (argv.migrationsDir) {
-      await updateMigrationsIndexFile(migrationsDir);
-    }
+    const yargsOptions = yargs.getOptions();
+    const optionAliases = new Set(Object.values(yargsOptions.alias).flat());
 
-    if (argv.libsDir) {
-      await addUppercaseFunctionToLib(libsDir);
-    }
+    // Exclude the first two elements (help and version) and aliases from the option entries
+    const optionEntries = Object.entries(yargsOptions.key)
+      .slice(2)
+      .filter(([optionName]) => !optionAliases.has(optionName));
 
-    if (argv.assetsDir) {
-      await updateDatabaseConfig(assetsDir);
-    }
-    if (argv.controllersDir) {
-      await addUppercaseEndpointToController(controllersDir);
+    for (const [optionName, isOptionEnabled] of optionEntries) {
+      if (!isOptionEnabled) continue;
+
+      const action = functionMappings[optionName];
+      const actionArguments = argv[optionName];
+
+      if (action && actionArguments) {
+        await action(actionArguments);
+      }
     }
   } catch (error) {
     console.error('Error during updates:', error);
@@ -231,9 +237,4 @@ async function executeUpdates(
   }
 }
 
-executeUpdates(
-  argv.migrationsDir,
-  argv.libsDir,
-  argv.assetsDir,
-  argv.controllersDir,
-);
+executeUpdates(argv);

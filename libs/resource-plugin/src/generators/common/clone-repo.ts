@@ -6,12 +6,6 @@ import fs from 'node:fs';
 export async function cloneRepo(root: string, tag: string, repository: string) {
   try {
     await spawnAsync('git', [
-      'config',
-      '--global',
-      'http.postBuffer',
-      '1048576000',
-    ]);
-    await spawnAsync('git', [
       'clone',
       '--depth',
       '1',
@@ -20,7 +14,6 @@ export async function cloneRepo(root: string, tag: string, repository: string) {
       repository,
       root,
     ]);
-    await spawnAsync('git', ['config', '--global', 'http.postBuffer', '1M']);
 
     const gitFolderPath = join(root, '.git');
     if (existsSync(gitFolderPath)) {
