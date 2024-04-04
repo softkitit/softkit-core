@@ -1,5 +1,5 @@
 #!/bin/bash
-set -euo pipefail
+set -eo pipefail
 
 trap handle_exit EXIT SIGINT SIGTERM
 
@@ -24,6 +24,17 @@ handle_exit() {
     exit 1
 }
 
+. "$SCRIPT_DIR/obj.h"
+
+obj first_app
+obj second_app
+
+first_app.port = "3000"
+first_app.name = "platform"
+
+second_app.port = "9000"
+second_app.name = "dashboard"
+
 kill_process_on_port() {
     local port="${1:-3000}"
     local pid=$(lsof -t -i:"$port" -sTCP:LISTEN)
@@ -36,8 +47,22 @@ kill_process_on_port() {
     fi
 }
 
+kill_process_on_port() {
+    local app_port_function="${1:-"first_app_port"}"
+    local port=$($app_port_function)
+
+    local pid=$(lsof -t -i:"$port" -sTCP:LISTEN)
+    if [ -n "$pid" ]; then
+        echo "Killing process $pid using port $port"
+        kill -9 $pid
+    else
+        echo "No process found using port $port."
+    fi
+}
+
 set_directories() {
-    local app_name="${1:-$FIRST_APP_NAME}"
+    local app_name_function="${1:-"first_app_name"}"
+    local app_name=$($app_name_function)
 
     MIGRATIONS_DIR="$FOLDER/apps/$app_name/src/app/database/migrations"
     CONTROLLERS_DIR="$FOLDER/apps/$app_name/src/app/controllers"
@@ -45,19 +70,21 @@ set_directories() {
 }
 
 check_server() {
-    local port="${1:-3000}"
-    local app_name="${2:-$FIRST_APP_NAME}"
+    local app_name_function="${1:-"first_app_name"}"
+    local app_port_function="${2:-"first_app_port"}"
+    local app_name=$($app_name_function)
+    local port=$($app_port_function)
     local health_endpoint="http://localhost:$port/api/$app_name/health"
 
     echo "Checking $app_name app server on port $port..."
     until nc -z localhost "$port"; do
-        sleep 1
+        sleep 5
     done
 
     echo "Port $port for $app_name app is open, checking health endpoint..."
     until [ "$(curl -s -o /dev/null -w '%{http_code}' $health_endpoint)" == "200" ]; do
         echo "Waiting for the $app_name server on port $port to become healthy..."
-        sleep 1
+        sleep 5
     done
 
     echo "$app_name server on port $port is healthy and ready"
@@ -76,11 +103,6 @@ clone_repo() {
     cd "$FOLDER"
 }
 
-install_dependencies() {
-    yarn install
-    sleep 1
-}
-
 generate_lib() {
     local name="${1:-random}"
     local import_path="${2:-@test/source}"
@@ -90,34 +112,36 @@ generate_lib() {
 }
 
 generate_resource() {
-    local project_name="${1:-$FIRST_APP_NAME}"
+    local app_name_function="${1:-first_app_name}"
+    local app_name=$($app_name_function)
     local entity_name="${2:-invoice}"
     local group_name="${3:-invoices}"
     local tenant_base_entity="${4:-false}"
     local generate_repository="${5:-true}"
     local generate_service="${6:-true}"
     local generate_controller="${7:-true}"
-    local base_path="${8:-api/$project_name}"
+    local base_path="${8:-api/$app_name}"
     local entity_includes_id_field="${9:-true}"
     local entity_includes_version_field="${10:-true}"
 
-    npx nx generate @softkit/resource-plugin:resource --projectName="$project_name" --entityName="$entity_name" --basePath="$base_path" --groupName="$group_name" --tenantBaseEntity=$tenant_base_entity --generateRepository=$generate_repository --generateService=$generate_service --generateController=$generate_controller --entityIncludesIdField=$entity_includes_id_field --entityIncludesVersionField=$entity_includes_version_field --lintCommandName=""
+    npx nx generate @softkit/resource-plugin:resource --projectName="$app_name" --entityName="$entity_name" --basePath="$base_path" --groupName="$group_name" --tenantBaseEntity=$tenant_base_entity --generateRepository=$generate_repository --generateService=$generate_service --generateController=$generate_controller --entityIncludesIdField=$entity_includes_id_field --entityIncludesVersionField=$entity_includes_version_field --lintCommandName=""
 }
 
 generate_service() {
-    local project_name="${1:-$FIRST_APP_NAME}"
+    local app_name_function="${1:-first_app_name}"
+    local app_name=$($app_name_function)
     local entity_name="${2:-invoice-new}"
     local group_name="${3:-invoices-new}"
     local repository_name="${4:-invoice-new}"
     local service_name="${5:-invoice-new}"
     local tenant_base_service="${6:-false}"
 
-    npx nx generate @softkit/resource-plugin:service --projectName="$project_name" --serviceName="$service_name" --repositoryName="$repository_name" --entityName="$entity_name" --groupName="$group_name" --tenantBaseService=$tenant_base_service --lintCommandName=""
+    npx nx generate @softkit/resource-plugin:service --projectName="$app_name" --serviceName="$service_name" --repositoryName="$repository_name" --entityName="$entity_name" --groupName="$group_name" --tenantBaseService=$tenant_base_service --lintCommandName=""
 }
 
 generate_controller() {
-    local project_name="${1:-$FIRST_APP_NAME}"
-    local entity_name="${2:-invoice-new}"
+    local app_name_function="${1:-first_app_name}"
+    local app_name=$($app_name_function)
     local controller_name="${3:-invoice-new}"
     local group_name="${4:-invoices-new}"
     local repository_name="${5:-invoice-new}"
@@ -127,19 +151,21 @@ generate_controller() {
     local entity_includes_id_field="${9:-true}"
     local entity_includes_version_field="${10:-true}"
 
-    npx nx generate @softkit/resource-plugin:controller --projectName="$project_name" --controllerName="$controller_name" --basePath="$base_path" --serviceName="$service_name" --entityName="$entity_name" --groupName="$group_name" --tenantBaseEntity=$tenant_base_entity --entityIncludesIdField=$entity_includes_id_field --entityIncludesVersionField=$entity_includes_version_field --lintCommandName=""
+    npx nx generate @softkit/resource-plugin:controller --projectName="$app_name" --controllerName="$controller_name" --basePath="$base_path" --serviceName="$service_name" --entityName="$entity_name" --groupName="$group_name" --tenantBaseEntity=$tenant_base_entity --entityIncludesIdField=$entity_includes_id_field --entityIncludesVersionField=$entity_includes_version_field --lintCommandName=""
 }
 
 generate_http_client() {
-    local name="${1:-$FIRST_APP_NAME}"
-    local import_path="${2:-@$FIRST_APP_NAME/client}"
+    local app_name_function="${1:-first_app_name}"
+    local app_name=$($app_name_function)
+    local import_path="${2:-@$app_name/client}"
     local directory="${3:-clients}"
 
-    npx nx generate @softkit/resource-plugin:http-client --name="$name" --importPath="$import_path" --directory="$directory" --lintCommandName=""
+    npx nx generate @softkit/resource-plugin:http-client --name="$app_name" --importPath="$import_path" --directory="$directory" --lintCommandName=""
 }
 
 generate_app() {
-    local app_name="${1:-$SECOND_APP_NAME}"
+    local app_name_function="${1:-first_app_name}"
+    local app_name=$($app_name_function)
     local app_port="${2:-9000}"
     local i18n="${3:-true}"
 
@@ -148,15 +174,17 @@ generate_app() {
 }
 
 generate_migrations() {
-    local app_name="${1:-$FIRST_APP_NAME}"
-    local migration_name="${1:-add-invoice-entities}"
+    local app_name_function="${1:-first_app_name}"
+    local app_name=$($app_name_function)
+    local migration_name="${2:-add-invoice-entities}"
 
     yarn run migration:generate $app_name $migration_name
     node "$SCRIPT_DIR/test-utils.js" -m "$MIGRATIONS_DIR"
 }
 
 generate_client() {
-    local app_name="${1:-$FIRST_APP_NAME}"
+    local app_name_function="${1:-first_app_name}"
+    local app_name=$($app_name_function)
 
     npx nx reset
     set +e
@@ -172,7 +200,9 @@ generate_client() {
 }
 
 run_migrations() {
-    local app_name="${1:-$FIRST_APP_NAME}"
+    local app_name_function="${1:-first_app_name}"
+    local app_name=$($app_name_function)
+
     export MIGRATION_APP_NAME=$app_name
     yarn run typeorm --dataSource=node_modules/@softkit/typeorm/src/lib/migration/migration-data-source.js migration:run
 }
@@ -181,7 +211,7 @@ generate_code() {
     local tag=$1
 
     clone_repo "$tag"
-    install_dependencies
+    yarn install
 
     set_directories
     node "$SCRIPT_DIR/test-utils.js" -a "$ASSETS_DIR"
@@ -192,14 +222,17 @@ generate_code() {
     generate_http_client
 
     generate_app
-    generate_resource $SECOND_APP_NAME
+    generate_resource "second_app_name"
 }
 
 run_app() {
-    local app_name="${1:-$FIRST_APP_NAME}"
-    local port="${2:-3000}"
+    local app_name_function="${1:-first_app_name}"
+    local app_port_function="${2:-first_app_port}"
+
     local pid_var_name="${3:-FIRST_APP_PID}"
     local development="${4:-true}"
+    local app_name=$($app_name_function)
+    local port=$($app_port_function)
 
     kill_process_on_port $port
     if [ "$development" = true ]; then
@@ -214,11 +247,13 @@ run_app() {
 }
 
 test_uppercase_endpoint() {
-    local app_name="${1:-$SECOND_APP_NAME}"
-    local base_path="${2:-api/$app_name/v1}"
-    local entity_name="${3:-invoice}"
-    local port="${4:-9000}"
+    local app_name_function="${1:-first_app_name}"
+    local app_port_function="${2:-first_app_port}"
+    local base_path="${3:-api/$app_name/v1}"
+    local entity_name="${4:-invoice}"
 
+    local app_name=$($app_name_function)
+    local port=$($app_port_function)
     local route="${entity_name}/uppercase"
     local url="http://localhost:${port}/$base_path/$route"
 
@@ -255,7 +290,7 @@ run_tests() {
     # npx nx run platform:test --all --codeCoverage --skip-nx-cache --parallel=false
 
     run_app
-    run_app "$SECOND_APP_NAME" 9000 "SECOND_APP_PID" false
+    run_app "second_app_name" "second_app_port" "SECOND_APP_PID" false
 
     test_uppercase_endpoint
 }
