@@ -6,6 +6,7 @@ import {
 import { StartedLocalstack } from './vo/localstack/started-localstack';
 import { LocalstackStartedConfig } from './vo/localstack/localstack-config';
 import { setTestEnvironmentForLocalstack } from './env/set-localstack-env-variables';
+import { retrievePortFromBinding } from './utils';
 
 export async function startLocalstack(
   opts?: Partial<StartLocalstackOptions>,
@@ -46,7 +47,7 @@ export async function startLocalstack(
       },
       {} as { [key in number]: number },
     ),
-    mainPort: container.getMappedPort(4566),
+    mainPort: retrievePortFromBinding(container, 4566),
     host: container.getHost(),
   };
 

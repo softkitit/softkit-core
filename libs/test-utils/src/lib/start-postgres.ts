@@ -8,6 +8,8 @@ import { DEFAULT_START_POSTGRES_OPTIONS } from './vo/start-postgres-default-opti
 import { setTestEnvironmentForTypeorm } from './env/set-typeorm-test-env';
 import { PostgresConnectionCredentialsOptions } from 'typeorm/driver/postgres/PostgresConnectionCredentialsOptions';
 import { AbstractStartedContainer } from 'testcontainers';
+import { retrievePortFromBinding } from './utils';
+import { StartedTestContainer } from 'testcontainers/build/test-container';
 
 export async function startPostgres(
   opts?: Partial<StartDbOptions>,
@@ -31,7 +33,12 @@ export async function startPostgres(
   console.timeEnd(`start postgres db`);
 
   const typeormOptions = {
-    port: pg.getPort(),
+    port: retrievePortFromBinding(
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      pg.startedTestContainer as never as StartedTestContainer,
+      5432,
+    ),
     username: pg.getUsername(),
     password: pg.getPassword(),
     database: pg.getDatabase(),
