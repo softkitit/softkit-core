@@ -3,6 +3,7 @@ import { DEFAULT_START_REDIS_OPTIONS, StartRedisOptions } from './vo';
 import { RedisStartedConfig } from './vo';
 import { setRedisTestEnv } from './env/set-redis-test-env';
 import { StartedRedis } from './vo/redis/started-redis';
+import { retrievePortFromBinding } from './utils';
 
 export async function startRedis(
   opts?: Partial<StartRedisOptions>,
@@ -24,7 +25,7 @@ export async function startRedis(
   console.timeEnd(`start redis`);
 
   const redisConfig = {
-    port: container.getMappedPort(6379),
+    port: retrievePortFromBinding(container, 6379),
     host: 'localhost',
   } satisfies RedisStartedConfig;
 
