@@ -47,7 +47,7 @@ export async function startLocalstack(
       {} as { [key in number]: number },
     ),
     mainPort: container.getMappedPort(4566),
-    host: 'localhost',
+    host: container.getHost(),
   };
 
   await setTestEnvironmentForLocalstack(localstackConfig);

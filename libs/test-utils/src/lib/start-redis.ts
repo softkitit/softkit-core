@@ -25,7 +25,7 @@ export async function startRedis(
 
   const redisConfig = {
     port: container.getMappedPort(6379),
-    host: 'localhost',
+    host: container.getHost(),
   } satisfies RedisStartedConfig;
 
   await setRedisTestEnv(redisConfig);
