@@ -23,6 +23,7 @@ export function setupYamlBaseConfigModule(
       return fileLoader({
         absolutePath: filePath,
         ignoreEnvironmentVariableSubstitution: false,
+        ignoreEmptySearchPlaces: false,
       });
     }),
   });
@@ -30,12 +31,12 @@ export function setupYamlBaseConfigModule(
   return {
     ...dynamicModule,
     providers: [
-      ...(dynamicModule.providers || []),
+      ...(dynamicModule.providers ?? []),
       {
         provide: ROOT_CONFIG_ALIAS_TOKEN,
         useExisting: rootSchemaClass,
       },
     ],
-    exports: [...(dynamicModule.exports || []), ROOT_CONFIG_ALIAS_TOKEN],
+    exports: [...(dynamicModule.exports ?? []), ROOT_CONFIG_ALIAS_TOKEN],
   };
 }
