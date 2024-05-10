@@ -1,15 +1,15 @@
-import { Allow, IsString, IsBoolean } from 'class-validator';
+import { IsString, IsBoolean } from 'class-validator';
+import { BooleanType } from '@softkit/validation';
 
 export class LoggerConfig {
   @IsBoolean()
-  @Allow()
-  colorize = true;
+  @BooleanType
+  colorize: boolean = false;
 
   @IsBoolean()
-  @Allow()
-  prettyLogs = true;
+  @BooleanType
+  prettyLogs: boolean = true;
 
   @IsString()
-  @Allow()
   defaultLevel = 'info';
 }

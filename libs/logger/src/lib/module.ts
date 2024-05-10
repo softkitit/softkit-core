@@ -90,6 +90,6 @@ export function setupLoggerModule<ClsType extends ClsStore>(
       };
     },
     inject: [LoggerConfig, { token: ClsService, optional: true }],
-    providers: [LoggerConfig],
+    providers: [],
   });
 }
