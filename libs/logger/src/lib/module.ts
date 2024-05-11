@@ -52,6 +52,9 @@ export function setupLoggerModule<ClsType extends ClsStore>(
               err: val.err,
             };
           },
+          customReceivedMessage: (req: IncomingMessage) => {
+            return `Call Endpoint: ${req.method} ${req.url}`;
+          },
           customSuccessMessage: (
             req: IncomingMessage,
             res: ServerResponse,

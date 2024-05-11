@@ -8,7 +8,7 @@ export class LoggerConfig {
 
   @IsBoolean()
   @BooleanType
-  prettyLogs: boolean = true;
+  prettyLogs: boolean = false;
 
   @IsString()
   defaultLevel = 'info';
