@@ -19,6 +19,11 @@ export function setupLoggerModule<ClsType extends ClsStore>(
       return {
         renameContext: 'class',
         pinoHttp: {
+          formatters: {
+            level: (label) => {
+              return { level: label };
+            },
+          },
           customProps: (req, res) => {
             return customProps(req, res, clsService);
           },
@@ -51,6 +56,9 @@ export function setupLoggerModule<ClsType extends ClsStore>(
               statusCode: res.statusCode,
               err: val.err,
             };
+          },
+          customReceivedMessage: (req: IncomingMessage) => {
+            return `Call Endpoint: ${req.method} ${req.url}`;
           },
           customSuccessMessage: (
             req: IncomingMessage,
@@ -90,6 +98,6 @@ export function setupLoggerModule<ClsType extends ClsStore>(
       };
     },
     inject: [LoggerConfig, { token: ClsService, optional: true }],
-    providers: [LoggerConfig],
+    providers: [],
   });
 }
