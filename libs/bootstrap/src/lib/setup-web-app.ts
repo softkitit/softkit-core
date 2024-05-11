@@ -34,7 +34,6 @@ import {
   TYPEORM_FACTORIES_TOKEN,
   TYPEORM_SEEDERS_TOKEN,
 } from '@softkit/typeorm';
-import { LoggingInterceptor } from '@softkit/logger';
 import { responseBodyFormatter } from '@softkit/exceptions';
 import { REQUEST_ID_HEADER } from '@softkit/server-http-client';
 import { fastifyHelmet } from '@fastify/helmet';
@@ -122,7 +121,6 @@ export function applyExpressCompatibilityRecommendations(
 }
 
 function setupGlobalInterceptors(app: INestApplication) {
-  app.useGlobalInterceptors(new LoggingInterceptor());
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
   app.useGlobalInterceptors(new LoggerErrorInterceptor());
 }
