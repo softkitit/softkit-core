@@ -19,6 +19,11 @@ export function setupLoggerModule<ClsType extends ClsStore>(
       return {
         renameContext: 'class',
         pinoHttp: {
+          formatters: {
+            level: (label) => {
+              return { level: label };
+            },
+          },
           customProps: (req, res) => {
             return customProps(req, res, clsService);
           },

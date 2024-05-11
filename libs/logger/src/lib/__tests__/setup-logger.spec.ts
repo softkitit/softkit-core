@@ -15,7 +15,7 @@ describe('setup logger', () => {
     expect(loggerConfig).toBeDefined();
 
     expect(loggerConfig.colorize).toBe(false);
-    expect(loggerConfig.prettyLogs).toBe(true);
+    expect(loggerConfig.prettyLogs).toBe(false);
     expect(loggerConfig.defaultLevel).toBe('debug');
 
     expect(rootConfig).toBeDefined();
