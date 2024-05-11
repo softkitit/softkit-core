@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.2.1](https://github.com/softkitit/softkit-core/compare/jobs-0.2.0...jobs-0.2.1) (2024-05-11)
+
+
+### Bug Fixes
+
+* **jobs:** updated tests to add logger config after fixing issue with logger misconfiguration ([4e9d316](https://github.com/softkitit/softkit-core/commit/4e9d3163145b0a427b13d335342ada3f7e0be1d1))
+
 ## [0.2.0](https://github.com/softkitit/softkit-core/compare/jobs-0.1.5...jobs-0.2.0) (2024-02-07)
 
 
