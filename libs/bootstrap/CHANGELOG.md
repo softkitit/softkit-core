@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.2.10](https://github.com/softkitit/softkit-core/compare/bootstrap-0.2.9...bootstrap-0.2.10) (2024-05-11)
+
+
+### Bug Fixes
+
+* **bootstrap:** fixed tests after updating logger module ([0b65c6f](https://github.com/softkitit/softkit-core/commit/0b65c6fb027fa76a924429bea979d270cf91162c))
+
 ## [0.2.9](https://github.com/softkitit/softkit-core/compare/bootstrap-0.2.8...bootstrap-0.2.9) (2024-03-25)
 
 
