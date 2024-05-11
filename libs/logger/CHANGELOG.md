@@ -1,4 +1,13 @@
 Softkit Core Libraries Changelog
+## [0.1.4](https://github.com/softkitit/softkit-core/compare/logger-0.1.3...logger-0.1.4) (2024-05-11)
+
+
+### Bug Fixes
+
+* **bootstrap:** fixed tests after updating logger module ([0b65c6f](https://github.com/softkitit/softkit-core/commit/0b65c6fb027fa76a924429bea979d270cf91162c))
+* **config:** added custom received message ([4cff9c5](https://github.com/softkitit/softkit-core/commit/4cff9c5c006d6d2de2f7f07f45dd3b62e3c97377))
+* **config:** updated config and added simple test ([10444dc](https://github.com/softkitit/softkit-core/commit/10444dc222067d419c30a5b2feaf3cd34e0b1e80))
+
 ## [0.1.3](https://github.com/softkitit/softkit-core/compare/logger-0.1.2...logger-0.1.3) (2024-02-05)
 
 ## [0.1.2](https://github.com/softkitit/softkit-core/compare/logger-0.1.1...logger-0.1.2) (2024-01-26)
