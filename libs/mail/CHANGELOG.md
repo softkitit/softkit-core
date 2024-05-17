@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.2.5](https://github.com/softkitit/softkit-core/compare/mail-0.2.4...mail-0.2.5) (2024-05-17)
+
+
+### Bug Fixes
+
+* **mail:** improved logs to include context and show errors stacktrace properly ([748a0cf](https://github.com/softkitit/softkit-core/commit/748a0cfc23bd8409760818cf52ea4bb554ab9097))
+
 ## [0.2.4](https://github.com/softkitit/softkit-core/compare/mail-0.2.3...mail-0.2.4) (2024-02-05)
 
 ## [0.2.3](https://github.com/softkitit/softkit-core/compare/mail-0.2.2...mail-0.2.3) (2024-01-26)
