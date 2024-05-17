@@ -65,7 +65,7 @@ export class MailgunService extends AbstractMailService<string> {
         }
       }
     } else {
-      this.logger.warn(
+      this.logger.log(
         `sendTemplateEmail: 'emailTemplateParams' is undefined or null. The email will be sent without template variables.`,
       );
     }
