@@ -1,4 +1,12 @@
 Softkit Core Libraries Changelog
+## [0.2.2](https://github.com/softkitit/softkit-core/compare/jobs-0.2.1...jobs-0.2.2) (2024-05-17)
+
+
+### Bug Fixes
+
+* **jobs:** improved logs to include context and show errors stacktrace properly ([143d769](https://github.com/softkitit/softkit-core/commit/143d7698ad2b6dab83d4c52bf62b88b16f25648b))
+* **jobs:** removed duplicate eslint rule ([bc4f6c1](https://github.com/softkitit/softkit-core/commit/bc4f6c1b893f33f1c25cab86b6d65a042958d123))
+
 ## [0.2.1](https://github.com/softkitit/softkit-core/compare/jobs-0.2.0...jobs-0.2.1) (2024-05-11)
 
 
