@@ -19,8 +19,10 @@ export class JwtPayloadTenantResolutionService extends AbstractTenantResolutionS
     if (jwtPayload) {
       if (!jwtPayload?.tenantId) {
         this.logger.error(
-          `Application is configured to use jwt payload tenant resolution, but tenant id is not in the token, most likely it's some misconfiguration. Require investigation: %o`,
-          jwtPayload,
+          {
+            jwtPayload,
+          },
+          `Application is configured to use jwt payload tenant resolution, but tenant id is not in the token, most likely it's some misconfiguration`,
         );
         throw new GeneralInternalServerException();
       }
