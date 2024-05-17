@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.1.5](https://github.com/softkitit/softkit-core/compare/logger-0.1.4...logger-0.1.5) (2024-05-17)
+
+
+### Bug Fixes
+
+* **logger:** improved logs to include context and show errors stacktrace properly ([46c330a](https://github.com/softkitit/softkit-core/commit/46c330a1137a1930460001d0187567d54de0e42a))
+
 ## [0.1.4](https://github.com/softkitit/softkit-core/compare/logger-0.1.3...logger-0.1.4) (2024-05-11)
 
 
