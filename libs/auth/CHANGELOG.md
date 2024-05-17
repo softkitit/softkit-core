@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [1.0.9](https://github.com/softkitit/softkit-core/compare/auth-1.0.8...auth-1.0.9) (2024-05-17)
+
+
+### Bug Fixes
+
+* **auth:** improved logs to include context and show errors stacktrace properly ([6b52a73](https://github.com/softkitit/softkit-core/commit/6b52a731780f0db6f9a2dcadc2794ac9f4704794))
+
 ## [1.0.8](https://github.com/softkitit/softkit-core/compare/auth-1.0.7...auth-1.0.8) (2024-01-26)
 
 ## [1.0.7](https://github.com/softkitit/softkit-core/compare/auth-1.0.6...auth-1.0.7) (2024-01-26)
