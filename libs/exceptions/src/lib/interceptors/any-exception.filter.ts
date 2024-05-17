@@ -47,8 +47,10 @@ export class AnyExceptionFilter implements ExceptionFilter {
     } satisfies ErrorResponse;
 
     this.logger.error(
+      {
+        err: exception,
+      },
       `Unexpected error happen, this require immediate attention`,
-      exception,
     );
 
     httpAdapter.reply(ctx.getResponse(), response, response.status);

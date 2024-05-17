@@ -25,6 +25,10 @@ export class SchedulingJobService implements AbstractSchedulingJobService {
     overrideData?: object,
   ): Promise<void> {
     this.logger.log(
+      {
+        queueName,
+        jobId,
+      },
       `Scheduling repeatable job to run now. ${queueName}:${jobId}`,
     );
 
@@ -160,6 +164,10 @@ export class SchedulingJobService implements AbstractSchedulingJobService {
     );
 
     this.logger.log(
+      {
+        jobName,
+        jobId,
+      },
       `Job ${jobName}:${jobId} is scheduled with id ${scheduledJob.id}`,
     );
   }

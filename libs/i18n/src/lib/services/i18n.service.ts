@@ -215,7 +215,9 @@ export class I18nService<K = Record<string, unknown>>
     if (typeof translations === 'object' && translations[key]) {
       translation = translations[key];
     } else {
-      this.logger.warn('Warning: Translation key not found');
+      this.logger.error(
+        `Error: Translation key not found, fix it! Key: ${key}`,
+      );
       translation = options?.defaultValue;
     }
 

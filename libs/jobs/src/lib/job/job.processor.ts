@@ -72,7 +72,7 @@ export abstract class JobProcessor<
     } catch (error) {
       this.logger.error(
         {
-          ...(error instanceof Error ? error : {}),
+          ...(error instanceof Error ? { err: error } : {}),
         },
         `Exception happened while executing job: ${job.name}:${job.id}`,
       );
