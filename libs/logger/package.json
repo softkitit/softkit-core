@@ -14,9 +14,7 @@
   "peerDependencies": {
     "nestjs-pino": "^3.4.0",
     "class-validator": "*",
-    "@nestjs/common": "^10.2.0",
     "@softkit/validation": ">0.3.7",
-    "rxjs": "^7.0.0",
     "nestjs-cls": "^3.0.0"
   }
 }
