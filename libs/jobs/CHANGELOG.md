@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.2.3](https://github.com/softkitit/softkit-core/compare/jobs-0.2.2...jobs-0.2.3) (2024-05-23)
+
+
+### Bug Fixes
+
+* **jobs:** added bullmq as peer deps ([f17a4e7](https://github.com/softkitit/softkit-core/commit/f17a4e765a92fad59bdcc2d39e8c0280ebcde83c))
+
 ## [0.2.2](https://github.com/softkitit/softkit-core/compare/jobs-0.2.1...jobs-0.2.2) (2024-05-17)
 
 
