@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { Global, Injectable, Module } from '@nestjs/common';
 import { AbstractMailService } from '../services';
 import { SENDGRID_CLIENT_TOKEN } from '../constants';
-import { SendgridMailModule } from '../modules/sendgrid/sendgrid.module';
+import { SendgridMailModule } from '../modules';
 
 @Injectable()
 class Config {

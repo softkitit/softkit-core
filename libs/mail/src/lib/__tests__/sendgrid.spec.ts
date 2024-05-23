@@ -1,8 +1,7 @@
 import { AbstractMailService, SendEmailDto } from '../services';
-import { MailService } from './app/mail/custom-mail.service';
 import { EmailTypes } from './app/mail/types/email.types';
 import { Test } from '@nestjs/testing';
-import { SENDGRID_CLIENT_TOKEN } from '../constants/index';
+import { SENDGRID_CLIENT_TOKEN } from '../constants';
 
 const mockSendgridClient = {
   send: jest.fn().mockImplementation(async () => {
@@ -16,8 +15,6 @@ const mockSendgridClient = {
 
 describe('mail e2e test', () => {
   let mailService: AbstractMailService<string>;
-  let typedMailService: MailService;
-  let sendEmailSpy: jest.SpyInstance;
 
   beforeAll(async () => {
     const {
@@ -32,8 +29,6 @@ describe('mail e2e test', () => {
       .compile();
 
     mailService = module.get<AbstractMailService<string>>(AbstractMailService);
-    typedMailService = module.get<MailService>(MailService);
-    sendEmailSpy = jest.spyOn(mockSendgridClient, 'send');
   }, 120_000);
 
   afterEach(() => {

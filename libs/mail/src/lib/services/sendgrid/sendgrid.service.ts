@@ -54,8 +54,8 @@ export class SendgridService extends AbstractMailService<string> {
           name: fromName,
         },
         subject,
-        bcc: this.transformToSendgridEmailData(bcc ?? []),
-        cc: this.transformToSendgridEmailData(cc ?? []),
+        bcc: this.transformToSendgridEmailData(bcc),
+        cc: this.transformToSendgridEmailData(cc),
         to: this.transformToSendgridEmailData(to),
         attachments,
         ...content,
@@ -108,8 +108,8 @@ export class SendgridService extends AbstractMailService<string> {
         email: fromAddress,
         name: fromName,
       },
-      bcc: this.transformToSendgridEmailData(bcc ?? []),
-      cc: this.transformToSendgridEmailData(cc ?? []),
+      bcc: this.transformToSendgridEmailData(bcc),
+      cc: this.transformToSendgridEmailData(cc),
       to: this.transformToSendgridEmailData(to),
       attachments,
       templateId,
@@ -122,15 +122,19 @@ export class SendgridService extends AbstractMailService<string> {
     } as SendEmailResult;
   }
 
-  private transformToSendgridEmailData(email: string | string[]) {
-    return Array.isArray(email)
-      ? email.map((email): EmailData => {
-          return {
-            email,
-          };
-        })
-      : ({
-          email: email,
-        } as EmailData);
+  private transformToSendgridEmailData(
+    emails?: string | string[],
+  ): EmailData[] {
+    if (emails === undefined) {
+      return [];
+    }
+
+    return (Array.isArray(emails) ? emails : [emails]).map(
+      (email): EmailData => {
+        return {
+          email,
+        };
+      },
+    );
   }
 }
