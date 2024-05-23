@@ -1,4 +1,17 @@
 Softkit Core Libraries Changelog
+## [0.3.0](https://github.com/softkitit/softkit-core/compare/mail-0.2.5...mail-0.3.0) (2024-05-23)
+
+
+### Features
+
+* **mail:** added send grid library integration ([a7deef1](https://github.com/softkitit/softkit-core/commit/a7deef1f6fc5b7a520447d3ce3900c0705f10def))
+
+
+### Bug Fixes
+
+* **mail:** small tests adjustments ([913ff77](https://github.com/softkitit/softkit-core/commit/913ff77fea0a542ba7d982deacc37de1f671276a))
+* **mail:** temporary lover coverage threshold ([ca5422b](https://github.com/softkitit/softkit-core/commit/ca5422b04b570d5307fffd79ca4e1fb19ea3f0e3))
+
 ## [0.2.5](https://github.com/softkitit/softkit-core/compare/mail-0.2.4...mail-0.2.5) (2024-05-17)
 
 
