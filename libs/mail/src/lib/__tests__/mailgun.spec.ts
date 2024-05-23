@@ -24,10 +24,12 @@ describe('mail e2e test', () => {
   let sendEmailSpy: jest.SpyInstance;
 
   beforeAll(async () => {
-    const { TestingMailModule } = require('./app/testing-mail.module');
+    const {
+      TestingMailgunModule,
+    } = require('./app/mail/mailgun/testing-mailgun.module');
 
     const module = await Test.createTestingModule({
-      imports: [TestingMailModule],
+      imports: [TestingMailgunModule],
     })
       .overrideProvider(MAILGUN_CLIENT_TOKEN)
       .useValue(mockMailgunClient)

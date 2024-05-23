@@ -1,12 +1,12 @@
 import {
-  IsArrayLocalized,
   IsEmailLocalized,
   IsNumberLocalized,
   IsStringLocalized,
 } from '@softkit/validation';
-import { ArrayMaxSize, IsFQDN, IsOptional } from 'class-validator';
+import { IsFQDN, IsOptional } from 'class-validator';
+import { GeneralConfig } from '../general.config';
 
-export class MailgunConfig {
+export class MailgunConfig extends GeneralConfig {
   @IsStringLocalized()
   @IsFQDN()
   domain!: string;
@@ -14,18 +14,6 @@ export class MailgunConfig {
   @IsStringLocalized()
   @IsEmailLocalized()
   defaultFromEmail!: string;
-
-  @IsArrayLocalized()
-  @IsStringLocalized({ each: true })
-  @ArrayMaxSize(100)
-  @IsEmailLocalized({
-    emailValidationOptions: { each: true },
-    maxLengthValidationOptions: {
-      each: true,
-    },
-  })
-  @IsOptional()
-  defaultBccList?: string[];
 
   @IsStringLocalized()
   username!: string;

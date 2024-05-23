@@ -1,16 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { MailgunMailModule } from '../mail.module';
 import { Global, Injectable, Module } from '@nestjs/common';
 import { AbstractMailService } from '../services';
-import { MAILGUN_CLIENT_TOKEN } from '../constants';
+import { SENDGRID_CLIENT_TOKEN } from '../constants';
+import { SendgridMailModule } from '../modules/sendgrid/sendgrid.module';
 
 @Injectable()
 class Config {
-  username = 'api';
-  domain = 'sandboxea47440175b84daf8586d18c5d5e1f0a.mailgun.org';
   defaultFromEmail = 'noreply@example.com';
   defaultBccList = ['first@gmail.com', 'second@gmail.com'];
-  key = 'test';
+  apiKey = 'SG.test';
 }
 
 @Module({
@@ -27,7 +25,7 @@ describe('forRootAsync', () => {
     module = await Test.createTestingModule({
       imports: [
         ConfigModule,
-        MailgunMailModule.forRootAsync({
+        SendgridMailModule.forRootAsync({
           useFactory: async (config: Config) => {
             return config;
           },
@@ -39,6 +37,6 @@ describe('forRootAsync', () => {
 
   it('should initialize mailgun config correctly with async configuration', () => {
     expect(module.get(AbstractMailService)).toBeDefined();
-    expect(module.get(MAILGUN_CLIENT_TOKEN)).toBeDefined();
+    expect(module.get(SENDGRID_CLIENT_TOKEN)).toBeDefined();
   });
 });

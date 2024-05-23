@@ -1,5 +1,5 @@
 import { Logger } from '@nestjs/common';
-import { SendEmailResult, SendEmailDto } from './vo';
+import { SendEmailResult, SendEmailDto } from './mailgun/vo';
 
 export abstract class AbstractMailService<TemplateIdType> {
   protected logger: Logger = new Logger(AbstractMailService.name);

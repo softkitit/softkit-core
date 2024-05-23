@@ -1,14 +1,14 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { AbstractMailService } from './abstract-mail.service';
+import { AbstractMailService } from '../abstract-mail.service';
 import { IMailgunClient } from 'mailgun.js/Interfaces/MailgunClient';
-import { MAILGUN_CLIENT_TOKEN, MAILGUN_CONFIG_TOKEN } from '../constants';
+import { MAILGUN_CLIENT_TOKEN, MAILGUN_CONFIG_TOKEN } from '../../constants';
 import {
   EmailDataType,
   MessageContentDto,
   SendEmailDto,
   SendEmailResult,
 } from './vo';
-import { MailgunConfig } from '../config';
+import { MailgunConfig } from '../../config';
 import { GeneralInternalServerException } from '@softkit/exceptions';
 import { AtLeastOneKeyPresent } from 'mailgun.js';
 
@@ -44,6 +44,7 @@ export class MailgunService extends AbstractMailService<string> {
       });
     } else {
       throw new GeneralInternalServerException(
+        undefined,
         `Looks like a developer mistake either html or text must be provided. Take a look now.`,
       );
     }
