@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { MailgunMailModule } from '../../mail.module';
-import { MailService } from './mail/custom-mail.service';
+import { MailgunMailModule } from '../../../../modules';
+import { MailService } from '../custom-mail.service';
 
 @Module({
   imports: [
@@ -14,4 +14,4 @@ import { MailService } from './mail/custom-mail.service';
   ],
   providers: [MailService],
 })
-export class TestingMailModule {}
+export class TestingMailgunModule {}

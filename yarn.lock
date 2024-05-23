@@ -6750,6 +6750,35 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sendgrid/client@npm:^8.1.3":
+  version: 8.1.3
+  resolution: "@sendgrid/client@npm:8.1.3"
+  dependencies:
+    "@sendgrid/helpers": ^8.0.0
+    axios: ^1.6.8
+  checksum: f4a21c7cf9a263003b0358651358dd5a8df7f1b9a689b0827139f8096f87aabd8886a2aebf157b96617af3a8f1948c30f70350318a29a5cfe1d4ffa7586433ff
+  languageName: node
+  linkType: hard
+
+"@sendgrid/helpers@npm:^8.0.0":
+  version: 8.0.0
+  resolution: "@sendgrid/helpers@npm:8.0.0"
+  dependencies:
+    deepmerge: ^4.2.2
+  checksum: 758cab1cb67c8d32632c7a599b2840186dcebc7e9fbc382633b5268d08ecf1de80817730ccbb5d0ad61905407070fa0a59c54d523e7b808b35b403ea0d4db22d
+  languageName: node
+  linkType: hard
+
+"@sendgrid/mail@npm:^8.1.3":
+  version: 8.1.3
+  resolution: "@sendgrid/mail@npm:8.1.3"
+  dependencies:
+    "@sendgrid/client": ^8.1.3
+    "@sendgrid/helpers": ^8.0.0
+  checksum: 9ff4ad494256929a0852a607068bef498c4b182bed2a59d07b599786cc295ae2e8485d6cd141c275120b9134e6fde192e49335395c963a3237eee0cbaa8b2f7a
+  languageName: node
+  linkType: hard
+
 "@sideway/address@npm:^4.1.4":
   version: 4.1.4
   resolution: "@sideway/address@npm:4.1.4"
@@ -7463,6 +7492,8 @@ __metadata:
     "@nx/webpack": 17.1.2
     "@nx/workspace": 17.1.2
     "@openapitools/openapi-generator-cli": 2.7.0
+    "@sendgrid/client": ^8.1.3
+    "@sendgrid/mail": ^8.1.3
     "@songkeys/nestjs-redis": 10.0.0
     "@testcontainers/postgresql": 10.2.1
     "@types/accept-language-parser": 1.5.3
@@ -10530,6 +10561,17 @@ __metadata:
     form-data: ^4.0.0
     proxy-from-env: ^1.1.0
   checksum: 87d4d429927d09942771f3b3a6c13580c183e31d7be0ee12f09be6d5655304996bb033d85e54be81606f4e89684df43be7bf52d14becb73a12727bf33298a082
+  languageName: node
+  linkType: hard
+
+"axios@npm:^1.6.8":
+  version: 1.7.2
+  resolution: "axios@npm:1.7.2"
+  dependencies:
+    follow-redirects: ^1.15.6
+    form-data: ^4.0.0
+    proxy-from-env: ^1.1.0
+  checksum: e457e2b0ab748504621f6fa6609074ac08c824bf0881592209dfa15098ece7e88495300e02cd22ba50b3468fd712fe687e629dcb03d6a3f6a51989727405aedf
   languageName: node
   linkType: hard
 
@@ -15008,6 +15050,16 @@ __metadata:
     debug:
       optional: true
   checksum: 5ca49b5ce6f44338cbfc3546823357e7a70813cecc9b7b768158a1d32c1e62e7407c944402a918ea8c38ae2e78266312d617dc68783fac502cbb55e1047b34ec
+  languageName: node
+  linkType: hard
+
+"follow-redirects@npm:^1.15.6":
+  version: 1.15.6
+  resolution: "follow-redirects@npm:1.15.6"
+  peerDependenciesMeta:
+    debug:
+      optional: true
+  checksum: a62c378dfc8c00f60b9c80cab158ba54e99ba0239a5dd7c81245e5a5b39d10f0c35e249c3379eae719ff0285fff88c365dd446fab19dee771f1d76252df1bbf5
   languageName: node
   linkType: hard
 

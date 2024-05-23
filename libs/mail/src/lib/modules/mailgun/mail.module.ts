@@ -1,9 +1,9 @@
 import { DynamicModule, Module } from '@nestjs/common';
-import { AbstractMailService } from './services';
+import { AbstractMailService } from '../../services';
 import { Provider } from '@nestjs/common/interfaces/modules/provider.interface';
-import { MAILGUN_CLIENT_TOKEN, MAILGUN_CONFIG_TOKEN } from './constants';
-import { MailgunService } from './services/mailgun.service';
-import { MailgunAsyncOptions, MailgunConfig } from './config';
+import { MAILGUN_CLIENT_TOKEN, MAILGUN_CONFIG_TOKEN } from '../../constants';
+import { MailgunService } from '../../services';
+import { MailgunAsyncOptions, MailgunConfig } from '../../config';
 import Mailgun from 'mailgun.js';
 import FormData from 'form-data';
 

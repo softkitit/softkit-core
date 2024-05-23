@@ -1,5 +1,6 @@
 export enum EmailTypes {
   SIGNUP_EMAIL = 'path/a/b',
+  LOGIN_EMAIL = 'd-9dcdb915f5364c05a5166cfe7b6c1505',
   WELCOME = 'WELCOME_TEMPLATE_ID',
   CHANGE_PASSWORD = 'CHANGE_PASSWORD_TEMPLATE_ID',
 }
