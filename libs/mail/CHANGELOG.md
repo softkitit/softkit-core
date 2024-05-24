@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.3.1](https://github.com/softkitit/softkit-core/compare/mail-0.3.0...mail-0.3.1) (2024-05-24)
+
+
+### Bug Fixes
+
+* **mail:** added optional instalation for the sendgrid library and mailgun library ([0b5eb33](https://github.com/softkitit/softkit-core/commit/0b5eb33e858382d99470845cacffe4292abdfe7b))
+
 ## [0.3.0](https://github.com/softkitit/softkit-core/compare/mail-0.2.5...mail-0.3.0) (2024-05-23)
 
 
