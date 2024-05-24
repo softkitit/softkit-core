@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { AbstractMailService } from '../abstract-mail.service';
-import { IMailgunClient } from 'mailgun.js/Interfaces/MailgunClient';
+import type { IMailgunClient } from 'mailgun.js/Interfaces/MailgunClient';
 import { MAILGUN_CLIENT_TOKEN, MAILGUN_CONFIG_TOKEN } from '../../constants';
 import {
   EmailDataType,
@@ -10,7 +10,7 @@ import {
 } from './vo';
 import { MailgunConfig } from '../../config';
 import { GeneralInternalServerException } from '@softkit/exceptions';
-import { AtLeastOneKeyPresent } from 'mailgun.js';
+import type { AtLeastOneKeyPresent } from 'mailgun.js';
 
 @Injectable()
 export class MailgunService extends AbstractMailService<string> {

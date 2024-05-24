@@ -6,11 +6,11 @@ import {
   SendEmailDto,
   SendEmailResult,
 } from '../mailgun/vo';
-import { MailService } from '@sendgrid/mail';
 import { GeneralInternalServerException } from '@softkit/exceptions';
-import { AttachmentData } from '@sendgrid/helpers/classes/attachment';
-import { EmailData } from '@sendgrid/helpers/classes/email-address';
-import { AtLeastOneKeyPresent } from 'mailgun.js';
+import type { MailService } from '@sendgrid/mail';
+import type { AttachmentData } from '@sendgrid/helpers/classes/attachment';
+import type { EmailData } from '@sendgrid/helpers/classes/email-address';
+import type { AtLeastOneKeyPresent } from 'mailgun.js';
 import { AbstractMailService } from '../abstract-mail.service';
 import { SendgridConfig } from '../../config';
 
