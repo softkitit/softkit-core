@@ -2,7 +2,6 @@ import { DynamicModule, Module } from '@nestjs/common';
 import { AbstractMailService } from '../../services';
 import { Provider } from '@nestjs/common/interfaces/modules/provider.interface';
 import { SENDGRID_CLIENT_TOKEN, SENDGRID_CONFIG_TOKEN } from '../../constants';
-import { MailService } from '@sendgrid/mail';
 import { SendgridService } from '../../services';
 import { SendgridAsyncOptions } from '../../config';
 import { SendgridConfig } from '../../config';
@@ -59,8 +58,13 @@ export class SendgridMailModule {
         },
         {
           provide: SENDGRID_CLIENT_TOKEN,
-          useFactory: (authCredentials: SendgridConfig) => {
-            const client = new MailService();
+          useFactory: async (authCredentials: SendgridConfig) => {
+            // eslint-disable-next-line unicorn/no-await-expression-member
+            const MailService = await import('@sendgrid/mail');
+
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            const client = new MailService.MailService();
             client.setApiKey(authCredentials.apiKey);
 
             return client;

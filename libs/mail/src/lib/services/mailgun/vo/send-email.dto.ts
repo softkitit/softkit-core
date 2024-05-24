@@ -8,7 +8,7 @@ import {
   IsStringLocalized,
   MaxLengthLocalized,
 } from '@softkit/validation';
-import { AtLeastOneKeyPresent } from 'mailgun.js';
+import type { AtLeastOneKeyPresent } from 'mailgun.js';
 
 export class AttachmentFile {
   @IsStringLocalized()
