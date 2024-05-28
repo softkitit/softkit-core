@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { SENDGRID_CLIENT_TOKEN, SENDGRID_CONFIG_TOKEN } from '../../constants';
 import {
+  AttachmentFile,
   EmailDataType,
   MessageContentDto,
   SendEmailDto,
@@ -13,6 +14,7 @@ import type { EmailData } from '@sendgrid/helpers/classes/email-address';
 import type { AtLeastOneKeyPresent } from 'mailgun.js';
 import { AbstractMailService } from '../abstract-mail.service';
 import { SendgridConfig } from '../../config';
+import { toBase64 } from '../../utils/type-convertor';
 
 @Injectable()
 export class SendgridService extends AbstractMailService<string> {
@@ -36,17 +38,8 @@ export class SendgridService extends AbstractMailService<string> {
         html ? { html } : { text }
       ) as AtLeastOneKeyPresent<MessageContentDto>;
 
-      // todo update attachments
-      const attachments = attachment?.map((item): AttachmentData => {
-        if (typeof item.data !== 'string') {
-          this.logger.warn('Attachments must be string.');
-        }
-
-        return {
-          content: Buffer.from(item.data as string).toString('base64'),
-          filename: item.filename,
-        };
-      });
+      const attachments: AttachmentData[] =
+        await this.transformAttachments(attachment);
 
       const response = await this.sendgrid.send({
         from: {
@@ -91,17 +84,8 @@ export class SendgridService extends AbstractMailService<string> {
 
     const { attachment, cc, to, ...rest } = emailData;
 
-    // todo update attachments
-    const attachments = attachment?.map((item): AttachmentData => {
-      if (typeof item.data !== 'string') {
-        this.logger.warn('Attachments must be string.');
-      }
-
-      return {
-        content: item.data as string,
-        filename: item.filename,
-      };
-    });
+    const attachments: AttachmentData[] =
+      await this.transformAttachments(attachment);
 
     const response = await this.sendgrid.send({
       from: {
@@ -136,5 +120,24 @@ export class SendgridService extends AbstractMailService<string> {
         };
       },
     );
+  }
+
+  private async transformAttachments(
+    attachment: AttachmentFile[] | undefined,
+  ): Promise<AttachmentData[]> {
+    if (!attachment) {
+      return [];
+    }
+
+    const attachments: AttachmentData[] = [];
+    for (const item of attachment) {
+      const content = await toBase64(item.data);
+      attachments.push({
+        content,
+        filename: item.filename,
+      });
+    }
+
+    return attachments;
   }
 }
