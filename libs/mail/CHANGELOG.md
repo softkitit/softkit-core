@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.3.2](https://github.com/softkitit/softkit-core/compare/mail-0.3.1...mail-0.3.2) (2024-05-28)
+
+
+### Bug Fixes
+
+* **mail:** added more tests for sendgrid ([b87384b](https://github.com/softkitit/softkit-core/commit/b87384b89569d03e88f16a4fa90f81a73dae994a))
+
 ## [0.3.1](https://github.com/softkitit/softkit-core/compare/mail-0.3.0...mail-0.3.1) (2024-05-24)
 
 
