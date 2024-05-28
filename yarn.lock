@@ -7516,10 +7516,10 @@ __metadata:
     apollo-cache-inmemory: 1.6.6
     apollo-client: 2.6.10
     apollo-link-ws: 1.0.20
-    apollo-server-core: 3.9.0
+    apollo-server-core: 3.13.0
     apollo-server-express: 3.9.0
     argon2: 0.31.0
-    axios: 1.6.7
+    axios: 1.6.8
     axios-retry: 4.0.0
     bullmq: 5.1.5
     chalk: 4.1.2
@@ -7531,7 +7531,7 @@ __metadata:
     cookie: 0.5.0
     cspell: 7.3.8
     docusaurus-plugin-typedoc: 1.0.0-next.21
-    ejs: 3.1.9
+    ejs: 3.1.10
     eslint: 8.48.0
     eslint-config-prettier: 9.0.0
     eslint-plugin-jest: 27.2.3
@@ -7579,7 +7579,7 @@ __metadata:
     plugin-image-zoom: 1.2.0
     prettier: 3.0.3
     prism-react-renderer: 2.3.0
-    pug: 3.0.2
+    pug: 3.0.3
     react: 18.2.0
     react-dom: 18.2.0
     reflect-metadata: 0.1.13
@@ -10045,7 +10045,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"apollo-reporting-protobuf@npm:^3.3.1, apollo-reporting-protobuf@npm:^3.4.0":
+"apollo-reporting-protobuf@npm:^3.4.0":
   version: 3.4.0
   resolution: "apollo-reporting-protobuf@npm:3.4.0"
   dependencies:
@@ -10054,39 +10054,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"apollo-server-core@npm:3.9.0":
-  version: 3.9.0
-  resolution: "apollo-server-core@npm:3.9.0"
-  dependencies:
-    "@apollo/utils.keyvaluecache": ^1.0.1
-    "@apollo/utils.logger": ^1.0.0
-    "@apollo/utils.usagereporting": ^1.0.0
-    "@apollographql/apollo-tools": ^0.5.3
-    "@apollographql/graphql-playground-html": 1.6.29
-    "@graphql-tools/mock": ^8.1.2
-    "@graphql-tools/schema": ^8.0.0
-    "@josephg/resolvable": ^1.0.0
-    apollo-datasource: ^3.3.2
-    apollo-reporting-protobuf: ^3.3.1
-    apollo-server-env: ^4.2.1
-    apollo-server-errors: ^3.3.1
-    apollo-server-plugin-base: ^3.6.1
-    apollo-server-types: ^3.6.1
-    async-retry: ^1.2.1
-    fast-json-stable-stringify: ^2.1.0
-    graphql-tag: ^2.11.0
-    loglevel: ^1.6.8
-    lru-cache: ^6.0.0
-    sha.js: ^2.4.11
-    uuid: ^8.0.0
-    whatwg-mimetype: ^3.0.0
-  peerDependencies:
-    graphql: ^15.3.0 || ^16.0.0
-  checksum: 161401b7081ff69415999dcfb010d410ef8b1f8ee63368b54dddd0a24b8803b4c269dde0844e0a4fc5963169101f12749d9d9ae3c5cf4f0ac7fdd60b43eda43c
-  languageName: node
-  linkType: hard
-
-"apollo-server-core@npm:^3.9.0":
+"apollo-server-core@npm:3.13.0, apollo-server-core@npm:^3.9.0":
   version: 3.13.0
   resolution: "apollo-server-core@npm:3.13.0"
   dependencies:
@@ -10159,7 +10127,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"apollo-server-plugin-base@npm:^3.6.1, apollo-server-plugin-base@npm:^3.7.2":
+"apollo-server-plugin-base@npm:^3.7.2":
   version: 3.7.2
   resolution: "apollo-server-plugin-base@npm:3.7.2"
   dependencies:
@@ -10553,7 +10521,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:1.6.7, axios@npm:^1.3.3, axios@npm:^1.5.1":
+"axios@npm:1.6.8":
+  version: 1.6.8
+  resolution: "axios@npm:1.6.8"
+  dependencies:
+    follow-redirects: ^1.15.6
+    form-data: ^4.0.0
+    proxy-from-env: ^1.1.0
+  checksum: bf007fa4b207d102459300698620b3b0873503c6d47bf5a8f6e43c0c64c90035a4f698b55027ca1958f61ab43723df2781c38a99711848d232cad7accbcdfcdd
+  languageName: node
+  linkType: hard
+
+"axios@npm:^1.3.3, axios@npm:^1.5.1":
   version: 1.6.7
   resolution: "axios@npm:1.6.7"
   dependencies:
@@ -13811,7 +13790,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ejs@npm:3.1.9, ejs@npm:^3.1.7":
+"ejs@npm:3.1.10":
+  version: 3.1.10
+  resolution: "ejs@npm:3.1.10"
+  dependencies:
+    jake: ^10.8.5
+  bin:
+    ejs: bin/cli.js
+  checksum: ce90637e9c7538663ae023b8a7a380b2ef7cc4096de70be85abf5a3b9641912dde65353211d05e24d56b1f242d71185c6d00e02cb8860701d571786d92c71f05
+  languageName: node
+  linkType: hard
+
+"ejs@npm:^3.1.7":
   version: 3.1.9
   resolution: "ejs@npm:3.1.9"
   dependencies:
@@ -15043,17 +15033,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:^1.0.0, follow-redirects@npm:^1.14.0, follow-redirects@npm:^1.14.9, follow-redirects@npm:^1.15.0, follow-redirects@npm:^1.15.4":
-  version: 1.15.5
-  resolution: "follow-redirects@npm:1.15.5"
-  peerDependenciesMeta:
-    debug:
-      optional: true
-  checksum: 5ca49b5ce6f44338cbfc3546823357e7a70813cecc9b7b768158a1d32c1e62e7407c944402a918ea8c38ae2e78266312d617dc68783fac502cbb55e1047b34ec
-  languageName: node
-  linkType: hard
-
-"follow-redirects@npm:^1.15.6":
+"follow-redirects@npm:^1.0.0, follow-redirects@npm:^1.14.0, follow-redirects@npm:^1.14.9, follow-redirects@npm:^1.15.0, follow-redirects@npm:^1.15.4, follow-redirects@npm:^1.15.6":
   version: 1.15.6
   resolution: "follow-redirects@npm:1.15.6"
   peerDependenciesMeta:
@@ -16841,9 +16821,9 @@ __metadata:
   linkType: hard
 
 "ip@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "ip@npm:2.0.0"
-  checksum: cfcfac6b873b701996d71ec82a7dd27ba92450afdb421e356f44044ed688df04567344c36cbacea7d01b1c39a4c732dc012570ebe9bebfb06f27314bca625349
+  version: 2.0.1
+  resolution: "ip@npm:2.0.1"
+  checksum: d765c9fd212b8a99023a4cde6a558a054c298d640fec1020567494d257afd78ca77e37126b1a3ef0e053646ced79a816bf50621d38d5e768cdde0431fa3b0d35
   languageName: node
   linkType: hard
 
@@ -23090,19 +23070,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pug-code-gen@npm:^3.0.2":
-  version: 3.0.2
-  resolution: "pug-code-gen@npm:3.0.2"
+"pug-code-gen@npm:^3.0.3":
+  version: 3.0.3
+  resolution: "pug-code-gen@npm:3.0.3"
   dependencies:
     constantinople: ^4.0.1
     doctypes: ^1.1.0
     js-stringify: ^1.0.2
     pug-attrs: ^3.0.0
-    pug-error: ^2.0.0
-    pug-runtime: ^3.0.0
+    pug-error: ^2.1.0
+    pug-runtime: ^3.0.1
     void-elements: ^3.1.0
     with: ^7.0.0
-  checksum: 1644d3a4d673392794248749eb146299704639a8197746454b7d03b240b83ee102f25b76d203381501e283be3927ab01eb3f4563ff51c45a478de1f3435a400d
+  checksum: 7a494887eb2cbe88c90cd45f818729046d3cb186d5101770e158cc14be9cd5e664809c600182756ebbcab2b27caba87ac8b743e0ad0789799b1925a850612947
   languageName: node
   linkType: hard
 
@@ -23110,6 +23090,13 @@ __metadata:
   version: 2.0.0
   resolution: "pug-error@npm:2.0.0"
   checksum: c5372d018c897c1d6a141dd803c50957feecfda1f3d84a6adc6149801315d6c7f8c28b05f3e186d98d774fc9718699d1e1caa675630dd3c4453f8c5ec4e4a986
+  languageName: node
+  linkType: hard
+
+"pug-error@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "pug-error@npm:2.1.0"
+  checksum: e084890365f1c03a828437c1dcf641598f5754bc0fdde625a8b2529c52fbda0caa89e0e29e9124d665cfd3915bb8916011787861930a0dcf250d46e1a33c1e5c
   languageName: node
   linkType: hard
 
@@ -23190,11 +23177,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pug@npm:3.0.2":
-  version: 3.0.2
-  resolution: "pug@npm:3.0.2"
+"pug@npm:3.0.3":
+  version: 3.0.3
+  resolution: "pug@npm:3.0.3"
   dependencies:
-    pug-code-gen: ^3.0.2
+    pug-code-gen: ^3.0.3
     pug-filters: ^4.0.0
     pug-lexer: ^5.0.1
     pug-linker: ^4.0.0
@@ -23202,7 +23189,7 @@ __metadata:
     pug-parser: ^6.0.0
     pug-runtime: ^3.0.1
     pug-strip-comments: ^2.0.0
-  checksum: 3e1a3d48897c0c7dedd4f959ce8afaf6417a63756b149e1b5382bef16de5792ec7c7ae6a7d41641059cb149520f20b0d1ecf57014c0661526e96f0bad88541e5
+  checksum: b825497b44fb373625680c0279199f964fd7446351f5570087d4b7f73e7855434ff075d3085fd11c08473dc355719b0613d20e3d44f197b1809736c1d5f8370b
   languageName: node
   linkType: hard
 
@@ -27210,7 +27197,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uuid@npm:^8.0.0, uuid@npm:^8.3.2":
+"uuid@npm:^8.3.2":
   version: 8.3.2
   resolution: "uuid@npm:8.3.2"
   bin:
@@ -27559,8 +27546,8 @@ __metadata:
   linkType: hard
 
 "webpack-dev-middleware@npm:^5.3.1":
-  version: 5.3.3
-  resolution: "webpack-dev-middleware@npm:5.3.3"
+  version: 5.3.4
+  resolution: "webpack-dev-middleware@npm:5.3.4"
   dependencies:
     colorette: ^2.0.10
     memfs: ^3.4.3
@@ -27569,7 +27556,7 @@ __metadata:
     schema-utils: ^4.0.0
   peerDependencies:
     webpack: ^4.0.0 || ^5.0.0
-  checksum: dd332cc6da61222c43d25e5a2155e23147b777ff32fdf1f1a0a8777020c072fbcef7756360ce2a13939c3f534c06b4992a4d659318c4a7fe2c0530b52a8a6621
+  checksum: 90cf3e27d0714c1a745454a1794f491b7076434939340605b9ee8718ba2b85385b120939754e9fdbd6569811e749dee53eec319e0d600e70e0b0baffd8e3fb13
   languageName: node
   linkType: hard
 
