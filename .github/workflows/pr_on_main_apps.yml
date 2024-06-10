@@ -59,8 +59,15 @@ jobs:
       - name: Install deps
         run: yarn install
 
-      - name: Build app
-        run: yarn build
+      - name: Check spell
+        run: ${{ steps.nx.outputs.exec-cmd }} -t check-spell
+
+      - name: Build docs
+        run: ${{ steps.nx.outputs.exec-cmd }} -t build-docs
+
+      - name: Get affected projects
+        id: get-affected-projects
+        run: echo affected-projects=$(${{ steps.nx.outputs.show-apps }} --with-target build) >> $GITHUB_OUTPUT
 
   init-state-app:
     needs: [ lint-and-run-tests, prepare ]
@@ -71,9 +78,10 @@ jobs:
     with:
       organization: ${{ github.event.repository.owner.login }}
       repository-name: ${{ github.event.repository.name }}
-      project-name: ${{ github.event.repository.name }}
+      project-name: ${{ matrix.project }}
       environment: ${{ matrix.environment }}
-      terraform-folder: terraform
+      terraform-folder: apps/${{ matrix.project }}/terraform
+
     secrets: inherit
 
   plan-app:
@@ -84,7 +92,7 @@ jobs:
     uses: softkitit/github-actions-terraform/.github/workflows/ci-terraform-plan-and-format.yml@main
     with:
       environment: ${{ matrix.environment }}
-      terraform-folder: terraform
+      terraform-folder: apps/${{ matrix.project }}/terraform
       override-plan-comment: false
     secrets: inherit
 

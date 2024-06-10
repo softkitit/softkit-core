@@ -75,7 +75,7 @@ export class AppController {
 ```
 
 :::tip
-You can import the `I18nPath` type so you require a valid i18n path in your code. This is useful when handeling exceptions with translations.
+You can import the `I18nPath` type so you require a valid i18n path in your code. This is useful when handling exceptions with translations.
 
 ```typescript title="src/app.controller.ts"
 import { I18nPath } from './generated/i18n.generated.ts';
