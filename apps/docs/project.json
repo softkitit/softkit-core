@@ -22,7 +22,7 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "cspell \"**/*.{md,mdx}\" -c ./apps/docs/cspell.json"
+          "cspell \"./apps/docs/docs/**/*.{md,mdx}\" -c ./apps/docs/cspell.json"
         ]
       }
     },
