@@ -67,14 +67,18 @@ jobs:
 
       - name: Get affected projects
         id: get-affected-projects
-        run: echo affected-projects=$(${{ steps.nx.outputs.show-apps }} --with-target build) >> $GITHUB_OUTPUT
+        run: echo affected-projects=$(${{ steps.nx.outputs.show-apps }} --with-target build-docs) >> $GITHUB_OUTPUT
 
   init-state-app:
     needs: [ lint-and-run-tests, prepare ]
     uses: softkitit/github-actions-terraform/.github/workflows/controller-initialize-terraform-state.yml@main
+
+    if: ${{ needs.lint-and-run-tests.outputs.affected-projects != '[]' && needs.prepare.outputs.environments != ''}}
+
     strategy:
       matrix:
         environment: ${{ fromJson(needs.prepare.outputs.environments) }}
+        project: ${{ fromJson(needs.lint-and-run-tests.outputs.affected-projects) }}
     with:
       organization: ${{ github.event.repository.owner.login }}
       repository-name: ${{ github.event.repository.name }}
@@ -86,9 +90,11 @@ jobs:
 
   plan-app:
     needs: [lint-and-run-tests, init-state-app, prepare]
+    if: ${{ needs.lint-and-run-tests.outputs.affected-projects != '[]' && needs.prepare.outputs.environments != ''}}
     strategy:
       matrix:
         environment: ${{ fromJson(needs.prepare.outputs.environments) }}
+        project: ${{ fromJson(needs.lint-and-run-tests.outputs.affected-projects) }}
     uses: softkitit/github-actions-terraform/.github/workflows/ci-terraform-plan-and-format.yml@main
     with:
       environment: ${{ matrix.environment }}
