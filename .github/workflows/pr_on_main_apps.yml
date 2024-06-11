@@ -24,7 +24,7 @@ jobs:
         id: define-envs
         run: |
             echo is-release=${{ startsWith(github.head_ref, 'release/') && 'true' || '' }} >> $GITHUB_OUTPUT
-            echo environments='${{ startsWith(github.head_ref, 'release/') && vars.RELEASE_ENVIRONMENTS || vars.DEV_ENVIRONMENTS }}' >> $GITHUB_OUTPUT
+            echo environments='${{ vars.RELEASE_ENVIRONMENTS }}' >> $GITHUB_OUTPUT
             echo release-tag=${{ startsWith(github.head_ref, 'release/') && 'last-release' || 'origin/main' }} >> $GITHUB_OUTPUT
 
   lint-and-run-tests:
