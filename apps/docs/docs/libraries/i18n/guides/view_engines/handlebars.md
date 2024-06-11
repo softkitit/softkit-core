@@ -40,7 +40,7 @@ export class TestController {
   @Get('/')
   @Render('page')
   index(): any {
-    return { helloArgs: { username: 'Toon' } };
+    return { helloArgs: { username: 'John' } };
   }
 }
 ```
@@ -55,12 +55,12 @@ export class TestController {
 
 :::tip
 
-The third argument `helloArgs` is optional. This is only needed if you want to pass along arugments to your translations.
+The third argument `helloArgs` is optional. This is only needed if you want to pass along arguments to your translations.
 
 :::
 
 ### Result
 
 <code>
-  <h1>Hello Toon</h1>
+  <h1>Hello John</h1>
 </code>

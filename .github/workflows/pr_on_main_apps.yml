@@ -1,0 +1,105 @@
+name: PR on main for docs
+
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [ opened, reopened, synchronize ]
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      environments: ${{ steps.define-envs.outputs.environments }}
+      release-tag: ${{ steps.define-envs.outputs.release-tag }}
+      is-release: ${{ steps.define-envs.outputs.is-release }}
+
+    steps:
+      - name: Define envs information
+        id: define-envs
+        run: |
+            echo is-release=${{ startsWith(github.head_ref, 'release/') && 'true' || '' }} >> $GITHUB_OUTPUT
+            echo environments='${{ vars.RELEASE_ENVIRONMENTS }}' >> $GITHUB_OUTPUT
+            echo release-tag=${{ startsWith(github.head_ref, 'release/') && 'last-release' || 'origin/main' }} >> $GITHUB_OUTPUT
+
+  lint-and-run-tests:
+    needs: [ prepare ]
+    runs-on: ubuntu-latest
+    outputs:
+        affected-projects: ${{ steps.get-affected-projects.outputs.affected-projects }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - name: Verify if last release tag exists, and define nx command to use
+        id: nx
+        run: |
+          if [ $(git tag -l ${{ needs.prepare.outputs.release-tag }}) ] || [[ 'main' == '${{ needs.prepare.outputs.release-tag }}' ]]; then
+           echo "Last release tag exists, will process with affected applications"
+           echo exec-cmd="npx nx affected --base=${{ needs.prepare.outputs.release-tag }}" >> $GITHUB_OUTPUT
+           echo show-apps="npx nx show projects --json --type app --affected --base ${{ needs.prepare.outputs.release-tag }}" >> $GITHUB_OUTPUT
+          else
+           echo "No last release tag exists, all apps will be deployed"
+           echo exec-cmd="npx nx run-many" >> $GITHUB_OUTPUT
+           echo show-apps="npx nx show projects --json --type app" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Install deps
+        run: yarn install
+
+      - name: Check spell
+        run: ${{ steps.nx.outputs.exec-cmd }} -t check-spell
+
+      - name: Build docs
+        run: ${{ steps.nx.outputs.exec-cmd }} -t build-docs
+
+      - name: Get affected projects
+        id: get-affected-projects
+        run: echo affected-projects=$(${{ steps.nx.outputs.show-apps }} --with-target build-docs) >> $GITHUB_OUTPUT
+
+  init-state-app:
+    needs: [ lint-and-run-tests, prepare ]
+    uses: softkitit/github-actions-terraform/.github/workflows/controller-initialize-terraform-state.yml@main
+
+    if: ${{ needs.lint-and-run-tests.outputs.affected-projects != '[]' && needs.prepare.outputs.environments != ''}}
+
+    strategy:
+      matrix:
+        environment: ${{ fromJson(needs.prepare.outputs.environments) }}
+        project: ${{ fromJson(needs.lint-and-run-tests.outputs.affected-projects) }}
+    with:
+      organization: ${{ github.event.repository.owner.login }}
+      repository-name: ${{ github.event.repository.name }}
+      project-name: ${{ matrix.project }}
+      environment: ${{ matrix.environment }}
+      terraform-folder: apps/${{ matrix.project }}/terraform
+
+    secrets: inherit
+
+  plan-app:
+    needs: [lint-and-run-tests, init-state-app, prepare]
+    if: ${{ needs.lint-and-run-tests.outputs.affected-projects != '[]' && needs.prepare.outputs.environments != ''}}
+    strategy:
+      matrix:
+        environment: ${{ fromJson(needs.prepare.outputs.environments) }}
+        project: ${{ fromJson(needs.lint-and-run-tests.outputs.affected-projects) }}
+    uses: softkitit/github-actions-terraform/.github/workflows/ci-terraform-plan-and-format.yml@main
+    with:
+      environment: ${{ matrix.environment }}
+      terraform-folder: apps/${{ matrix.project }}/terraform
+      override-plan-comment: false
+    secrets: inherit
+
+

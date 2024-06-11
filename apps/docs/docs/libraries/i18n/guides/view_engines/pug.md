@@ -34,7 +34,7 @@ export class TestController {
   @Get('/')
   @Render('page')
   index(): any {
-    return { username: 'Toon' };
+    return { username: 'John' };
   }
 }
 ```
@@ -51,12 +51,12 @@ The second parameter `i18nLang` is the current language. There is no way of pass
 
 :::tip
 
-The third argument is optional. This is only needed if you want to pass along arugments to your translations.
+The third argument is optional. This is only needed if you want to pass along arguments to your translations.
 
 :::
 
 ### Result
 
 <code>
-  <h1>Hello Toon</h1>
+  <h1>Hello John</h1>
 </code>

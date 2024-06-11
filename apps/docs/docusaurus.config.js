@@ -10,7 +10,7 @@ const config = {
   trailingSlash: true,
 
   // Set the production url of your site here
-  url: 'https://docs.softkit.io',
+  url: 'https://docs.softkit.dev',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
@@ -95,7 +95,7 @@ const config = {
             label: 'FAQ',
           },
           {
-            href: 'https://github.com/softkitit/docusaurus',
+            href: 'https://github.com/softkitit/softkit-core',
             label: 'GitHub',
             position: 'right',
           },
@@ -139,7 +139,7 @@ const config = {
               },
               {
                 label: 'GitHub',
-                href: 'https://github.com/facebook/docusaurus',
+                href: 'https://github.com/softkitit/softkit-core',
               },
             ],
           },
