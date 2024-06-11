@@ -7,11 +7,11 @@ locals {
   })
 
   # Non-Editable Variables
-  prod_env         = var.environment == "prod"
-  base_domain      = "softkit.dev"
-  notFoundPagePath = "/404.html"
-  parent_zone_name = lookup(local.parent_zone_env, var.environment, "${var.environment}.${local.base_domain}")
-  website_domain   = "docs.${local.parent_zone_name}"
+  prod_env           = var.environment == "prod"
+  base_domain        = "softkit.dev"
+  notFoundPagePath   = "/404.html"
+  parent_zone_name   = lookup(local.parent_zone_env, var.environment, "${var.environment}.${local.base_domain}")
+  website_domain     = "docs.${local.parent_zone_name}"
   www_website_domain = "www.${local.website_domain}"
 
 

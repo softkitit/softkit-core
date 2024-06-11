@@ -58,16 +58,16 @@ resource "aws_cloudfront_response_headers_policy" "website-security-policy" {
 
 
 module "cdn" {
-  source                  = "cloudposse/cloudfront-s3-cdn/aws"
-  version                 = "0.94.0"
-  parent_zone_id          = data.aws_route53_zone.default.zone_id
-  cors_allowed_origins    = [local.website_domain]
-  dns_alias_enabled       = true
-  aliases                 = [local.website_domain]
-  acm_certificate_arn     = module.acm_request_certificate.arn
-  website_enabled         = true
+  source                      = "cloudposse/cloudfront-s3-cdn/aws"
+  version                     = "0.94.0"
+  parent_zone_id              = data.aws_route53_zone.default.zone_id
+  cors_allowed_origins        = [local.website_domain]
+  dns_alias_enabled           = true
+  aliases                     = [local.website_domain]
+  acm_certificate_arn         = module.acm_request_certificate.arn
+  website_enabled             = true
   s3_website_password_enabled = true
-  allow_ssl_requests_only = false
+  allow_ssl_requests_only     = false
   custom_error_response = [
     {
       error_code            = 404
