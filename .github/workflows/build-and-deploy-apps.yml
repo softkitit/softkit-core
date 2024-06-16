@@ -118,8 +118,8 @@ jobs:
     uses: softkitit/github-actions-terraform/.github/workflows/cd-deploy-to-s3.yml@main
     with:
       environment: ${{ needs.prepare.outputs.environment }}
-      s3-bucket-name: ${{ github.event.repository.owner.login }}-${{ needs.prepare.outputs.environment }}-${{ matrix.project }}-origin
-      cloudfront-origin-name: ${{ github.event.repository.owner.login }}-${{ needs.prepare.outputs.environment }}-${{ matrix.project }}
+      s3-bucket-name: ${{ github.event.repository.name }}-${{ needs.prepare.outputs.environment }}-${{ matrix.project }}-origin
+      cloudfront-origin-name: ${{ github.event.repository.name }}-${{ needs.prepare.outputs.environment }}-${{ matrix.project }}
       website-content: build
       folder-to-upload: ${{ matrix.project }}/build
     secrets: inherit

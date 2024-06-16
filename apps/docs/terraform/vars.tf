@@ -19,6 +19,12 @@ variable "repository_name" {
   default     = "org-setup"
 }
 
+variable "project_name" {
+  type        = string
+  description = "The project name for monorepo setup"
+  default     = "default-project"
+}
+
 variable "tf_state_file_name" {
   type        = string
   description = "Terraform file state name on a remote"
