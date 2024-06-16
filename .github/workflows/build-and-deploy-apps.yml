@@ -120,7 +120,8 @@ jobs:
       environment: ${{ needs.prepare.outputs.environment }}
       s3-bucket-name: ${{ github.event.repository.owner.login }}-${{ needs.prepare.outputs.environment }}-${{ matrix.project }}-origin
       cloudfront-origin-name: ${{ github.event.repository.owner.login }}-${{ needs.prepare.outputs.environment }}-${{ matrix.project }}
-      website-content: apps/${{ matrix.project }}/build
+      website-content: build
+      folder-to-upload: ${{ matrix.project }}/build
     secrets: inherit
 
 
