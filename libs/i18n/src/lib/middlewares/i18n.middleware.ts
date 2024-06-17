@@ -8,7 +8,6 @@ import {
   WsArgumentsHost,
 } from '@nestjs/common/interfaces';
 import { ModuleRef } from '@nestjs/core';
-import { isResolverWithOptions, shouldResolve } from '../utils';
 import { I18N_OPTIONS, I18N_RESOLVERS } from '../i18n.constants';
 import {
   I18nOptions,
@@ -19,6 +18,8 @@ import {
 import { I18nService } from '../services/i18n.service';
 import { I18nError } from '../i18n.error';
 import { I18nContext } from '../i18n.context';
+import { shouldResolve } from '../utils';
+import { isResolverWithOptions } from '../utils/type-guards';
 
 const ExecutionContextMethodNotImplemented = new I18nError(
   "Method not implemented. @softkit/i18n creates a fake Http context since it's using middleware to resolve your language. Nestjs middlewares don't have access to the ExecutionContext.",

@@ -3,6 +3,7 @@ import { AppConfig } from '../../../lib/config/app.config';
 import { ValidateNested } from 'class-validator';
 import { SwaggerConfig } from '@softkit/swagger-utils';
 import { DbConfig } from '@softkit/typeorm';
+import { LoggerConfig } from '@softkit/logger';
 
 export class RootConfig {
   @ValidateNested()
@@ -12,6 +13,10 @@ export class RootConfig {
   @ValidateNested()
   @Type(() => DbConfig)
   db!: DbConfig;
+
+  @ValidateNested()
+  @Type(() => LoggerConfig)
+  logs!: LoggerConfig;
 
   @Type(() => AppConfig)
   @ValidateNested()

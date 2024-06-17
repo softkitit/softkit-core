@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.1.6](https://github.com/softkitit/softkit-core/compare/exceptions-0.1.5...exceptions-0.1.6) (2024-05-17)
+
+
+### Bug Fixes
+
+* **exceptions:** improved logs to include context and show errors stacktrace properly ([cc7c581](https://github.com/softkitit/softkit-core/commit/cc7c5818c2b8fc88741f46e0e6ab16f2e0cf4d1e))
+
 ## [0.1.5](https://github.com/softkitit/softkit-core/compare/exceptions-0.1.4...exceptions-0.1.5) (2024-02-05)
 
 

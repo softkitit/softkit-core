@@ -15,13 +15,10 @@ import {
 } from '../interfaces';
 import { I18nService } from '../services/i18n.service';
 import { ModuleRef } from '@nestjs/core';
-import {
-  shouldResolve,
-  getContextObject,
-  isResolverWithOptions,
-} from '../utils';
 import { Observable } from 'rxjs';
 import { I18nContext } from '../i18n.context';
+import { shouldResolve, getContextObject } from '../utils';
+import { isResolverWithOptions } from '../utils/type-guards';
 
 @Injectable()
 export class I18nLanguageInterceptor implements NestInterceptor {

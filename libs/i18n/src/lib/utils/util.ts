@@ -11,7 +11,7 @@ import {
 import { I18nService, TranslateOptions } from '../services/i18n.service';
 import { MiddlewareConsumer } from '@nestjs/common';
 import { NestMiddlewareConsumer, Path } from '../types';
-import { isResolverWithOptions } from './typescript';
+import { isResolverWithOptions } from './type-guards';
 
 export function shouldResolve(e: I18nOptionResolver) {
   return typeof e === 'function' || isResolverWithOptions(e);

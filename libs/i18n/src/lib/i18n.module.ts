@@ -33,7 +33,7 @@ import { I18nLoader } from './loaders/i18n.loader';
 import format from 'string-format';
 import { I18nMiddleware } from './middlewares/i18n.middleware';
 import { processLanguages, processTranslations } from './utils/loaders-utils';
-import { isResolverWithOptions } from './utils';
+import { isResolverWithOptions } from './utils/type-guards';
 
 export const logger = new Logger('I18nService');
 

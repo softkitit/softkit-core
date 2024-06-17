@@ -36,12 +36,14 @@ export class HeaderTenantResolutionService extends AbstractTenantResolutionServi
       return true;
     } else {
       this.logger.error(
+        {
+          tenantId,
+          jwtPayload,
+        },
         `
         Cross tenant request detected, that is suspicious,
-        and it's better to investigate it. Tenant: %s, payload: %s
+        and it's better to investigate it.
         `,
-        tenantId,
-        jwtPayload,
       );
       throw new GeneralForbiddenException();
     }

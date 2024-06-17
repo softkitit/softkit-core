@@ -81,6 +81,10 @@ export class S3FileStorageModule {
           useClass: S3FileService,
         },
         {
+          useExisting: AbstractFileService,
+          provide: S3FileService,
+        },
+        {
           provide: S3_CLIENT_TOKEN,
           useFactory: (config: S3ClientConfig) => {
             let credentials = config?.credentials;
@@ -96,7 +100,7 @@ export class S3FileStorageModule {
           inject: [S3_SERVICE_CONFIG_TOKEN],
         },
       ],
-      exports: [AbstractFileService, S3_CLIENT_TOKEN],
+      exports: [AbstractFileService, S3FileService, S3_CLIENT_TOKEN],
     };
   }
 

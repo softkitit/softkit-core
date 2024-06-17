@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { AbstractMailService } from '../../../services';
-import { SendEmailDto, SendEmailResult } from '../../../services/vo';
+import { SendEmailDto, SendEmailResult } from '../../../services/mailgun/vo';
 import { EmailDataParams } from './types/email-params.dto';
 import { EmailTypes } from './types/email.types';
 

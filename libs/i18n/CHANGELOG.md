@@ -1,4 +1,18 @@
 Softkit Core Libraries Changelog
+## [0.4.3](https://github.com/softkitit/softkit-core/compare/i18n-0.4.2...i18n-0.4.3) (2024-05-17)
+
+
+### Bug Fixes
+
+* **i18n:** improved logs to include context and show errors stacktrace properly ([253b60c](https://github.com/softkitit/softkit-core/commit/253b60cb5cf61b7067ab9a8d59f5a4aec8ce9a3b))
+
+## [0.4.2](https://github.com/softkitit/softkit-core/compare/i18n-0.4.1...i18n-0.4.2) (2024-03-28)
+
+
+### Bug Fixes
+
+* **i18n:** fix the "Cannot find module 'typescript'" error ([ae968b1](https://github.com/softkitit/softkit-core/commit/ae968b1302aa464d4b0f97fa89b256989c6ac34b))
+
 ## [0.4.1](https://github.com/softkitit/softkit-core/compare/i18n-0.4.0...i18n-0.4.1) (2024-02-07)
 
 

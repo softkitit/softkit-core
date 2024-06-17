@@ -1,4 +1,12 @@
 Softkit Core Libraries Changelog
+## [0.2.4](https://github.com/softkitit/softkit-core/compare/test-utils-0.2.3...test-utils-0.2.4) (2024-04-05)
+
+
+### Bug Fixes
+
+* **test-utils:** fixed getting a port always for ipv4 ([0324d2b](https://github.com/softkitit/softkit-core/commit/0324d2bc5bb018af713f88a951173de9ad3eab28))
+* **test-utils:** fixed hosts in tests containers ([3b5ae7e](https://github.com/softkitit/softkit-core/commit/3b5ae7e47030f0c3f5674d671eee88f96674873e))
+
 ## [0.2.3](https://github.com/softkitit/softkit-core/compare/test-utils-0.2.2...test-utils-0.2.3) (2024-02-05)
 
 ## [0.2.2](https://github.com/softkitit/softkit-core/compare/test-utils-0.2.1...test-utils-0.2.2) (2024-01-26)

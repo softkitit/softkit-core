@@ -1,4 +1,71 @@
 Softkit Core Libraries Changelog
+## [0.6.14](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.13...resource-plugin-0.6.14) (2024-06-17)
+
+## [0.6.13](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.12...resource-plugin-0.6.13) (2024-03-22)
+
+
+### Bug Fixes
+
+* **resource-plugin:** update i18n paths for app generator ([5fc28ea](https://github.com/softkitit/softkit-core/commit/5fc28eab220525a5c89c155b5cd3e8daac3c9f1a))
+
+## [0.6.12](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.11...resource-plugin-0.6.12) (2024-02-27)
+
+
+### Bug Fixes
+
+* **resource-plugin:** add headerTenantId to default headers in controller tests ([951b9da](https://github.com/softkitit/softkit-core/commit/951b9dae368a68e5ddd4400ad404011edd0648bd))
+
+## [0.6.11](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.10...resource-plugin-0.6.11) (2024-02-22)
+
+
+### Bug Fixes
+
+* **resource-plugin:** update service template to use correct namings according to schema ([aef4c48](https://github.com/softkitit/softkit-core/commit/aef4c486c672ca4cc593e2e9b670f1ccc1011b2e))
+
+## [0.6.10](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.9...resource-plugin-0.6.10) (2024-02-22)
+
+
+### Bug Fixes
+
+* **resource-plugin:** update service name in service template ([9bfb95c](https://github.com/softkitit/softkit-core/commit/9bfb95cf12d69b8559bba49309a1f9bc12164c1d))
+
+## [0.6.9](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.8...resource-plugin-0.6.9) (2024-02-21)
+
+
+### Bug Fixes
+
+* **resource-plugin:** update controller dto template ([d4d60de](https://github.com/softkitit/softkit-core/commit/d4d60de8cf6267b93f12461f3f413736add3ac65))
+
+## [0.6.8](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.7...resource-plugin-0.6.8) (2024-02-20)
+
+
+### Bug Fixes
+
+* **resource-plugin:** update app and controller templates ([7afcead](https://github.com/softkitit/softkit-core/commit/7afceadae70e2543093c7f67d20b4d49268def7e))
+* **resource-plugin:** update controller test to accept optional version field ([b173dc1](https://github.com/softkitit/softkit-core/commit/b173dc1dd6fb344bc41834314e74e2967d945299))
+* **resource-plugin:** update index.ts files to  index.ts.template to avoid build process ([0b1eb20](https://github.com/softkitit/softkit-core/commit/0b1eb20dce8da978ed476922f0bcd8e8eb463ac8))
+
+## [0.6.7](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.6...resource-plugin-0.6.7) (2024-02-16)
+
+
+### Bug Fixes
+
+* **resource-plugin:** update templates for controller and resource ([6805687](https://github.com/softkitit/softkit-core/commit/6805687e8c0ba4b61718b493757c8531972b1e42))
+
+## [0.6.6](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.5...resource-plugin-0.6.6) (2024-02-13)
+
+
+### Bug Fixes
+
+* **resource-plugin:** add missing imports and accept optional and version fields in base service template ([8e8ba39](https://github.com/softkitit/softkit-core/commit/8e8ba393024833cca4f465d9c8f66b8d352496e2))
+
+## [0.6.5](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.4...resource-plugin-0.6.5) (2024-02-13)
+
+
+### Bug Fixes
+
+* **resource-plugin:** update generators to accept optional id and version fields ([71c28e1](https://github.com/softkitit/softkit-core/commit/71c28e1d92b208d701f4bf30b63e4f7cba49bd1f))
+
 ## [0.6.4](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.3...resource-plugin-0.6.4) (2024-02-05)
 
 
