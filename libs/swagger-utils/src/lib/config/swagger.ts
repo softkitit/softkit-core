@@ -20,10 +20,6 @@ export class SwaggerConfig {
   swaggerPath!: string;
 
   @IsString()
-  @IsOptional()
-  docsOutputPath!: string;
-
-  @IsString()
   description!: string;
 
   @IsString()
