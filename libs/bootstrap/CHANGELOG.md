@@ -1,4 +1,6 @@
 Softkit Core Libraries Changelog
+## [0.2.12](https://github.com/softkitit/softkit-core/compare/bootstrap-0.2.11...bootstrap-0.2.12) (2024-06-17)
+
 ## [0.2.11](https://github.com/softkitit/softkit-core/compare/bootstrap-0.2.10...bootstrap-0.2.11) (2024-05-11)
 
 
