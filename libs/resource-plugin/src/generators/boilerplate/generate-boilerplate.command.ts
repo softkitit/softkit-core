@@ -16,8 +16,6 @@ function updatePackageJson(root: string, companyName: string) {
   const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf8'));
   packageJson.name = `@${companyName}/source`;
   writeFileSync(packageJsonPath, JSON.stringify(packageJson, undefined, 2));
-  // eslint-disable-next-line no-console
-  console.log(`${packageJsonPath} is updated`);
 }
 
 export class BoilerplateGeneratorCommand
