@@ -83,6 +83,9 @@ export class SampleDto {
 
   @IsArrayCombinedLocalized({ minLength: 2, maxLength: 4 })
   fileNameArray!: string[];
+
+  @IsArrayCombinedLocalized()
+  documentArray?: string[];
 }
 
 export const DEFAULT_SAMPLE_DTO: SampleDto = {
@@ -105,4 +108,5 @@ export const DEFAULT_SAMPLE_DTO: SampleDto = {
     `${faker.person.lastName()}.png`,
     `${faker.person.lastName()}.png`,
   ],
+  documentArray: [],
 };

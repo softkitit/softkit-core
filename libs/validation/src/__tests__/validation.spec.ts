@@ -183,6 +183,27 @@ describe('validation e2e test', () => {
       },
     );
 
+    it.each([
+      {
+        documentArray: generateFileName(2),
+        expectedStatus: 201,
+      },
+    ])(
+      'should validate file name array: %s',
+      async ({ documentArray, expectedStatus }) => {
+        const response = await app.inject({
+          method: 'POST',
+          url: '/sample',
+          payload: {
+            ...DEFAULT_SAMPLE_DTO,
+            documentArray,
+          },
+        });
+
+        expect(response.statusCode).toBe(expectedStatus);
+      },
+    );
+
     it.each(['invalidEmail', 'invalidEmail@', 'invalidEmail@.com'])(
       'email validation fail: %s',
       async (email) => {
