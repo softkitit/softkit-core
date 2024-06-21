@@ -15,8 +15,7 @@ export abstract class AbstractFileStorageController {
   @HttpCode(HttpStatus.MOVED_PERMANENTLY)
   protected async downloadFlyerFilesFromAWS(
     @Res() reply: FastifyReply,
-    @Body()
-    fileDownloadRequest: FileDownloadRequest,
+    @Body() fileDownloadRequest: FileDownloadRequest,
   ) {
     const { key } = fileDownloadRequest;
 
