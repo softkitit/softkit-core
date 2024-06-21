@@ -12,6 +12,16 @@ import { DEFAULT_SAMPLE_PRIMITIVES_DTO } from './app/vo/sample-primitives.dto';
 import { DEFAULT_SAMPLE_QUERY_PARAM } from './app/vo/sample-query.dto';
 import { plainToClass } from 'class-transformer';
 
+const generateFileName = (count: number) => {
+  const res: string[] = [];
+
+  for (let i = 1; i <= count; i++) {
+    res.push(`${faker.person.lastName()}.png`);
+  }
+
+  return res;
+};
+
 describe('validation e2e test', () => {
   let app: NestFastifyApplication;
 
@@ -138,33 +148,19 @@ describe('validation e2e test', () => {
 
     it.each([
       {
-        fileNameArray: [
-          `${faker.person.lastName()}.png`,
-          `${faker.person.lastName()}.png`,
-        ],
+        fileNameArray: generateFileName(2),
         expectedStatus: 201,
       },
       {
-        fileNameArray: [
-          `${faker.person.lastName()}.png`,
-          `${faker.person.lastName()}.png`,
-          `${faker.person.lastName()}.png`,
-          `${faker.person.lastName()}.png`,
-        ],
+        fileNameArray: generateFileName(4),
         expectedStatus: 201,
       },
       {
-        fileNameArray: [
-          `${faker.person.lastName()}.png`,
-          `${faker.person.lastName()}.png`,
-          `${faker.person.lastName()}.png`,
-          `${faker.person.lastName()}.png`,
-          `${faker.person.lastName()}.png`,
-        ],
+        fileNameArray: generateFileName(5),
         expectedStatus: 400,
       },
       {
-        fileNameArray: [`${faker.person.lastName()}.png`],
+        fileNameArray: generateFileName(1),
         expectedStatus: 400,
       },
       {
