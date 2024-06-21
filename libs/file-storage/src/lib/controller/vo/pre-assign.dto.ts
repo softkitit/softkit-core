@@ -1,19 +1,27 @@
-import { ArrayMinSize, IsArray, IsString } from 'class-validator';
 import { Expose } from 'class-transformer';
+import {
+  IsArrayCombinedLocalized,
+  IsStringLocalized,
+} from '@softkit/validation';
 
-export class PreAssignRequest {
-  @IsArray()
-  @IsString({
+export class UploadPreAssignRequest {
+  @IsStringLocalized({
     each: true,
   })
-  @ArrayMinSize(1)
+  @IsArrayCombinedLocalized({
+    minLength: 1,
+    maxLength: 20,
+  })
   originalFileNames!: string[];
 }
 
 export class PreAssignResponse {
   @Expose()
-  fileName!: string;
+  key!: string;
 
   @Expose()
   preAssignUrl!: string;
+
+  @Expose()
+  originalFileName!: string;
 }

@@ -8,8 +8,17 @@ import {
 } from '@nestjs/platform-fastify';
 import { AbstractFileService } from '../services';
 import axios from 'axios';
-import { HttpStatus } from '@nestjs/common';
+import { HttpStatus, ValidationPipe } from '@nestjs/common';
 import { PreAssignResponse } from '../controller/vo/pre-assign.dto';
+
+const generateFileNames = (count: number) => {
+  const res: string[] = [];
+  for (let i = 1; i <= count; i++) {
+    res.push(`test-file-${i}.txt`);
+  }
+
+  return res;
+};
 
 describe('file controller e2e test', () => {
   let s3: S3;
@@ -29,6 +38,12 @@ describe('file controller e2e test', () => {
     }).compile();
 
     app = module.createNestApplication(new FastifyAdapter());
+    app.useGlobalPipes(
+      new ValidationPipe({
+        transform: true,
+      }),
+    );
+
     await app.listen(0);
 
     s3 = module.get<S3>(S3_CLIENT_TOKEN);
@@ -47,17 +62,12 @@ describe('file controller e2e test', () => {
     await localstack.container.stop();
   });
 
-  it(`should get pre assign url successfully, POST ${baseController}/get-pre-assign-url`, async () => {
-    const originalFileNames = [
-      'test-file-1.txt',
-      'test-file-2.txt',
-      'test-file-3.txt',
-      'test-file-4.txt',
-    ];
+  it(`should get pre assign url successfully, POST ${baseController}/get-upload-pre-assign-url`, async () => {
+    const originalFileNames = generateFileNames(4);
 
     const response = await app.inject({
       method: 'POST',
-      url: `${baseController}/get-pre-assign-url`,
+      url: `${baseController}/get-upload-pre-assign-url`,
       payload: {
         originalFileNames,
       },
@@ -67,13 +77,35 @@ describe('file controller e2e test', () => {
     const createResponseBody = response.json<PreAssignResponse[]>();
 
     expect(createResponseBody.length).toBe(4);
-    expect(createResponseBody[0].fileName).toContain(originalFileNames[0]);
-    expect(createResponseBody[0].preAssignUrl).toContain(originalFileNames[0]);
-    expect(createResponseBody[1].fileName).toContain(originalFileNames[1]);
-    expect(createResponseBody[1].preAssignUrl).toContain(originalFileNames[1]);
-    expect(createResponseBody[3].fileName).toContain(originalFileNames[3]);
-    expect(createResponseBody[3].preAssignUrl).toContain(originalFileNames[3]);
+
+    for (const [index, resBody] of createResponseBody.entries()) {
+      expect(resBody.key).toContain(originalFileNames[index]);
+      expect(resBody.preAssignUrl).toContain(originalFileNames[index]);
+      expect(resBody.originalFileName).toBe(originalFileNames[index]);
+    }
   });
+
+  it.each([
+    {
+      originalFileNames: [],
+    },
+    {
+      originalFileNames: generateFileNames(22),
+    },
+  ])(
+    `should not get pre assign url, because of the error. POST ${baseController}/get-upload-pre-assign-url`,
+    async ({ originalFileNames }) => {
+      const response = await app.inject({
+        method: 'POST',
+        url: `${baseController}/get-upload-pre-assign-url`,
+        payload: {
+          originalFileNames,
+        },
+      });
+
+      expect(response.statusCode).toEqual(HttpStatus.BAD_REQUEST);
+    },
+  );
 
   it(`should download file successfully, POST ${baseController}/download-file`, async () => {
     const fileContent = 'test file content';
@@ -100,5 +132,23 @@ describe('file controller e2e test', () => {
     const result = await axios.get(response.headers['location']!.toString());
 
     expect(result.data).toBe(fileContent);
+  });
+
+  it(`should download file, but the link returns an error POST ${baseController}/download-file`, async () => {
+    const response = await app.inject({
+      method: 'POST',
+      url: `${baseController}/download-file`,
+      payload: {
+        key: 'test-file.txt',
+      },
+    });
+
+    expect(response.statusCode).toEqual(HttpStatus.MOVED_PERMANENTLY);
+    expect(response.headers).toBeDefined();
+    expect(response.headers['location']).toBeDefined();
+
+    await expect(
+      axios.get(response.headers['location']!.toString()),
+    ).rejects.toThrow();
   });
 });

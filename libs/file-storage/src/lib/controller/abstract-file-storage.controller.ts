@@ -1,19 +1,28 @@
 import { Body, HttpCode, HttpStatus, Post, Res } from '@nestjs/common';
 import { AbstractFileService } from '../services';
 import { FileDownloadRequest } from './vo/file-donwload.dto';
-import { PreAssignRequest, PreAssignResponse } from './vo/pre-assign.dto';
+import { PreAssignResponse, UploadPreAssignRequest } from './vo/pre-assign.dto';
 import { FastifyReply } from 'fastify';
 import 'reflect-metadata';
+import { ApiOperation } from '@nestjs/swagger';
 
 export abstract class AbstractFileStorageController {
   protected constructor(
     private readonly bucket: string,
     private readonly fileService: AbstractFileService,
+    private readonly crossOriginResourcePolicy: string = 'same-site',
   ) {}
 
+  @ApiOperation({
+    summary: 'Generate Pre-Signed URLs for File Uploads',
+    description:
+      'This endpoint generates pre-signed URLs for uploading files to the specified bucket. ' +
+      'Note that the generated URL is returned regardless of whether the file actually exists in the bucket. ' +
+      'If the file does not exist, an error will occur only when an attempt is made to download the file using the pre-signed URL.',
+  })
   @Post('download-file')
   @HttpCode(HttpStatus.MOVED_PERMANENTLY)
-  protected async downloadFlyerFilesFromAWS(
+  protected async downloadFileFromAWS(
     @Res() reply: FastifyReply,
     @Body() fileDownloadRequest: FileDownloadRequest,
   ) {
@@ -26,32 +35,36 @@ export abstract class AbstractFileStorageController {
     );
 
     reply
-      .status(301)
-      .header('Content-Security-Policy', "img-src 'self'")
+      .status(HttpStatus.MOVED_PERMANENTLY)
+      .header('Cross-Origin-Resource-Policy', this.crossOriginResourcePolicy)
       .redirect(url);
   }
 
-  @Post('get-pre-assign-url')
+  @Post('get-upload-pre-assign-url')
   @HttpCode(HttpStatus.OK)
-  protected async getPreAssignUrl(
-    @Body() preAssignRequest: PreAssignRequest,
+  protected async getUploadPreAssignUrl(
+    @Body() uploadPreAssignRequest: UploadPreAssignRequest,
   ): Promise<PreAssignResponse[]> {
-    const { originalFileNames } = preAssignRequest;
+    const { originalFileNames } = uploadPreAssignRequest;
 
-    const preAssignUrls: PreAssignResponse[] = [];
+    return Promise.all(
+      originalFileNames.map(
+        async (originalFileName): Promise<PreAssignResponse> => {
+          const { url, key } =
+            await this.fileService.generateUploadFilePreSignUrlPut(
+              this.bucket,
+              {
+                originalFileName,
+              },
+            );
 
-    for (const originalFileName of originalFileNames) {
-      const { url, key } =
-        await this.fileService.generateUploadFilePreSignUrlPut(this.bucket, {
-          originalFileName,
-        });
-
-      preAssignUrls.push({
-        fileName: key,
-        preAssignUrl: url,
-      });
-    }
-
-    return preAssignUrls;
+          return {
+            key,
+            preAssignUrl: url,
+            originalFileName,
+          };
+        },
+      ),
+    );
   }
 }
