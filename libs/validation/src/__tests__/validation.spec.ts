@@ -136,6 +136,57 @@ describe('validation e2e test', () => {
       },
     );
 
+    it.each([
+      {
+        fileNameArray: [
+          `${faker.person.lastName()}.png`,
+          `${faker.person.lastName()}.png`,
+        ],
+        expectedStatus: 201,
+      },
+      {
+        fileNameArray: [
+          `${faker.person.lastName()}.png`,
+          `${faker.person.lastName()}.png`,
+          `${faker.person.lastName()}.png`,
+          `${faker.person.lastName()}.png`,
+        ],
+        expectedStatus: 201,
+      },
+      {
+        fileNameArray: [
+          `${faker.person.lastName()}.png`,
+          `${faker.person.lastName()}.png`,
+          `${faker.person.lastName()}.png`,
+          `${faker.person.lastName()}.png`,
+          `${faker.person.lastName()}.png`,
+        ],
+        expectedStatus: 400,
+      },
+      {
+        fileNameArray: [`${faker.person.lastName()}.png`],
+        expectedStatus: 400,
+      },
+      {
+        fileNameArray: [],
+        expectedStatus: 400,
+      },
+    ])(
+      'should validate file name array: %s',
+      async ({ fileNameArray, expectedStatus }) => {
+        const response = await app.inject({
+          method: 'POST',
+          url: '/sample',
+          payload: {
+            ...DEFAULT_SAMPLE_DTO,
+            fileNameArray,
+          },
+        });
+
+        expect(response.statusCode).toBe(expectedStatus);
+      },
+    );
+
     it.each(['invalidEmail', 'invalidEmail@', 'invalidEmail@.com'])(
       'email validation fail: %s',
       async (email) => {
@@ -242,6 +293,8 @@ describe('validation e2e test', () => {
       ],
       ['minTen', [9, 9.9, 9.999_999_999_999_99]],
       ['maxTen', [11, 10.1, 10.000_000_000_000_01]],
+      ['arrayMinThree', [['asd1', 'asd2']]],
+      ['arrayMaxThree', [['asd23', 'asd123', 'asd4234', 'asd4324']]],
     ])(
       'failed validation: field - %s, values: %s',
       async (fieldName: string, values: unknown[]) => {
