@@ -1,1 +1,1 @@
-export * from './file-storage.controller';
+export * from './abstract-file-storage.controller';
