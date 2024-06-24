@@ -4,7 +4,7 @@ import {
   IsStringLocalized,
 } from '@softkit/validation';
 
-export class UploadPreAssignRequest {
+export class UploadPresignRequest {
   @IsStringLocalized({
     each: true,
   })
@@ -15,12 +15,12 @@ export class UploadPreAssignRequest {
   originalFileNames!: string[];
 }
 
-export class PreAssignResponse {
+export class PreSignedResponse {
   @Expose()
   key!: string;
 
   @Expose()
-  preAssignUrl!: string;
+  preSignedUrl!: string;
 
   @Expose()
   originalFileName!: string;

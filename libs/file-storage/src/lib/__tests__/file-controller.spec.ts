@@ -9,7 +9,7 @@ import {
 import { AbstractFileService } from '../services';
 import axios from 'axios';
 import { HttpStatus, ValidationPipe } from '@nestjs/common';
-import { PreAssignResponse } from '../controller/vo/pre-assign.dto';
+import { PreSignedResponse } from '../controller/vo/pre-assign.dto';
 
 const generateFileNames = (count: number) => {
   const res: string[] = [];
@@ -75,13 +75,13 @@ describe('file controller e2e test', () => {
     });
     expect(response.statusCode).toEqual(HttpStatus.OK);
 
-    const createResponseBody = response.json<PreAssignResponse[]>();
+    const createResponseBody = response.json<PreSignedResponse[]>();
 
     expect(createResponseBody.length).toBe(4);
 
     for (const [index, resBody] of createResponseBody.entries()) {
       expect(resBody.key).toContain(originalFileNames[index]);
-      expect(resBody.preAssignUrl).toContain(originalFileNames[index]);
+      expect(resBody.preSignedUrl).toContain(originalFileNames[index]);
       expect(resBody.originalFileName).toBe(originalFileNames[index]);
     }
   });

@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { AbstractFileStorageController } from '../../controller/abstract-file-storage.controller';
-import { AbstractFileService } from '../../services';
+import { AbstractFileStorageController } from '../../../controller';
+import { AbstractFileService } from '../../../services';
 
 @ApiTags('File')
 @Controller('file')
