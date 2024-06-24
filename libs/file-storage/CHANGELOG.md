@@ -1,4 +1,20 @@
 Softkit Core Libraries Changelog
+## [0.2.0](https://github.com/softkitit/softkit-core/compare/file-storage-0.1.8...file-storage-0.2.0) (2024-06-24)
+
+
+### Features
+
+* **file-storage:** added the abstract file controller ([3c77cd0](https://github.com/softkitit/softkit-core/commit/3c77cd02a3736e165dd2bd58da6b047e265ef9e7))
+* **file-storage:** added the abstract file controller ([84a10be](https://github.com/softkitit/softkit-core/commit/84a10bec5e45e1d6c4c767f6febcc39be6e64598))
+* **file-storage:** updated after reviewing ([a67fc74](https://github.com/softkitit/softkit-core/commit/a67fc742dc5a849a46be34d0d0e4415bcd7f9a30))
+* **file-storage:** updated after reviewing ([ad4ddfc](https://github.com/softkitit/softkit-core/commit/ad4ddfc85961e2532594e1b4c42afef39cc65d50))
+* **file-storage:** updated after reviewing ([50e0c14](https://github.com/softkitit/softkit-core/commit/50e0c14f1f95ebfa796f8e4495b81011d1da8a4d))
+
+
+### Bug Fixes
+
+* **file-storage:** various small fixed and naming change ([7b48b4e](https://github.com/softkitit/softkit-core/commit/7b48b4e577e9d247e54c5aa637a0f8e027f7f88b))
+
 ## [0.1.8](https://github.com/softkitit/softkit-core/compare/file-storage-0.1.7...file-storage-0.1.8) (2024-03-06)
 
 
