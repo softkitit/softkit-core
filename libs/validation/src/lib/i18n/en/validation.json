@@ -24,5 +24,7 @@
   "MIN": "Minimal available value is {constraints.0}",
   "MAX": "Max available value is {constraints.0}",
   "MAX_STRING_LENGTH": "It's too long, must be max {constraints.0} characters",
-  "MIN_STRING_LENGTH": "It's too short, must be min {constraints.0} characters"
+  "MIN_STRING_LENGTH": "It's too short, must be min {constraints.0} characters",
+  "ARRAY_MAX_SIZE": "It's too long, must be max {constraints.0} elements",
+  "ARRAY_MIN_SIZE": "It's too short, must be min {constraints.0} elements"
 }

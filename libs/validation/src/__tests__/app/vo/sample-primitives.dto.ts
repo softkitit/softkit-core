@@ -1,5 +1,7 @@
 import {
   IsArrayLocalized,
+  IsArrayMaxSizeLocalized,
+  IsArrayMinSizeLocalized,
   IsDateLocalized,
   IsIntegerString,
   IsJSONLocalized,
@@ -44,6 +46,12 @@ export class SamplePrimitivesDto {
 
   @MatchesRegexpLocalized(/^[a-z]+$/)
   onlyLowercaseCharacters!: string;
+
+  @IsArrayMinSizeLocalized(3)
+  arrayMinThree!: string[];
+
+  @IsArrayMaxSizeLocalized(3)
+  arrayMaxThree!: string[];
 }
 
 export const DEFAULT_SAMPLE_PRIMITIVES_DTO: SamplePrimitivesDto = {
@@ -61,4 +69,11 @@ export const DEFAULT_SAMPLE_PRIMITIVES_DTO: SamplePrimitivesDto = {
   }),
   minTen: 11,
   maxTen: 9,
+  arrayMinThree: [
+    faker.string.uuid(),
+    faker.string.uuid(),
+    faker.string.uuid(),
+    faker.string.uuid(),
+  ],
+  arrayMaxThree: [faker.string.uuid(), faker.string.uuid()],
 };

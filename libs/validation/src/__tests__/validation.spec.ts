@@ -12,6 +12,16 @@ import { DEFAULT_SAMPLE_PRIMITIVES_DTO } from './app/vo/sample-primitives.dto';
 import { DEFAULT_SAMPLE_QUERY_PARAM } from './app/vo/sample-query.dto';
 import { plainToClass } from 'class-transformer';
 
+const generateFileName = (count: number) => {
+  const res: string[] = [];
+
+  for (let i = 1; i <= count; i++) {
+    res.push(`${faker.person.lastName()}.png`);
+  }
+
+  return res;
+};
+
 describe('validation e2e test', () => {
   let app: NestFastifyApplication;
 
@@ -136,6 +146,64 @@ describe('validation e2e test', () => {
       },
     );
 
+    it.each([
+      {
+        fileNameArray: generateFileName(2),
+        expectedStatus: 201,
+      },
+      {
+        fileNameArray: generateFileName(4),
+        expectedStatus: 201,
+      },
+      {
+        fileNameArray: generateFileName(5),
+        expectedStatus: 400,
+      },
+      {
+        fileNameArray: generateFileName(1),
+        expectedStatus: 400,
+      },
+      {
+        fileNameArray: [],
+        expectedStatus: 400,
+      },
+    ])(
+      'should validate file name array: %s',
+      async ({ fileNameArray, expectedStatus }) => {
+        const response = await app.inject({
+          method: 'POST',
+          url: '/sample',
+          payload: {
+            ...DEFAULT_SAMPLE_DTO,
+            fileNameArray,
+          },
+        });
+
+        expect(response.statusCode).toBe(expectedStatus);
+      },
+    );
+
+    it.each([
+      {
+        documentArray: generateFileName(2),
+        expectedStatus: 201,
+      },
+    ])(
+      'should validate file name array: %s',
+      async ({ documentArray, expectedStatus }) => {
+        const response = await app.inject({
+          method: 'POST',
+          url: '/sample',
+          payload: {
+            ...DEFAULT_SAMPLE_DTO,
+            documentArray,
+          },
+        });
+
+        expect(response.statusCode).toBe(expectedStatus);
+      },
+    );
+
     it.each(['invalidEmail', 'invalidEmail@', 'invalidEmail@.com'])(
       'email validation fail: %s',
       async (email) => {
@@ -242,6 +310,8 @@ describe('validation e2e test', () => {
       ],
       ['minTen', [9, 9.9, 9.999_999_999_999_99]],
       ['maxTen', [11, 10.1, 10.000_000_000_000_01]],
+      ['arrayMinThree', [['asd1', 'asd2']]],
+      ['arrayMaxThree', [['asd23', 'asd123', 'asd4234', 'asd4324']]],
     ])(
       'failed validation: field - %s, values: %s',
       async (fieldName: string, values: unknown[]) => {
