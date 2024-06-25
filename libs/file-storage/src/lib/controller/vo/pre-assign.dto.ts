@@ -18,12 +18,15 @@ export class UploadPresignRequest {
 }
 
 export class PreSignedResponse {
+  @ApiProperty()
   @Expose()
   key!: string;
 
+  @ApiProperty()
   @Expose()
   preSignedUrl!: string;
 
+  @ApiProperty()
   @Expose()
   originalFileName!: string;
 }

@@ -3,7 +3,7 @@ import { AbstractFileService } from '../services';
 import { FileDownloadRequest } from './vo/file-download.dto';
 import { PreSignedResponse, UploadPresignRequest } from './vo/pre-assign.dto';
 import { FastifyReply } from 'fastify';
-import { ApiBody, ApiOperation } from '@nestjs/swagger';
+import { ApiBody, ApiOkResponse, ApiOperation } from '@nestjs/swagger';
 
 export abstract class AbstractFileStorageController {
   protected constructor(
@@ -42,6 +42,10 @@ export abstract class AbstractFileStorageController {
 
   // TODO: implement getting a JWT token for file upload and parsing it to simplify security part
   @ApiBody({ type: UploadPresignRequest })
+  @ApiOkResponse({
+    type: PreSignedResponse,
+    isArray: true,
+  })
   @Post('get-upload-pre-assign-url')
   @HttpCode(HttpStatus.OK)
   protected async getUploadPreAssignUrl(
