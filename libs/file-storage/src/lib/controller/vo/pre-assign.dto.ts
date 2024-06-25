@@ -3,8 +3,10 @@ import {
   IsArrayCombinedLocalized,
   IsStringLocalized,
 } from '@softkit/validation';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class UploadPresignRequest {
+  @ApiProperty()
   @IsStringLocalized({
     each: true,
   })
