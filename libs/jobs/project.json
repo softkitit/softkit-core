@@ -44,7 +44,8 @@
       ],
       "options": {
         "jestConfig": "libs/jobs/jest.config.ts",
-        "passWithNoTests": true
+        "passWithNoTests": true,
+        "runInBand": true
       },
       "configurations": {
         "ci": {

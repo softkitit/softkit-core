@@ -1,4 +1,4 @@
-import { GenericContainer } from 'testcontainers';
+import { GenericContainer, Wait } from 'testcontainers';
 import { DEFAULT_START_REDIS_OPTIONS, StartRedisOptions } from './vo';
 import { RedisStartedConfig } from './vo';
 import { setRedisTestEnv } from './env/set-redis-test-env';
@@ -19,6 +19,8 @@ export async function startRedis(
     `${options.imageName}:${options.imageTag}`,
   )
     .withExposedPorts(6379)
+    .withStartupTimeout(50_000)
+    .withWaitStrategy(Wait.forLogMessage('Ready to accept connections'))
     .start();
 
   // eslint-disable-next-line no-console

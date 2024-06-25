@@ -1,4 +1,4 @@
-import { GenericContainer } from 'testcontainers';
+import { GenericContainer, Wait } from 'testcontainers';
 import {
   DEFAULT_START_LOCALSTACK_OPTIONS,
   StartLocalstackOptions,
@@ -26,6 +26,8 @@ export async function startLocalstack(
       SERVICES: options.services.join(','),
       DOCKER_HOST: 'unix:///var/run/docker.sock',
     })
+    .withWaitStrategy(Wait.forLogMessage('Ready', 1))
+    .withStartupTimeout(50_000)
     .withBindMounts([
       {
         source: '/var/run/docker.sock',
