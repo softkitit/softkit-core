@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.3.0](https://github.com/softkitit/softkit-core/compare/file-storage-0.2.0...file-storage-0.3.0) (2024-06-25)
+
+
+### Features
+
+* **file-storage:** moved dependencies from the peer dependencies to the dependencies ([53d6a7a](https://github.com/softkitit/softkit-core/commit/53d6a7a5005f1cbdf5fc0993da5601b4bfd96b9a))
+
 ## [0.2.0](https://github.com/softkitit/softkit-core/compare/file-storage-0.1.8...file-storage-0.2.0) (2024-06-24)
 
 
