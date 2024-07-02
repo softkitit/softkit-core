@@ -51,17 +51,18 @@ export abstract class AbstractFileStorageController {
   protected async getUploadPreAssignUrl(
     @Body() uploadPreAssignRequest: UploadPresignRequest,
   ): Promise<PreSignedResponse[]> {
-    const { originalFileNames } = uploadPreAssignRequest;
+    const { filesData } = uploadPreAssignRequest;
 
     return Promise.all(
-      originalFileNames.map(
-        async (originalFileName): Promise<PreSignedResponse> => {
+      filesData.map(
+        async ({ originalFileName, folder }): Promise<PreSignedResponse> => {
           const { url, key } =
             await this.fileService.generateUploadFilePreSignUrlPut(
               this.bucket,
               {
                 originalFileName,
               },
+              folder,
             );
 
           return {

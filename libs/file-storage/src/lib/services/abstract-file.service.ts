@@ -74,7 +74,7 @@ export abstract class AbstractFileService {
     folder?: string,
   ): string {
     const originalFileName = this.truncateFileName(
-      file.originalFileName,
+      file.originalFileName.replaceAll('/', ':'),
       this.DEFAULT_FILE_NAME_FULL_LENGTH,
     );
 
