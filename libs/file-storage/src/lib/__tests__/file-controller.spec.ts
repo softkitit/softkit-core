@@ -13,7 +13,7 @@ import {
   FileDataRequest,
   PreSignedResponse,
   UploadPresignRequest,
-} from '../controller/vo/pre-assign.dto';
+} from '../controller/vo';
 import { faker } from '@faker-js/faker';
 
 const generateFileNames = (count: number, folder?: string) => {

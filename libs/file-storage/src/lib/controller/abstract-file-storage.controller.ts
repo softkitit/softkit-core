@@ -8,7 +8,7 @@ import {
   Res,
 } from '@nestjs/common';
 import { AbstractFileService } from '../services';
-import { PreSignedResponse, UploadPresignRequest } from './vo/pre-assign.dto';
+import { PreSignedResponse, UploadPresignRequest } from './vo';
 import { FastifyReply } from 'fastify';
 import { ApiBody, ApiOkResponse, ApiOperation } from '@nestjs/swagger';
 
