@@ -9,13 +9,21 @@ import {
 import { AbstractFileService } from '../services';
 import axios from 'axios';
 import { HttpStatus, ValidationPipe } from '@nestjs/common';
-import { PreSignedResponse } from '../controller/vo/pre-assign.dto';
+import {
+  FileDataRequest,
+  PreSignedResponse,
+  UploadPresignRequest,
+} from '../controller/vo';
+import { faker } from '@faker-js/faker';
 
-const generateFileNames = (count: number) => {
-  const res: string[] = [];
+const generateFileNames = (count: number, folder?: string) => {
+  const res: FileDataRequest[] = [];
 
   for (let i = 1; i <= count; i++) {
-    res.push(`test-file-${i}.txt`);
+    res.push({
+      originalFileName: `test-file-${i}.txt`,
+      ...(folder ? { folder } : {}),
+    });
   }
 
   return res;
@@ -63,52 +71,67 @@ describe('file controller e2e test', () => {
     await localstack.container.stop();
   });
 
-  it(`should get pre assign url successfully, POST ${baseController}/get-upload-pre-assign-url`, async () => {
-    const originalFileNames = generateFileNames(4);
+  it.each([
+    {
+      filesData: generateFileNames(4),
+    },
+    {
+      filesData: generateFileNames(4, faker.string.uuid()),
+    },
+  ])(
+    `should get presign url successfully, POST ${baseController}/get-upload-presign-url`,
+    async ({ filesData }) => {
+      const response = await app.inject({
+        method: 'POST',
+        url: `${baseController}/get-upload-presign-url`,
+        payload: {
+          filesData,
+        } as UploadPresignRequest,
+      });
+      expect(response.statusCode).toEqual(HttpStatus.OK);
 
-    const response = await app.inject({
-      method: 'POST',
-      url: `${baseController}/get-upload-pre-assign-url`,
-      payload: {
-        originalFileNames,
-      },
-    });
-    expect(response.statusCode).toEqual(HttpStatus.OK);
+      const createResponseBody = response.json<PreSignedResponse[]>();
 
-    const createResponseBody = response.json<PreSignedResponse[]>();
+      expect(createResponseBody.length).toBe(4);
 
-    expect(createResponseBody.length).toBe(4);
-
-    for (const [index, resBody] of createResponseBody.entries()) {
-      expect(resBody.key).toContain(originalFileNames[index]);
-      expect(resBody.preSignedUrl).toContain(originalFileNames[index]);
-      expect(resBody.originalFileName).toBe(originalFileNames[index]);
-    }
-  });
+      for (const [index, resBody] of createResponseBody.entries()) {
+        expect(resBody.key).toContain(filesData[index].originalFileName);
+        expect(resBody.preSignedUrl).toContain(
+          filesData[index].originalFileName,
+        );
+        expect(resBody.originalFileName).toBe(
+          filesData[index].originalFileName,
+        );
+        expect(
+          resBody.key.startsWith(filesData[index].folder || ''),
+        ).toBeTruthy();
+      }
+    },
+  );
 
   it.each([
     {
-      originalFileNames: [],
+      filesData: [],
     },
     {
-      originalFileNames: generateFileNames(22),
+      filesData: generateFileNames(22),
     },
   ])(
-    `should not get pre assign url, because of the error. POST ${baseController}/get-upload-pre-assign-url`,
-    async ({ originalFileNames }) => {
+    `could not get presign url, because of the error. POST ${baseController}/get-upload-presign-url`,
+    async ({ filesData }) => {
       const response = await app.inject({
         method: 'POST',
-        url: `${baseController}/get-upload-pre-assign-url`,
+        url: `${baseController}/get-upload-presign-url`,
         payload: {
-          originalFileNames,
-        },
+          filesData,
+        } as UploadPresignRequest,
       });
 
       expect(response.statusCode).toEqual(HttpStatus.BAD_REQUEST);
     },
   );
 
-  it(`should download file successfully, POST ${baseController}/download-file`, async () => {
+  it(`should download file successfully, GET ${baseController}/download-file/:key`, async () => {
     const fileContent = 'test file content';
     const uploadResult = await fileService.uploadFile(
       bucketName,
@@ -119,11 +142,8 @@ describe('file controller e2e test', () => {
     );
 
     const response = await app.inject({
-      method: 'POST',
-      url: `${baseController}/download-file`,
-      payload: {
-        key: uploadResult.key,
-      },
+      method: 'GET',
+      url: `${baseController}/download-file/${uploadResult.key}`,
     });
 
     expect(response.statusCode).toEqual(HttpStatus.MOVED_PERMANENTLY);
@@ -135,13 +155,10 @@ describe('file controller e2e test', () => {
     expect(result.data).toBe(fileContent);
   });
 
-  it(`should download file, but the link returns an error POST ${baseController}/download-file`, async () => {
+  it(`should download file, but the link returns an error GET ${baseController}/download-file/:key`, async () => {
     const response = await app.inject({
-      method: 'POST',
-      url: `${baseController}/download-file`,
-      payload: {
-        key: 'test-file.txt',
-      },
+      method: 'GET',
+      url: `${baseController}/download-file/test-file.txt`,
     });
 
     expect(response.statusCode).toEqual(HttpStatus.MOVED_PERMANENTLY);
