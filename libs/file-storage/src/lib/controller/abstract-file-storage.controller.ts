@@ -3,7 +3,7 @@ import { AbstractFileService } from '../services';
 import { FileDownloadRequest } from './vo/file-download.dto';
 import { PreSignedResponse, UploadPresignRequest } from './vo/pre-assign.dto';
 import { FastifyReply } from 'fastify';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiBody, ApiOkResponse, ApiOperation } from '@nestjs/swagger';
 
 export abstract class AbstractFileStorageController {
   protected constructor(
@@ -19,6 +19,7 @@ export abstract class AbstractFileStorageController {
       If the file does not exist, an error will occur only when an attempt is made to download the file using the pre-signed URL.
     `,
   })
+  @ApiBody({ type: FileDownloadRequest })
   @Post('download-file')
   @HttpCode(HttpStatus.MOVED_PERMANENTLY)
   protected async downloadFileFromAWS(
@@ -40,22 +41,28 @@ export abstract class AbstractFileStorageController {
   }
 
   // TODO: implement getting a JWT token for file upload and parsing it to simplify security part
+  @ApiBody({ type: UploadPresignRequest })
+  @ApiOkResponse({
+    type: PreSignedResponse,
+    isArray: true,
+  })
   @Post('get-upload-pre-assign-url')
   @HttpCode(HttpStatus.OK)
   protected async getUploadPreAssignUrl(
     @Body() uploadPreAssignRequest: UploadPresignRequest,
   ): Promise<PreSignedResponse[]> {
-    const { originalFileNames } = uploadPreAssignRequest;
+    const { filesData } = uploadPreAssignRequest;
 
     return Promise.all(
-      originalFileNames.map(
-        async (originalFileName): Promise<PreSignedResponse> => {
+      filesData.map(
+        async ({ originalFileName, folder }): Promise<PreSignedResponse> => {
           const { url, key } =
             await this.fileService.generateUploadFilePreSignUrlPut(
               this.bucket,
               {
                 originalFileName,
               },
+              folder,
             );
 
           return {

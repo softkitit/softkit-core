@@ -143,13 +143,19 @@ describe('file upload e2e test', () => {
   });
 
   it.each([
-    [faker.string.alphanumeric(129), '.txt'],
-    [faker.string.alphanumeric(10_000), '.txt'],
-    [faker.string.alphanumeric(10), ''],
-    [faker.string.alphanumeric(10), '.txt'],
+    [faker.string.alphanumeric(129), '.txt', undefined],
+    [faker.string.alphanumeric(10_000), '.txt', undefined],
+    [faker.string.alphanumeric(10), '', undefined],
+    [faker.string.alphanumeric(10), '.txt', undefined],
+    [faker.string.alphanumeric(10), '.txt', faker.string.uuid()],
+    [
+      `${faker.string.alphanumeric(5)}/${faker.string.alphanumeric(5)}`,
+      '.txt',
+      faker.string.uuid(),
+    ],
   ])(
     'should upload file using PUT pre-signed url, fileName: %s, extension: %s',
-    async (fileName: string, extension: string) => {
+    async (fileName: string, extension: string, folder?: string) => {
       const fileContent = 'test file content';
 
       const uploadUrl = await fileService.generateUploadFilePreSignUrlPut(
@@ -157,9 +163,11 @@ describe('file upload e2e test', () => {
         {
           originalFileName: fileName + extension,
         },
+        folder,
       );
 
       expect(uploadUrl.key.endsWith(extension)).toBe(true);
+      expect(uploadUrl.key.startsWith(folder || '')).toBe(true);
 
       const fileContentBlob = new Blob([fileContent]);
 
