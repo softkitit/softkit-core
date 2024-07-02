@@ -1,4 +1,12 @@
-import { Body, HttpCode, HttpStatus, Post, Res } from '@nestjs/common';
+import {
+  Body,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Query,
+  Res,
+} from '@nestjs/common';
 import { AbstractFileService } from '../services';
 import { FileDownloadRequest } from './vo/file-download.dto';
 import { PreSignedResponse, UploadPresignRequest } from './vo/pre-assign.dto';
@@ -19,12 +27,11 @@ export abstract class AbstractFileStorageController {
       If the file does not exist, an error will occur only when an attempt is made to download the file using the pre-signed URL.
     `,
   })
-  @ApiBody({ type: FileDownloadRequest })
-  @Post('download-file')
+  @Get('download-file')
   @HttpCode(HttpStatus.MOVED_PERMANENTLY)
   protected async downloadFileFromAWS(
     @Res() reply: FastifyReply,
-    @Body() fileDownloadRequest: FileDownloadRequest,
+    @Query() fileDownloadRequest: FileDownloadRequest,
   ) {
     const { key } = fileDownloadRequest;
 

@@ -142,9 +142,9 @@ describe('file controller e2e test', () => {
     );
 
     const response = await app.inject({
-      method: 'POST',
+      method: 'GET',
       url: `${baseController}/download-file`,
-      payload: {
+      query: {
         key: uploadResult.key,
       },
     });
@@ -160,9 +160,9 @@ describe('file controller e2e test', () => {
 
   it(`should download file, but the link returns an error POST ${baseController}/download-file`, async () => {
     const response = await app.inject({
-      method: 'POST',
+      method: 'GET',
       url: `${baseController}/download-file`,
-      payload: {
+      query: {
         key: 'test-file.txt',
       },
     });
