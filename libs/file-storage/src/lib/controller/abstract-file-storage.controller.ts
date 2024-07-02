@@ -3,12 +3,11 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   Post,
-  Query,
   Res,
 } from '@nestjs/common';
 import { AbstractFileService } from '../services';
-import { FileDownloadRequest } from './vo/file-download.dto';
 import { PreSignedResponse, UploadPresignRequest } from './vo/pre-assign.dto';
 import { FastifyReply } from 'fastify';
 import { ApiBody, ApiOkResponse, ApiOperation } from '@nestjs/swagger';
@@ -27,14 +26,12 @@ export abstract class AbstractFileStorageController {
       If the file does not exist, an error will occur only when an attempt is made to download the file using the pre-signed URL.
     `,
   })
-  @Get('download-file')
+  @Get('download-file/:key')
   @HttpCode(HttpStatus.MOVED_PERMANENTLY)
   protected async downloadFileFromAWS(
     @Res() reply: FastifyReply,
-    @Query() fileDownloadRequest: FileDownloadRequest,
+    @Param('key') key: string,
   ) {
-    const { key } = fileDownloadRequest;
-
     const url = await this.fileService.generateDownloadFilePreSignUrl(
       this.bucket,
       key,
@@ -53,12 +50,12 @@ export abstract class AbstractFileStorageController {
     type: PreSignedResponse,
     isArray: true,
   })
-  @Post('get-upload-pre-assign-url')
+  @Post('get-upload-presign-url')
   @HttpCode(HttpStatus.OK)
-  protected async getUploadPreAssignUrl(
-    @Body() uploadPreAssignRequest: UploadPresignRequest,
+  protected async getUploadPresignUrl(
+    @Body() uploadPresignRequest: UploadPresignRequest,
   ): Promise<PreSignedResponse[]> {
-    const { filesData } = uploadPreAssignRequest;
+    const { filesData } = uploadPresignRequest;
 
     return Promise.all(
       filesData.map(

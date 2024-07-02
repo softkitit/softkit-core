@@ -79,11 +79,11 @@ describe('file controller e2e test', () => {
       filesData: generateFileNames(4, faker.string.uuid()),
     },
   ])(
-    `should get pre assign url successfully, POST ${baseController}/get-upload-pre-assign-url`,
+    `should get presign url successfully, POST ${baseController}/get-upload-presign-url`,
     async ({ filesData }) => {
       const response = await app.inject({
         method: 'POST',
-        url: `${baseController}/get-upload-pre-assign-url`,
+        url: `${baseController}/get-upload-presign-url`,
         payload: {
           filesData,
         } as UploadPresignRequest,
@@ -117,11 +117,11 @@ describe('file controller e2e test', () => {
       filesData: generateFileNames(22),
     },
   ])(
-    `should not get pre assign url, because of the error. POST ${baseController}/get-upload-pre-assign-url`,
+    `could not get presign url, because of the error. POST ${baseController}/get-upload-presign-url`,
     async ({ filesData }) => {
       const response = await app.inject({
         method: 'POST',
-        url: `${baseController}/get-upload-pre-assign-url`,
+        url: `${baseController}/get-upload-presign-url`,
         payload: {
           filesData,
         } as UploadPresignRequest,
@@ -131,7 +131,7 @@ describe('file controller e2e test', () => {
     },
   );
 
-  it(`should download file successfully, POST ${baseController}/download-file`, async () => {
+  it(`should download file successfully, GET ${baseController}/download-file/:key`, async () => {
     const fileContent = 'test file content';
     const uploadResult = await fileService.uploadFile(
       bucketName,
@@ -143,10 +143,7 @@ describe('file controller e2e test', () => {
 
     const response = await app.inject({
       method: 'GET',
-      url: `${baseController}/download-file`,
-      query: {
-        key: uploadResult.key,
-      },
+      url: `${baseController}/download-file/${uploadResult.key}`,
     });
 
     expect(response.statusCode).toEqual(HttpStatus.MOVED_PERMANENTLY);
@@ -158,13 +155,10 @@ describe('file controller e2e test', () => {
     expect(result.data).toBe(fileContent);
   });
 
-  it(`should download file, but the link returns an error POST ${baseController}/download-file`, async () => {
+  it(`should download file, but the link returns an error GET ${baseController}/download-file/:key`, async () => {
     const response = await app.inject({
       method: 'GET',
-      url: `${baseController}/download-file`,
-      query: {
-        key: 'test-file.txt',
-      },
+      url: `${baseController}/download-file/test-file.txt`,
     });
 
     expect(response.statusCode).toEqual(HttpStatus.MOVED_PERMANENTLY);
