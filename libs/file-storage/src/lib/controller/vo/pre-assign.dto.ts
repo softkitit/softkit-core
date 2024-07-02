@@ -5,12 +5,11 @@ import {
   IsStringLocalized,
 } from '@softkit/validation';
 import { ApiProperty } from '@nestjs/swagger';
-import { string } from 'yargs';
 
 export class FileDataRequest {
   @ApiProperty({
     required: true,
-    type: string,
+    type: String,
     description: 'Original file name',
   })
   @IsNotEmptyLocalized()
@@ -19,7 +18,7 @@ export class FileDataRequest {
 
   @ApiProperty({
     required: false,
-    type: string,
+    type: String,
     description: 'Folder for a file',
   })
   @IsStringLocalized()
@@ -44,7 +43,7 @@ export class UploadPresignRequest {
 export class PreSignedResponse {
   @ApiProperty({
     required: true,
-    type: string,
+    type: String,
     description: 'File name in a storage',
   })
   @Expose()
@@ -52,7 +51,7 @@ export class PreSignedResponse {
 
   @ApiProperty({
     required: true,
-    type: string,
+    type: String,
     description: 'Url for uploading files',
   })
   @Expose()
@@ -60,7 +59,7 @@ export class PreSignedResponse {
 
   @ApiProperty({
     required: true,
-    type: string,
+    type: String,
     description: 'Original file name',
   })
   @Expose()
