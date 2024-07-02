@@ -1,4 +1,18 @@
 Softkit Core Libraries Changelog
+## [0.4.0](https://github.com/softkitit/softkit-core/compare/file-storage-0.3.0...file-storage-0.4.0) (2024-07-02)
+
+
+### Features
+
+* **file-storage:** renamed the presign.dto.ts file ([8483a2c](https://github.com/softkitit/softkit-core/commit/8483a2c5fafe15610cfd425405f3e1619ff60572))
+* **file-storage:** update the request body in swagger ([194af06](https://github.com/softkitit/softkit-core/commit/194af068faf019cbda48253ccf8383cb3807ad34))
+* **file-storage:** update the request body in swagger ([a6b2ef8](https://github.com/softkitit/softkit-core/commit/a6b2ef8700d2c65882784cab8f298eea6447226f))
+* **file-storage:** updated the swagger api property ([9b5b5a4](https://github.com/softkitit/softkit-core/commit/9b5b5a4bd65f6fbcc468f35c9fd2034c9ed0ea70))
+* **file-storage:** updated the swagger api property ([61c8ad3](https://github.com/softkitit/softkit-core/commit/61c8ad30f6d982df9f310536d5f0386ba11a5475))
+* **file-storage:** updated the swagger api property ([9e3bf50](https://github.com/softkitit/softkit-core/commit/9e3bf505adad3dfdf3df3fc86c9f1c30ea676f4a))
+* **file-storage:** updated the swagger api property, updated the request dto for the upload file endpoint ([d736dfb](https://github.com/softkitit/softkit-core/commit/d736dfb8f8f2cef4f9d42391776093ac1ccb2962))
+* **file-storage:** updated the swagger api property, updated the request dto for the upload file endpoint ([1aea195](https://github.com/softkitit/softkit-core/commit/1aea1957c5dd87ab9e78c9dd124e072e72679fd8))
+
 ## [0.3.0](https://github.com/softkitit/softkit-core/compare/file-storage-0.2.0...file-storage-0.3.0) (2024-06-25)
 
 
