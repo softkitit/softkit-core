@@ -131,29 +131,38 @@ describe('file controller e2e test', () => {
     },
   );
 
-  it(`should download file successfully, GET ${baseController}/download-file/:key`, async () => {
-    const fileContent = 'test file content';
-    const uploadResult = await fileService.uploadFile(
-      bucketName,
-      {
-        originalFileName: 'test.txt',
-      },
-      fileContent,
-    );
+  it.each([
+    [undefined],
+    ['folder1'],
+    ['folder1/folder2'],
+    ['f/f/f/f/f/f/ff/f/'],
+  ])(
+    `should download file successfully, GET ${baseController}/download-file/%s/test.txt`,
+    async (folder) => {
+      const fileContent = 'test file content';
+      const uploadResult = await fileService.uploadFile(
+        bucketName,
+        {
+          originalFileName: 'test.txt',
+        },
+        fileContent,
+        folder,
+      );
 
-    const response = await app.inject({
-      method: 'GET',
-      url: `${baseController}/download-file/${uploadResult.key}`,
-    });
+      const response = await app.inject({
+        method: 'GET',
+        url: `${baseController}/download-file/${uploadResult.key}`,
+      });
 
-    expect(response.statusCode).toEqual(HttpStatus.MOVED_PERMANENTLY);
-    expect(response.headers).toBeDefined();
-    expect(response.headers['location']).toBeDefined();
+      expect(response.statusCode).toEqual(HttpStatus.MOVED_PERMANENTLY);
+      expect(response.headers).toBeDefined();
+      expect(response.headers['location']).toBeDefined();
 
-    const result = await axios.get(response.headers['location']!.toString());
+      const result = await axios.get(response.headers['location']!.toString());
 
-    expect(result.data).toBe(fileContent);
-  });
+      expect(result.data).toBe(fileContent);
+    },
+  );
 
   it(`should download file, but the link returns an error GET ${baseController}/download-file/:key`, async () => {
     const response = await app.inject({
