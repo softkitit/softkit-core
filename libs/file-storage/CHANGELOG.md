@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.4.1](https://github.com/softkitit/softkit-core/compare/file-storage-0.4.0...file-storage-0.4.1) (2024-07-04)
+
+
+### Bug Fixes
+
+* **file-storage:** download files from folder ([f1e4994](https://github.com/softkitit/softkit-core/commit/f1e499437b422677f888b36c9f0ced7cf0bb7b44))
+
 ## [0.4.0](https://github.com/softkitit/softkit-core/compare/file-storage-0.3.0...file-storage-0.4.0) (2024-07-02)
 
 
