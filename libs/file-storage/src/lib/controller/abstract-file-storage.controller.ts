@@ -26,15 +26,15 @@ export abstract class AbstractFileStorageController {
       If the file does not exist, an error will occur only when an attempt is made to download the file using the pre-signed URL.
     `,
   })
-  @Get('download-file/:key')
+  @Get('download-file/*')
   @HttpCode(HttpStatus.MOVED_PERMANENTLY)
   protected async downloadFileFromAWS(
     @Res() reply: FastifyReply,
-    @Param('key') key: string,
+    @Param('*') path: string,
   ) {
     const url = await this.fileService.generateDownloadFilePreSignUrl(
       this.bucket,
-      key,
+      path,
       300,
     );
 
