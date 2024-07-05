@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.4.2](https://github.com/softkitit/softkit-core/compare/file-storage-0.4.1...file-storage-0.4.2) (2024-07-05)
+
+
+### Bug Fixes
+
+* **file-storage:** fixed cache control header for presign url ([ea177d1](https://github.com/softkitit/softkit-core/commit/ea177d1a65c6df353002247b94aa697ccbd5a207))
+
 ## [0.4.1](https://github.com/softkitit/softkit-core/compare/file-storage-0.4.0...file-storage-0.4.1) (2024-07-04)
 
 
