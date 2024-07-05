@@ -42,7 +42,7 @@ export abstract class AbstractFileStorageController {
     `,
   })
   @Get('download-file/*')
-  @HttpCode(HttpStatus.MOVED_PERMANENTLY)
+  @HttpCode(HttpStatus.TEMPORARY_REDIRECT)
   protected async downloadFileFromAWS(
     @Res() reply: FastifyReply,
     @Param('*') path: string,
@@ -54,10 +54,14 @@ export abstract class AbstractFileStorageController {
     );
 
     reply
-      .status(HttpStatus.MOVED_PERMANENTLY)
+      .status(HttpStatus.TEMPORARY_REDIRECT)
       .header(
         'Cross-Origin-Resource-Policy',
         this.options.crossOriginResourcePolicy,
+      )
+      .header(
+        `Cache-Control`,
+        `private, max-age=${this.options.downloadExpiresIn}, immutable`,
       )
       .redirect(url);
   }
