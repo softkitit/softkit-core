@@ -154,7 +154,7 @@ describe('file controller e2e test', () => {
         url: `${baseController}/download-file/${uploadResult.key}`,
       });
 
-      expect(response.statusCode).toEqual(HttpStatus.MOVED_PERMANENTLY);
+      expect(response.statusCode).toEqual(HttpStatus.TEMPORARY_REDIRECT);
       expect(response.headers).toBeDefined();
       expect(response.headers['location']).toBeDefined();
 
@@ -170,7 +170,7 @@ describe('file controller e2e test', () => {
       url: `${baseController}/download-file/test-file.txt`,
     });
 
-    expect(response.statusCode).toEqual(HttpStatus.MOVED_PERMANENTLY);
+    expect(response.statusCode).toEqual(HttpStatus.TEMPORARY_REDIRECT);
     expect(response.headers).toBeDefined();
     expect(response.headers['location']).toBeDefined();
 
