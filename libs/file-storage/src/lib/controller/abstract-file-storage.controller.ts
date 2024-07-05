@@ -12,12 +12,27 @@ import { PreSignedResponse, UploadPresignRequest } from './vo';
 import { FastifyReply } from 'fastify';
 import { ApiBody, ApiOkResponse, ApiOperation } from '@nestjs/swagger';
 
+export interface IFileStorageControllerOptions {
+  downloadExpiresIn?: number;
+  uploadExpiredIn?: number;
+  crossOriginResourcePolicy?: string;
+}
+
 export abstract class AbstractFileStorageController {
+  private readonly options: Required<IFileStorageControllerOptions>;
+
   protected constructor(
     private readonly bucket: string,
     private readonly fileService: AbstractFileService,
-    private readonly crossOriginResourcePolicy: string = 'same-site',
-  ) {}
+    options?: IFileStorageControllerOptions,
+  ) {
+    this.options = {
+      downloadExpiresIn: 60 * 60,
+      uploadExpiredIn: 60 * 60,
+      crossOriginResourcePolicy: 'same-site',
+      ...options,
+    };
+  }
 
   @ApiOperation({
     summary: 'Generate Pre-Signed URLs for File Uploads',
@@ -35,12 +50,15 @@ export abstract class AbstractFileStorageController {
     const url = await this.fileService.generateDownloadFilePreSignUrl(
       this.bucket,
       path,
-      300,
+      this.options.downloadExpiresIn,
     );
 
     reply
       .status(HttpStatus.MOVED_PERMANENTLY)
-      .header('Cross-Origin-Resource-Policy', this.crossOriginResourcePolicy)
+      .header(
+        'Cross-Origin-Resource-Policy',
+        this.options.crossOriginResourcePolicy,
+      )
       .redirect(url);
   }
 
@@ -67,6 +85,7 @@ export abstract class AbstractFileStorageController {
                 originalFileName,
               },
               folder,
+              this.options.uploadExpiredIn,
             );
 
           return {

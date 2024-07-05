@@ -5,7 +5,7 @@ import {
   StartMultipartUploadInfo,
   UploadedFileInfo,
 } from './vo/file-definition';
-import { CompletedPartDTO } from '../controller/vo/completed-part.dto';
+import { CompletedPartDTO } from '../controller/vo';
 import { Readable } from 'node:stream';
 
 export abstract class AbstractFileService {
