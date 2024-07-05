@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.4.3](https://github.com/softkitit/softkit-core/compare/file-storage-0.4.2...file-storage-0.4.3) (2024-07-05)
+
+
+### Bug Fixes
+
+* **file-storage:** fixed cache control header for presign url and changed status to 302 temporary redirect ([31314e1](https://github.com/softkitit/softkit-core/commit/31314e10b5194ec0a1b524f6d28f3b7028b57caa))
+
 ## [0.4.2](https://github.com/softkitit/softkit-core/compare/file-storage-0.4.1...file-storage-0.4.2) (2024-07-05)
 
 
