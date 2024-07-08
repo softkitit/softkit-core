@@ -1,4 +1,3 @@
-import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { spawnAsync } from './spawn-async';
 import fs from 'node:fs';
@@ -16,7 +15,7 @@ export async function cloneRepo(root: string, tag: string, repository: string) {
     ]);
 
     const gitFolderPath = join(root, '.git');
-    if (existsSync(gitFolderPath)) {
+    if (fs.existsSync(gitFolderPath)) {
       fs.rm(gitFolderPath, { recursive: true, force: true }, (err) => {
         if (err) {
           throw err;
