@@ -1,4 +1,6 @@
 Softkit Core Libraries Changelog
+## [0.2.4](https://github.com/softkitit/softkit-core/compare/jobs-0.2.3...jobs-0.2.4) (2024-07-08)
+
 ## [0.2.3](https://github.com/softkitit/softkit-core/compare/jobs-0.2.2...jobs-0.2.3) (2024-05-23)
 
 
