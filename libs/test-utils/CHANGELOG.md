@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.2.5](https://github.com/softkitit/softkit-core/compare/test-utils-0.2.4...test-utils-0.2.5) (2024-07-08)
+
+
+### Bug Fixes
+
+* **test-utils:** added waiting strategies for redis and localstack ([8e7a11d](https://github.com/softkitit/softkit-core/commit/8e7a11dc2048535956a7cf0227ed5fdb3b7707c8))
+
 ## [0.2.4](https://github.com/softkitit/softkit-core/compare/test-utils-0.2.3...test-utils-0.2.4) (2024-04-05)
 
 
