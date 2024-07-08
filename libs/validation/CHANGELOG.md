@@ -1,4 +1,18 @@
 Softkit Core Libraries Changelog
+## [0.4.0](https://github.com/softkitit/softkit-core/compare/validation-0.3.7...validation-0.4.0) (2024-06-24)
+
+
+### Features
+
+* **file-storage:** covered the code ([582ee74](https://github.com/softkitit/softkit-core/commit/582ee746298d62f74d9231c483f8c2b2a7009bc0))
+* **file-storage:** updated after reviewing ([d709ac2](https://github.com/softkitit/softkit-core/commit/d709ac290285aa7900c87cca1f977e42fe8c2830))
+
+
+### Bug Fixes
+
+* **validation:** added the array size validator ([40f9e5d](https://github.com/softkitit/softkit-core/commit/40f9e5d665da92b095184b269175f668035f537b))
+* **validation:** fixed i18n library version ([2bc5385](https://github.com/softkitit/softkit-core/commit/2bc53855b9442aebeb512dc8ecd583f5c6a5658e))
+
 ## [0.3.7](https://github.com/softkitit/softkit-core/compare/validation-0.3.6...validation-0.3.7) (2024-02-05)
 
 

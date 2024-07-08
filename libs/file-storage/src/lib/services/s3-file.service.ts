@@ -170,6 +170,7 @@ export class S3FileService extends AbstractFileService {
     const command = new GetObjectCommand({
       Bucket: bucket,
       Key: key,
+      ResponseCacheControl: `private, max-age=${expiresInSeconds}, immutable`,
     });
 
     return getSignedUrl(this.s3, command, {

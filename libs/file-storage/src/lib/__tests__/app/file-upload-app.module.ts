@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
 import { S3FileStorageModule } from '../../s3-file-storage.module';
+import { FileStorageController } from './controller/file-storage.controller';
 
 @Module({
+  controllers: [FileStorageController],
   imports: [
     S3FileStorageModule.forRoot({
       credentials: {
