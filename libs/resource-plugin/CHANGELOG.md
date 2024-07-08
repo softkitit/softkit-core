@@ -1,4 +1,21 @@
 Softkit Core Libraries Changelog
+## [0.7.0](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.14...resource-plugin-0.7.0) (2024-07-08)
+
+
+### Features
+
+* **resource-plugin:** add bash integration tests and implement boilerplate cli generator ([432e12d](https://github.com/softkitit/softkit-core/commit/432e12d63faee9f3a6ebec572fa602d4cc456f12))
+* **resource-plugin:** emulate OOP in run-test.sh ([d12f82e](https://github.com/softkitit/softkit-core/commit/d12f82e3527d92262fa5503c5a43e027aac708f2))
+* **resource-plugin:** enhance bash script with detailed functions ([13bce12](https://github.com/softkitit/softkit-core/commit/13bce123cd00749aca75ee9860e7053d2073f047))
+
+
+### Bug Fixes
+
+* **resource-plugin:** avoid multi import ([e5db4c5](https://github.com/softkitit/softkit-core/commit/e5db4c5aff8a1f715508bcdd0c4e121617b512ef))
+* **resource-plugin:** enhance exit handling in bash script ([a28dbe4](https://github.com/softkitit/softkit-core/commit/a28dbe4d0d0196368b8cd5a52d69594eb61a402c))
+* **resource-plugin:** remove unnecessary commands from clone-repo function and refactor executeUpdates ([98fa701](https://github.com/softkitit/softkit-core/commit/98fa7018c68b7865c4280a13b40ecd100271205b))
+* **resource-plugin:** update i18n paths for app generator ([d27ec38](https://github.com/softkitit/softkit-core/commit/d27ec386e6dc63ec460c0c6220d412d7069d0a4b))
+
 ## [0.6.14](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.13...resource-plugin-0.6.14) (2024-06-17)
 
 ## [0.6.13](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.12...resource-plugin-0.6.13) (2024-03-22)
