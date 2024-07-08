@@ -39,11 +39,6 @@
       "factory": "./src/generators/http-client/generator",
       "schema": "./src/generators/http-client/schema.json",
       "description": "http-client generator"
-    },
-    "boilerplate": {
-      "factory": "./src/generators/boilerplate/generator",
-      "schema": "./src/generators/boilerplate/schema.json",
-      "description": "boilerplate generator"
     }
   }
 }

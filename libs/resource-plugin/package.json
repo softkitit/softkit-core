@@ -10,7 +10,11 @@
   ],
   "generators": "./generators.json",
   "dependencies": {
-    "change-case": "4.1.2"
+    "change-case": "4.1.2",
+    "yargs": "17.7.2"
+  },
+  "bin": {
+    "boilerplate": "./src/generators/boilerplate/utils/cli.js"
   },
   "peerDependencies": {
     "@nx/devkit": "^17.0.0",
