@@ -40,6 +40,7 @@
       "options": {
         "jestConfig": "libs/typeorm/jest.config.ts",
         "passWithNoTests": true,
+        "runInBand": true,
         "maxWorkers": 1
       },
       "configurations": {
