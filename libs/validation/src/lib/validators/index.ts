@@ -1,3 +1,4 @@
+export * from './is-array-combined.validator';
 export * from './is-email.validator';
 export * from './is-integer-string-combined.validator';
 export * from './is-string-combined.validator';

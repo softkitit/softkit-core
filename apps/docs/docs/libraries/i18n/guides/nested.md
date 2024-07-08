@@ -30,7 +30,7 @@ Here is an example of how this looks in your translation files
 ```
 
 ```typescript
-i18n.t('test.PAGE_HOME.SUBTITLE', { args: { username: 'Toon' } });
+i18n.t('test.PAGE_HOME.SUBTITLE', { args: { username: 'John' } });
 // => Hello Toon, this is the home page
 ```
 

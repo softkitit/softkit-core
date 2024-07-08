@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.2.1](https://github.com/softkitit/softkit-core/compare/config-0.2.0...config-0.2.1) (2024-05-10)
+
+
+### Bug Fixes
+
+* **config:** ignore empty search places to allow load empty files ([24dd349](https://github.com/softkitit/softkit-core/commit/24dd34985dc9d59de7edf65e6a5edde5993e4a13))
+
 ## [0.2.0](https://github.com/softkitit/softkit-core/compare/config-0.1.3...config-0.2.0) (2024-01-26)
 
 

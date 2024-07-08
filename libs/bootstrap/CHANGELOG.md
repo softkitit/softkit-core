@@ -1,4 +1,20 @@
 Softkit Core Libraries Changelog
+## [0.2.12](https://github.com/softkitit/softkit-core/compare/bootstrap-0.2.11...bootstrap-0.2.12) (2024-06-17)
+
+## [0.2.11](https://github.com/softkitit/softkit-core/compare/bootstrap-0.2.10...bootstrap-0.2.11) (2024-05-11)
+
+
+### Bug Fixes
+
+* **bootstrap:** get rid of custom logging interceptor ([8b65631](https://github.com/softkitit/softkit-core/commit/8b656316c40ceae26cd7541d0677dcca1362e272))
+
+## [0.2.10](https://github.com/softkitit/softkit-core/compare/bootstrap-0.2.9...bootstrap-0.2.10) (2024-05-11)
+
+
+### Bug Fixes
+
+* **bootstrap:** fixed tests after updating logger module ([0b65c6f](https://github.com/softkitit/softkit-core/commit/0b65c6fb027fa76a924429bea979d270cf91162c))
+
 ## [0.2.9](https://github.com/softkitit/softkit-core/compare/bootstrap-0.2.8...bootstrap-0.2.9) (2024-03-25)
 
 

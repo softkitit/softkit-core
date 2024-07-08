@@ -10,7 +10,7 @@ const config = {
   trailingSlash: true,
 
   // Set the production url of your site here
-  url: 'https://docs.softkit.io',
+  url: 'https://docs.softkit.dev',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
@@ -68,8 +68,8 @@ const config = {
     /** @type {import("@docusaurus/preset-classic").ThemeConfig} */
     ({
       algolia: {
-        appId: 'Z9EWM9H0BN',
-        apiKey: 'aab3af965df3c8049e5da4701e289618',
+        appId: 'PLYJTXZHRK',
+        apiKey: '1f0cfa6c5336592be3c6691fb17bb9bf',
         indexName: 'softkit',
         contextualSearch: true,
       },
@@ -95,7 +95,7 @@ const config = {
             label: 'FAQ',
           },
           {
-            href: 'https://github.com/softkitit/docusaurus',
+            href: 'https://github.com/softkitit/softkit-core',
             label: 'GitHub',
             position: 'right',
           },
@@ -139,7 +139,7 @@ const config = {
               },
               {
                 label: 'GitHub',
-                href: 'https://github.com/facebook/docusaurus',
+                href: 'https://github.com/softkitit/softkit-core',
               },
             ],
           },

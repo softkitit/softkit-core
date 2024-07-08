@@ -22,12 +22,17 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     if (exception.status > 499) {
       this.logger.error(
-        'Internal server error. Require immediate attention, details: %o',
-        exception,
+        {
+          err: exception,
+        },
+        'Internal server error. Require immediate attention!',
       );
     } else {
-      this.logger.debug(
-        `Error thrown - details: ${JSON.stringify(exception, undefined, 2)}`,
+      this.logger.log(
+        {
+          err: exception,
+        },
+        `Exception happened with status ${exception.status}`,
       );
     }
 

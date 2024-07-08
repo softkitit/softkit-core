@@ -18,7 +18,7 @@ To fix this change your `GraphQLModule` configuration.
 
 :::caution
 
-It's recommened to use `graphql-ws` instead of `subscriptions-transport-ws` (**[read more](https://github.com/apollographql/subscriptions-transport-ws)**). If you're still using `subscriptions-transport-ws` you should re-configure your `GraphQLModule`.
+It's recommend to use `graphql-ws` instead of `subscriptions-transport-ws` (**[read more](https://github.com/apollographql/subscriptions-transport-ws)**). If you're still using `subscriptions-transport-ws` you should re-configure your `GraphQLModule`.
 
 ```diff title="src/app.module.ts"
   GraphQLModule.forRoot<ApolloDriverConfig>({

@@ -4,7 +4,7 @@
   "sourceRoot": "apps/docs/src",
   "projectType": "application",
   "targets": {
-    "build": {
+    "build-docs": {
       "executor": "nx:run-commands",
       "options": {
         "commands": [
@@ -22,7 +22,7 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "cspell \"**/*.{md,mdx}\" -c ./apps/docs/cspell.json"
+          "cspell \"./apps/docs/docs/**/*.{md,mdx}\" -c ./apps/docs/cspell.json"
         ]
       }
     },
@@ -30,7 +30,7 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "apps/docs/serve.sh"
+          "docusaurus start apps/docs"
         ]
       }
     }

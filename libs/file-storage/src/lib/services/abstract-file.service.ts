@@ -5,7 +5,7 @@ import {
   StartMultipartUploadInfo,
   UploadedFileInfo,
 } from './vo/file-definition';
-import { CompletedPartDTO } from '../controller/vo/completed-part.dto';
+import { CompletedPartDTO } from '../controller/vo';
 import { Readable } from 'node:stream';
 
 export abstract class AbstractFileService {
@@ -73,14 +73,14 @@ export abstract class AbstractFileService {
     file: FileDefinition,
     folder?: string,
   ): string {
-    const originalFileName = this.truncateFileName(
-      file.originalFileName,
+    const sanitizedOriginalFileName = this.truncateFileName(
+      file.originalFileName.replaceAll('/', ':'),
       this.DEFAULT_FILE_NAME_FULL_LENGTH,
     );
 
     return [
       folder,
-      `${uniqueFileNameWithoutExtension}-${originalFileName.toLowerCase()}`,
+      `${uniqueFileNameWithoutExtension}-${sanitizedOriginalFileName.toLowerCase()}`,
     ]
       .filter((a) => !!a)
       .join('/');

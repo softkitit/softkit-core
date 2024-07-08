@@ -7,8 +7,6 @@
     "node": "20"
   },
   "scripts": {
-    "typeorm": "ts-node --project ./tsconfig.base.json -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
-    "migration:generate": "sh -c 'export MIGRATION_APP_NAME=${0}; yarn run typeorm --dataSource=libs/typeorm/src/lib/migration/migration-data-source.ts migration:generate apps/${0}/src/app/database/migrations/${1}'",
     "prebuild": "rimraf dist",
     "test:all": "nx affected:test --all --codeCoverage --skip-nx-cache --parallel=false",
     "prepare": "husky install"
@@ -117,7 +115,6 @@
     "mailgun.js": "9.3.0",
     "nestjs-cls": "3.5.1",
     "nestjs-paginate": "8.6.0",
-    "newrelic": "11.1.0",
     "ngx-deploy-npm": "7.0.1",
     "nx": "17.1.2",
     "nx-cloud": "16.5.2",
@@ -154,6 +151,8 @@
     "@apollo/server": "^4.10.0",
     "@fastify/helmet": "11.1.1",
     "@fastify/static": "6.12.0",
+    "@sendgrid/client": "^8.1.3",
+    "@sendgrid/mail": "^8.1.3",
     "accept-language-parser": "1.5.0",
     "argon2": "0.31.0",
     "axios-retry": "4.0.0",

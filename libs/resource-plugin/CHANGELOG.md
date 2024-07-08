@@ -1,4 +1,6 @@
 Softkit Core Libraries Changelog
+## [0.6.14](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.13...resource-plugin-0.6.14) (2024-06-17)
+
 ## [0.6.13](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.12...resource-plugin-0.6.13) (2024-03-22)
 
 

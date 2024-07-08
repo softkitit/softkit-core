@@ -30,9 +30,9 @@ export abstract class BaseJobProcessor<JobDataType extends VersionedJobData>
         this.logger.error(
           {
             jobStatus: 'error',
+            err: error,
           },
-          `Queue: ${this.queue.name} worker error: ${error.message}, %s`,
-          error.stack,
+          `Queue: ${this.queue.name} worker error: ${error.message}`,
         );
       },
     );
@@ -42,11 +42,11 @@ export abstract class BaseJobProcessor<JobDataType extends VersionedJobData>
       (job: Job<JobDataType> | undefined, error: Error, prev: string) => {
         this.logger.error(
           {
+            err: error,
             previousStatus: prev,
             jobStatus: 'failed',
           },
           `Queue: ${this.queue.name} job: ${job?.name} failed with error: ${error.message}. Previous status: ${prev}. %s`,
-          error.stack,
         );
       },
     );
