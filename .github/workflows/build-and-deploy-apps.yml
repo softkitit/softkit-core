@@ -66,6 +66,10 @@ jobs:
       - name: Install environment
         run: yarn install
 
+      - name: Get affected projects
+        id: get-affected-projects
+        run: echo affected-projects=$(${{ steps.nx.outputs.show-apps }} --with-target build-fe) >> $GITHUB_OUTPUT
+
       - name: Build apps
         run: ${{ steps.nx.outputs.exec-cmd }} -t build-fe
 
@@ -73,14 +77,11 @@ jobs:
 #      https://github.com/actions/upload-artifact/issues/174
       - name: Upload builds
         uses: actions/upload-artifact@v4
+        if: steps.get-affected-projects.outputs.affected-projects != '[]'
         with:
           name: build
           path: apps/*/build
           if-no-files-found: error
-
-      - name: Get affected projects
-        id: get-affected-projects
-        run: echo affected-projects=$(${{ steps.nx.outputs.show-apps }} --with-target build-fe) >> $GITHUB_OUTPUT
 
   apply-tf-app-changes:
     needs: [ prepare, build-apps ]
