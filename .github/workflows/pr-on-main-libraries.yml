@@ -1,5 +1,5 @@
 # File for Pull Request on main branch
-name: PR on main
+name: PR on main libraries
 
 # When a PR is opened to main
 on:
@@ -26,34 +26,12 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
 
-      - uses: volta-cli/action@v4
-        with:
-          package-json-path: '${{ github.workspace }}/package.json'
-
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
-          cache: 'yarn'
           node-version: ${{ matrix.node-version }}
 
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
-
-      - name: Cache yarn dependencies
-        uses: actions/cache@v3
-        id: yarn-cache
-        with:
-          path: |
-            ${{ steps.yarn-cache-dir-path.outputs.dir }}
-            **\node_modules
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-
-
       - name: Install environment
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install
 
       - name: Run lint
@@ -61,6 +39,12 @@ jobs:
 
       - name: Pull postgres image, before running tests
         run: docker pull postgres:15.4-alpine
+
+      - name: Pull redis image, before running tests
+        run: docker pull redis:7.2.1-alpine3.18
+
+      - name: Pull localstack image, before running tests
+        run: docker pull localstack/localstack:3.0.0
 
       - name: Verify libraries can properly built
         run: npx nx affected:build --base="origin/main"

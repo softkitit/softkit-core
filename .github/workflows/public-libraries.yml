@@ -1,9 +1,9 @@
-name: Merge on main
+name: Publish Libraries
+
 on:
-  pull_request:
+  push:
     branches:
       - main
-    types: [closed]
 
 concurrency:
   group: single-group

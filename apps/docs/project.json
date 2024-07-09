@@ -4,7 +4,7 @@
   "sourceRoot": "apps/docs/src",
   "projectType": "application",
   "targets": {
-    "build-docs": {
+    "build-fe": {
       "executor": "nx:run-commands",
       "options": {
         "commands": [
