@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.3.0](https://github.com/softkitit/softkit-core/compare/config-0.2.1...config-0.3.0) (2024-07-09)
+
+
+### Features
+
+* **config:** export default configurations folder name and default configuration file name ([e40cd8a](https://github.com/softkitit/softkit-core/commit/e40cd8a3370939eb605a67e7d2c3caf53b50b871))
+
 ## [0.2.1](https://github.com/softkitit/softkit-core/compare/config-0.2.0...config-0.2.1) (2024-05-10)
 
 
