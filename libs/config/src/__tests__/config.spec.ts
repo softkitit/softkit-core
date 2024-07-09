@@ -7,6 +7,9 @@ import {
 import path from 'node:path';
 import { RootConfig } from './app/config/root.config';
 import { SetupConfigOptions } from '../lib/vo/setup-config-options';
+import { SwaggerConfig } from './app/config/test-swagger.config';
+import crypto from 'node:crypto';
+import { DEFAULT_CONFIGURATIONS_FOLDER_NAME } from '../lib/constants';
 
 describe('Tests for config library', () => {
   let app: NestFastifyApplication;
@@ -72,6 +75,9 @@ describe('Tests for config library', () => {
     expect(secondRootConfig.swagger.description).toEqual(
       'This is a test dev application',
     );
+
+    const swaggerConfig = app.get(SwaggerConfig);
+    expect(swaggerConfig).toEqual(secondRootConfig.swagger);
   });
 
   it('should handle correctly with no profiles', async () => {
@@ -154,7 +160,9 @@ describe('Tests for config library', () => {
   });
 
   it('should throw an error when specific folder does not exist', async () => {
-    const nonExistentDir = path.join(__dirname, `non-existent${Date.now()}`);
+    const randomUUID = crypto.randomUUID();
+    const nonExistentDir = path.join(__dirname, `non-existent-${randomUUID}`);
+
     const { AppModule } = require('./app/app.module');
 
     let error: Error | unknown;
@@ -171,10 +179,10 @@ describe('Tests for config library', () => {
     } catch (error_) {
       error = error_;
     }
+
+    const errorMessage = `No configuration files found in "${nonExistentDir}/${DEFAULT_CONFIGURATIONS_FOLDER_NAME}". Please check your configuration.`;
+
     expect(error).toBeInstanceOf(Error);
-    expect(error).toHaveProperty(
-      'message',
-      expect.stringContaining('No configuration files found'),
-    );
+    expect(error).toHaveProperty('message', errorMessage);
   });
 });
