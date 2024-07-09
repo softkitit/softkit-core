@@ -41,7 +41,7 @@ jobs:
         run: docker pull postgres:15.4-alpine
 
       - name: Pull redis image, before running tests
-        run: docker pull postgres:7.2.1-alpine3.18
+        run: docker pull redis:7.2.1-alpine3.18
 
       - name: Pull localstack image, before running tests
         run: docker pull localstack/localstack:3.0.0
