@@ -1,4 +1,4 @@
-name: Deploy apps
+name: Build and Deploy apps
 
 permissions:
   contents: write
@@ -15,10 +15,8 @@ on:
         required: true
         type: choice
         options:
-          - dev
-          - stage
           - prod
-        description: "Environment to apply changes to"
+        description: "Environment to deploy apps to"
         default: "prod"
 
 env:
@@ -30,26 +28,19 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       environment: ${{ steps.define-envs.outputs.environment }}
-      is-dev: ${{ steps.define-envs.outputs.is-dev }}
-      is-release: ${{ steps.define-envs.outputs.is-release }}
-      cloudfront-origin-name: ${{ steps.define-envs.outputs.cloudfront-origin-name }}
-      s3-bucket-name: ${{ steps.define-envs.outputs.s3-bucket-name }}
 
     steps:
       - name: Base env info
         run: |
-          echo BRANCH_SLUG="$(echo '${{ env.BRANCH_NAME }}' | sed 's/[^a-zA-Z0-9]/-/g')" >> $GITHUB_ENV
           echo ENVIRONMENT=${{ inputs.environment || 'prod' }} >> $GITHUB_ENV
 
       - name: Define envs information
         id: define-envs
         run: |
           echo environment=${{ env.ENVIRONMENT }} >> $GITHUB_OUTPUT
-          echo is-dev=${{ env.ENVIRONMENT == 'dev' && 'true' || '' }} >> $GITHUB_OUTPUT
-          echo is-release=${{ startsWith(env.BRANCH_NAME, 'release/') && 'true' || '' }} >> $GITHUB_OUTPUT
-          echo cloudfront-origin-name=${{ env.CLOUDFRONT_ORIGIN_NAME }} >> $GITHUB_OUTPUT
 
   build-apps:
+
     needs: [ prepare ]
     runs-on: ubuntu-latest
     outputs:
@@ -64,15 +55,8 @@ jobs:
       - name: Verify if last release tag exists, and define nx command to use
         id: nx
         run: |
-          if [ $(git tag -l ${{ needs.prepare.outputs.release-tag }}) ]; then
-           echo "Last release tag exists, will process with affected applications"
-           echo exec-cmd="npx nx affected --base=${{ needs.prepare.outputs.release-tag }}" >> $GITHUB_OUTPUT
-           echo show-apps="npx nx show projects --json --type app --affected --base ${{ needs.prepare.outputs.release-tag }}" >> $GITHUB_OUTPUT
-          else
-           echo "No last release tag exists, all apps will be deployed"
-           echo exec-cmd="npx nx run-many" >> $GITHUB_OUTPUT
-           echo show-apps="npx nx show projects --json --type app" >> $GITHUB_OUTPUT
-          fi
+           echo exec-cmd="npx nx affected --base=origin/main" >> $GITHUB_OUTPUT
+           echo show-apps="npx nx show projects --json --type app --affected --base origin/main" >> $GITHUB_OUTPUT
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -83,7 +67,7 @@ jobs:
         run: yarn install
 
       - name: Build apps
-        run: ${{ steps.nx.outputs.exec-cmd }} -t build-docs
+        run: ${{ steps.nx.outputs.exec-cmd }} -t build-fe
 
 #      readme needed because of limitation of upload artifact action
 #      https://github.com/actions/upload-artifact/issues/174
@@ -96,10 +80,12 @@ jobs:
 
       - name: Get affected projects
         id: get-affected-projects
-        run: echo affected-projects=$(${{ steps.nx.outputs.show-apps }} --with-target build-docs) >> $GITHUB_OUTPUT
+        run: echo affected-projects=$(${{ steps.nx.outputs.show-apps }} --with-target build-fe) >> $GITHUB_OUTPUT
 
   apply-tf-app-changes:
     needs: [ prepare, build-apps ]
+    if: ${{ needs.build-apps.outputs.affected-projects != '[]' && needs.build-apps.outputs.affected-projects != ''}}
+
     strategy:
       matrix:
         project: ${{ fromJson(needs.build-apps.outputs.affected-projects) }}
