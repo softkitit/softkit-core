@@ -23,15 +23,15 @@ const sidebars = {
       },
       items: ['intro', 'intro/general-information'],
     },
-    {
-      type: 'category',
-      label: 'How To',
-      link: {
-        type: 'doc',
-        id: 'how-to/index',
-      },
-      items: [],
-    },
+    // {
+    //   type: 'category',
+    //   label: 'How To',
+    //   link: {
+    //     type: 'doc',
+    //     id: 'how-to/index',
+    //   },
+    //   items: [],
+    // },
     {
       type: 'category',
       label: 'Available Features',
@@ -48,14 +48,14 @@ const sidebars = {
             id: 'features/code-generators/index',
           },
           items: [
-            'features/code-generators/microservice-generator',
-            'features/code-generators/library-generator',
-            'features/code-generators/service-generator',
+            // 'features/code-generators/microservice-generator',
+            // 'features/code-generators/library-generator',
+            // 'features/code-generators/service-generator',
             'features/code-generators/backend-client-generator',
           ],
         },
-        'features/error-handling',
-        'features/localization',
+        // 'features/error-handling',
+        // 'features/localization',
       ],
     },
     {
@@ -464,24 +464,24 @@ const sidebars = {
       ],
     },
 
-    {
-      type: 'category',
-      label: 'About Softkit',
-      link: {
-        type: 'doc',
-        id: 'about/index',
-      },
-      items: ['about/licensing', 'about/product-roadmap'],
-    },
-    {
-      type: 'category',
-      label: 'FAQ',
-      link: {
-        type: 'doc',
-        id: 'faq/index',
-      },
-      items: [],
-    },
+    // {
+    //   type: 'category',
+    //   label: 'About Softkit',
+    //   link: {
+    //     type: 'doc',
+    //     id: 'about/index',
+    //   },
+    //   items: ['about/licensing', 'about/product-roadmap'],
+    // },
+    // {
+    //   type: 'category',
+    //   label: 'FAQ',
+    //   link: {
+    //     type: 'doc',
+    //     id: 'faq/index',
+    //   },
+    //   items: [],
+    // },
     {
       type: 'category',
       label: 'API Documentation',
