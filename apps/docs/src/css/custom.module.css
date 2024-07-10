@@ -57,7 +57,7 @@
   --ifm-menu-color: var(--black80);
   --ifm-font-color-base: var(--black80);
   --ifm-heading-color: var(--black100);
-  --ifm-link-color: var(--tertiary);
+  --ifm-link-color: var(--primary);
 
   --ifm-heading-font-weight: 600;
   --docusaurus-highlighted-code-line-bg: rgb(0, 0, 0);

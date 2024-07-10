@@ -89,11 +89,11 @@ const config = {
             label: 'Getting Started',
             activeBaseRegex: '^/$',
           },
-          {
-            to: '/faq',
-            position: 'left',
-            label: 'FAQ',
-          },
+          // {
+          //   to: '/faq',
+          //   position: 'left',
+          //   label: 'FAQ',
+          // },
           {
             href: 'https://github.com/softkitit/softkit-core',
             label: 'GitHub',
@@ -117,12 +117,16 @@ const config = {
             title: 'Community',
             items: [
               {
-                label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+                label: 'Instagram',
+                href: 'https://www.instagram.com/softkitit/',
               },
               {
-                label: 'Discord',
-                href: 'https://discordapp.com/invite/docusaurus',
+                label: 'Facebook',
+                href: 'https://www.facebook.com/SoftkitIT/',
+              },
+              {
+                label: 'LinkedIn',
+                href: 'https://linkedin.com/company/softkitit',
               },
               {
                 label: 'Twitter',
@@ -135,7 +139,7 @@ const config = {
             items: [
               {
                 label: 'Blog',
-                to: '/blog',
+                to: 'https://www.softkit.dev/blog/',
               },
               {
                 label: 'GitHub',
