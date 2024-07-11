@@ -1,4 +1,6 @@
 Softkit Core Libraries Changelog
+## [0.1.5](https://github.com/softkitit/softkit-core/compare/swagger-utils-0.1.4...swagger-utils-0.1.5) (2024-07-11)
+
 ## [0.1.4](https://github.com/softkitit/softkit-core/compare/swagger-utils-0.1.3...swagger-utils-0.1.4) (2024-06-17)
 
 ## [0.1.3](https://github.com/softkitit/softkit-core/compare/swagger-utils-0.1.2...swagger-utils-0.1.3) (2024-02-05)
