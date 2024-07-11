@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.5.0](https://github.com/softkitit/softkit-core/compare/validation-0.4.0...validation-0.5.0) (2024-07-11)
+
+
+### Features
+
+* **validation:** add validate nested property decorator ([364c4bb](https://github.com/softkitit/softkit-core/commit/364c4bb7e81fe07bc2f45e09a4da0c38f61cf687))
+
 ## [0.4.0](https://github.com/softkitit/softkit-core/compare/validation-0.3.7...validation-0.4.0) (2024-06-24)
 
 
