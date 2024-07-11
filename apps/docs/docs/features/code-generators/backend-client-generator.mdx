@@ -17,24 +17,17 @@ This generator helps to create a client library that will be consumed by other b
 ```bash
 yarn add -D @softkit/resource-plugin
 ```
+
 :::note
 If you are using our starter kit, this generator is already installed.
 :::
 
 ## How to use it
 
-
-
-
 ## Why is it only for backend?
 
 It has an automatic NestJS module generation and so ideally should be consumed by a NestJS application.
 
-It has a dependency on [ClsService](/features/cls-service) for automatic user token and request id propagation for tracing and convenience.
+It has a dependency on ClsService for automatic user token and request id propagation for tracing and convenience.
 
-Also it has a super convenient feature to [proxy errors](/features/backend-http-client) from your microservice to the client application.
-
-
-
-
-
+Also it has a super convenient feature to proxy errors from your microservice to the client application.
