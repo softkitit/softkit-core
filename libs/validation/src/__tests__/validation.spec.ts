@@ -283,6 +283,82 @@ describe('validation e2e test', () => {
     });
   });
 
+  describe('nested validation', () => {
+    it.each([
+      {
+        nestedConfig: { certificate: 'valid-certificate' },
+        expectedStatus: 201,
+      },
+      {
+        nestedConfig: { certificate: '' },
+        expectedStatus: 400,
+      },
+      {
+        nestedConfig: undefined,
+        expectedStatus: 400,
+      },
+      {
+        nestedConfig: [],
+        expectedStatus: 400,
+      },
+      {
+        nestedConfig: 'not-an-object',
+        expectedStatus: 400,
+      },
+    ])(
+      'should validate nested config: %s',
+      async ({ nestedConfig, expectedStatus }) => {
+        const response = await app.inject({
+          method: 'POST',
+          url: '/sample',
+          payload: {
+            ...DEFAULT_SAMPLE_DTO,
+            nestedConfig,
+          },
+        });
+
+        expect(response.statusCode).toBe(expectedStatus);
+      },
+    );
+
+    it.each([
+      {
+        nestedConfigNotRequired: { certificate: 'valid-certificate' },
+        expectedStatus: 201,
+      },
+      {
+        nestedConfigNotRequired: { certificate: '' },
+        expectedStatus: 400,
+      },
+      {
+        nestedConfigNotRequired: undefined,
+        expectedStatus: 201,
+      },
+      {
+        nestedConfigNotRequired: [],
+        expectedStatus: 201,
+      },
+      {
+        nestedConfigNotRequired: 'not-an-object',
+        expectedStatus: 400,
+      },
+    ])(
+      'should validate nested config that not required: %s',
+      async ({ nestedConfigNotRequired, expectedStatus }) => {
+        const response = await app.inject({
+          method: 'POST',
+          url: '/sample',
+          payload: {
+            ...DEFAULT_SAMPLE_DTO,
+            nestedConfigNotRequired,
+          },
+        });
+
+        expect(response.statusCode).toBe(expectedStatus);
+      },
+    );
+  });
+
   describe('validation primitives', () => {
     it('dto validation success', async () => {
       const response = await app.inject({

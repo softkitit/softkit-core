@@ -5,3 +5,4 @@ export * from './is-string-combined.validator';
 export * from './match-validator';
 export * from './password.validator';
 export * from './primitives';
+export * from './validate-nested-property.validator';
