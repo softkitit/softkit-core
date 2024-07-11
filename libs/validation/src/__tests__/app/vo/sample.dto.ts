@@ -8,11 +8,22 @@ import {
   PasswordLocalized,
   trimTransformer,
   IsArrayCombinedLocalized,
+  ValidateNestedProperty,
 } from '../../../index';
 import { Optional } from '@nestjs/common';
 import { faker } from '@faker-js/faker';
 import { IsInt, Min } from 'class-validator';
 import { Transform } from 'class-transformer';
+
+class NestedConfig {
+  @IsStringCombinedLocalized()
+  certificate!: string;
+}
+
+class NestedConfigNotRequired {
+  @IsStringCombinedLocalized()
+  certificate!: string;
+}
 
 export class SampleDto {
   @IsEmailLocalized()
@@ -86,6 +97,15 @@ export class SampleDto {
 
   @IsArrayCombinedLocalized()
   documentArray?: string[];
+
+  @ValidateNestedProperty({ classType: NestedConfig })
+  nestedConfig!: NestedConfig;
+
+  @ValidateNestedProperty({
+    required: false,
+    classType: NestedConfigNotRequired,
+  })
+  nestedConfigNotRequired!: NestedConfigNotRequired;
 }
 
 export const DEFAULT_SAMPLE_DTO: SampleDto = {
@@ -109,4 +129,6 @@ export const DEFAULT_SAMPLE_DTO: SampleDto = {
     `${faker.person.lastName()}.png`,
   ],
   documentArray: [],
+  nestedConfig: { certificate: 'valid-certificate' },
+  nestedConfigNotRequired: { certificate: 'valid-certificate' },
 };
