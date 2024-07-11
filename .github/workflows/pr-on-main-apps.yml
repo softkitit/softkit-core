@@ -42,8 +42,8 @@ jobs:
       - name: Verify if last release tag exists, and define nx command to use
         id: nx
         run: |
-           echo exec-cmd="npx nx affected --base=origin/main" >> $GITHUB_OUTPUT
-           echo show-apps="npx nx show projects --json --type app --affected --base origin/main" >> $GITHUB_OUTPUT
+           echo exec-cmd="npx nx affected --base=last-release" >> $GITHUB_OUTPUT
+           echo show-apps="npx nx show projects --json --type app --affected --base last-release" >> $GITHUB_OUTPUT
 
       - name: Install deps
         run: yarn install
