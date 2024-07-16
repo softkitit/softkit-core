@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.1.6](https://github.com/softkitit/softkit-core/compare/logger-0.1.5...logger-0.1.6) (2024-07-16)
+
+
+### Bug Fixes
+
+* **logger:** update usage of @ValidateNested decorator ([e6cb481](https://github.com/softkitit/softkit-core/commit/e6cb4816114b6d7977fdfdee7f33b8f740621c82))
+
 ## [0.1.5](https://github.com/softkitit/softkit-core/compare/logger-0.1.4...logger-0.1.5) (2024-05-17)
 
 
