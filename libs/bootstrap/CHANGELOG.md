@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.2.14](https://github.com/softkitit/softkit-core/compare/bootstrap-0.2.13...bootstrap-0.2.14) (2024-07-16)
+
+
+### Bug Fixes
+
+* **bootstrap:** update usage of @ValidateNested decorator ([c51205f](https://github.com/softkitit/softkit-core/commit/c51205f34a94815ccf122a20f42b32179527c2f3))
+
 ## [0.2.13](https://github.com/softkitit/softkit-core/compare/bootstrap-0.2.12...bootstrap-0.2.13) (2024-07-08)
 
 ## [0.2.12](https://github.com/softkitit/softkit-core/compare/bootstrap-0.2.11...bootstrap-0.2.12) (2024-06-17)
