@@ -1,6 +1,5 @@
-import { IsArray, IsInt, IsOptional, ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
-import { IntegerType } from '@softkit/validation';
+import { IsArray, IsInt } from 'class-validator';
+import { IntegerType, ValidateNestedProperty } from '@softkit/validation';
 import { SystemJobConfig } from './system-job.config';
 
 export class SystemJobsConfig {
@@ -9,10 +8,10 @@ export class SystemJobsConfig {
   systemJobLockTimeoutMillis: number = 15_000;
 
   @IsArray()
-  @IsOptional()
-  @ValidateNested({
-    each: true,
+  @ValidateNestedProperty({
+    required: false,
+    classType: SystemJobConfig,
+    validationOptions: { each: true },
   })
-  @Type(() => SystemJobConfig)
   jobs?: SystemJobConfig[];
 }

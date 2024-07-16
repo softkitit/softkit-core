@@ -1,22 +1,15 @@
-import { Type } from 'class-transformer';
-import {
-  IsArray,
-  IsBoolean,
-  IsObject,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from 'class-validator';
-import { BooleanType } from '@softkit/validation';
+import { IsArray, IsBoolean, IsOptional, IsString } from 'class-validator';
+import { BooleanType, ValidateNestedProperty } from '@softkit/validation';
 import { RedisConfig, RedisLockConfig } from '@softkit/redis';
 import { DefaultJobOptionsConfig } from './default-job-options.config';
 import { SystemJobsConfig } from './system-jobs.config';
 import { JobConfig } from './job.config';
 
 export class JobsConfig {
-  @ValidateNested()
-  @Type(() => DefaultJobOptionsConfig)
-  @IsObject()
+  @ValidateNestedProperty({
+    required: false,
+    classType: DefaultJobOptionsConfig,
+  })
   defaultJobOptions: DefaultJobOptionsConfig = new DefaultJobOptionsConfig();
 
   /**
@@ -44,27 +37,20 @@ export class JobsConfig {
   @IsBoolean()
   skipVersionCheck: boolean = false;
 
-  @Type(() => RedisConfig)
-  @ValidateNested()
-  @IsObject()
+  @ValidateNestedProperty({ classType: RedisConfig })
   redisConfig!: RedisConfig;
 
-  @Type(() => RedisLockConfig)
-  @ValidateNested()
-  @IsObject()
+  @ValidateNestedProperty({ required: false, classType: RedisLockConfig })
   redisLockConfig: RedisLockConfig = new RedisLockConfig();
 
-  @IsOptional()
-  @ValidateNested({
-    each: true,
+  @ValidateNestedProperty({
+    classType: JobConfig,
+    required: false,
+    validationOptions: { each: true },
   })
-  @Type(() => JobConfig)
   @IsArray()
   jobs?: JobConfig[];
 
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => SystemJobsConfig)
-  @IsObject()
+  @ValidateNestedProperty({ required: false, classType: SystemJobsConfig })
   systemJobs?: SystemJobsConfig;
 }

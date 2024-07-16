@@ -1,13 +1,8 @@
-import {
-  IsNumber,
-  IsObject,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from 'class-validator';
-import { Transform, Type } from 'class-transformer';
+import { IsNumber, IsObject, IsOptional, IsString } from 'class-validator';
+import { Transform } from 'class-transformer';
 import { DefaultJobOptionsConfig } from './default-job-options.config';
 import { RepeatableJobOptions } from './repeatable-job-options';
+import { ValidateNestedProperty } from '@softkit/validation';
 
 export class SystemJobConfig {
   @IsString()
@@ -16,9 +11,7 @@ export class SystemJobConfig {
   @IsNumber()
   jobVersion!: number;
 
-  @IsObject()
-  @ValidateNested()
-  @Type(() => RepeatableJobOptions)
+  @ValidateNestedProperty({ classType: RepeatableJobOptions })
   repeat!: RepeatableJobOptions;
 
   @Transform((j) => j.value)
@@ -27,8 +20,9 @@ export class SystemJobConfig {
   jobData?: object;
 
   @IsOptional()
-  @ValidateNested()
-  @Type(() => DefaultJobOptionsConfig)
-  @IsObject()
+  @ValidateNestedProperty({
+    required: false,
+    classType: DefaultJobOptionsConfig,
+  })
   defaultJobOptions: DefaultJobOptionsConfig = new DefaultJobOptionsConfig();
 }
