@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.2.3](https://github.com/softkitit/softkit-core/compare/redis-0.2.2...redis-0.2.3) (2024-07-16)
+
+
+### Bug Fixes
+
+* **redis:** update usage of @ValidateNested decorator ([d0219f6](https://github.com/softkitit/softkit-core/commit/d0219f6903bce2f1e80601de2ea2cd9c9bd50df8))
+
 ## [0.2.2](https://github.com/softkitit/softkit-core/compare/redis-0.2.1...redis-0.2.2) (2024-01-26)
 
 ## [0.2.1](https://github.com/softkitit/softkit-core/compare/redis-0.2.0...redis-0.2.1) (2024-01-26)
