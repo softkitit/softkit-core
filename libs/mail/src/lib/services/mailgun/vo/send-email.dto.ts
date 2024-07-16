@@ -1,5 +1,4 @@
-import { Type } from 'class-transformer';
-import { ArrayMaxSize, IsOptional, ValidateNested } from 'class-validator';
+import { ArrayMaxSize, IsOptional } from 'class-validator';
 import { MessageContentDto } from './message-content.dto';
 import { Readable } from 'node:stream';
 import {
@@ -7,6 +6,7 @@ import {
   IsEmailLocalized,
   IsStringLocalized,
   MaxLengthLocalized,
+  ValidateNestedProperty,
 } from '@softkit/validation';
 import type { AtLeastOneKeyPresent } from 'mailgun.js';
 
@@ -70,10 +70,12 @@ export class SendEmailDto {
   /**
    * **Important:** You must use `multipart/form-data` encoding when sending attachments.
    */
-  @Type(() => AttachmentFile)
-  @IsOptional()
   @IsArrayLocalized()
-  @ValidateNested({ each: true })
+  @ValidateNestedProperty({
+    classType: AttachmentFile,
+    required: false,
+    validationOptions: { each: true },
+  })
   attachment?: AttachmentFile[];
 
   /**
