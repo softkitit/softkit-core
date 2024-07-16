@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.0.11](https://github.com/softkitit/softkit-core/compare/health-check-0.0.10...health-check-0.0.11) (2024-07-16)
+
+
+### Bug Fixes
+
+* **health-check:** update usage of @ValidateNested decorator ([cac3c7d](https://github.com/softkitit/softkit-core/commit/cac3c7d44e5c1c36fd4a37753d214b32d8377085))
+
 ## [0.0.10](https://github.com/softkitit/softkit-core/compare/health-check-0.0.9...health-check-0.0.10) (2024-02-09)
 
 
