@@ -1,9 +1,7 @@
-import { ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
 import { LoggerConfig } from '../../../config/logger';
+import { ValidateNestedProperty } from '@softkit/validation';
 
 export class LoggerRootConfig {
-  @ValidateNested()
-  @Type(() => LoggerConfig)
+  @ValidateNestedProperty({ classType: LoggerConfig })
   logger!: LoggerConfig;
 }
