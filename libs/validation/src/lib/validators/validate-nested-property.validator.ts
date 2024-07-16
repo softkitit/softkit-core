@@ -1,6 +1,11 @@
 import { applyDecorators } from '@nestjs/common';
 import { Type } from 'class-transformer';
-import { ValidateNested, IsObject, ValidationOptions } from 'class-validator';
+import {
+  ValidateNested,
+  IsObject,
+  ValidationOptions,
+  IsOptional,
+} from 'class-validator';
 
 interface ValidateNestedPropertyOptions<T> {
   required?: boolean;
@@ -17,6 +22,8 @@ export const ValidateNestedProperty = <T>({
 
   if (required) {
     decorators.push(IsObject(validationOptions));
+  } else {
+    decorators.push(IsOptional(validationOptions));
   }
 
   return applyDecorators(...decorators);

@@ -1,16 +1,11 @@
+import { ValidateNestedProperty } from '@softkit/validation';
 import { RedisConfig } from '../../../lib/config';
-import { IsObject, ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
 import { RedisLockConfig } from '../../../lib/config/redis-lock.config';
 
 export class RedisRootConfig {
-  @ValidateNested()
-  @Type(() => RedisConfig)
-  @IsObject()
+  @ValidateNestedProperty({ classType: RedisConfig })
   redisConfig!: RedisConfig;
 
-  @ValidateNested()
-  @Type(() => RedisLockConfig)
-  @IsObject()
+  @ValidateNestedProperty({ classType: RedisLockConfig })
   redisLockConfig!: RedisLockConfig;
 }

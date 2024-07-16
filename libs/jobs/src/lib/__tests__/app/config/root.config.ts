@@ -1,19 +1,15 @@
 import { JobsConfig } from '../../../config';
-import { Type } from 'class-transformer';
-import { ValidateNested } from 'class-validator';
 import { DbConfig } from '@softkit/typeorm';
 import { LoggerConfig } from '@softkit/logger';
+import { ValidateNestedProperty } from '@softkit/validation';
 
 export class RootConfig {
-  @ValidateNested()
-  @Type(() => JobsConfig)
+  @ValidateNestedProperty({ classType: JobsConfig })
   jobsConfig!: JobsConfig;
 
-  @ValidateNested()
-  @Type(() => DbConfig)
+  @ValidateNestedProperty({ classType: DbConfig })
   db!: DbConfig;
 
-  @ValidateNested()
-  @Type(() => LoggerConfig)
+  @ValidateNestedProperty({ classType: LoggerConfig })
   logs!: LoggerConfig;
 }

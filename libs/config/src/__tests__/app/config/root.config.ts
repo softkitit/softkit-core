@@ -1,9 +1,7 @@
-import { Type } from 'class-transformer';
-import { ValidateNested } from 'class-validator';
 import { SwaggerConfig } from './test-swagger.config';
+import { ValidateNestedProperty } from '@softkit/validation';
 
 export class RootConfig {
-  @Type(() => SwaggerConfig)
-  @ValidateNested()
+  @ValidateNestedProperty({ classType: SwaggerConfig })
   public readonly swagger!: SwaggerConfig;
 }

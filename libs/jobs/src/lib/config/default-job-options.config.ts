@@ -1,14 +1,9 @@
-import { Type } from 'class-transformer';
+import { IsBoolean, IsEnum, IsInt, IsOptional, Min } from 'class-validator';
 import {
-  IsBoolean,
-  IsEnum,
-  IsInt,
-  IsObject,
-  IsOptional,
-  Min,
-  ValidateNested,
-} from 'class-validator';
-import { BooleanType, IntegerType } from '@softkit/validation';
+  BooleanType,
+  IntegerType,
+  ValidateNestedProperty,
+} from '@softkit/validation';
 
 export class BackoffOptionsConfig {
   @IsEnum(['fixed', 'exponential'])
@@ -51,9 +46,7 @@ export class DefaultJobOptionsConfig {
   /**
    * Backoff setting for automatic retries if the job fails
    */
-  @Type(() => BackoffOptionsConfig)
-  @ValidateNested()
-  @IsObject()
+  @ValidateNestedProperty({ classType: BackoffOptionsConfig })
   backoff: BackoffOptionsConfig = new BackoffOptionsConfig();
 
   /**
@@ -70,18 +63,14 @@ export class DefaultJobOptionsConfig {
    * Default behavior is up to 0 days and 0 jobs
    * It allows us to do not have multiple jobs with the same type running in a cluster
    */
-  @ValidateNested()
-  @Type(() => KeepJobsConfig)
-  @IsObject()
+  @ValidateNestedProperty({ required: false, classType: KeepJobsConfig })
   removeOnComplete: KeepJobsConfig = new KeepJobsConfig();
 
   /**
    * Default behavior is 0 days and 0 jobs
    * We do store this information in postgres, so redis doesn't make too much sense
    */
-  @ValidateNested()
-  @Type(() => KeepJobsConfig)
-  @IsObject()
+  @ValidateNestedProperty({ required: false, classType: KeepJobsConfig })
   removeOnFail?: KeepJobsConfig = new KeepJobsConfig();
 
   /**

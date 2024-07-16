@@ -28,11 +28,11 @@ yarn add <%= scope -%><%= name -%>-client
 ```typescript
 import { HttpClientConfig } from '@softkit/server-http-client';
 import { <%= pascalCase(name) -%>ClientConfig } from '<%= scope -%><%= name -%>-client';
+import { ValidateNestedProperty } from '@softkit/validation';
 
 export default class RootConfig implements <%= pascalCase(name) -%>ClientConfig {
 
-  @Type(() => HttpClientConfig)
-  @ValidateNested()
+  @ValidateNestedProperty({ classType: HttpClientConfig })
   public readonly <%= camelCase(name) -%>Client!: HttpClientConfig;
 
 }

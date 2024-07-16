@@ -1,14 +1,8 @@
-import {
-  IsNumber,
-  IsOptional,
-  IsString,
-  IsUrl,
-  Min,
-  ValidateNested,
-} from 'class-validator';
+import { IsNumber, IsString, IsUrl, Min } from 'class-validator';
 import { Type } from 'class-transformer';
 import { HttpRetryConfig } from './http-retry.config';
 import { HttpCircuitBreakerConfig } from './http-circuit-breaker.config';
+import { ValidateNestedProperty } from '@softkit/validation';
 
 export class HttpClientConfig {
   @IsString()
@@ -30,13 +24,12 @@ export class HttpClientConfig {
    * */
   timeout = 10_000;
 
-  @Type(() => HttpRetryConfig)
-  @ValidateNested()
-  @IsOptional()
+  @ValidateNestedProperty({ required: false, classType: HttpClientConfig })
   retryConfig?: HttpRetryConfig;
 
-  @Type(() => HttpCircuitBreakerConfig)
-  @ValidateNested()
-  @IsOptional()
+  @ValidateNestedProperty({
+    required: false,
+    classType: HttpCircuitBreakerConfig,
+  })
   circuitBreakerConfig?: HttpCircuitBreakerConfig;
 }

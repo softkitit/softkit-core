@@ -1,14 +1,11 @@
 import { DiskHealthConfig } from './disk-health.config';
-import { Type } from 'class-transformer';
-import { ValidateNested } from 'class-validator';
 import { DbHealthConfig } from './db-health.config';
+import { ValidateNestedProperty } from '@softkit/validation';
 
 export class HealthConfig {
-  @Type(() => DiskHealthConfig)
-  @ValidateNested()
+  @ValidateNestedProperty({ classType: DiskHealthConfig })
   public readonly disk!: DiskHealthConfig;
 
-  @Type(() => DbHealthConfig)
-  @ValidateNested()
+  @ValidateNestedProperty({ classType: DbHealthConfig })
   public readonly db!: DbHealthConfig;
 }

@@ -8,6 +8,7 @@
   },
   "peerDependencies": {
     "@softkit/exceptions": "*",
+    "@softkit/validation": "^0.3.5",
     "axios": "^1.6.7",
     "fastify": "^4.0.0",
     "@softkit/auth": "^1.0.6",

@@ -1,24 +1,19 @@
-import { Type } from 'class-transformer';
 import { AppConfig } from '../../../lib/config/app.config';
-import { ValidateNested } from 'class-validator';
 import { SwaggerConfig } from '@softkit/swagger-utils';
 import { DbConfig } from '@softkit/typeorm';
 import { LoggerConfig } from '@softkit/logger';
+import { ValidateNestedProperty } from '@softkit/validation';
 
 export class RootConfig {
-  @ValidateNested()
-  @Type(() => SwaggerConfig)
+  @ValidateNestedProperty({ classType: SwaggerConfig })
   swaggerConfig!: SwaggerConfig;
 
-  @ValidateNested()
-  @Type(() => DbConfig)
+  @ValidateNestedProperty({ classType: DbConfig })
   db!: DbConfig;
 
-  @ValidateNested()
-  @Type(() => LoggerConfig)
+  @ValidateNestedProperty({ classType: LoggerConfig })
   logs!: LoggerConfig;
 
-  @Type(() => AppConfig)
-  @ValidateNested()
+  @ValidateNestedProperty({ classType: AppConfig })
   public readonly app!: AppConfig;
 }
