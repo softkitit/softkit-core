@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.0.12](https://github.com/softkitit/softkit-core/compare/server-http-client-0.0.11...server-http-client-0.0.12) (2024-07-16)
+
+
+### Bug Fixes
+
+* **server-http-client:** update usage of @ValidateNested decorator ([c385d35](https://github.com/softkitit/softkit-core/commit/c385d35202dd203c3531d0b8b73097cea2c38b2a))
+
 ## [0.0.11](https://github.com/softkitit/softkit-core/compare/server-http-client-0.0.10...server-http-client-0.0.11) (2024-01-26)
 
 ## [0.0.10](https://github.com/softkitit/softkit-core/compare/server-http-client-0.0.9...server-http-client-0.0.10) (2024-01-26)
