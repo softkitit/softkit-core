@@ -1,4 +1,3 @@
-import { Type } from 'class-transformer';
 import {
   Allow,
   IsBoolean,
@@ -9,10 +8,13 @@ import {
   IsString,
   Max,
   Min,
-  ValidateNested,
 } from 'class-validator';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
-import { BooleanType, IntegerType } from '@softkit/validation';
+import {
+  BooleanType,
+  IntegerType,
+  ValidateNestedProperty,
+} from '@softkit/validation';
 import { NamingStrategyInterface } from 'typeorm/naming-strategy/NamingStrategyInterface';
 
 class DbSSLExtraConfig {
@@ -38,9 +40,7 @@ class DbExtraSettings {
   @IsInt()
   max = 100;
 
-  @Type(/* istanbul ignore next */ () => DbSSLExtraConfig)
-  @ValidateNested()
-  @IsOptional()
+  @ValidateNestedProperty({ required: false, classType: DbSSLExtraConfig })
   ssl?: DbSSLExtraConfig;
 }
 
@@ -101,8 +101,7 @@ export class DbConfig {
   @BooleanType
   autoLoadEntities = true;
 
-  @Type(/* istanbul ignore next */ () => DbExtraSettings)
-  @ValidateNested()
+  @ValidateNestedProperty({ required: false, classType: DbExtraSettings })
   extra: DbExtraSettings = new DbExtraSettings();
 
   @Allow()

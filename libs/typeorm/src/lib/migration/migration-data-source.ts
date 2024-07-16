@@ -6,8 +6,7 @@ import { DataSource, DataSourceOptions } from 'typeorm';
 import { DbConfig } from '../config/db';
 import { NestFactory } from '@nestjs/core';
 import { setupYamlBaseConfigModule } from '@softkit/config';
-import { Type } from 'class-transformer';
-import { ValidateNested } from 'class-validator';
+import { ValidateNestedProperty } from '@softkit/validation';
 
 const sourceDir = path.join(
   process.cwd(),
@@ -16,8 +15,7 @@ const sourceDir = path.join(
 );
 
 class RootConfig {
-  @Type(() => DbConfig)
-  @ValidateNested()
+  @ValidateNestedProperty({ classType: DbConfig })
   public readonly db!: DbConfig;
 }
 
