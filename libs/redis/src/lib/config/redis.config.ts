@@ -1,13 +1,5 @@
-import {
-  ArrayMinSize,
-  IsArray,
-  IsBoolean,
-  IsObject,
-  IsOptional,
-  ValidateNested,
-} from 'class-validator';
-import { BooleanType } from '@softkit/validation';
-import { Type } from 'class-transformer';
+import { ArrayMinSize, IsArray, IsBoolean } from 'class-validator';
+import { BooleanType, ValidateNestedProperty } from '@softkit/validation';
 import { RedisClientConfig } from './redis-client.config';
 import { RedisCommonConfig } from './redis-common.config';
 
@@ -23,15 +15,14 @@ export class RedisConfig {
   /**
    * It's a common config that will be applied to each client
    * */
-  @IsOptional()
-  @Type(() => RedisCommonConfig)
-  @ValidateNested()
-  @IsObject()
+  @ValidateNestedProperty({ required: false, classType: RedisCommonConfig })
   commonConfig?: RedisCommonConfig;
 
   @IsArray()
   @ArrayMinSize(1)
-  @Type(() => RedisClientConfig)
-  @ValidateNested({ each: true })
+  @ValidateNestedProperty({
+    classType: RedisClientConfig,
+    validationOptions: { each: true },
+  })
   config!: RedisClientConfig[];
 }
