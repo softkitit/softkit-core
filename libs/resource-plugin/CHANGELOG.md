@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.7.1](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.7.0...resource-plugin-0.7.1) (2024-07-16)
+
+
+### Bug Fixes
+
+* **resource-plugin:** update usage of @ValidateNested decorator ([0e1de40](https://github.com/softkitit/softkit-core/commit/0e1de40ead05260dada6878d28d1766eb3bc78fb))
+
 ## [0.7.0](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.6.14...resource-plugin-0.7.0) (2024-07-08)
 
 
