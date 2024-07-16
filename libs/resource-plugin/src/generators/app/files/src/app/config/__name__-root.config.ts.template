@@ -1,6 +1,3 @@
-import { Type } from 'class-transformer';
-import { ValidateNested } from 'class-validator';
-
 import { LoggerConfig } from '@softkit/logger';
 import { AuthConfig } from '@softkit/auth';
 import { SwaggerConfig } from '@softkit/swagger-utils';
@@ -10,37 +7,31 @@ import { AppConfig } from '@softkit/bootstrap';
 import { HttpClientConfig } from '@softkit/server-http-client';
 import { PlatformClientConfig } from '@softkit/platform-client';
 import { HealthConfig } from '@softkit/health-check';
+import { ValidateNestedProperty } from '@softkit/validation';
 
 export default class <%= pascalCase(name) -%>RootConfig {
-  @Type(() => LoggerConfig)
-  @ValidateNested()
+  @ValidateNestedProperty({ classType: LoggerConfig })
   public readonly logs!: LoggerConfig;
 <% if (auth) { %>
-  @Type(() => AuthConfig)
-  @ValidateNested()
+  @ValidateNestedProperty({ classType: AuthConfig })
   public readonly auth!: AuthConfig;
 <% } %>
-  @Type(() => AppConfig)
-  @ValidateNested()
+  @ValidateNestedProperty({ classType: AppConfig })
   public readonly app!: AppConfig;
 
-  @Type(() => SwaggerConfig)
-  @ValidateNested()
+  @ValidateNestedProperty({ classType: SwaggerConfig })
   public readonly swagger!: SwaggerConfig;
 
-  @Type(() => I18Config)
-  @ValidateNested()
+  @ValidateNestedProperty({ classType: I18Config })
   public readonly i18!: I18Config;
 
 <% if (db) { %>
-  @Type(() => DbConfig)
-  @ValidateNested()
+  @ValidateNestedProperty({ classType: DbConfig })
   public readonly db!: DbConfig;
 <% } %>
 
 <% if (health) { %>
-  @Type(() => HealthConfig)
-  @ValidateNested()
+  @ValidateNestedProperty({ classType: HealthConfig })
   public readonly health!: HealthConfig;
 <% } %>
 
