@@ -1,13 +1,6 @@
-import {
-  Allow,
-  IsInt,
-  IsString,
-  Max,
-  Min,
-  ValidateNested,
-} from 'class-validator';
-import { Type } from 'class-transformer';
+import { Allow, IsInt, IsString, Max, Min } from 'class-validator';
 import { CorsConfig } from './cors.config';
+import { ValidateNestedProperty } from '@softkit/validation';
 
 export class AppConfig {
   @IsInt()
@@ -19,7 +12,6 @@ export class AppConfig {
   @Allow()
   prefix?: string;
 
-  @Type(() => CorsConfig)
-  @ValidateNested()
+  @ValidateNestedProperty({ classType: CorsConfig })
   public readonly cors!: CorsConfig;
 }
