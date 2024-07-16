@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.2.5](https://github.com/softkitit/softkit-core/compare/jobs-0.2.4...jobs-0.2.5) (2024-07-16)
+
+
+### Bug Fixes
+
+* **jobs:** update usage of @ValidateNested decorator ([8b2c816](https://github.com/softkitit/softkit-core/commit/8b2c816259cec7166cfbd464d7d860a0ee340e2f))
+
 ## [0.2.4](https://github.com/softkitit/softkit-core/compare/jobs-0.2.3...jobs-0.2.4) (2024-07-08)
 
 ## [0.2.3](https://github.com/softkitit/softkit-core/compare/jobs-0.2.2...jobs-0.2.3) (2024-05-23)
