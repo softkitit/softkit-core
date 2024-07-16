@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.5.5](https://github.com/softkitit/softkit-core/compare/typeorm-0.5.4...typeorm-0.5.5) (2024-07-16)
+
+
+### Bug Fixes
+
+* **typeorm:** update usage of @ValidateNested decorator ([cb24bc3](https://github.com/softkitit/softkit-core/commit/cb24bc38a1962b6e3c1a4eeca000e0e19ce1b10f))
+
 ## [0.5.4](https://github.com/softkitit/softkit-core/compare/typeorm-0.5.3...typeorm-0.5.4) (2024-07-08)
 
 ## [0.5.3](https://github.com/softkitit/softkit-core/compare/typeorm-0.5.2...typeorm-0.5.3) (2024-02-05)
