@@ -26,7 +26,6 @@
     "@softkit/auth": "^1.0.6",
     "@nestjs/terminus": "^10.0.0",
     "class-validator": "*",
-    "class-transformer": "*",
     "@nestjs/common": "^10.0.0",
     "@nestjs/swagger": "^7.0.0"
   }
