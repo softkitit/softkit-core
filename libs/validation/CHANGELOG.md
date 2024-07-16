@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.5.1](https://github.com/softkitit/softkit-core/compare/validation-0.5.0...validation-0.5.1) (2024-07-16)
+
+
+### Bug Fixes
+
+* **validation:** add [@isoptional](https://github.com/isoptional) decorator to non-required branch and additional test cases for validate nested property decorator ([64e133a](https://github.com/softkitit/softkit-core/commit/64e133ae6323a362d435cf27eda5318aef1e6999))
+
 ## [0.5.0](https://github.com/softkitit/softkit-core/compare/validation-0.4.0...validation-0.5.0) (2024-07-11)
 
 
