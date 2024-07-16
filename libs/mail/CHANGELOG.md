@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.3.3](https://github.com/softkitit/softkit-core/compare/mail-0.3.2...mail-0.3.3) (2024-07-16)
+
+
+### Bug Fixes
+
+* **mail:** update usage of @ValidateNested decorator ([447e991](https://github.com/softkitit/softkit-core/commit/447e991c591f6600a975a63fcd994e92af3e8de2))
+
 ## [0.3.2](https://github.com/softkitit/softkit-core/compare/mail-0.3.1...mail-0.3.2) (2024-05-28)
 
 
