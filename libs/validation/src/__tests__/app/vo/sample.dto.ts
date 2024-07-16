@@ -98,7 +98,10 @@ export class SampleDto {
   @IsArrayCombinedLocalized()
   documentArray?: string[];
 
-  @ValidateNestedProperty({ classType: NestedConfig })
+  @ValidateNestedProperty({
+    classType: NestedConfig,
+    validationOptions: { each: true },
+  })
   nestedConfig!: NestedConfig;
 
   @ValidateNestedProperty({

@@ -298,11 +298,26 @@ describe('validation e2e test', () => {
         expectedStatus: 400,
       },
       {
-        nestedConfig: [],
+        nestedConfig: null,
         expectedStatus: 400,
       },
       {
+        nestedConfig: [],
+        expectedStatus: 201,
+      },
+      {
         nestedConfig: 'not-an-object',
+        expectedStatus: 400,
+      },
+      {
+        nestedConfig: [{ certificate: 'valid-certificate' }],
+        expectedStatus: 201,
+      },
+      {
+        nestedConfig: [
+          { certificate: 'valid-certificate' },
+          { certificate: '' },
+        ],
         expectedStatus: 400,
       },
     ])(
@@ -335,11 +350,29 @@ describe('validation e2e test', () => {
         expectedStatus: 201,
       },
       {
+        nestedConfigNotRequired: null,
+        expectedStatus: 201,
+      },
+      {
         nestedConfigNotRequired: [],
         expectedStatus: 201,
       },
       {
         nestedConfigNotRequired: 'not-an-object',
+        expectedStatus: 400,
+      },
+      {
+        nestedConfigNotRequired: [
+          { certificate: 'valid-certificate' },
+          { certificate: 'another-valid-certificate' },
+        ],
+        expectedStatus: 201,
+      },
+      {
+        nestedConfigNotRequired: [
+          { certificate: 'valid-certificate' },
+          { certificate: '' },
+        ],
         expectedStatus: 400,
       },
     ])(
