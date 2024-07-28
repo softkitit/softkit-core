@@ -50,4 +50,4 @@ jobs:
         run: npx nx affected:build --base="origin/main"
 
       - name: Tests coverage
-        run: npx nx affected:test --base="origin/main" --codeCoverage --parallel=false
+        run: npx nx affected:test --base="origin/main" --codeCoverage --skip-nx-cache

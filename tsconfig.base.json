@@ -12,90 +12,37 @@
     "importHelpers": true,
     "target": "es2021",
     "module": "commonjs",
-    "lib": [
-      "es2021",
-      "dom"
-    ],
+    "lib": ["es2021", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@softkit/async-storage": [
-        "libs/async-storage/src/index.ts"
-      ],
-      "@softkit/auth": [
-        "libs/auth/src/index.ts"
-      ],
-      "@softkit/bootstrap": [
-        "libs/bootstrap/src/index.ts"
-      ],
-      "@softkit/common-types": [
-        "libs/common-types/src/index.ts"
-      ],
-      "@softkit/config": [
-        "libs/config/src/index.ts"
-      ],
-      "@softkit/crypto": [
-        "libs/crypto/src/index.ts"
-      ],
-      "@softkit/eslint-backend": [
-        "libs/eslint-backend/src/index.js"
-      ],
-      "@softkit/exceptions": [
-        "libs/exceptions/src/index.ts"
-      ],
-      "@softkit/file-storage": [
-        "libs/file-storage/src/index.ts"
-      ],
-      "@softkit/healthcheck": [
-        "libs/health-check/src/index.ts"
-      ],
-      "@softkit/i18n": [
-        "libs/i18n/src/index.ts"
-      ],
-      "@softkit/logger": [
-        "libs/logger/src/index.ts"
-      ],
-      "@softkit/mail": [
-        "libs/mail/src/index.ts"
-      ],
-      "@softkit/platform-client": [
-        "libs/clients/platform-client/src/index.ts"
-      ],
-      "@softkit/redis": [
-        "libs/redis/src/index.ts"
-      ],
-      "@softkit/resource-plugin": [
-        "libs/resource-plugin/src/index.ts"
-      ],
-      "@softkit/jobs": [
-        "libs/jobs/src/index.ts"
-      ],
-      "@softkit/server-http-client": [
-        "libs/server-http-client/src/index.ts"
-      ],
-      "@softkit/string-utils": [
-        "libs/string-utils/src/index.ts"
-      ],
-      "@softkit/swagger-utils": [
-        "libs/swagger-utils/src/index.ts"
-      ],
-      "@softkit/test-utils": [
-        "libs/test-utils/src/index.ts"
-      ],
-      "@softkit/typeorm": [
-        "libs/typeorm/src/index.ts"
-      ],
-      "@softkit/typeorm-service": [
-        "libs/typeorm-service/src/index.ts"
-      ],
-      "@softkit/validation": [
-        "libs/validation/src/index.ts"
-      ]
+      "@softkit/async-storage": ["libs/async-storage/src/index.ts"],
+      "@softkit/auth": ["libs/auth/src/index.ts"],
+      "@softkit/bootstrap": ["libs/bootstrap/src/index.ts"],
+      "@softkit/common-types": ["libs/common-types/src/index.ts"],
+      "@softkit/config": ["libs/config/src/index.ts"],
+      "@softkit/crypto": ["libs/crypto/src/index.ts"],
+      "@softkit/eslint-backend": ["libs/eslint-backend/src/index.js"],
+      "@softkit/exceptions": ["libs/exceptions/src/index.ts"],
+      "@softkit/file-storage": ["libs/file-storage/src/index.ts"],
+      "@softkit/healthcheck": ["libs/health-check/src/index.ts"],
+      "@softkit/i18n": ["libs/i18n/src/index.ts"],
+      "@softkit/jobs": ["libs/jobs/src/index.ts"],
+      "@softkit/logger": ["libs/logger/src/index.ts"],
+      "@softkit/mail": ["libs/mail/src/index.ts"],
+      "@softkit/persistence-api": ["libs/persistence-api/src/index.ts"],
+      "@softkit/platform-client": ["libs/clients/platform-client/src/index.ts"],
+      "@softkit/redis": ["libs/redis/src/index.ts"],
+      "@softkit/resource-plugin": ["libs/resource-plugin/src/index.ts"],
+      "@softkit/server-http-client": ["libs/server-http-client/src/index.ts"],
+      "@softkit/string-utils": ["libs/string-utils/src/index.ts"],
+      "@softkit/swagger-utils": ["libs/swagger-utils/src/index.ts"],
+      "@softkit/test-utils": ["libs/test-utils/src/index.ts"],
+      "@softkit/typeorm": ["libs/typeorm/src/index.ts"],
+      "@softkit/typeorm-service": ["libs/typeorm-service/src/index.ts"],
+      "@softkit/validation": ["libs/validation/src/index.ts"]
     }
   },
-  "exclude": [
-    "node_modules",
-    "tmp"
-  ]
+  "exclude": ["node_modules", "tmp"]
 }

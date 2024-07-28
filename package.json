@@ -8,7 +8,7 @@
   },
   "scripts": {
     "prebuild": "rimraf dist",
-    "test:all": "nx affected:test --all --codeCoverage --skip-nx-cache --parallel=false",
+    "test:all": "nx affected:test --all --codeCoverage --skip-nx-cache",
     "prepare": "husky install"
   },
   "packageManager": "yarn@3.6.3",
@@ -42,7 +42,7 @@
     "@nestjs/jwt": "10.1.1",
     "@nestjs/microservices": "9.0.11",
     "@nestjs/passport": "10.0.1",
-    "@nestjs/platform-express": "9.0.11",
+    "@nestjs/platform-express": "^10.0.2",
     "@nestjs/platform-fastify": "10.2.4",
     "@nestjs/schematics": "10.0.2",
     "@nestjs/swagger": "7.1.10",
