@@ -11,7 +11,7 @@ import {
 } from '@nestjs/platform-fastify';
 import { getQueueToken } from '@nestjs/bull-shared/dist/utils/get-queue-token.util';
 import { wait } from 'nx-cloud/lib/utilities/waiter';
-import { JobDefinitionRepository } from '../repository';
+import { JobDefinitionRepository, JobVersionRepository } from '../repository';
 import { Jobs } from './app/jobs/vo/jobs.enum';
 import { BusyProgressSystemJob } from './app/jobs/busy-progress-system.job';
 import { setupYamlBaseConfigModule } from '@softkit/config';
@@ -24,6 +24,7 @@ describe('progress system job e2e tests', () => {
   let app: NestFastifyApplication;
   let busyProgressSystemJob: BusyProgressSystemJob;
   let jobDefinitionRepository: JobDefinitionRepository;
+  let jobVersionRepository: JobVersionRepository;
 
   beforeAll(async () => {
     startedRedis = await startRedis();
@@ -58,6 +59,7 @@ describe('progress system job e2e tests', () => {
     );
     busyProgressSystemJob = app.get(BusyProgressSystemJob);
     jobDefinitionRepository = app.get(JobDefinitionRepository);
+    jobVersionRepository = app.get(JobVersionRepository);
   });
 
   afterEach(async () => {
@@ -68,12 +70,9 @@ describe('progress system job e2e tests', () => {
   it('should auto schedule jobs and run 2 times', async () => {
     await wait(3000);
     expect(busyProgressSystemJob.jobStats.started).toBeGreaterThanOrEqual(2);
-    const allJobs = await jobDefinitionRepository.find({
-      where: {
-        id: Jobs.BUSY_PROGRESS_SYSTEM_JOB,
-      },
-      relations: ['jobDataVersions'],
-    });
+    const allJobs = await jobDefinitionRepository.findById([
+      Jobs.BUSY_PROGRESS_SYSTEM_JOB,
+    ]);
 
     expect(allJobs.length).toBe(1);
 
@@ -84,9 +83,13 @@ describe('progress system job e2e tests', () => {
     expect(job.jobName).toBe(Jobs.BUSY_PROGRESS_SYSTEM_JOB);
     expect(job.id).toBe(Jobs.BUSY_PROGRESS_SYSTEM_JOB);
 
-    expect(job?.jobDataVersions?.length).toBe(1);
+    const jobDataVersions = await jobVersionRepository.findAll({
+      jobDefinitionId: job.id,
+    });
 
-    const jobVersion = job.jobDataVersions![0];
+    expect(jobDataVersions.length).toBe(1);
+
+    const jobVersion = jobDataVersions[0];
     expect(jobVersion.jobData).toStrictEqual({
       jobVersion: 1,
       executeForMillis: 800,

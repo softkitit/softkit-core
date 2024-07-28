@@ -4,6 +4,7 @@ import { JobVersionRepository } from '../repository';
 import { BaseJobVersion } from '../entity';
 import { Transactional } from 'typeorm-transactional';
 import { LessThan } from 'typeorm';
+import { ObjectNotFoundException } from '@softkit/exceptions';
 
 @Injectable()
 export class JobVersionService extends AbstractJobVersionService {
@@ -16,47 +17,35 @@ export class JobVersionService extends AbstractJobVersionService {
     jobDefinitionId: string,
     jobVersion: number,
   ): Promise<BaseJobVersion | undefined> {
-    return this.findOne(
-      {
-        where: {
-          jobDefinitionId,
-          jobVersion,
-        },
-      },
-      false,
-    );
+    return this.repository.findOne({
+      jobDefinitionId,
+      jobVersion,
+    });
   }
 
   @Transactional()
-  override findPreviousJobVersion(
+  override async findPreviousJobVersion(
     jobDefinitionId: string,
     newJobVersion: number,
   ): Promise<BaseJobVersion | undefined> {
-    return this.findOne(
-      {
-        where: {
-          jobDefinitionId,
-          jobVersion: LessThan(newJobVersion),
-        },
-        order: {
-          jobVersion: 'DESC',
-        },
-      },
-      false,
-    );
+    return this.repository.findOne({
+      jobDefinitionId,
+      jobVersion: LessThan(newJobVersion),
+    });
   }
 
   @Transactional()
-  override findLatestJobVersion(
+  override async findLatestJobVersion(
     jobDefinitionId: string,
   ): Promise<BaseJobVersion> {
-    return this.findOne({
-      where: {
-        jobDefinitionId,
-      },
-      order: {
-        jobVersion: 'DESC',
-      },
+    const result = await this.repository.findOne({
+      jobDefinitionId,
     });
+
+    if (!result) {
+      throw new ObjectNotFoundException(this.repository.entityName());
+    }
+
+    return result;
   }
 }

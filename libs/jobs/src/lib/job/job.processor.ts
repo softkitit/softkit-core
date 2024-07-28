@@ -92,7 +92,7 @@ export abstract class JobProcessor<
   }
 
   protected async trackJobStart(jobVersion: BaseJobVersion, token?: string) {
-    await this.jobExecutionService.createOrUpdateEntity({
+    await this.jobExecutionService.upsert({
       ...this.baseTrackJobData(jobVersion, token),
       jobStatus: JobStatus.ACTIVE,
       progress: 1,
@@ -104,7 +104,7 @@ export abstract class JobProcessor<
     progress: number,
     token?: string,
   ) {
-    await this.jobExecutionService.createOrUpdateEntity({
+    await this.jobExecutionService.upsert({
       ...this.baseTrackJobData(jobVersion, token),
       jobStatus: JobStatus.PROCESSING,
       progress,
@@ -116,7 +116,7 @@ export abstract class JobProcessor<
     token?: string,
     jobResult?: T,
   ) {
-    await this.jobExecutionService.createOrUpdateEntity({
+    await this.jobExecutionService.upsert({
       ...this.baseTrackJobData(jobVersion, token),
       jobStatus: JobStatus.COMPLETED,
       progress: 100,
@@ -129,7 +129,7 @@ export abstract class JobProcessor<
     err: unknown,
     token?: string,
   ) {
-    await this.jobExecutionService.createOrUpdateEntity({
+    await this.jobExecutionService.upsert({
       ...this.baseTrackJobData(jobVersion, token),
       jobStatus: JobStatus.FAILED,
       progress: 100,
@@ -142,7 +142,7 @@ export abstract class JobProcessor<
   }
 
   protected async trackJobSkipped(jobVersion: BaseJobVersion, token?: string) {
-    await this.jobExecutionService.createOrUpdateEntity({
+    await this.jobExecutionService.upsert({
       ...this.baseTrackJobData(jobVersion, token),
       jobStatus: JobStatus.SKIPPED,
     } as BaseJobExecution);

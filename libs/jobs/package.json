@@ -28,7 +28,9 @@
     "bullmq": "^5.0.0",
     "@anchan828/nest-redlock": "^0.2.7",
     "@nestjs/swagger": "^7.0.0",
-    "@nestjs/bullmq": "^10.0.0"
+    "@nestjs/bullmq": "^10.0.0",
+    "@softkit/persistence-api": "^0.1.0",
+    "@softkit/exceptions": "^0.1.6"
   },
   "type": "commonjs",
   "main": "./src/index.js",
