@@ -1,5 +1,5 @@
 import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
-import { BaseEntityHelper } from '@softkit/typeorm';
+import { BaseTrackedEntityHelper } from '@softkit/typeorm';
 import { Expose } from 'class-transformer';
 import {
   IsStringCombinedLocalized,
@@ -9,7 +9,7 @@ import {
 import { TenantStatus } from './vo/tenant-status.enum';
 
 @Entity('tenants')
-export class TenantEntity extends BaseEntityHelper {
+export class TenantEntity extends BaseTrackedEntityHelper {
   @PrimaryGeneratedColumn('uuid')
   @Expose()
   @IsUUIDLocalized()
