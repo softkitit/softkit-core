@@ -1,14 +1,16 @@
-import { PresetType } from './decorator/vo/preset-type';
-import { TenantClsStore } from '../vo/tenant-base-cls-store';
+import { PresetType } from './vo/preset-type';
+import { TenantClsStore } from './vo/tenant-base-cls-store';
 
-interface ClsPresetMetadataField<CLS_STORAGE_TYPE extends TenantClsStore> {
+export interface ClsPresetMetadataField<
+  CLS_STORAGE_TYPE extends TenantClsStore,
+> {
   entityName: string;
   entityPropertyName: string;
   clsStorageKey: keyof CLS_STORAGE_TYPE;
   presetType: PresetType;
 }
 
-class ClsPresetMetadataStorage<CLS_STORAGE_TYPE extends TenantClsStore> {
+export class ClsPresetMetadataStorage<CLS_STORAGE_TYPE extends TenantClsStore> {
   private metadataFields: {
     [key: string]: ClsPresetMetadataField<CLS_STORAGE_TYPE>[];
   } = {};
@@ -24,20 +26,17 @@ class ClsPresetMetadataStorage<CLS_STORAGE_TYPE extends TenantClsStore> {
     this.metadataFields[field.entityName] = fields;
   }
 
-  getMetadataFieldsByEntitiesHierarchy(
+  getMetadataFieldsByEntityHierarchy(
     topLevelEntity: string,
     entities: string[],
   ) {
-    // eslint-disable-next-line security/detect-object-injection
     const result = this.metadataFieldsForHierarchy[topLevelEntity];
 
     if (result === undefined) {
       const fieldToAutoFill = entities.flatMap(
-        // eslint-disable-next-line security/detect-object-injection
         (e) => this.metadataFields[e] || [],
       );
 
-      // eslint-disable-next-line security/detect-object-injection
       this.metadataFieldsForHierarchy[topLevelEntity] = fieldToAutoFill;
 
       return fieldToAutoFill;
@@ -47,6 +46,4 @@ class ClsPresetMetadataStorage<CLS_STORAGE_TYPE extends TenantClsStore> {
   }
 }
 
-const defaultClsMetadataStore = new ClsPresetMetadataStorage();
-
-export default defaultClsMetadataStore;
+export const defaultClsMetadataStore = new ClsPresetMetadataStorage();
