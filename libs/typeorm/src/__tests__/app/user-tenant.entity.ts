@@ -5,13 +5,13 @@ import {
   PrimaryGeneratedColumn,
   VersionColumn,
 } from 'typeorm';
-import { BaseTenantEntityHelper } from '../../lib/entities/tenant-entity-helper';
+import { BaseTenantEntityHelper } from '../../lib/entity/tenant-entity-helper';
 import { TenantEntity } from './tenant.entity';
 import { ClsPreset } from '../../lib/subscribers/decorator/cls-preset.decorator';
-import { PresetType } from '../../lib/subscribers/decorator/vo/preset-type';
 import { UserAndTenantClsStore } from './cls/user.cls-store';
 import { IsNumberLocalized } from '@softkit/validation';
 import { Expose } from 'class-transformer';
+import { PresetType } from '@softkit/persistence-api';
 
 @Entity()
 export class TenantUserEntity extends BaseTenantEntityHelper {
@@ -29,27 +29,27 @@ export class TenantUserEntity extends BaseTenantEntityHelper {
   lastName!: string;
 
   @Column({ type: Number, nullable: true })
-  sampleNumber?: number;
+  nullableNumber?: number;
 
   @Column({ type: String, nullable: true, length: 128 })
-  nullableStringField?: string | null;
+  nullableStringField?: string;
 
   @ClsPreset<UserAndTenantClsStore>({
-    clsPropertyFieldName: 'userId',
+    clsFieldName: 'userId',
     presetType: PresetType.INSERT,
   })
   @Column({ type: String, nullable: false, length: 128 })
   createdBy!: string;
 
   @ClsPreset<UserAndTenantClsStore>({
-    clsPropertyFieldName: 'userId',
+    clsFieldName: 'userId',
     presetType: PresetType.UPDATE,
   })
   @Column({ type: String, nullable: true, length: 128 })
   updatedBy!: string;
 
   @JoinColumn()
-  tenant?: TenantEntity | null;
+  tenant?: TenantEntity;
 
   @VersionColumn()
   @IsNumberLocalized()

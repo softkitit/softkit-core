@@ -7,7 +7,7 @@ import { DataSource, EntitySubscriberInterface, UpdateEvent } from 'typeorm';
  * this subscriber works only with save method and doesn't work with update
  * */
 export class OptimisticLockingSubscriber implements EntitySubscriberInterface {
-  constructor(private readonly dataSource: DataSource) {
+  constructor(readonly dataSource: DataSource) {
     dataSource.subscribers.push(this);
   }
 

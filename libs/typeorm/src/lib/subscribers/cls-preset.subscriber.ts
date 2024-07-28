@@ -1,5 +1,3 @@
-import defaultClsMetadataStore from './cls-preset.metadata.storage';
-import { PresetType } from './decorator/vo/preset-type';
 import { Injectable } from '@nestjs/common';
 import { ClsService } from 'nestjs-cls';
 import {
@@ -8,7 +6,11 @@ import {
   InsertEvent,
   UpdateEvent,
 } from 'typeorm';
-import { TenantClsStore } from '../vo/tenant-base-cls-store';
+import {
+  defaultClsMetadataStore,
+  PresetType,
+  TenantClsStore,
+} from '@softkit/persistence-api';
 
 @Injectable()
 export class ClsPresetSubscriber<ClsStoreType extends TenantClsStore>
@@ -57,13 +59,12 @@ export class ClsPresetSubscriber<ClsStoreType extends TenantClsStore>
     presetType: PresetType,
   ) {
     const topLevelEntity = inheritanceTree[0].name;
-    // todo check for bunch of entities
-    const allEntities = inheritanceTree.map((e) => e.name);
+    const entityHierarchy = inheritanceTree.map((e) => e.name);
 
     const metadataFields =
-      defaultClsMetadataStore.getMetadataFieldsByEntitiesHierarchy(
+      defaultClsMetadataStore.getMetadataFieldsByEntityHierarchy(
         topLevelEntity,
-        allEntities,
+        entityHierarchy,
       );
 
     for (const field of metadataFields) {

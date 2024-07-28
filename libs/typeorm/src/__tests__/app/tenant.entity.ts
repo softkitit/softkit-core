@@ -1,8 +1,8 @@
 import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
-import { BaseEntityHelper } from '../../lib/entities/entity-helper';
+import { BaseTrackedEntityHelper } from '../../lib/entity/entity-helper';
 
 @Entity()
-export class TenantEntity extends BaseEntityHelper {
+export class TenantEntity extends BaseTrackedEntityHelper {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 

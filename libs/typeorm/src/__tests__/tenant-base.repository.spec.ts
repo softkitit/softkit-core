@@ -2,11 +2,10 @@ import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ClsModule, ClsService } from 'nestjs-cls';
-import { EntityNotFoundError } from 'typeorm';
+import { In } from 'typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 import { ClsPresetSubscriber } from '../lib/subscribers/cls-preset.subscriber';
-import { TenantClsStore } from '../lib/vo/tenant-base-cls-store';
 import {
   expectNotNullAndGet,
   StartedDb,
@@ -20,12 +19,16 @@ import { FilterOperator } from 'nestjs-paginate';
 import { USER_PAGINATED_CONFIG } from './app/user.entity';
 import { setupTypeormModule } from '../lib/setup-typeorm-module';
 import { GeneralInternalServerException } from '@softkit/exceptions';
+import { TenantClsStore } from '@softkit/persistence-api';
 
 describe('tenant base entity test', () => {
   let userRepository: TenantUserRepository;
   let tenantRepository: TenantRepository;
   let clsService: ClsService<TenantClsStore>;
-  let objectToSave: Partial<TenantUserEntity>;
+  let objectToSave: Pick<
+    TenantUserEntity,
+    'password' | 'firstName' | 'lastName' | 'createdBy'
+  >;
   let createdTenant: TenantEntity;
   let db: StartedDb;
 
@@ -68,7 +71,7 @@ describe('tenant base entity test', () => {
       createdBy: faker.string.uuid(),
     };
 
-    createdTenant = await tenantRepository.createOrUpdate({
+    createdTenant = await tenantRepository.upsert({
       tenantName: faker.company.name(),
       tenantUrl: faker.internet.url(),
     });
@@ -82,9 +85,9 @@ describe('tenant base entity test', () => {
         tenantId: createdTenant.id,
       },
       async () => {
-        const saved = await userRepository.createOrUpdate(objectToSave);
+        const saved = await userRepository.upsert(objectToSave);
         savedId = saved.id;
-        expectNotNullAndGet(await userRepository.findSingle(saved.id));
+        expectNotNullAndGet(await userRepository.findById(saved.id));
       },
     );
 
@@ -93,8 +96,34 @@ describe('tenant base entity test', () => {
         tenantId: faker.string.uuid(),
       },
       async () => {
-        const actual = await userRepository.findSingle(savedId);
-        expect(actual).toBeNull();
+        const actual = await userRepository.findById(savedId);
+        expect(actual).toBeUndefined();
+      },
+    );
+  });
+
+  test('insert 2 and find with or condition', async () => {
+    await clsService.runWith(
+      {
+        tenantId: createdTenant.id,
+      },
+      async () => {
+        const savedFirst = await userRepository.upsert(objectToSave);
+        const secondFirstName = faker.person.firstName() + faker.number.int();
+        const savedSecond = await userRepository.upsert({
+          ...objectToSave,
+          firstName: secondFirstName,
+        });
+        const foundEntities = await userRepository.findAll([
+          {
+            firstName: objectToSave.firstName,
+          },
+          {
+            firstName: secondFirstName,
+          },
+        ]);
+
+        expect(foundEntities.length).toBe(2);
       },
     );
   });
@@ -107,17 +136,20 @@ describe('tenant base entity test', () => {
         tenantId: createdTenant.id,
       },
       async () => {
-        const saved = await userRepository.createOrUpdate(objectToSave);
+        const saved = await userRepository.upsert(objectToSave);
+
         savedEntityWithFirstTenant = saved;
-        const updateResult = await userRepository.update(saved.id, {
+        const updateResult = await userRepository.updatePartial({
+          id: saved.id,
+          version: saved.version,
           firstName: faker.person.firstName() + faker.number.int(),
         });
 
-        expect(updateResult.affected).toEqual(1);
+        expect(updateResult.version).toEqual(saved.version + 1);
       },
     );
 
-    const secondTenant = await tenantRepository.createOrUpdate({
+    const secondTenant = await tenantRepository.upsert({
       tenantName: faker.company.name(),
       tenantUrl: faker.internet.url(),
     });
@@ -127,17 +159,19 @@ describe('tenant base entity test', () => {
         tenantId: secondTenant.id,
       },
       async () => {
-        const saved = await userRepository.createOrUpdate(objectToSave);
+        const saved = await userRepository.upsert(objectToSave);
 
         // update multiple records
-        const updateResult = await userRepository.update(
-          [saved.id, savedEntityWithFirstTenant.id],
+        const updateResult = await userRepository.updateByQuery(
           {
             firstName: faker.person.firstName() + faker.number.int(),
           },
+          {
+            id: In([saved.id, savedEntityWithFirstTenant.id]),
+          },
         );
         // it should skip the update for the wrong tenant
-        expect(updateResult.affected).toEqual(1);
+        expect(updateResult).toEqual(1);
       },
     );
   });
@@ -150,13 +184,9 @@ describe('tenant base entity test', () => {
         tenantId: createdTenant.id,
       },
       async () => {
-        const saved = await userRepository.createOrUpdate(objectToSave);
+        const saved = await userRepository.upsert(objectToSave);
         savedId = saved.id;
-        expectNotNullAndGet(
-          await userRepository.findOne({
-            where: [{ id: saved.id }, { id: saved.id }],
-          }),
-        );
+        expectNotNullAndGet(await userRepository.findById(savedId));
       },
     );
 
@@ -165,130 +195,10 @@ describe('tenant base entity test', () => {
         tenantId: faker.string.uuid(),
       },
       async () => {
-        const actual = await userRepository.findOne({
-          where: [{ id: savedId }, { id: savedId }],
-        });
-        expect(actual).toBeNull();
+        const actual = await userRepository.findById(savedId);
+        expect(actual).toBeUndefined();
       },
     );
-  });
-
-  test('decrement test', async () => {
-    let savedId: string;
-
-    await clsService.runWith(
-      {
-        tenantId: createdTenant.id,
-      },
-      async () => {
-        const sampleNumber = 10;
-
-        const saved = await userRepository.createOrUpdate({
-          ...objectToSave,
-          sampleNumber,
-        });
-
-        const actual = await userRepository.decrement(
-          { id: saved.id },
-          'sampleNumber', // <--- this is the column name
-          1,
-        );
-
-        expect(actual.affected).toBe(1);
-
-        savedId = saved.id;
-
-        const foundEntity = expectNotNullAndGet(
-          await userRepository.findSingle(saved.id),
-        );
-        expect(foundEntity?.sampleNumber).toBe(sampleNumber - 1);
-      },
-    );
-
-    await clsService.runWith(
-      {
-        tenantId: faker.string.uuid(),
-      },
-      async () => {
-        const decrementValue = await userRepository.decrement(
-          { id: savedId },
-          'sampleNumber', // <--- this is the column name
-          1,
-        );
-        expect(decrementValue.affected).toBe(0);
-      },
-    );
-  });
-
-  test('increment test', async () => {
-    let savedId: string;
-
-    await clsService.runWith(
-      {
-        tenantId: createdTenant.id,
-      },
-      async () => {
-        const sampleNumber = 10;
-
-        const saved = await userRepository.createOrUpdate({
-          ...objectToSave,
-          sampleNumber,
-        });
-
-        const actual = await userRepository.increment(
-          { id: saved.id },
-          'sampleNumber',
-          1,
-        );
-
-        expect(actual.affected).toBe(1);
-
-        savedId = saved.id;
-
-        const foundEntity = expectNotNullAndGet(
-          await userRepository.findSingle(saved.id),
-        );
-        expect(foundEntity?.sampleNumber).toBe(sampleNumber + 1);
-      },
-    );
-
-    await clsService.runWith(
-      {
-        tenantId: faker.string.uuid(),
-      },
-      async () => {
-        const decrementValue = await userRepository.increment(
-          { id: savedId },
-          'sampleNumber', // <--- this is the column name
-          1,
-        );
-        expect(decrementValue.affected).toBe(0);
-      },
-    );
-  });
-
-  test('deprecated methods throw exception', async () => {
-    await expect(() =>
-      userRepository.findByIds([faker.string.uuid()]),
-    ).rejects.toThrow();
-
-    await expect(() =>
-      userRepository.findOneById(faker.string.uuid()),
-    ).rejects.toThrow();
-
-    await expect(() =>
-      userRepository.softDelete(faker.string.uuid()),
-    ).rejects.toThrow();
-
-    await expect(() => userRepository.softRemove()).rejects.toThrow();
-
-    await expect(() =>
-      userRepository.restore(faker.string.uuid()),
-    ).rejects.toThrow();
-
-    await expect(() =>
-      userRepository.recover({} as unknown as TenantUserEntity),
-    ).rejects.toThrow();
   });
 
   test('delete record from the db', async () => {
@@ -299,27 +209,24 @@ describe('tenant base entity test', () => {
         tenantId: createdTenant.id,
       },
       async () => {
-        const firstEntity = await userRepository.createOrUpdate(objectToSave);
-        const secondEntity = await userRepository.createOrUpdate(objectToSave);
+        const firstEntity = await userRepository.upsert(objectToSave);
+        const secondEntity = await userRepository.upsert(objectToSave);
 
         savedId = secondEntity.id;
 
         const deleteResult = await userRepository.delete(firstEntity.id);
 
-        expect(deleteResult.affected).toBe(1);
+        expect(deleteResult).toBeTruthy();
 
-        const foundEntity = await userRepository.findSingle(firstEntity.id);
-        expect(foundEntity).toBeNull();
+        const foundEntity = await userRepository.findById(firstEntity.id);
+        expect(foundEntity).toBeUndefined();
 
         // the record should not be found with deleted flag
-        const foundEntityWithDeleted = await userRepository.findOne({
-          where: {
-            id: firstEntity.id,
-          },
-          withDeleted: true,
-        });
+        const foundEntityWithDeleted = await userRepository.findById(
+          firstEntity.id,
+        );
 
-        expect(foundEntityWithDeleted).toBeNull();
+        expect(foundEntityWithDeleted).toBeUndefined();
       },
     );
 
@@ -329,7 +236,7 @@ describe('tenant base entity test', () => {
       },
       async () => {
         const deleteResult = await userRepository.delete(savedId);
-        expect(deleteResult.affected).toBe(0);
+        expect(deleteResult).toBeFalsy();
       },
     );
   });
@@ -340,10 +247,10 @@ describe('tenant base entity test', () => {
         tenantId: createdTenant.id,
       },
       async () => {
-        await userRepository.createOrUpdate(objectToSave);
-        await userRepository.createOrUpdate(objectToSave);
+        await userRepository.upsert(objectToSave);
+        await userRepository.upsert(objectToSave);
 
-        const allEntities = await userRepository.find();
+        const allEntities = await userRepository.findAll();
         expect(allEntities.length).toBe(2);
       },
     );
@@ -353,12 +260,16 @@ describe('tenant base entity test', () => {
         tenantId: faker.string.uuid(),
       },
       async () => {
-        const findAllForNotExistedTenant = await userRepository.find();
+        const findAllForNotExistedTenant = await userRepository.findAll();
         expect(findAllForNotExistedTenant.length).toBe(0);
 
-        const findWithDefaultOptions = await userRepository.find({
-          take: 2,
-        });
+        const findWithDefaultOptions = await userRepository.findAll(
+          {},
+          {
+            limit: 2,
+            offset: 0,
+          },
+        );
 
         expect(findWithDefaultOptions.length).toBe(0);
       },
@@ -371,25 +282,14 @@ describe('tenant base entity test', () => {
         tenantId: createdTenant.id,
       },
       async () => {
-        await userRepository.createOrUpdate(objectToSave);
-        await userRepository.createOrUpdate(objectToSave);
+        await userRepository.upsert(objectToSave);
+        await userRepository.upsert(objectToSave);
 
-        const allEntities = await userRepository.findBy({
+        const allEntities = await userRepository.findAll({
           firstName: objectToSave.firstName,
         });
 
         expect(allEntities.length).toBe(2);
-
-        const allEntitiesWithOr = await userRepository.findBy([
-          {
-            firstName: objectToSave.firstName,
-          },
-          {
-            lastName: objectToSave.lastName,
-          },
-        ]);
-
-        expect(allEntitiesWithOr.length).toBe(2);
       },
     );
 
@@ -398,7 +298,7 @@ describe('tenant base entity test', () => {
         tenantId: faker.string.uuid(),
       },
       async () => {
-        const allEntities = await userRepository.findBy({
+        const allEntities = await userRepository.findAll({
           firstName: objectToSave.firstName,
         });
 
@@ -413,24 +313,13 @@ describe('tenant base entity test', () => {
         tenantId: createdTenant.id,
       },
       async () => {
-        await userRepository.createOrUpdate(objectToSave);
+        await userRepository.upsert(objectToSave);
 
-        const entity = await userRepository.findOneByOrFail({
+        const entity = await userRepository.findOne({
           firstName: objectToSave.firstName,
         });
 
         expect(entity).toBeDefined();
-
-        const entityWithOr = await userRepository.findOneByOrFail([
-          {
-            firstName: objectToSave.firstName,
-          },
-          {
-            lastName: objectToSave.lastName,
-          },
-        ]);
-
-        expect(entityWithOr).toBeDefined();
       },
     );
 
@@ -440,10 +329,10 @@ describe('tenant base entity test', () => {
       },
       async () => {
         await expect(
-          userRepository.findOneByOrFail({
+          userRepository.findOne({
             firstName: objectToSave.firstName,
           }),
-        ).rejects.toBeInstanceOf(EntityNotFoundError);
+        ).resolves.toBeUndefined();
       },
     );
   });
@@ -454,24 +343,13 @@ describe('tenant base entity test', () => {
         tenantId: createdTenant.id,
       },
       async () => {
-        await userRepository.createOrUpdate(objectToSave);
+        await userRepository.upsert(objectToSave);
 
-        const entity = await userRepository.findOneBy({
+        const entity = await userRepository.findOne({
           firstName: objectToSave.firstName,
         });
 
         expect(entity).toBeDefined();
-
-        const entityWithOr = await userRepository.findOneBy([
-          {
-            firstName: objectToSave.firstName,
-          },
-          {
-            lastName: objectToSave.lastName,
-          },
-        ]);
-
-        expect(entityWithOr).toBeDefined();
       },
     );
 
@@ -480,10 +358,10 @@ describe('tenant base entity test', () => {
         tenantId: faker.string.uuid(),
       },
       async () => {
-        const entity = await userRepository.findOneBy({
+        const entity = await userRepository.findOne({
           firstName: objectToSave.firstName,
         });
-        await expect(entity).toBeNull();
+        await expect(entity).toBeUndefined();
       },
     );
   });
@@ -494,26 +372,20 @@ describe('tenant base entity test', () => {
         tenantId: createdTenant.id,
       },
       async () => {
-        await userRepository.createOrUpdate(objectToSave);
-        await userRepository.createOrUpdate(objectToSave);
+        await userRepository.upsert(objectToSave);
+        await userRepository.upsert(objectToSave);
 
         const allEntities = await userRepository.count();
         expect(allEntities).toBe(2);
 
         const allEntitiesCountWithOr = await userRepository.count({
-          where: [
-            { firstName: objectToSave.firstName },
-            { lastName: objectToSave.lastName },
-          ],
+          firstName: objectToSave.firstName,
         });
 
         expect(allEntitiesCountWithOr).toBe(2);
 
         const allEntitiesCountWithAnd = await userRepository.count({
-          where: {
-            firstName: objectToSave.firstName,
-            lastName: objectToSave.lastName,
-          },
+          firstName: objectToSave.firstName,
         });
 
         expect(allEntitiesCountWithAnd).toBe(2);
@@ -537,22 +409,18 @@ describe('tenant base entity test', () => {
         tenantId: createdTenant.id,
       },
       async () => {
-        await userRepository.createOrUpdate(objectToSave);
+        await userRepository.upsert(objectToSave);
 
-        const successFullyFind = await userRepository.findOneOrFail({
-          where: {
-            firstName: objectToSave.firstName,
-          },
+        const successFullyFind = await userRepository.findOne({
+          firstName: objectToSave.firstName,
         });
-        expect(successFullyFind).not.toBeNull();
+        expect(successFullyFind).not.toBeUndefined();
 
         await expect(
-          userRepository.findOneOrFail({
-            where: {
-              firstName: faker.person.firstName(),
-            },
+          userRepository.findOne({
+            firstName: faker.person.firstName(),
           }),
-        ).rejects.toThrow();
+        ).resolves.toBeUndefined();
       },
     );
 
@@ -562,106 +430,10 @@ describe('tenant base entity test', () => {
       },
       async () => {
         await expect(
-          userRepository.findOneOrFail({
-            where: {
-              firstName: objectToSave.firstName,
-            },
+          userRepository.findOne({
+            firstName: objectToSave.firstName,
           }),
-        ).rejects.toThrow();
-      },
-    );
-  });
-
-  test('find and count test', async () => {
-    await clsService.runWith(
-      {
-        tenantId: createdTenant.id,
-      },
-      async () => {
-        await userRepository.createOrUpdate(objectToSave);
-
-        const successFindByFirstName = await userRepository.findAndCountBy({
-          firstName: objectToSave.firstName,
-        });
-
-        expect(successFindByFirstName[0].length).toBe(1);
-        expect(successFindByFirstName[1]).toBe(1);
-
-        const successFullyFindByLastName = await userRepository.findAndCountBy([
-          {
-            firstName: objectToSave.firstName,
-          },
-          {
-            lastName: objectToSave.lastName,
-          },
-        ]);
-
-        expect(successFullyFindByLastName[0].length).toBe(1);
-        expect(successFullyFindByLastName[1]).toBe(1);
-      },
-    );
-
-    await clsService.runWith(
-      {
-        tenantId: faker.string.uuid(),
-      },
-      async () => {
-        const successFullyFind = await userRepository.findAndCountBy({
-          firstName: objectToSave.firstName,
-        });
-
-        expect(successFullyFind[0].length).toBe(0);
-        expect(successFullyFind[1]).toBe(0);
-      },
-    );
-  });
-
-  test('findAndCount simple test', async () => {
-    await clsService.runWith(
-      {
-        tenantId: createdTenant.id,
-      },
-      async () => {
-        await userRepository.createOrUpdate(objectToSave);
-
-        const successFindByFirstName = await userRepository.findAndCount({
-          where: {
-            firstName: objectToSave.firstName,
-          },
-        });
-
-        expect(successFindByFirstName[0].length).toBe(1);
-        expect(successFindByFirstName[1]).toBe(1);
-
-        const successFullyFindByLastName = await userRepository.findAndCount({
-          where: [
-            {
-              firstName: objectToSave.firstName,
-            },
-            {
-              lastName: objectToSave.lastName,
-            },
-          ],
-        });
-
-        expect(successFullyFindByLastName[0].length).toBe(1);
-        expect(successFullyFindByLastName[1]).toBe(1);
-      },
-    );
-
-    await clsService.runWith(
-      {
-        tenantId: faker.string.uuid(),
-      },
-      async () => {
-        const successFullyFind = await userRepository.findAndCount({
-          where: {
-            firstName: objectToSave.firstName,
-          },
-        });
-
-        expect(successFullyFind[0].length).toBe(0);
-        expect(successFullyFind[1]).toBe(0);
+        ).resolves.toBeUndefined();
       },
     );
   });
@@ -672,7 +444,7 @@ describe('tenant base entity test', () => {
         tenantId: createdTenant.id,
       },
       async () => {
-        await userRepository.createOrUpdate(objectToSave);
+        await userRepository.upsert(objectToSave);
 
         const successFindByFirstName = await userRepository.findAllPaginated(
           {

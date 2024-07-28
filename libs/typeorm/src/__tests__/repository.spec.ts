@@ -1,17 +1,16 @@
 import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { QueryFailedError } from 'typeorm';
 
 import {
   expectNotNullAndGet,
   StartedDb,
   startPostgres,
 } from '@softkit/test-utils';
-import { USER_PAGINATED_CONFIG, UserEntity } from './app/user.entity';
+import { UserEntity } from './app/user.entity';
 import { UserRepository } from './app/user-repository.service';
-import { FilterOperator } from 'nestjs-paginate';
 import { setupTypeormModule } from '../lib/setup-typeorm-module';
+import { In } from 'typeorm';
 
 describe('start db and populate the entity', () => {
   let testUserRepository: UserRepository;
@@ -52,21 +51,19 @@ describe('start db and populate the entity', () => {
       lastName: faker.person.lastName(),
     };
 
-    const saved = await testUserRepository.createOrUpdate(toSave);
+    const saved = await testUserRepository.upsert(toSave);
 
     checkAllTestFieldsPresent(toSave, saved);
 
     const resultFromFindOne = await testUserRepository.findOne({
-      where: {
-        firstName: toSave.firstName,
-      },
+      firstName: toSave.firstName,
     });
 
     expect(resultFromFindOne).toBeDefined();
     expect(resultFromFindOne?.id).toBe(saved.id);
     checkAllTestFieldsPresent(toSave, resultFromFindOne);
 
-    const findOneById = await testUserRepository.findSingle(saved.id);
+    const findOneById = await testUserRepository.findById(saved.id);
 
     checkAllTestFieldsPresent(toSave, findOneById);
   });
@@ -78,18 +75,23 @@ describe('start db and populate the entity', () => {
       lastName: faker.person.lastName(),
     };
 
-    const saved = await testUserRepository.createOrUpdate(toSave);
+    const saved = await testUserRepository.upsert(toSave);
 
     const updates = [...'1'.repeat(10)].map(() => {
-      return testUserRepository.update(saved.id, {
-        firstName: faker.person.firstName() + faker.number.int(),
-      });
+      return testUserRepository.updateByQuery(
+        {
+          firstName: faker.person.firstName() + faker.number.int(),
+        },
+        {
+          id: saved.id,
+        },
+      );
     });
 
     await Promise.all(updates);
 
     const saves = [...'1'.repeat(10)].map(() => {
-      return testUserRepository.save({
+      return testUserRepository.upsert({
         ...saved,
         firstName: faker.person.firstName() + faker.number.int(),
       });
@@ -105,7 +107,7 @@ describe('start db and populate the entity', () => {
       lastName: faker.person.lastName(),
     };
 
-    const saved = await testUserRepository.createOrUpdate(toSave);
+    const saved = await testUserRepository.upsert(toSave);
 
     expect(saved).toBeDefined();
     expect(saved.id).toBeDefined();
@@ -118,8 +120,9 @@ describe('start db and populate the entity', () => {
     expect(saved.deletedAt).toBeNull();
     expect(saved.version).toBeDefined();
 
-    const updateLastNameField = await testUserRepository.createOrUpdate({
+    const updateLastNameField = await testUserRepository.updatePartial({
       id: saved.id,
+      version: saved.version,
       lastName: faker.person.lastName() + faker.number.int(),
     });
 
@@ -141,7 +144,7 @@ describe('start db and populate the entity', () => {
       lastName: faker.person.lastName(),
     };
 
-    const saved = await testUserRepository.createOrUpdateWithReload(toSave);
+    const saved = await testUserRepository.upsert(toSave);
 
     expect(saved).toBeDefined();
     expect(saved.id).toBeDefined();
@@ -154,22 +157,26 @@ describe('start db and populate the entity', () => {
     expect(saved.deletedAt).toBeNull();
     expect(saved.version).toBeDefined();
 
-    const updateLastNameField =
-      await testUserRepository.createOrUpdateWithReload({
-        id: saved.id,
-        lastName: faker.person.lastName() + faker.number.int(),
-      });
+    const updateLastNameField = await testUserRepository.updatePartial({
+      id: saved.id,
+      version: saved.version,
+      lastName: faker.person.lastName() + faker.number.int(),
+    });
 
     expect(updateLastNameField).toBeDefined();
     expect(updateLastNameField.id).toBeDefined();
     expect(updateLastNameField.password).toBeDefined();
-    expect(updateLastNameField.firstName).toBeDefined();
+    expect(updateLastNameField.firstName).toBeUndefined();
     expect(updateLastNameField.lastName).toBeDefined();
     expect(updateLastNameField.nullableStringField).toBeNull();
-    expect(updateLastNameField.createdAt).toBeDefined();
+    expect(updateLastNameField.createdAt).toBeUndefined();
     expect(updateLastNameField.updatedAt).toBeDefined();
     expect(updateLastNameField.deletedAt).toBeNull();
     expect(updateLastNameField.version).toBeDefined();
+  });
+
+  test(`entity name should properly populate`, async () => {
+    expect(testUserRepository.entityName()).toBe('UserEntity');
   });
 
   test('save and override null value', async () => {
@@ -180,7 +187,7 @@ describe('start db and populate the entity', () => {
       nullableStringField: faker.person.jobTitle(),
     };
 
-    const saved = await testUserRepository.createOrUpdate(toSave);
+    const saved = await testUserRepository.upsert(toSave);
 
     expect(saved.nullableStringField).toBe(toSave.nullableStringField);
 
@@ -190,14 +197,14 @@ describe('start db and populate the entity', () => {
       lastName: toSave.lastName,
       // eslint-disable-next-line unicorn/no-null
       nullableStringField: null,
+      version: saved.version,
     };
 
-    const savedSecondTime =
-      await testUserRepository.createOrUpdate(secondToSave);
+    const savedSecondTime = await testUserRepository.upsert(secondToSave);
 
     expect(savedSecondTime.nullableStringField).toBeNull();
 
-    const findSecondTime = await testUserRepository.findSingle(
+    const findSecondTime = await testUserRepository.findById(
       savedSecondTime.id,
     );
 
@@ -216,9 +223,9 @@ describe('start db and populate the entity', () => {
       };
     });
 
-    const saved = await testUserRepository.save(dataToSave);
+    const saved = await testUserRepository.upsert(dataToSave);
 
-    const count = await testUserRepository.countBy({
+    const count = await testUserRepository.count({
       firstName,
     });
 
@@ -235,15 +242,15 @@ describe('start db and populate the entity', () => {
       };
     });
 
-    const savedEntities = await testUserRepository.save(dataToSave);
+    const savedEntities = await testUserRepository.upsert(dataToSave);
 
     const allIds = savedEntities.map(({ id }) => id);
 
-    const resultOfFind = await testUserRepository.findAllByIds(allIds);
+    const resultOfFind = await testUserRepository.findById(allIds);
 
     for (const saved of savedEntities) {
       const foundEntity = expectNotNullAndGet(
-        resultOfFind.find(({ id }) => saved.id === id),
+        resultOfFind.find((v) => saved.id === v?.id),
       );
 
       expect(saved.id).toBe(foundEntity.id);
@@ -251,7 +258,7 @@ describe('start db and populate the entity', () => {
     }
   });
 
-  test('to json function', async () => {
+  test('archive entity', async () => {
     const toSave = {
       password: faker.hacker.ingverb(),
       firstName: faker.person.firstName() + faker.number.int(),
@@ -259,57 +266,32 @@ describe('start db and populate the entity', () => {
       nullableStringField: faker.person.jobTitle(),
     };
 
-    const saved = await testUserRepository.save(toSave);
-
-    const savedEntity = expectNotNullAndGet(
-      await testUserRepository.findSingle(saved.id),
-    );
-
-    const json = savedEntity.toJSON();
-
-    expect(json['password']).toBe(toSave.password);
-    expect(json['firstName']).toBe(toSave.firstName);
-    expect(json['lastName']).toBe(toSave.lastName);
-    expect(json['nullableStringField']).toBe(toSave.nullableStringField);
-    expect(json['createdAt']).toBeDefined();
-    expect(json['updatedAt']).toBeDefined();
-    expect(json['deletedAt']).toBeDefined();
-    expect(json['version']).toBeDefined();
-  });
-
-  test('archive entity test', async () => {
-    const toSave = {
-      password: faker.hacker.ingverb(),
-      firstName: faker.person.firstName() + faker.number.int(),
-      lastName: faker.person.lastName(),
-      nullableStringField: faker.person.jobTitle(),
-    };
-
-    const saved = await testUserRepository.save(toSave);
+    const saved = await testUserRepository.upsert(toSave);
 
     const foundEntity = expectNotNullAndGet(
-      await testUserRepository.findSingle(saved.id),
+      await testUserRepository.findById(saved.id),
     );
 
-    const archived = await testUserRepository.archive(
-      saved.id,
-      foundEntity.version,
-    );
+    const archived = await testUserRepository.archive(saved.id);
 
     expect(archived).toBeTruthy();
 
-    const foundArchived = await testUserRepository.findSingle(saved.id);
+    const foundArchived = await testUserRepository.findById(saved.id);
 
-    expect(foundArchived).toBeNull();
+    expect(foundArchived).toBeUndefined();
 
-    const notFoundArchiveForTheFirstTime = await testUserRepository.findSingle(
+    const notFoundArchiveForTheFirstTime = await testUserRepository.findById(
       saved.id,
     );
 
-    expect(notFoundArchiveForTheFirstTime).toBeNull();
+    expect(notFoundArchiveForTheFirstTime).toBeUndefined();
 
+    const allArchivedById = await testUserRepository.findAllWithArchived({
+      id: saved.id,
+    });
     const foundArchivedAfterFirstArchive = expectNotNullAndGet(
-      await testUserRepository.findSingle(saved.id, true),
+      // eslint-disable-next-line @typescript-eslint/await-thenable
+      allArchivedById[0],
     );
 
     expect(foundArchivedAfterFirstArchive.version).toBe(
@@ -318,18 +300,76 @@ describe('start db and populate the entity', () => {
 
     expect(foundArchivedAfterFirstArchive.deletedAt).toBeDefined();
 
-    const archivedSecondTime = await testUserRepository.archive(
-      saved.id,
-      foundEntity.version + 1,
-    );
+    const archivedSecondTime = await testUserRepository.archive(saved.id);
 
     expect(archivedSecondTime).toBeFalsy();
 
-    const foundArchivedAfterSecondArchive = await testUserRepository.findSingle(
+    const foundArchivedAfterSecondArchive = await testUserRepository.findById(
       saved.id,
     );
 
-    expect(foundArchivedAfterSecondArchive).toBeNull();
+    expect(foundArchivedAfterSecondArchive).toBeUndefined();
+  });
+
+  test('archive multiple', async () => {
+    const toSave = {
+      password: faker.hacker.ingverb(),
+      firstName: faker.person.firstName() + faker.number.int(),
+      lastName: faker.person.lastName(),
+      nullableStringField: faker.person.jobTitle(),
+    };
+
+    const saved = await Promise.all(
+      Array.from({ length: 10 }).map((_) => testUserRepository.upsert(toSave)),
+    );
+
+    for (const userEntity of saved) {
+      expectNotNullAndGet(await testUserRepository.findById(userEntity.id));
+    }
+
+    const allSavedIds = saved.map(({ id }) => id);
+
+    const archived = await testUserRepository.archive(allSavedIds);
+
+    expect(archived).toBeTruthy();
+
+    const foundArchived = await testUserRepository.findById(allSavedIds);
+
+    expect(foundArchived.length).toBe(0);
+
+    const allArchived = await testUserRepository.findAllWithArchived({
+      id: In(allSavedIds),
+    });
+
+    expect(allArchived.length).toBe(10);
+
+    for (const userEntity of allArchived) {
+      expect(userEntity.deletedAt).toBeDefined();
+    }
+
+    const archivedSecondTime = await testUserRepository.archive(allSavedIds);
+
+    expect(archivedSecondTime).toBeFalsy();
+
+    const restored = await testUserRepository.restore(allSavedIds);
+
+    expect(restored).toBeTruthy();
+
+    const allWithArchived = await testUserRepository.findAllWithArchived({
+      id: In(allSavedIds),
+    });
+
+    expect(allWithArchived.length).toBe(10);
+
+    const foundAsPlain = await testUserRepository.findAll({
+      id: In(allSavedIds),
+    });
+
+    expect(foundAsPlain.length).toBe(10);
+
+    for (const userEntity of foundAsPlain) {
+      expect(userEntity.deletedAt).toBeNull();
+    }
   });
 
   test('delete by id entity test', async () => {
@@ -340,27 +380,57 @@ describe('start db and populate the entity', () => {
       nullableStringField: faker.person.jobTitle(),
     };
 
-    const saved = await testUserRepository.save(toSave);
+    const saved = await testUserRepository.upsert(toSave);
 
-    expectNotNullAndGet(await testUserRepository.findSingle(saved.id));
+    expectNotNullAndGet(await testUserRepository.findById(saved.id));
 
-    const deleted = await testUserRepository.deleteById(saved.id);
+    const deleted = await testUserRepository.delete(saved.id);
 
-    expect(deleted.affected).toBe(1);
+    expect(deleted).toBeTruthy();
 
-    const foundDeleted = await testUserRepository.findSingle(saved.id);
+    const foundDeleted = await testUserRepository.findById(saved.id);
 
-    expect(foundDeleted).toBeNull();
+    expect(foundDeleted).toBeUndefined();
 
-    const notFoundArchiveForTheFirstTime = await testUserRepository.findSingle(
+    const notFoundArchiveForTheFirstTime = await testUserRepository.findById(
       saved.id,
     );
 
-    expect(notFoundArchiveForTheFirstTime).toBeNull();
+    expect(notFoundArchiveForTheFirstTime).toBeUndefined();
 
-    const deletedSecondTime = await testUserRepository.deleteById(saved.id);
+    const deletedSecondTime = await testUserRepository.delete(saved.id);
 
-    expect(deletedSecondTime.affected).toBe(0);
+    expect(deletedSecondTime).toBe(false);
+  });
+
+  test('should delete multiple by ids', async () => {
+    const toSave = {
+      password: faker.hacker.ingverb(),
+      firstName: faker.person.firstName() + faker.number.int(),
+      lastName: faker.person.lastName(),
+      nullableStringField: faker.person.jobTitle(),
+    };
+
+    const saved = await Promise.all(
+      Array.from({ length: 10 }).map((_) => testUserRepository.upsert(toSave)),
+    );
+
+    for (const e of saved) {
+      expectNotNullAndGet(await testUserRepository.findById(e.id));
+    }
+
+    const allIds = saved.map(({ id }) => id);
+    const deleted = await testUserRepository.delete(allIds);
+
+    expect(deleted).toBeTruthy();
+
+    const foundDeleted = await testUserRepository.findById(allIds);
+
+    expect(foundDeleted.length).toBe(0);
+
+    const deletedSecondTime = await testUserRepository.delete(allIds);
+
+    expect(deletedSecondTime).toBe(false);
   });
 
   test('archive and restore entity test', async () => {
@@ -371,101 +441,30 @@ describe('start db and populate the entity', () => {
       nullableStringField: faker.person.jobTitle(),
     };
 
-    const saved = await testUserRepository.save(toSave);
+    const saved = await testUserRepository.upsert(toSave);
 
     const foundEntity = expectNotNullAndGet(
-      await testUserRepository.findSingle(saved.id),
+      await testUserRepository.findById(saved.id),
     );
 
-    const archived = await testUserRepository.archive(
-      saved.id,
-      foundEntity.version,
-    );
+    const archived = await testUserRepository.archive(saved.id);
 
     expect(archived).toBeTruthy();
 
-    const foundArchived = await testUserRepository.findSingle(saved.id);
+    const foundArchived = await testUserRepository.findById(saved.id);
 
-    expect(foundArchived).toBeNull();
+    expect(foundArchived).toBeUndefined();
 
     const versionToRestore = foundEntity.version + 1;
-    const restoreResults = await testUserRepository.unarchive(
-      foundEntity.id,
-      versionToRestore,
-    );
+    const restoreResults = await testUserRepository.restore(foundEntity.id);
 
     expect(restoreResults).toBeTruthy();
 
     const restoredEntity = expectNotNullAndGet(
-      await testUserRepository.findSingle(saved.id),
+      await testUserRepository.findById(saved.id),
     );
 
     expect(restoredEntity.version).toBe(versionToRestore + 1);
-  });
-
-  test('run in transaction failed, do not save test', async () => {
-    const toSaveSuccess = {
-      password: faker.hacker.ingverb(),
-      firstName: 'success',
-      lastName: faker.person.lastName(),
-      nullableStringField: faker.person.jobTitle(),
-    };
-
-    const toSaveFailed = {
-      ...toSaveSuccess,
-      firstName: faker.string.alpha({ length: 1024 }),
-    };
-
-    await expect(
-      testUserRepository.runInTransaction(async (qr) => {
-        await qr.manager.save(UserEntity, toSaveSuccess);
-        await qr.manager.save(UserEntity, toSaveFailed);
-      }),
-    ).rejects.toBeInstanceOf(QueryFailedError);
-
-    const savedEntity = await testUserRepository.findOne({
-      where: {
-        firstName: toSaveSuccess.firstName,
-      },
-    });
-
-    expect(savedEntity).toBeNull();
-  });
-
-  test('run in transaction success', async () => {
-    const toSaveSuccessFirst = {
-      password: faker.hacker.ingverb(),
-      firstName: faker.person.firstName() + '1',
-      lastName: faker.person.lastName(),
-      nullableStringField: faker.person.jobTitle(),
-    };
-
-    const toSaveSuccessSecond = {
-      ...toSaveSuccessFirst,
-      firstName: faker.person.firstName() + '2',
-    };
-
-    await testUserRepository.runInTransaction(async (qr) => {
-      await qr.manager.save(UserEntity, toSaveSuccessFirst);
-      await qr.manager.save(UserEntity, toSaveSuccessSecond);
-    });
-
-    const savedEntity = await testUserRepository.findAllPaginated(
-      {
-        path: 'users',
-        filter: {
-          firstName: [
-            FilterOperator.IN,
-            [toSaveSuccessFirst.firstName, toSaveSuccessSecond.firstName].join(
-              ',',
-            ),
-          ].join(':'),
-        },
-      },
-      USER_PAGINATED_CONFIG,
-    );
-
-    expect(savedEntity.data.length).toBe(2);
   });
 
   test('save and update', async () => {
@@ -475,10 +474,10 @@ describe('start db and populate the entity', () => {
       lastName: faker.person.lastName(),
     };
 
-    const saved = await testUserRepository.save(toSave);
+    const saved = await testUserRepository.upsert(toSave);
 
     const insertedRecord = await testUserRepository
-      .findSingle(saved.id)
+      .findById(saved.id)
       .then(expectNotNullAndGet);
 
     checkAllTestFieldsPresent(toSave, insertedRecord);
@@ -487,13 +486,14 @@ describe('start db and populate the entity', () => {
 
     const entityToUpdate = {
       id: insertedRecord.id,
+      version: insertedRecord.version,
       ...toSave,
     };
 
-    const updated = await testUserRepository.save(entityToUpdate);
+    const updated = await testUserRepository.update(entityToUpdate);
 
     const updatedRecord = await testUserRepository
-      .findSingle(updated.id)
+      .findById(updated.id)
       .then(expectNotNullAndGet);
 
     expect(entityToUpdate.id).toBe(updatedRecord.id);
@@ -501,10 +501,10 @@ describe('start db and populate the entity', () => {
     expect(insertedRecord.lastName).not.toBe(updatedRecord.lastName);
 
     const updatedSameRecordWithSameValuesAsInDb =
-      await testUserRepository.save(entityToUpdate);
+      await testUserRepository.update(entityToUpdate);
 
     const updatedRecordWithoutAnyChanges = await testUserRepository
-      .findSingle(updatedSameRecordWithSameValuesAsInDb.id)
+      .findById(updatedSameRecordWithSameValuesAsInDb.id)
       .then(expectNotNullAndGet);
 
     // record shouldn't be updated because there are no changes in the entity

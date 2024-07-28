@@ -1,11 +1,11 @@
 import { Column, Entity, PrimaryGeneratedColumn, VersionColumn } from 'typeorm';
-import { BaseEntityHelper } from '../../lib/entities/entity-helper';
+import { BaseTrackedEntityHelper } from '../../lib/entity/entity-helper';
 import { PaginateConfig } from 'nestjs-paginate';
 import { IsNumberLocalized } from '@softkit/validation';
 import { Expose } from 'class-transformer';
 
 @Entity()
-export class UserEntity extends BaseEntityHelper {
+export class UserEntity extends BaseTrackedEntityHelper {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 

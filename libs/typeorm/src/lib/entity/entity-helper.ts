@@ -1,32 +1,29 @@
-import { Expose, instanceToPlain } from 'class-transformer';
 import {
-  AfterLoad,
   BaseEntity,
   CreateDateColumn,
   DeleteDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
+import {
+  BaseEntity as Base,
+  BaseTrackedEntity,
+} from '@softkit/persistence-api';
+import { Expose } from 'class-transformer';
 
-export abstract class EntityHelper extends BaseEntity {
-  __entity?: string;
+export abstract class EntityHelper extends BaseEntity implements Base {}
 
-  @AfterLoad()
-  setEntityName() {
-    this.__entity = this.constructor.name;
-  }
-
-  toJSON() {
-    return instanceToPlain(this);
-  }
-}
-
-export abstract class BaseEntityHelper extends EntityHelper {
+export abstract class BaseTrackedEntityHelper
+  extends EntityHelper
+  implements BaseTrackedEntity
+{
   @ApiProperty({
     type: Date,
     description: 'Created at date time in ISO format',
   })
-  @Expose()
+  @Expose({
+    toPlainOnly: true,
+  })
   @CreateDateColumn()
   createdAt!: Date;
 
@@ -34,7 +31,9 @@ export abstract class BaseEntityHelper extends EntityHelper {
     type: Date,
     description: 'Last time updated at date time in ISO format',
   })
-  @Expose()
+  @Expose({
+    toPlainOnly: true,
+  })
   @UpdateDateColumn()
   updatedAt!: Date;
 
@@ -42,7 +41,9 @@ export abstract class BaseEntityHelper extends EntityHelper {
     type: Date,
     description: 'Deleted at date time in ISO format',
   })
-  @Expose()
+  @Expose({
+    toPlainOnly: true,
+  })
   @DeleteDateColumn()
   deletedAt?: Date;
 }

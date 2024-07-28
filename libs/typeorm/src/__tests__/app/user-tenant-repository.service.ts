@@ -1,15 +1,23 @@
 import { DataSource } from 'typeorm';
 import { Injectable } from '@nestjs/common';
-import { BaseTenantRepository } from '../../lib/repositories/tenant-base.repository';
+import { BaseTypeormTenantedEntityRepository } from '../../lib/repositories/tenant-base.repository';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { ClsService } from 'nestjs-cls';
-import { TenantClsStore } from '../../lib/vo/tenant-base-cls-store';
+import { TenantClsStore } from '@softkit/persistence-api';
 import { TenantUserEntity } from './user-tenant.entity';
+import { BaseTrackedEntityHelper } from '../../lib/entity/entity-helper';
 
 @Injectable()
-export class TenantUserRepository extends BaseTenantRepository<
+export class TenantUserRepository extends BaseTypeormTenantedEntityRepository<
   TenantUserEntity,
-  'id'
+  'id',
+  'id' | 'version',
+  | 'tenantId'
+  | 'createdBy'
+  | 'updatedBy'
+  | 'id'
+  | 'version'
+  | keyof BaseTrackedEntityHelper
 > {
   constructor(
     @InjectDataSource()
