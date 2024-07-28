@@ -84,7 +84,7 @@ expect.extend(matchers);
   ];
 
   if (configureJestConfig) {
-    newConfigLines.push(`  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],`);
+    newConfigLines.push(`  setupFilesAfterEnv: ['../../jest.setup.js'],`);
   }
 
   const newJestConfigFile = [...newConfigLines, ...fileConfig.slice(-3)].join(
