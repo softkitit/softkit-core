@@ -1,8 +1,8 @@
-import { BaseEntityHelper } from '@softkit/typeorm';
+import { BaseTrackedEntityHelper } from '@softkit/typeorm';
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity()
-export class AuditEntity extends BaseEntityHelper {
+export class AuditEntity extends BaseTrackedEntityHelper {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 

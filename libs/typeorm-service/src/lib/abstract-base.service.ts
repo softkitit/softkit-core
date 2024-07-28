@@ -1,80 +1,90 @@
-import { DeepPartial, FindOneOptions, FindOptionsOrder } from 'typeorm';
-import { BaseEntityHelper } from '@softkit/typeorm';
 import { PaginateConfig, Paginated, PaginateQuery } from 'nestjs-paginate';
 import { ClassConstructor } from 'class-transformer';
 import { ClassTransformOptions } from 'class-transformer/types/interfaces';
 import { Never } from '@softkit/common-types';
-import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere';
+import { BaseEntity } from '@softkit/persistence-api';
 
 export abstract class AbstractBaseService<
-  ENTITY extends BaseEntityHelper,
+  ENTITY extends BaseEntity,
   ID extends keyof ENTITY,
-  FIELDS_REQUIRED_FOR_UPDATE,
-  DEFAULT_EXCLUDE_LIST extends BaseEntityHelper,
+  FIELDS_REQUIRED_FOR_UPDATE extends keyof ENTITY = ID,
+  AUTO_GENERATED_FIELDS extends keyof ENTITY = ID | keyof BaseEntity,
 > {
-  abstract createOrUpdateEntity(
-    entity: // update type
-    | (Omit<
-          ENTITY,
-          keyof DEFAULT_EXCLUDE_LIST | keyof FIELDS_REQUIRED_FOR_UPDATE
-        > &
-          Never<FIELDS_REQUIRED_FOR_UPDATE> &
-          Partial<Pick<ENTITY, ID>>)
-      | (Omit<ENTITY, keyof DEFAULT_EXCLUDE_LIST> & FIELDS_REQUIRED_FOR_UPDATE),
+  abstract update(
+    entity: Omit<ENTITY, AUTO_GENERATED_FIELDS> &
+      Pick<ENTITY, FIELDS_REQUIRED_FOR_UPDATE>,
   ): Promise<ENTITY>;
 
-  abstract createOrUpdateEntities(
-    entity: // update type
-    | (Omit<
-          ENTITY,
-          keyof DEFAULT_EXCLUDE_LIST | keyof FIELDS_REQUIRED_FOR_UPDATE
-        > &
-          Partial<Never<FIELDS_REQUIRED_FOR_UPDATE>>)[]
-      | (Omit<ENTITY, keyof DEFAULT_EXCLUDE_LIST> &
-          FIELDS_REQUIRED_FOR_UPDATE)[],
+  abstract update(
+    entities: Array<
+      Omit<ENTITY, AUTO_GENERATED_FIELDS> &
+        Pick<ENTITY, FIELDS_REQUIRED_FOR_UPDATE>
+    >,
+  ): Promise<Array<ENTITY>>;
+
+  abstract create(
+    entity: Omit<ENTITY, AUTO_GENERATED_FIELDS> & Partial<Pick<ENTITY, ID>>,
+  ): Promise<ENTITY>;
+
+  abstract create(
+    entities: Array<
+      Omit<ENTITY, AUTO_GENERATED_FIELDS> & Partial<Pick<ENTITY, ID>>
+    >,
+  ): Promise<Array<ENTITY>>;
+
+  abstract upsert(
+    entity:
+      | (Omit<ENTITY, AUTO_GENERATED_FIELDS | FIELDS_REQUIRED_FOR_UPDATE> &
+          Partial<Never<Pick<ENTITY, FIELDS_REQUIRED_FOR_UPDATE>>>)
+      | (Omit<ENTITY, AUTO_GENERATED_FIELDS | FIELDS_REQUIRED_FOR_UPDATE> &
+          Pick<ENTITY, FIELDS_REQUIRED_FOR_UPDATE>),
+  ): Promise<ENTITY>;
+
+  abstract upsert(
+    entities: Array<
+      | (Omit<ENTITY, AUTO_GENERATED_FIELDS | FIELDS_REQUIRED_FOR_UPDATE> &
+          Partial<Never<Pick<ENTITY, FIELDS_REQUIRED_FOR_UPDATE>>>)
+      | (Omit<ENTITY, AUTO_GENERATED_FIELDS | FIELDS_REQUIRED_FOR_UPDATE> &
+          Pick<ENTITY, FIELDS_REQUIRED_FOR_UPDATE>)
+    >,
   ): Promise<ENTITY[]>;
+
+  /**
+   * update entity partial if it doesn't exist -> throw error
+   * */
+  abstract partialUpdate(
+    entity: Partial<Omit<ENTITY, AUTO_GENERATED_FIELDS>> &
+      Pick<ENTITY, FIELDS_REQUIRED_FOR_UPDATE>,
+  ): Promise<Partial<ENTITY>>;
 
   abstract partialUpdate(
-    entity: DeepPartial<Omit<ENTITY, keyof DEFAULT_EXCLUDE_LIST>>,
-  ): Promise<DeepPartial<ENTITY>>;
+    entities: Array<
+      Partial<Omit<ENTITY, AUTO_GENERATED_FIELDS>> &
+        Pick<ENTITY, FIELDS_REQUIRED_FOR_UPDATE>
+    >,
+  ): Promise<Array<Partial<ENTITY>>>;
 
-  abstract findAll(
-    page: number,
-    limit: number,
-    where?: FindOptionsWhere<ENTITY>[] | FindOptionsWhere<ENTITY>,
-    order?: FindOptionsOrder<ENTITY>,
-  ): Promise<ENTITY[]>;
+  abstract findAll(page: number, limit: number): Promise<ENTITY[]>;
 
-  abstract findOneById(
+  abstract findById(
     id: ENTITY[ID],
-    throwExceptionIfNotFound: boolean,
-  ): Promise<ENTITY | undefined>;
-
-  protected abstract findOne(
-    findOptions: FindOneOptions<ENTITY>,
-    throwExceptionIfNotFound?: true,
+    throwExceptionIfNotFound: true,
   ): Promise<ENTITY>;
+  abstract findById(ids: Array<ENTITY[ID]>): Promise<Array<ENTITY>>;
 
-  protected abstract findOne(
-    findOptions: FindOneOptions<ENTITY>,
+  abstract findById(
+    id: ENTITY[ID],
     throwExceptionIfNotFound: false,
   ): Promise<ENTITY | undefined>;
 
-  abstract findAllPaginated(
-    query: PaginateQuery,
-    config: PaginateConfig<ENTITY>,
-  ): Promise<Paginated<ENTITY>>;
+  abstract findById(ids: Array<ENTITY[ID]>): Promise<Array<ENTITY>>;
 
-  abstract findAllPaginatedAndTransform<T>(
+  abstract findAllPaginated<T = ENTITY>(
     query: PaginateQuery,
     config: PaginateConfig<ENTITY>,
-    clazz: ClassConstructor<T>,
+    clazz?: ClassConstructor<T>,
     options?: ClassTransformOptions,
   ): Promise<Paginated<T>>;
-
-  abstract archive(id: ENTITY[ID], version: number): Promise<boolean>;
-
-  abstract unarchive(id: ENTITY[ID], version: number): Promise<boolean>;
 
   abstract delete(id: ENTITY[ID]): Promise<boolean>;
 }

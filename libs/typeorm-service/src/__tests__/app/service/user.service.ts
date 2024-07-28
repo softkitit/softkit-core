@@ -1,17 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { UserEntity } from '../entity/user.entity';
-import { BaseEntityService } from '../../../lib/base.service';
 import { UserRepository } from '../repository/user.repository';
 import { AuditService } from './audit.service';
 import { Transactional, Propagation } from 'typeorm-transactional';
 import { CreateUserDTO } from '../vo/user.dto';
+import { BaseTrackedEntityService } from '../../../lib/base-tracked-entity.service';
+import { BaseTrackedEntityHelper } from '@softkit/typeorm';
 
 @Injectable()
-export class UserService extends BaseEntityService<
+export class UserService extends BaseTrackedEntityService<
   UserEntity,
   'id',
   UserRepository,
-  Pick<UserEntity, 'id' | 'version'>
+  'id' | 'version',
+  keyof BaseTrackedEntityHelper | 'version' | 'id'
 > {
   constructor(
     userRepository: UserRepository,
@@ -53,27 +55,18 @@ export class UserService extends BaseEntityService<
 
   @Transactional({ propagation: Propagation.REQUIRES_NEW })
   actualSignUpProcess(a: CreateUserDTO) {
-    return this.createOrUpdateEntity(a);
+    return this.upsert(a);
   }
 
-  findOneByFirstName(firstName: string): Promise<UserEntity | undefined> {
-    return this.findOne({
-      where: {
-        firstName,
-      },
+  async findOneByFirstName(firstName: string): Promise<UserEntity | undefined> {
+    return await this.repository.findOne({
+      firstName,
     });
   }
 
   findOneByFirstNameWithoutException(
     firstName: string,
   ): Promise<UserEntity | undefined> {
-    return this.findOne(
-      {
-        where: {
-          firstName,
-        },
-      },
-      false,
-    );
+    return this.repository.findOne({ firstName });
   }
 }

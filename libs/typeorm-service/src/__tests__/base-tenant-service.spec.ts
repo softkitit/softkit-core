@@ -69,10 +69,10 @@ describe('base tenant service tests', () => {
           companyWebsite: 'https://softkit.io',
           companyName: 'softkit',
           directorName: 'softkit',
+          version: 1,
         };
 
-        const savedEntity =
-          await tenantService.createOrUpdateEntity(objectToSave);
+        const savedEntity = await tenantService.upsert(objectToSave);
 
         expect(savedEntity.createdAt.getTime()).toBeLessThan(Date.now());
         expect(savedEntity.updatedAt.getTime()).toBeLessThan(Date.now());

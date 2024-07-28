@@ -1,12 +1,12 @@
 import { Column, Entity, PrimaryGeneratedColumn, VersionColumn } from 'typeorm';
-import { BaseEntityHelper } from '@softkit/typeorm';
+import { BaseTrackedEntityHelper } from '@softkit/typeorm';
 import { FilterOperator, PaginateConfig } from 'nestjs-paginate';
 import { FilterSuffix } from 'nestjs-paginate/lib/filter';
 import { IsNumberLocalized } from '@softkit/validation';
 import { Expose } from 'class-transformer';
 
 @Entity()
-export class UserEntity extends BaseEntityHelper {
+export class UserEntity extends BaseTrackedEntityHelper {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 

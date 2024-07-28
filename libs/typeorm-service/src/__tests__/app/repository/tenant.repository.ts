@@ -1,4 +1,7 @@
-import { BaseTenantRepository } from '@softkit/typeorm';
+import {
+  BaseTenantEntityHelper,
+  BaseTypeormTenantedEntityRepository,
+} from '@softkit/typeorm';
 import { TenantEntity } from '../entity/tenant.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
@@ -6,9 +9,11 @@ import { DataSource } from 'typeorm';
 import { ClsService } from 'nestjs-cls';
 
 @Injectable()
-export class TenantRepository extends BaseTenantRepository<
+export class TenantRepository extends BaseTypeormTenantedEntityRepository<
   TenantEntity,
-  'companyWebsite'
+  'companyWebsite',
+  'companyWebsite' | 'version',
+  keyof BaseTenantEntityHelper | 'tenantId' | 'version'
 > {
   constructor(
     @InjectDataSource()

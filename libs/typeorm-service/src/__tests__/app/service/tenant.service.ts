@@ -1,14 +1,16 @@
-import { BaseTenantEntityService } from '../../../lib/base-tenant.service';
 import { TenantEntity } from '../entity/tenant.entity';
 import { TenantRepository } from '../repository/tenant.repository';
 import { Injectable } from '@nestjs/common';
+import { BaseTrackedEntityService } from '../../../lib/base-tracked-entity.service';
+import { BaseTenantEntityHelper } from '@softkit/typeorm';
 
 @Injectable()
-export class TenantService extends BaseTenantEntityService<
+export class TenantService extends BaseTrackedEntityService<
   TenantEntity,
   'companyWebsite',
   TenantRepository,
-  Pick<TenantEntity, 'companyWebsite' | 'version'>
+  'companyWebsite' | 'version',
+  keyof BaseTenantEntityHelper | 'tenantId' | 'version'
 > {
   constructor(repository: TenantRepository) {
     super(repository);

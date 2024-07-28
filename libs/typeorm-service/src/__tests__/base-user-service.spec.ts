@@ -146,7 +146,7 @@ describe('base user service tests', () => {
       lastName: faker.person.lastName(),
     };
 
-    const savedEntity = await userService.createOrUpdateEntity(objectToSave);
+    const savedEntity = await userService.upsert(objectToSave);
 
     checkAllTestFieldsPresent(objectToSave, savedEntity);
   });
@@ -158,7 +158,7 @@ describe('base user service tests', () => {
       lastName: faker.person.lastName(),
     };
 
-    const savedEntity = await userService.createOrUpdateEntity(objectToSave);
+    const savedEntity = await userService.create(objectToSave);
 
     const dataToUpdate = {
       ...objectToSave,
@@ -167,10 +167,11 @@ describe('base user service tests', () => {
       firstName: 'updated first name',
     };
 
-    const updatedEntity = await userService.createOrUpdateEntity(dataToUpdate);
+    const updatedEntity = await userService.update(dataToUpdate);
 
     expect(updatedEntity.id).toBe(savedEntity.id);
     expect(updatedEntity.firstName).toBe(dataToUpdate.firstName);
+    expect(updatedEntity.updatedAt).toBeTruthy();
     expect(savedEntity.updatedAt).not.toBe(updatedEntity.updatedAt);
 
     const foundEntity = await userService.findAll();
@@ -184,9 +185,9 @@ describe('base user service tests', () => {
       lastName: faker.person.lastName(),
     };
 
-    const savedEntity = await userService.createOrUpdateEntity(objectToSave);
+    const savedEntity = await userService.upsert(objectToSave);
 
-    const updatedEntity = await userService.createOrUpdateEntity({
+    const updatedEntity = await userService.upsert({
       id: savedEntity.id,
       firstName: 'updated',
       lastName: 'updated',
@@ -208,7 +209,7 @@ describe('base user service tests', () => {
       lastName: faker.person.lastName(),
     };
 
-    const savedEntity = await userService.createOrUpdateEntity(objectToSave);
+    const savedEntity = await userService.upsert(objectToSave);
 
     const updatedEntity = await userService.partialUpdate({
       id: savedEntity.id,
@@ -224,6 +225,47 @@ describe('base user service tests', () => {
     expect(updatedEntity.version).toBe(2);
   });
 
+  test('should partial update many items name', async () => {
+    const objectToSave = Array.from({ length: 10 }).map((_) => ({
+      password: faker.hacker.verb(),
+      firstName: faker.person.firstName(),
+      lastName: faker.person.lastName(),
+    }));
+
+    const savedEntity = await userService.upsert(objectToSave);
+
+    const updatedFirstName = 'updated';
+
+    const entitiesToUpdate = savedEntity.map((e) => ({
+      id: e.id,
+      version: e.version,
+      firstName: updatedFirstName,
+    }));
+
+    const updatedEntities = await userService.partialUpdate(entitiesToUpdate);
+
+    for (const updatedEntity of updatedEntities) {
+      expect(updatedEntity.id).toBeDefined();
+      expect(updatedEntity.firstName).toBe(updatedFirstName);
+      expect(updatedEntity.lastName).toBeUndefined();
+      expect(updatedEntity.password).toBeNull();
+      expect(updatedEntity.updatedAt).toBeDefined();
+      expect(updatedEntity.version).toBe(2);
+    }
+
+    const allUpdatedEntitiesIds = updatedEntities
+      .map(({ id }) => id)
+      .filter((v): v is string => v !== undefined);
+
+    const allFound = await userService.findById(allUpdatedEntitiesIds);
+
+    expect(allFound.length).toBe(allUpdatedEntitiesIds.length);
+
+    for (const userEntity of allFound) {
+      expect(userEntity.version).toBe(2);
+    }
+  });
+
   test('archive test', async () => {
     const objectToSave = {
       password: faker.hacker.verb(),
@@ -231,20 +273,50 @@ describe('base user service tests', () => {
       lastName: faker.person.lastName(),
     };
 
-    const savedEntity = await userService.createOrUpdateEntity(objectToSave);
+    const savedEntity = await userService.upsert(objectToSave);
 
-    expectNotNullAndGet(await userService.findOneById(savedEntity.id));
+    expectNotNullAndGet(await userService.findById(savedEntity.id));
 
-    const archived = await userService.archive(
-      savedEntity.id,
-      savedEntity.version,
-    );
+    const archived = await userService.archive(savedEntity.id);
 
     expect(archived).toBeTruthy();
 
-    await expect(
-      userService.findOneById(savedEntity.id),
-    ).rejects.toBeInstanceOf(ObjectNotFoundException);
+    await expect(userService.findById(savedEntity.id)).rejects.toBeInstanceOf(
+      ObjectNotFoundException,
+    );
+  });
+
+  test('should archive and restore many', async () => {
+    const itemsCount = 10;
+    const toSave = Array.from({ length: itemsCount }).map((_) => ({
+      password: faker.hacker.verb(),
+      firstName: faker.person.firstName(),
+      lastName: faker.person.lastName(),
+    }));
+
+    const saved = await userService.upsert(toSave);
+
+    const savedIds = saved.map(({ id }) => id);
+
+    const foundSaved = await userService.findById(savedIds);
+
+    expect(foundSaved.length).toBe(itemsCount);
+
+    const archived = await userService.archive(savedIds);
+
+    expect(archived).toBeTruthy();
+
+    const foundAfterArchived = await userService.findById(savedIds);
+
+    expect(foundAfterArchived.length).toBe(0);
+
+    const restored = await userService.restore(savedIds);
+
+    expect(restored).toBeTruthy();
+
+    const foundAfterRestore = await userService.findById(savedIds);
+
+    expect(foundAfterRestore.length).toBe(itemsCount);
   });
 
   test('restore test', async () => {
@@ -254,29 +326,23 @@ describe('base user service tests', () => {
       lastName: faker.person.lastName(),
     };
 
-    const savedEntity = await userService.createOrUpdateEntity(objectToSave);
+    const savedEntity = await userService.upsert(objectToSave);
 
-    expectNotNullAndGet(await userService.findOneById(savedEntity.id));
+    expectNotNullAndGet(await userService.findById(savedEntity.id));
 
-    const archived = await userService.archive(
-      savedEntity.id,
-      savedEntity.version,
-    );
+    const archived = await userService.archive(savedEntity.id);
 
     expect(archived).toBeTruthy();
 
-    await expect(
-      userService.findOneById(savedEntity.id),
-    ).rejects.toBeInstanceOf(ObjectNotFoundException);
-
-    const restored = await userService.unarchive(
-      savedEntity.id,
-      savedEntity.version + 1,
+    await expect(userService.findById(savedEntity.id)).rejects.toBeInstanceOf(
+      ObjectNotFoundException,
     );
+
+    const restored = await userService.restore(savedEntity.id);
 
     expect(restored).toBeTruthy();
 
-    expect(await userService.findOneById(savedEntity.id)).toBeDefined();
+    expect(await userService.findById(savedEntity.id)).toBeDefined();
   });
 
   test('create one and use find test', async () => {
@@ -286,10 +352,10 @@ describe('base user service tests', () => {
       lastName: faker.person.lastName(),
     };
 
-    const savedEntity = await userService.createOrUpdateEntity(objectToSave);
+    const savedEntity = await userService.upsert(objectToSave);
 
     const savedEntityFound = expectNotNullAndGet(
-      await userService.findOneById(savedEntity.id),
+      await userService.findById(savedEntity.id),
     );
 
     expect(savedEntityFound.id).toBe(savedEntity.id);
@@ -301,25 +367,50 @@ describe('base user service tests', () => {
       firstName: 'updated first name',
     };
 
-    const updatedEntity = await userService.createOrUpdateEntity(dataToUpdate);
+    const updatedEntity = await userService.create(dataToUpdate);
 
     const updatedEntityFound = expectNotNullAndGet(
-      await userService.findOneById(savedEntity.id),
+      await userService.findById(savedEntity.id),
     );
 
     expect(updatedEntity.firstName).toBe(updatedEntityFound.firstName);
   });
 
+  it.each([1, 2, 10])(
+    'create %s entities and update each',
+    async (itemsCount: number) => {
+      const objectToSave = Array.from({ length: itemsCount }).map((_) => ({
+        password: faker.hacker.verb(),
+        firstName: faker.person.firstName(),
+        lastName: faker.person.lastName(),
+      }));
+
+      const savedEntity = await userService.create(objectToSave);
+
+      const firstNameUpdated = 'updated first name';
+      const dataToUpdate = savedEntity.map((e) => ({
+        ...e,
+        firstName: firstNameUpdated,
+      }));
+
+      const updatedEntity = await userService.update(dataToUpdate);
+
+      for (const userEntity of updatedEntity) {
+        expect(userEntity.firstName).toBe(firstNameUpdated);
+      }
+    },
+  );
+
   test('find one throw exception test', async () => {
     await expect(
-      userService.findOneById(faker.string.uuid(), true),
+      userService.findById(faker.string.uuid(), true),
     ).rejects.toBeInstanceOf(ObjectNotFoundException);
   });
 
   test('custom find one throw exception test', async () => {
     await expect(
       userService.findOneByFirstName(faker.person.firstName()),
-    ).rejects.toBeInstanceOf(ObjectNotFoundException);
+    ).resolves.toBeUndefined();
   });
 
   test('custom find one return undefined test', async () => {
@@ -337,7 +428,7 @@ describe('base user service tests', () => {
       lastName: faker.person.lastName(),
     };
 
-    const savedEntity = await userService.createOrUpdateEntity(objectToSave);
+    const savedEntity = await userService.upsert(objectToSave);
 
     await expect(
       userService.findOneByFirstName(savedEntity.firstName),
@@ -370,7 +461,7 @@ describe('base user service tests', () => {
         },
       );
 
-      await userService.createOrUpdateEntities(dataToSave);
+      await userService.upsert(dataToSave);
 
       const allEntities = [];
 
@@ -391,12 +482,11 @@ describe('base user service tests', () => {
           PAGINATED_CONFIG,
         );
 
-        const entitiesTransformed =
-          await userService.findAllPaginatedAndTransform(
-            filterQuery,
-            PAGINATED_CONFIG,
-            UserDto,
-          );
+        const entitiesTransformed = await userService.findAllPaginated(
+          filterQuery,
+          PAGINATED_CONFIG,
+          UserDto,
+        );
 
         const entitiesManualTransformedData = {
           ...entities,
@@ -419,7 +509,7 @@ describe('base user service tests', () => {
         }
       }
 
-      const allEntitiesFromDb = await userService.findAll(1, 1000);
+      const allEntitiesFromDb = await userService.findAll(0, 1000);
 
       const allIdsFromDb = allEntitiesFromDb
         .filter((e) => e.firstName === firstName)
@@ -437,19 +527,19 @@ describe('base user service tests', () => {
         expect(allPasswords).toContain(i + '_' + uniqueId);
       }
     },
-    10_000_000,
+    100_000,
   );
 
-  test('success delete', async () => {
+  test('should delete one successfully', async () => {
     const objectToSave = {
       password: faker.hacker.verb(),
       firstName: faker.person.firstName(),
       lastName: faker.person.lastName(),
     };
 
-    const savedEntity = await userService.createOrUpdateEntity(objectToSave);
+    const savedEntity = await userService.upsert(objectToSave);
 
-    const foundEntity = await userService.findOneById(savedEntity.id);
+    const foundEntity = await userService.findById(savedEntity.id);
 
     expect(foundEntity).toBeDefined();
 
@@ -457,7 +547,7 @@ describe('base user service tests', () => {
 
     expect(deleted).toBeTruthy();
 
-    const foundEntitySecondTime = await userService.findOneById(
+    const foundEntitySecondTime = await userService.findById(
       savedEntity.id,
       false,
     );
@@ -465,6 +555,35 @@ describe('base user service tests', () => {
     expect(foundEntitySecondTime).toBeUndefined();
 
     const deletedSecondTime = await userService.delete(savedEntity.id);
+
+    expect(deletedSecondTime).toBeFalsy();
+  });
+
+  test('should delete many successfully', async () => {
+    const toSave = Array.from({ length: 10 }).map((_) => ({
+      password: faker.hacker.verb(),
+      firstName: faker.person.firstName(),
+      lastName: faker.person.lastName(),
+    }));
+
+    const saved = await userService.upsert(toSave);
+
+    const savedIds = saved.map(({ id }) => id);
+
+    const foundAfterSave = await userService.findById(savedIds);
+
+    expect(foundAfterSave).toBeDefined();
+    expect(foundAfterSave.length).toBe(savedIds.length);
+
+    const deleted = await userService.delete(savedIds);
+
+    expect(deleted).toBeTruthy();
+
+    const foundAfterDeletion = await userService.findById(savedIds);
+
+    expect(foundAfterDeletion.length).toBe(0);
+
+    const deletedSecondTime = await userService.delete(savedIds);
 
     expect(deletedSecondTime).toBeFalsy();
   });

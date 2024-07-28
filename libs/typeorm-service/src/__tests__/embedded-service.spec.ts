@@ -58,7 +58,7 @@ describe('embedded service tests', () => {
 
   test('should fail on second creation of the same entity', async () => {
     const toSave = generateRandomEntityToSave();
-    const savedEntity = await embeddedService.createOrUpdateEntity(toSave);
+    const savedEntity = await embeddedService.upsert(toSave);
 
     expect(savedEntity.createdAt.getTime()).toBeLessThan(Date.now());
     expect(savedEntity.updatedAt.getTime()).toBeLessThan(Date.now());
@@ -70,7 +70,7 @@ describe('embedded service tests', () => {
 
     // second save should overwrite the entity
 
-    await embeddedService.createOrUpdateEntity(toSave);
+    await embeddedService.upsert(toSave);
 
     const entityWithEmbeddedIds = await embeddedService.findAll();
 

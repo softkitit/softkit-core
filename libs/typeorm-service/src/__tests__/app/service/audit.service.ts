@@ -1,15 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { BaseEntityService } from '../../../lib/base.service';
+import { BaseTrackedEntityService } from '../../../lib/base-tracked-entity.service';
 import { Transactional } from 'typeorm-transactional';
 import { AuditEntity } from '../entity/audit.entity';
 import { AuditRepository } from '../repository/audit.repository';
+import { BaseTrackedEntityHelper } from '@softkit/typeorm';
 
 @Injectable()
-export class AuditService extends BaseEntityService<
+export class AuditService extends BaseTrackedEntityService<
   AuditEntity,
   'id',
   AuditRepository,
-  Pick<AuditEntity, 'id'>
+  'id',
+  keyof BaseTrackedEntityHelper | 'id'
 > {
   constructor(auditRepository: AuditRepository) {
     super(auditRepository);
@@ -17,11 +19,11 @@ export class AuditService extends BaseEntityService<
 
   @Transactional()
   recordAudit(userId: string, action: string, details: string) {
-    return this.createOrUpdateEntity({ userId, details, action });
+    return this.upsert({ userId, details, action });
   }
 
   @Transactional()
   async recordGeneralAction(action: string, details: string) {
-    return this.createOrUpdateEntity({ action, details });
+    return this.upsert({ action, details });
   }
 }

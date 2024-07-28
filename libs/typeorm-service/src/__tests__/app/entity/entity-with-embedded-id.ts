@@ -1,9 +1,9 @@
 import { Column, Entity } from 'typeorm';
 import { EmbeddedId } from './vo/embedded-id';
-import { BaseEntityHelper } from '@softkit/typeorm';
+import { BaseTrackedEntityHelper } from '@softkit/typeorm';
 
 @Entity('with-embedded')
-export class EntityWithEmbeddedId extends BaseEntityHelper {
+export class EntityWithEmbeddedId extends BaseTrackedEntityHelper {
   @Column(() => EmbeddedId)
   id!: EmbeddedId;
 
