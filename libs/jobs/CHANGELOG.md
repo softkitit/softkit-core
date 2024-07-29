@@ -1,4 +1,17 @@
 Softkit Core Libraries Changelog
+## [0.3.0](https://github.com/softkitit/softkit-core/compare/jobs-0.2.5...jobs-0.3.0) (2024-07-29)
+
+
+### Features
+
+* **jobs:** added jest-setup usage, and new persistence api compatibility ([b3f2587](https://github.com/softkitit/softkit-core/commit/b3f258724f57728bfbd656c42e447194f5fdaa79))
+
+
+### Bug Fixes
+
+* **jobs:** replaced || with nullish operator ([2bd85bd](https://github.com/softkitit/softkit-core/commit/2bd85bdf3d7f661fa27d2cbfd399a6e486f94eb7))
+* **jobs:** started using an updated service-api library ([0fe2498](https://github.com/softkitit/softkit-core/commit/0fe2498dac5232db128a39b63e196504db050582))
+
 ## [0.2.5](https://github.com/softkitit/softkit-core/compare/jobs-0.2.4...jobs-0.2.5) (2024-07-16)
 
 
