@@ -30,6 +30,6 @@ export class JobVersionRepository<
     @Optional()
     idFieldName?: ID,
   ) {
-    super(entityTarget || JobVersion, ds, idFieldName || ('id' as ID));
+    super(entityTarget ?? JobVersion, ds, idFieldName ?? ('id' as ID));
   }
 }

@@ -30,6 +30,6 @@ export class JobDefinitionRepository<
     @Optional()
     idFieldName?: ID,
   ) {
-    super(entityTarget || JobDefinition, ds, idFieldName || ('id' as ID));
+    super(entityTarget ?? JobDefinition, ds, idFieldName ?? ('id' as ID));
   }
 }
