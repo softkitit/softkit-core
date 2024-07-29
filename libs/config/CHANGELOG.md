@@ -1,4 +1,6 @@
 Softkit Core Libraries Changelog
+## [0.3.2](https://github.com/softkitit/softkit-core/compare/config-0.3.1...config-0.3.2) (2024-07-29)
+
 ## [0.3.1](https://github.com/softkitit/softkit-core/compare/config-0.3.0...config-0.3.1) (2024-07-16)
 
 
