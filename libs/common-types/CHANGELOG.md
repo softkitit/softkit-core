@@ -1,4 +1,6 @@
 Softkit Core Libraries Changelog
+## [0.2.3](https://github.com/softkitit/softkit-core/compare/common-types-0.2.2...common-types-0.2.3) (2024-07-29)
+
 ## [0.2.2](https://github.com/softkitit/softkit-core/compare/common-types-0.2.1...common-types-0.2.2) (2024-02-05)
 
 ## [0.2.1](https://github.com/softkitit/softkit-core/compare/common-types-0.2.0...common-types-0.2.1) (2024-01-26)
