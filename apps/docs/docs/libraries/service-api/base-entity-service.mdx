@@ -8,7 +8,7 @@ title: 'Base Entity Service'
 
 ## Overview
 
-`BaseEntityService` is a cornerstone of the [`@softkit/typeorm-service`](https://www.npmjs.com/package/@softkit/typeorm-service) library, offering robust functionalities for entity operations. It extends the [`AbstractBaseService`](/) and integrates transactional support for a variety of operations.
+`BaseEntityService` is a cornerstone of the [`@softkit/service-api`](https://www.npmjs.com/package/@softkit/service-api) library, offering robust functionalities for entity operations. It extends the [`AbstractBaseService`](/) and integrates transactional support for a variety of operations.
 
 ### Key Features
 
@@ -27,7 +27,7 @@ Here's an example of how to implement the `BaseEntityService`:
 import { Injectable } from '@nestjs/common';
 import { Transactional } from 'typeorm-transactional';
 import { CustomUserRoleRepository } from '../../repositories';
-import { BaseEntityService } from '@softkit/typeorm-service';
+import { BaseEntityService } from '@softkit/service-api';
 import { IsNull } from 'typeorm';
 
 @Injectable()

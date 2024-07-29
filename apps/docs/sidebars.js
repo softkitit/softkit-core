@@ -431,16 +431,16 @@ const sidebars = {
           label: 'Typeorm Service Library',
           link: {
             type: 'doc',
-            id: 'libraries/typeorm-service/getting-started',
+            id: 'libraries/service-api/getting-started',
           },
           items: [
-            'libraries/typeorm-service/getting-started',
-            'libraries/typeorm-service/base-entity-service',
-            'libraries/typeorm-service/base-tenant-entity-service',
+            'libraries/service-api/getting-started',
+            'libraries/service-api/base-entity-service',
+            'libraries/service-api/base-tenant-entity-service',
             {
               type: 'doc',
               label: 'API',
-              id: 'api/typeorm-service/src/index',
+              id: 'api/service-api/src/index',
             },
           ],
         },
@@ -593,7 +593,7 @@ const sidebars = {
         {
           type: 'doc',
           label: 'Typeorm Service',
-          id: 'api/typeorm-service/src/index',
+          id: 'api/service-api/src/index',
         },
         {
           type: 'doc',
