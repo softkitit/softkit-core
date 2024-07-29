@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [1.1.0](https://github.com/softkitit/softkit-core/compare/auth-1.0.9...auth-1.1.0) (2024-07-29)
+
+
+### Features
+
+* **auth:** added usage of new persistence api instead of typeorm for decoupling services ([4cdf8e1](https://github.com/softkitit/softkit-core/commit/4cdf8e18e8c8b7363ad91f3ffbe3ea32949445e7))
+
 ## [1.0.9](https://github.com/softkitit/softkit-core/compare/auth-1.0.8...auth-1.0.9) (2024-05-17)
 
 
