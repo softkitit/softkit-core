@@ -1,6 +1,6 @@
 {
   "name": "@softkit/server-http-client",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "type": "commonjs",
   "dependencies": {
     "opossum": "8.1.0",
