@@ -69,8 +69,8 @@ export abstract class BaseTypeormTrackedEntityRepository<
   ): Promise<ENTITY[]> {
     return this.typeormRepository.find({
       where: this.presetWhereOptions(where),
-      take: limitOptions?.limit || 20,
-      skip: limitOptions?.offset || 0,
+      take: limitOptions?.limit ?? 20,
+      skip: limitOptions?.offset ?? 0,
       withDeleted: true,
     });
   }

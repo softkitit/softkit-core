@@ -113,7 +113,7 @@ export abstract class BaseTypeormEntityRepository<
     const deleteResult = await this.typeormRepository.delete(where);
 
     return Array.isArray(id)
-      ? deleteResult.affected! == id.length
+      ? deleteResult.affected === id.length
       : deleteResult.affected! > 0;
   }
 
