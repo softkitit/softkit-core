@@ -1,4 +1,12 @@
 Softkit Core Libraries Changelog
+## [0.7.2](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.7.1...resource-plugin-0.7.2) (2024-07-29)
+
+
+### Bug Fixes
+
+* **resource-plugin:** fixed jest-setup configuration ([9934d7c](https://github.com/softkitit/softkit-core/commit/9934d7c7fddd3cde0a7bef50ce78bff94cce0b74))
+* **resource-plugin:** started using service-api library instead of typeorm-service that has been removed ([d37c37f](https://github.com/softkitit/softkit-core/commit/d37c37f6d5a907940405f550991d537fe90a340d))
+
 ## [0.7.1](https://github.com/softkitit/softkit-core/compare/resource-plugin-0.7.0...resource-plugin-0.7.1) (2024-07-16)
 
 
