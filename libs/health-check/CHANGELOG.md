@@ -1,4 +1,6 @@
 Softkit Core Libraries Changelog
+## [0.0.12](https://github.com/softkitit/softkit-core/compare/health-check-0.0.11...health-check-0.0.12) (2024-07-29)
+
 ## [0.0.11](https://github.com/softkitit/softkit-core/compare/health-check-0.0.10...health-check-0.0.11) (2024-07-16)
 
 
