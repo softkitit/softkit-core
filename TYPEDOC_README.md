@@ -24,5 +24,5 @@
 | [swagger-utils](./swagger-utils/src)           | Swagger module and utilities for exporting specification                                                                       |
 | [test-utils](./test-utils/src)                 | Test utils, to simplify tests creation and maintenance                                                                         |
 | [typeorm](./typeorm/src)                       | Typeorm configuration and base entities and repositories, with built-in multi-tenancy support, and automatic fields population |
-| [typeorm-service](./typeorm-service/src)       | General CRUD services, with built-in pagination, filtering, sorting and generics for single or multi-tenant entities           |
+| [service-api](./service-api/src)       | General CRUD services, with built-in pagination, filtering, sorting and generics for single or multi-tenant entities           |
 | [validation](./validation/src)                 | The extension library for class-validator, that solves many child issues of class-validator                                    |

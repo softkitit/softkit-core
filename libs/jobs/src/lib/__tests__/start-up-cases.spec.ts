@@ -10,18 +10,14 @@ import * as process from 'node:process';
 import { setupYamlBaseConfigModule } from '@softkit/config';
 import { RootConfig } from './app/config/root.config';
 import * as path from 'node:path';
-import {
-  AbstractJobDefinitionService,
-  AbstractJobVersionService,
-  JobDefinitionService,
-  JobVersionService,
-} from '../service';
+import { AbstractJobDefinitionService, JobDefinitionService } from '../service';
 import { Jobs } from './app/jobs/vo/jobs.enum';
 import { getQueueToken } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
 import { BusyJobData } from './app/jobs/vo/busy-job-data.dto';
 import { wait } from 'nx-cloud/lib/utilities/waiter';
 import { BusyProgressSystemJob } from './app/jobs/busy-progress-system.job';
+import { JobVersionRepository } from '../repository';
 
 describe('start up fail cases', () => {
   let startedRedis: StartedRedis;
@@ -95,17 +91,17 @@ describe('start up fail cases', () => {
     const jobDefinitionService = app.get<JobDefinitionService>(
       AbstractJobDefinitionService,
     );
-    const jobVersionService = app.get<JobVersionService>(
-      AbstractJobVersionService,
-    );
 
-    const jobDefinition = await jobDefinitionService.findOneById(
+    const jobVersionRepository =
+      app.get<JobVersionRepository>(JobVersionRepository);
+
+    const jobDefinition = await jobDefinitionService.findById(
       Jobs.BUSY_PROGRESS_SYSTEM_JOB,
     );
 
     expect(jobDefinition).toBeDefined();
 
-    const jobVersions = await jobVersionService.findAll(1, 20, {
+    const jobVersions = await jobVersionRepository.findAll({
       jobDefinitionId: jobDefinition?.id,
     });
 
@@ -127,7 +123,7 @@ describe('start up fail cases', () => {
     );
     await appUpdated.listen(0);
 
-    const updatedJobVersions = await jobVersionService.findAll(1, 20, {
+    const updatedJobVersions = await jobVersionRepository.findAll({
       jobDefinitionId: jobDefinition?.id,
     });
 

@@ -2,7 +2,7 @@ import { Controller, Get } from '@nestjs/common';
 import { SkipAuth } from '../../../lib/decorators/skip-auth.decorator';
 import { Permissions } from '../../../lib/decorators/permission.decorator';
 import { ClsService } from 'nestjs-cls';
-import { TenantClsStore } from '@softkit/typeorm';
+import { TenantClsStore } from '@softkit/persistence-api';
 
 @Controller('skip-auth')
 @SkipAuth()

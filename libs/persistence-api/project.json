@@ -1,0 +1,74 @@
+{
+  "name": "persistence-api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/persistence-api/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/libs/persistence-api",
+        "tsConfig": "libs/persistence-api/tsconfig.lib.json",
+        "packageJson": "libs/persistence-api/package.json",
+        "main": "libs/persistence-api/src/index.ts",
+        "assets": [
+          "libs/persistence-api/*.md"
+        ]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "libs/persistence-api/**/*.ts",
+          "libs/persistence-api/package.json",
+          "libs/persistence-api/project.json"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
+      "options": {
+        "jestConfig": "libs/persistence-api/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "version": {
+      "executor": "@jscutlery/semver:version",
+      "dependsOn": [
+        "build"
+      ],
+      "options": {
+        "postTargets": [
+          "persistence-api:npm",
+          "persistence-api:github"
+        ],
+        "preset": "conventional"
+      }
+    },
+    "github": {
+      "executor": "@jscutlery/semver:github",
+      "options": {
+        "tag": "${tag}",
+        "notes": "${notes}"
+      }
+    },
+    "npm": {
+      "executor": "ngx-deploy-npm:deploy",
+      "options": {
+        "access": "public",
+        "dryRun": false
+      }
+    }
+  },
+  "tags": []
+}

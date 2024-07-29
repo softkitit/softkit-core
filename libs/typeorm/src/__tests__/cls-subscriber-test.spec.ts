@@ -71,7 +71,7 @@ describe('tenant base service test', () => {
       lastName: faker.person.lastName(),
     };
 
-    const tenant = await tenantRepository.createOrUpdate({
+    const tenant = await tenantRepository.create({
       tenantName: faker.company.name(),
       tenantUrl: faker.internet.url(),
     });
@@ -85,8 +85,9 @@ describe('tenant base service test', () => {
         const beforeInsertSpy = jest.spyOn(clsPresetSubscriber, 'beforeInsert');
         const beforeUpdateSpy = jest.spyOn(clsPresetSubscriber, 'beforeUpdate');
 
-        const saved =
-          await tenantUserRepository.createOrUpdateWithReload(objectToSave);
+        const saved = await tenantUserRepository.upsert({
+          ...objectToSave,
+        });
         expect(beforeInsertSpy).toHaveBeenCalledTimes(1);
 
         expect(saved.tenantId).toBe(tenant.id);
@@ -95,7 +96,7 @@ describe('tenant base service test', () => {
         expect(saved.updatedBy).toBeNull();
 
         const found = expectNotNullAndGet(
-          await tenantUserRepository.findOneBy({ id: saved.id }),
+          await tenantUserRepository.findById(saved.id),
         );
         expect(saved.tenantId).toBe(tenant.id);
         checkAllTestFieldsPresent(objectToSave, found);
@@ -106,13 +107,12 @@ describe('tenant base service test', () => {
           id: found?.id,
           version: found?.version,
         };
-        const updatedEntity =
-          await tenantUserRepository.createOrUpdateWithReload(objectToUpdate);
+        const updatedEntity = await tenantUserRepository.upsert(objectToUpdate);
 
         expect(beforeUpdateSpy).toHaveBeenCalledTimes(1);
 
         const updatedEntityFound = expectNotNullAndGet(
-          await tenantUserRepository.findOneBy({ id: saved.id }),
+          await tenantUserRepository.findById(saved.id),
         );
 
         expect(updatedEntity.tenantId).toBe(tenant.id);
@@ -134,7 +134,7 @@ describe('tenant base service test', () => {
       lastName: faker.person.lastName(),
     };
 
-    const tenant = await tenantRepository.createOrUpdate({
+    const tenant = await tenantRepository.upsert({
       tenantName: faker.company.name(),
       tenantUrl: faker.internet.url(),
     });
@@ -147,7 +147,7 @@ describe('tenant base service test', () => {
         userId: firstUserId,
       },
       async () => {
-        const saved = await tenantUserRepository.createOrUpdate(objectToSave);
+        const saved = await tenantUserRepository.upsert(objectToSave);
         entityId = saved.id;
 
         expect(saved.tenantId).toBe(tenant.id);
@@ -164,15 +164,15 @@ describe('tenant base service test', () => {
           userId: userForUpdate,
         },
         async () => {
-          const TenantUserEntity = await tenantUserRepository.createOrUpdate({
+          const entity = await tenantUserRepository.upsert({
             ...objectToSave,
             firstName: faker.person.firstName(),
             id: entityId,
           } as TenantUserEntity);
 
-          const updatedEntityFound = await tenantUserRepository.findOneBy({
-            id: TenantUserEntity.id,
-          });
+          const updatedEntityFound = await tenantUserRepository.findById(
+            entity.id,
+          );
 
           expect(updatedEntityFound?.id).toBe(entityId);
           expect(updatedEntityFound?.tenantId).toBe(tenant.id);
@@ -190,7 +190,7 @@ describe('tenant base service test', () => {
       lastName: faker.person.lastName(),
     };
 
-    const tenant = await tenantRepository.createOrUpdate({
+    const tenant = await tenantRepository.upsert({
       tenantName: faker.company.name(),
       tenantUrl: faker.internet.url(),
     });
@@ -204,22 +204,20 @@ describe('tenant base service test', () => {
         const beforeInsertSpy = jest.spyOn(clsPresetSubscriber, 'beforeInsert');
         const beforeUpdateSpy = jest.spyOn(clsPresetSubscriber, 'beforeUpdate');
 
-        const saved = await tenantUserRepository.createOrUpdate(objectToSave);
+        const saved = await tenantUserRepository.upsert(objectToSave);
         expect(beforeInsertSpy).toHaveBeenCalledTimes(1);
         expect(beforeUpdateSpy).toHaveBeenCalledTimes(0);
         expect(saved.tenantId).toBe(tenant.id);
         checkAllTestFieldsPresent(objectToSave, saved);
 
         const found = expectNotNullAndGet(
-          await tenantUserRepository.findOneBy({
-            id: saved.id,
-          }),
+          await tenantUserRepository.findById(saved.id),
         );
 
         expect(saved.tenantId).toBe(tenant.id);
         checkAllTestFieldsPresent(objectToSave, found);
 
-        await tenantUserRepository.archive(found.id, found.version);
+        await tenantUserRepository.archive(found.id);
 
         expect(beforeUpdateSpy).toHaveBeenCalledTimes(1);
       },
@@ -233,12 +231,12 @@ describe('tenant base service test', () => {
       lastName: faker.person.lastName(),
     };
 
-    const tenant1 = await tenantRepository.createOrUpdate({
+    const tenant1 = await tenantRepository.upsert({
       tenantName: faker.company.name(),
       tenantUrl: faker.internet.url(),
     });
 
-    const tenant2 = await tenantRepository.createOrUpdate({
+    const tenant2 = await tenantRepository.upsert({
       tenantName: faker.company.name(),
       tenantUrl: faker.internet.url(),
     });
@@ -249,13 +247,9 @@ describe('tenant base service test', () => {
         userId,
       },
       async () => {
-        const saved = await tenantUserRepository.createOrUpdate(objectToSave);
+        const saved = await tenantUserRepository.upsert(objectToSave);
 
-        expectNotNullAndGet(
-          await tenantUserRepository.findOneBy({
-            id: saved.id,
-          }),
-        );
+        expectNotNullAndGet(await tenantUserRepository.findById(saved.id));
 
         return saved.id;
       },
@@ -268,10 +262,8 @@ describe('tenant base service test', () => {
       },
       async () => {
         await expect(
-          tenantUserRepository.findOneBy({
-            id: savedEntityId,
-          }),
-        ).resolves.toBeNull();
+          tenantUserRepository.findById(savedEntityId),
+        ).resolves.toBeUndefined();
       },
     );
   });

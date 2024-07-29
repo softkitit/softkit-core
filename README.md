@@ -7,7 +7,7 @@
 ## Libraries
 
 | Name                                                      | Description                                                                                                                    |
-| --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+|-----------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------|
 | [async-storage](./libs/async-storage/README.md)           | CLS Module and Service Base Setup                                                                                              |
 | [auth](./libs/auth/README.md)                             | Authorization and Authentication services, to handle various needs                                                             |
 | [bootstrap](./libs/bootstrap/README.md)                   | Application startup utilities                                                                                                  |
@@ -25,5 +25,5 @@
 | [swagger-utils](./libs/swagger-utils/README.md)           | Swagger module and utilities for exporting specification                                                                       |
 | [test-utils](./libs/test-utils/README.md)                 | Test utils, to simplify tests creation and maintenance                                                                         |
 | [typeorm](./libs/typeorm/README.md)                       | Typeorm configuration and base entities and repositories, with built-in multi-tenancy support, and automatic fields population |
-| [typeorm-service](./libs/typeorm-service/README.md)       | General CRUD services, with built-in pagination, filtering, sorting and generics for single or multi-tenant entities           |
+| [service-api](./libs/service-api/README.md)               | CRUD services api, with built-in pagination, filtering, sorting and generics for single or multi-tenant entities       |
 | [validation](./libs/validation/README.md)                 | The extension library for class-validator, that solves many child issues of class-validator                                    |

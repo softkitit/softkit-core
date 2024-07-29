@@ -1,0 +1,22 @@
+{
+  "name": "@softkit/service-api",
+  "version": "0.1.0",
+  "type": "commonjs",
+  "keywords": [
+    "services",
+    "business logic",
+    "CRUD",
+    "CRUD service",
+    "nestjs service",
+    "nest service"
+  ],
+  "peerDependencies": {
+    "@softkit/validation": "^0.3.5",
+    "@softkit/exceptions": "^0.1.3",
+    "class-transformer": "*",
+    "nestjs-paginate": "^8.6.0",
+    "typeorm-transactional": "^0.4.0",
+    "@softkit/common-types": "^0.2.0",
+    "@softkit/persistence-api": "^0.1.0"
+  }
+}

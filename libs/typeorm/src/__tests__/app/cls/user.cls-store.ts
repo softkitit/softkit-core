@@ -1,4 +1,4 @@
-import { TenantClsStore } from '../../../lib/vo/tenant-base-cls-store';
+import { TenantClsStore } from '@softkit/persistence-api';
 
 export interface UserAndTenantClsStore extends TenantClsStore {
   userId: string;

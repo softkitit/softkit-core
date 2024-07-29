@@ -2,9 +2,9 @@ import { Column, PrimaryGeneratedColumn } from 'typeorm';
 import { Expose } from 'class-transformer';
 import { JobsOptions } from 'bullmq';
 import { IsUUIDLocalized } from '@softkit/validation';
-import { BaseEntityHelper } from '@softkit/typeorm';
+import { BaseTrackedEntityHelper } from '@softkit/typeorm';
 
-export class BaseJobVersion extends BaseEntityHelper {
+export class BaseJobVersion extends BaseTrackedEntityHelper {
   @PrimaryGeneratedColumn('uuid')
   @Expose()
   @IsUUIDLocalized()

@@ -1,0 +1,80 @@
+{
+  "name": "service-api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/service-api/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/libs/service-api",
+        "tsConfig": "libs/service-api/tsconfig.lib.json",
+        "packageJson": "libs/service-api/package.json",
+        "main": "libs/service-api/src/index.ts",
+        "assets": [
+          "libs/service-api/*.md"
+        ]
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "libs/service-api/**/*.ts",
+          "libs/service-api/package.json",
+          "libs/service-api/project.json"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
+      "options": {
+        "jestConfig": "libs/service-api/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    },
+    "version": {
+      "executor": "@jscutlery/semver:version",
+      "dependsOn": [
+        "build"
+      ],
+      "options": {
+        "postTargets": [
+          "service-api:npm",
+          "service-api:github"
+        ],
+        "preset": "conventional"
+      }
+    },
+    "github": {
+      "executor": "@jscutlery/semver:github",
+      "options": {
+        "tag": "${tag}",
+        "notes": "${notes}"
+      }
+    },
+    "npm": {
+      "executor": "ngx-deploy-npm:deploy",
+      "options": {
+        "access": "public",
+        "dryRun": false
+      }
+    }
+  },
+  "tags": []
+}

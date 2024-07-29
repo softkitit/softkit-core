@@ -1,10 +1,10 @@
-import { BaseEntityHelper } from '@softkit/typeorm';
+import { BaseTrackedEntityHelper } from '@softkit/typeorm';
 import { Column, PrimaryGeneratedColumn } from 'typeorm';
 import { Expose } from 'class-transformer';
 import { IsStringEnumLocalized, IsUUIDLocalized } from '@softkit/validation';
 import { JobStatus } from '../vo';
 
-export class BaseJobExecution extends BaseEntityHelper {
+export class BaseJobExecution extends BaseTrackedEntityHelper {
   @PrimaryGeneratedColumn('uuid')
   @Expose()
   @IsUUIDLocalized()

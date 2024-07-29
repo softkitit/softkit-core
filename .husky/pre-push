@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-npx nx affected:test --base="origin/main" --codeCoverage --parallel=false
+npx nx affected:test --base="origin/main" --codeCoverage

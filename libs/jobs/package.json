@@ -22,13 +22,15 @@
     "@softkit/typeorm": "^0.5.0",
     "typeorm": "^0.3.0",
     "@nestjs/typeorm": "^10.0.0",
-    "@softkit/typeorm-service": "^0.1.0",
     "typeorm-transactional": "^0.4.0",
     "@nestjs/core": "^10.0.0",
     "bullmq": "^5.0.0",
     "@anchan828/nest-redlock": "^0.2.7",
     "@nestjs/swagger": "^7.0.0",
-    "@nestjs/bullmq": "^10.0.0"
+    "@nestjs/bullmq": "^10.0.0",
+    "@softkit/persistence-api": "^0.1.0",
+    "@softkit/exceptions": "^0.1.6",
+    "@softkit/service-api": "^0.1.0"
   },
   "type": "commonjs",
   "main": "./src/index.js",

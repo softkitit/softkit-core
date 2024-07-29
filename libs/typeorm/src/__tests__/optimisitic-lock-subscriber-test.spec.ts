@@ -50,14 +50,11 @@ describe('optimistic lost subscriber test', () => {
     [-1],
     // bigger version
     [1000],
-    // same version
-    [1],
-    // eslint-disable-next-line unicorn/no-null
-    [null],
-    [undefined],
+    // version before
+    [0],
   ])(
     'optimistic lock exception different versions cases: %s',
-    async (versionNumber?: number | null) => {
+    async (versionNumber: number) => {
       const objectToSave = {
         password: faker.hacker.verb(),
         firstName: faker.person.firstName(),
@@ -69,18 +66,17 @@ describe('optimistic lost subscriber test', () => {
         'beforeUpdate',
       );
 
-      const testBaseEntitySave =
-        await testBaseRepository.createOrUpdate(objectToSave);
+      const testBaseEntitySave = await testBaseRepository.upsert(objectToSave);
       expect(beforeUpdateSpy).toHaveBeenCalledTimes(0);
 
       const objectForUpdate = {
         ...objectToSave,
         firstName: objectToSave.firstName + '1',
         id: testBaseEntitySave.id,
-        versionNumber,
+        version: versionNumber,
       };
       await expect(
-        testBaseRepository.createOrUpdate(objectForUpdate),
+        testBaseRepository.upsert(objectForUpdate),
       ).rejects.toBeInstanceOf(OptimisticLockException);
 
       expect(beforeUpdateSpy).toHaveBeenCalledTimes(1);

@@ -1,6 +1,6 @@
 import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 
-import { BaseEntityHelper } from '@softkit/typeorm';
+import { BaseTrackedEntityHelper } from '@softkit/typeorm';
 import {
   IsEmailLocalized,
   IsStringCombinedLocalized,
@@ -12,7 +12,7 @@ import { Expose } from 'class-transformer';
 import { UserProfileStatus } from './vo/user-profile-status.enum';
 
 @Entity('user_profile')
-export class UserProfile extends BaseEntityHelper {
+export class UserProfile extends BaseTrackedEntityHelper {
   @PrimaryGeneratedColumn('uuid')
   @Expose()
   @IsUUIDLocalized()

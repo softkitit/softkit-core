@@ -6,8 +6,8 @@ import {
   PermissionCheckMode,
   Permissions,
 } from '../../../lib/decorators/permission.decorator';
-import { TenantClsStore } from '@softkit/typeorm';
 import { ClsService } from 'nestjs-cls';
+import { TenantClsStore } from '@softkit/persistence-api';
 
 @Controller('auth')
 export class AuthController {

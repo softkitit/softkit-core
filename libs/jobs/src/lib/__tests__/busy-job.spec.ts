@@ -18,6 +18,7 @@ import { RootConfig } from './app/config/root.config';
 import path from 'node:path';
 import { AbstractSchedulingJobService } from '../service';
 import { BusyScheduledJob } from './app/jobs/busy-scheduled.job';
+import { ObjectNotFoundException } from '@softkit/exceptions';
 
 describe('busy job e2e tests', () => {
   let startedRedis: StartedRedis;
@@ -93,6 +94,12 @@ describe('busy job e2e tests', () => {
 
     expect(fakeJob.jobStats.started).toBe(2);
     expect(fakeJob.jobStats.finished).toBe(2);
+  });
+
+  it(`should fail on running repeatable job now`, async () => {
+    await expect(
+      schedulingService.runRepeatableJobNow('somequeue', generateRandomId()),
+    ).rejects.toBeInstanceOf(ObjectNotFoundException);
   });
 
   it('should schedule a job and run each 10 seconds', async () => {

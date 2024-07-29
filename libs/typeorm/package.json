@@ -10,7 +10,9 @@
     "cls auto preset"
   ],
   "dependencies": {
-    "typeorm-naming-strategies": "4.1.0"
+    "typeorm-naming-strategies": "4.1.0",
+    "@softkit/persistence-api": "^0.1.0",
+    "@softkit/common-types": "^0.2.0"
   },
   "peerDependencies": {
     "nestjs-paginate": "^8.6.0",

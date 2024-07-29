@@ -1,11 +1,13 @@
-import defaultClsMetadataStore from '../cls-preset.metadata.storage';
-import { PresetType } from './vo/preset-type';
 import { getMetadataArgsStorage } from 'typeorm';
-import { TenantClsStore } from '../../vo/tenant-base-cls-store';
-import { BaseEntityHelper } from '../../entities/entity-helper';
+import { BaseTrackedEntityHelper } from '../../entity/entity-helper';
+import {
+  defaultClsMetadataStore,
+  PresetType,
+  TenantClsStore,
+} from '@softkit/persistence-api';
 
 interface ClsPresetDecoratorOptions<CLS_STORE extends TenantClsStore> {
-  clsPropertyFieldName: keyof CLS_STORE;
+  clsFieldName: keyof CLS_STORE;
   presetType?: PresetType;
 }
 
@@ -16,7 +18,7 @@ export function ClsPreset<CLS_STORE extends TenantClsStore>(
   return function (object: object, propertyName: string) {
     const metadataArgsStorage = getMetadataArgsStorage();
 
-    if (!(object instanceof BaseEntityHelper)) {
+    if (!(object instanceof BaseTrackedEntityHelper)) {
       throw new TypeError(
         `Cls Preset functionality is available only for instances of BaseEntityHelper class`,
       );
@@ -36,13 +38,11 @@ export function ClsPreset<CLS_STORE extends TenantClsStore>(
         .join(',')}]`;
     }
 
-    if (foundProperty) {
-      defaultClsMetadataStore.addField({
-        entityPropertyName: propertyName,
-        entityName,
-        clsStorageKey: options.clsPropertyFieldName as symbol,
-        presetType: options.presetType ?? PresetType.ALL,
-      });
-    }
+    defaultClsMetadataStore.addField({
+      entityPropertyName: propertyName,
+      entityName,
+      clsStorageKey: options.clsFieldName as symbol,
+      presetType: options.presetType ?? PresetType.ALL,
+    });
   };
 }

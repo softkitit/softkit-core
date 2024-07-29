@@ -2,10 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { TenantEntity } from './tenant.entity';
-import { BaseRepository } from '@softkit/typeorm';
+import { BaseTypeormTrackedEntityRepository } from '@softkit/typeorm';
 
 @Injectable()
-export class TenantRepository extends BaseRepository<TenantEntity, 'id'> {
+export class TenantRepository extends BaseTypeormTrackedEntityRepository<
+  TenantEntity,
+  'id'
+> {
   constructor(
     @InjectDataSource()
     ds: DataSource,

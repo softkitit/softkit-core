@@ -1,4 +1,4 @@
-import { SystemJobConfig } from '../../config/system-job.config';
+import { SystemJobConfig } from '../../config';
 import { VersionedJobData } from '../../job';
 import { JobsOptions } from 'bullmq';
 

@@ -1,16 +1,27 @@
-import { BaseRepository } from './base.repository';
 import { ClsService } from 'nestjs-cls';
-import { DataSource, EntityTarget, FindOptionsWhere } from 'typeorm';
-import { BaseTenantEntityHelper } from '../entities/tenant-entity-helper';
-import { TenantClsStore } from '../vo/tenant-base-cls-store';
+import { DataSource, FindOptionsWhere } from 'typeorm';
 import { GeneralInternalServerException } from '@softkit/exceptions';
+import { BaseTypeormTrackedEntityRepository } from './base-typeorm-tracked-entity.repository';
+import { BaseTenantEntityHelper } from '../entity/tenant-entity-helper';
+import { TenantClsStore } from '@softkit/persistence-api';
+import { ObjectType } from 'typeorm/common/ObjectType';
 
-export abstract class BaseTenantRepository<
+export abstract class BaseTypeormTenantedEntityRepository<
   ENTITY extends BaseTenantEntityHelper,
   ID extends keyof ENTITY,
-> extends BaseRepository<ENTITY, ID> {
+  FIELDS_REQUIRED_FOR_UPDATE extends keyof ENTITY = ID,
+  AUTO_GENERATED_FIELDS extends keyof ENTITY =
+    | keyof BaseTenantEntityHelper
+    | ID
+    | 'tenantId',
+> extends BaseTypeormTrackedEntityRepository<
+  ENTITY,
+  ID,
+  FIELDS_REQUIRED_FOR_UPDATE,
+  AUTO_GENERATED_FIELDS
+> {
   protected constructor(
-    et: EntityTarget<ENTITY>,
+    et: ObjectType<ENTITY>,
     dataSource: DataSource,
     idFieldName: ID,
     protected clsService: ClsService<TenantClsStore>,
@@ -18,9 +29,16 @@ export abstract class BaseTenantRepository<
     super(et, dataSource, idFieldName);
   }
 
-  protected override presetDefaultWhereOptions<
-    T extends FindOptionsWhere<ENTITY> | undefined,
-  >(currentOptions: T): T {
+  /**
+   * todo: reimplement to use a preset decorator for this
+   * */
+  protected override presetWhereOptions(
+    criteria: FindOptionsWhere<ENTITY> | Array<FindOptionsWhere<ENTITY>>,
+  ): FindOptionsWhere<ENTITY> | Array<FindOptionsWhere<ENTITY>> {
+    const options = super.presetWhereOptions(criteria);
+
+    const optionsArray = Array.isArray(options) ? options : [options];
+
     const clsStore = this.clsService.get();
 
     const tenantId = clsStore?.tenantId;
@@ -32,10 +50,14 @@ export abstract class BaseTenantRepository<
       );
     }
 
-    return {
-      // allow to override tenantId from user perspective
-      tenantId: tenantId,
-      ...currentOptions,
-    };
+    const result = optionsArray.map((option) => {
+      return {
+        // allow to override tenantId from user perspective
+        tenantId: tenantId,
+        ...option,
+      };
+    });
+
+    return Array.isArray(criteria) ? result : result[0];
   }
 }

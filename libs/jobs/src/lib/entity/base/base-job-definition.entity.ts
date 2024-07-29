@@ -1,9 +1,12 @@
-import { BaseEntityHelper } from '@softkit/typeorm';
+import { BaseTrackedEntityHelper } from '@softkit/typeorm';
 import { Column, PrimaryColumn } from 'typeorm';
 import { Expose } from 'class-transformer';
 
-export abstract class BaseJobDefinitionEntity extends BaseEntityHelper {
-  @PrimaryColumn()
+export abstract class BaseJobDefinitionEntity extends BaseTrackedEntityHelper {
+  @PrimaryColumn({
+    type: String,
+    nullable: false,
+  })
   @Expose()
   id!: string;
 

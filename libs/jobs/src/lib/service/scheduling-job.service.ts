@@ -89,7 +89,7 @@ export class SchedulingJobService implements AbstractSchedulingJobService {
       return;
     }
 
-    await this.jobDefinitionService.createOrUpdateEntity({
+    await this.jobDefinitionService.create({
       id: jobId,
       jobName,
       queueName,
@@ -101,7 +101,7 @@ export class SchedulingJobService implements AbstractSchedulingJobService {
     };
 
     if (!jobVersion) {
-      await this.jobVersionService.createOrUpdateEntity({
+      await this.jobVersionService.upsert({
         jobVersion: data.jobVersion,
         jobOptions: updatedJobOptions,
         jobDefinitionId: jobId,

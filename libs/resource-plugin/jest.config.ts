@@ -5,6 +5,7 @@ export default {
   transform: {
     '^.+\\.[tj]s$': ['ts-jest', { tsconfig: '<rootDir>/tsconfig.spec.json' }]
   },
+  setupFilesAfterEnv: ['../../jest.setup.js'],
   coverageThreshold: {
     global: {
       lines: 100,
