@@ -1,5 +1,5 @@
 import { BaseTrackedEntityHelper } from '@softkit/typeorm';
-import { BaseTrackedEntityService } from '@softkit/typeorm-service';
+import { BaseTrackedEntityService } from '@softkit/service-api';
 import { BaseJobVersion, JobVersion } from '../../entity';
 import {
   AbstractRepository,
