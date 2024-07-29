@@ -1,5 +1,5 @@
 export default {
-  displayName: 'typeorm-service',
+  displayName: 'service-api',
   preset: '../../jest.preset.js',
   testEnvironment: 'node',
   transform: {
@@ -7,5 +7,5 @@ export default {
   },
   setupFilesAfterEnv: ['../../jest.setup.js'],
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../coverage/libs/typeorm-service',
+  coverageDirectory: '../../coverage/libs/service-api',
 };

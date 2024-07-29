@@ -1,7 +1,7 @@
 {
-  "name": "typeorm-service",
+  "name": "service-api",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/typeorm-service/src",
+  "sourceRoot": "libs/service-api/src",
   "projectType": "library",
   "targets": {
     "build": {
@@ -10,12 +10,12 @@
         "{options.outputPath}"
       ],
       "options": {
-        "outputPath": "dist/libs/typeorm-service",
-        "tsConfig": "libs/typeorm-service/tsconfig.lib.json",
-        "packageJson": "libs/typeorm-service/package.json",
-        "main": "libs/typeorm-service/src/index.ts",
+        "outputPath": "dist/libs/service-api",
+        "tsConfig": "libs/service-api/tsconfig.lib.json",
+        "packageJson": "libs/service-api/package.json",
+        "main": "libs/service-api/src/index.ts",
         "assets": [
-          "libs/typeorm-service/*.md"
+          "libs/service-api/*.md"
         ]
       }
     },
@@ -26,9 +26,9 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "libs/typeorm-service/**/*.ts",
-          "libs/typeorm-service/package.json",
-          "libs/typeorm-service/project.json"
+          "libs/service-api/**/*.ts",
+          "libs/service-api/package.json",
+          "libs/service-api/project.json"
         ]
       }
     },
@@ -38,7 +38,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "libs/typeorm-service/jest.config.ts",
+        "jestConfig": "libs/service-api/jest.config.ts",
         "passWithNoTests": true
       },
       "configurations": {
@@ -55,8 +55,8 @@
       ],
       "options": {
         "postTargets": [
-          "typeorm-service:npm",
-          "typeorm-service:github"
+          "service-api:npm",
+          "service-api:github"
         ],
         "preset": "conventional"
       }

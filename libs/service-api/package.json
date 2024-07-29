@@ -1,6 +1,6 @@
 {
-  "name": "@softkit/typeorm-service",
-  "version": "0.1.2",
+  "name": "@softkit/service-api",
+  "version": "0.1.0",
   "type": "commonjs",
   "keywords": [
     "services",

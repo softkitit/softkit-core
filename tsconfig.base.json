@@ -40,7 +40,7 @@
       "@softkit/swagger-utils": ["libs/swagger-utils/src/index.ts"],
       "@softkit/test-utils": ["libs/test-utils/src/index.ts"],
       "@softkit/typeorm": ["libs/typeorm/src/index.ts"],
-      "@softkit/typeorm-service": ["libs/typeorm-service/src/index.ts"],
+      "@softkit/service-api": ["libs/service-api/src/index.ts"],
       "@softkit/validation": ["libs/validation/src/index.ts"]
     }
   },

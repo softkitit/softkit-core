@@ -4,8 +4,8 @@
   ],
   "parserOptions": {
     "project": [
-      "./libs/typeorm-service/tsconfig.lib.json",
-      "./libs/typeorm-service/tsconfig.spec.json"
+      "./libs/service-api/tsconfig.lib.json",
+      "./libs/service-api/tsconfig.spec.json"
     ]
   },
   "ignorePatterns": [

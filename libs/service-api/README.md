@@ -7,7 +7,7 @@ This library is also throwing standard exceptions from @softkit/exceptions libra
 ## Installation
 
 ```bash
-yarn add @softkit/typeorm-service
+yarn add @softkit/service-api
 ```
 
 ## Examples:
@@ -18,7 +18,7 @@ yarn add @softkit/typeorm-service
 import { Injectable } from '@nestjs/common';
 import { Transactional } from 'typeorm-transactional';
 import { CustomUserRoleRepository } from '../../repositories';
-import { BaseEntityService } from '@softkit/typeorm-service';
+import { BaseEntityService } from '@softkit/service-api';
 import { IsNull } from 'typeorm';
 
 @Injectable()
