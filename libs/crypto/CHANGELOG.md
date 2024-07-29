@@ -1,4 +1,6 @@
 Softkit Core Libraries Changelog
+## [0.0.9](https://github.com/softkitit/softkit-core/compare/crypto-0.0.8...crypto-0.0.9) (2024-07-29)
+
 ## [0.0.8](https://github.com/softkitit/softkit-core/compare/crypto-0.0.7...crypto-0.0.8) (2024-02-05)
 
 ## [0.0.7](https://github.com/softkitit/softkit-core/compare/crypto-0.0.6...crypto-0.0.7) (2024-01-26)
