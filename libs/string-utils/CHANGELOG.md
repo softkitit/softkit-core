@@ -1,4 +1,6 @@
 Softkit Core Libraries Changelog
+## [0.0.6](https://github.com/softkitit/softkit-core/compare/string-utils-0.0.5...string-utils-0.0.6) (2024-07-29)
+
 ## [0.0.5](https://github.com/saas-buildkit/saas-buildkit-core/compare/string-utils-0.0.4...string-utils-0.0.5) (2023-09-08)
 
 
