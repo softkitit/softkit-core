@@ -1,4 +1,17 @@
 Softkit Core Libraries Changelog
+## [0.6.0](https://github.com/softkitit/softkit-core/compare/typeorm-0.5.5...typeorm-0.6.0) (2024-07-29)
+
+
+### Features
+
+* **persistence-api:** added base persistence-api for backward compatibility ([fd3d0b9](https://github.com/softkitit/softkit-core/commit/fd3d0b944ecbcecdcc389c52e9227202e16d613e))
+* **typeorm:** updated repository abstraction to use new persistence-api layer ([a005b62](https://github.com/softkitit/softkit-core/commit/a005b6228b3a7c17cfe54d42cc4c128f6199af5c))
+
+
+### Bug Fixes
+
+* **typeorm:** sonar fixes ([b650b50](https://github.com/softkitit/softkit-core/commit/b650b50edcdb550e027b55b1ffd5b76a1a9517ff))
+
 ## [0.5.5](https://github.com/softkitit/softkit-core/compare/typeorm-0.5.4...typeorm-0.5.5) (2024-07-16)
 
 
