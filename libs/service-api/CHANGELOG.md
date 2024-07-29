@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## 0.1.0 (2024-07-29)
+
+
+### Features
+
+* **service-api:** renamed typeorm-service library to service-api to better reflect that it's a general service api and has nothing to do with typeorm ([70558c6](https://github.com/softkitit/softkit-core/commit/70558c639de77f9b962580638b050a745a167c85))
+
 ## [0.1.2](https://github.com/softkitit/softkit-core/compare/service-api-0.1.1...service-api-0.1.2) (2024-01-26)
 
 ## [0.1.1](https://github.com/softkitit/softkit-core/compare/service-api-0.1.0...service-api-0.1.1) (2024-01-26)
