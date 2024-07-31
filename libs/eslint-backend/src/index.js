@@ -94,7 +94,7 @@ module.exports = {
           },
         ],
         'no-console': ['error'],
-        complexity: ['error', 7],
+        complexity: ['error', 15],
         'spaced-comment': [2, 'always'],
       },
     },
