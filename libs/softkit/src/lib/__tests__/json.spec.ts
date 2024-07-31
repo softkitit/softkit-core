@@ -1,4 +1,4 @@
-import { parseJson } from './';
+import { parseJson } from '../utils/json';
 
 describe('parseJson', () => {
   it('should parse JSON', () => {
@@ -6,7 +6,7 @@ describe('parseJson', () => {
         "test": 123,
         "nested": {
             "test": 123,
-            "nx": "workspace"
+            "sk": "workspace"
         },
         "array": [1, 2, 3]
     }`);
@@ -15,7 +15,7 @@ describe('parseJson', () => {
       test: 123,
       nested: {
         test: 123,
-        nx: 'workspace',
+        sk: 'workspace',
       },
       array: [1, 2, 3],
     });
@@ -28,7 +28,7 @@ describe('parseJson', () => {
             "test": 123
             /*
             This should not be parsed
-            "nx": "workspace"
+            "sk": "workspace"
             */
         },
         "array": [1, 2, 3]
@@ -51,7 +51,7 @@ describe('parseJson', () => {
           "test": 123
           /*
           This should not be parsed
-          "nx": "workspace"
+          "sk": "workspace"
           */
       },
       "array": [1, 2, 3]
@@ -79,7 +79,7 @@ describe('parseJson', () => {
           "test": 123
           /*
           This should not be parsed
-          "nx": "workspace"
+          "sk": "workspace"
           */
       },
       "array": [1, 2, 3]

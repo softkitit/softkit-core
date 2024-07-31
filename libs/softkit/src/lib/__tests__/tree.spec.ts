@@ -12,7 +12,7 @@ import {
   flushChanges,
   TreeWriteOptions,
   printChanges,
-} from './index';
+} from '../service/tree';
 
 const error = console.error;
 const log = console.log;

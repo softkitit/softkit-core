@@ -95,7 +95,7 @@ export interface Tree {
 }
 
 /**
- * Description of a file change in the Nx virtual file system/
+ * Description of a file change in the Sk virtual file system/
  */
 export interface FileChange {
   /**

@@ -1,5 +1,5 @@
 import { fs } from 'memfs';
-import { createDirectory, isRelativePath } from './fileutils';
+import { createDirectory, isRelativePath } from '../utils/file/fileutils';
 
 jest.mock('node:fs', () => fs);
 
@@ -24,7 +24,7 @@ describe('fileutils', () => {
     });
     it('should return false for absolute imports', () => {
       expect(isRelativePath('file')).toEqual(false);
-      expect(isRelativePath('@nx/angular')).toEqual(false);
+      expect(isRelativePath('@sk/angular')).toEqual(false);
     });
   });
 });

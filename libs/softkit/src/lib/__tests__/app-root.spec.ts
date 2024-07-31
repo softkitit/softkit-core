@@ -1,5 +1,5 @@
-import * as fileUtils from './fileutils';
-import { appRootInner } from './app-root';
+import * as fileUtils from '../utils/file/fileutils';
+import { appRootInner } from '../utils/file/app-root';
 
 const rootMarkers = ['sk.json', 'sk'];
 

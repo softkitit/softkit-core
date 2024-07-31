@@ -1,4 +1,4 @@
-import { checkGitVersion } from './git';
+import { checkGitVersion } from '../utils/git/git';
 import cp from 'node:child_process';
 
 describe('checkGitVersion', () => {

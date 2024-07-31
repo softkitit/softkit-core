@@ -1,17 +1,15 @@
 import { execSync } from 'node:child_process';
 
 /*
- * Because we don't want to depend on @nx/workspace (to speed up the workspace creation)
- * we duplicate the helper functions from @nx/workspace in this file.
  */
 export function deduceDefaultBase(): string {
-  const nxDefaultBase = 'main';
+  const skDefaultBase = 'main';
   try {
     return (
       execSync('git config --get init.defaultBranch').toString().trim() ||
-      nxDefaultBase
+      skDefaultBase
     );
   } catch {
-    return nxDefaultBase;
+    return skDefaultBase;
   }
 }

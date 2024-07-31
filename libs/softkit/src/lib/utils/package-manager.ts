@@ -30,7 +30,7 @@ export interface PackageManagerCommands {
   dlx: string;
   list: string;
   run: (script: string, args?: string) => string;
-  // Make this required once bun adds programatically support for reading config https://github.com/oven-sh/bun/issues/7140
+  // Make this required once bun adds programmatically support for reading config https://github.com/oven-sh/bun/issues/7140
   getRegistryUrl?: string;
 }
 
