@@ -69,6 +69,7 @@ module.exports = {
         es2021: true,
       },
       rules: {
+        'sonarjs/no-redundant-jump': 'off',
         'simple-import-sort/imports': 'off',
         'unicorn/prevent-abbreviations': 'off',
         'unicorn/no-abusive-eslint-disable': 'off',
