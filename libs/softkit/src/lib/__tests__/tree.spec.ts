@@ -42,7 +42,7 @@ describe('tree', () => {
         'child content',
       );
 
-      tree = new FsTree(dir, true);
+      tree = new FsTree(dir);
     });
 
     afterEach(() => {

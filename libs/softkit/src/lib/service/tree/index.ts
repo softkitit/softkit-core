@@ -137,7 +137,6 @@ export class FsTree implements Tree {
 
   constructor(
     readonly root: string,
-    private readonly isVerbose: boolean,
     private readonly logOperationId?: string,
   ) {}
 
@@ -157,9 +156,7 @@ export class FsTree implements Tree {
 
       return encoding ? content?.toString(encoding) : content;
     } catch (error) {
-      if (this.isVerbose) {
-        logger.error(error);
-      }
+      logger.error(error);
       return;
     }
   }
@@ -198,9 +195,7 @@ export class FsTree implements Tree {
         options,
       };
     } catch (error) {
-      if (this.isVerbose) {
-        logger.error(error);
-      }
+      logger.error(error);
     }
   }
 

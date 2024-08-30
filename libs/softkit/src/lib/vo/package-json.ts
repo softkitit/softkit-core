@@ -29,6 +29,19 @@ export interface PackageJson {
       };
   publishConfig?: Record<string, string>;
 
+  sk?: {
+    generators?: Record<string, string>;
+    /**
+     * key is a plugin name from package.json
+     * value is an object with default values for the generator, useful for do not repeat yourself
+     * for things like:
+     *   - i18n default languages
+     *   - db default ORM
+     *   - testing default setup
+     */
+    defaultGeneratorOptions?: Record<string, object>;
+  };
+
   packageManager?: string;
   description?: string;
   keywords?: string[];

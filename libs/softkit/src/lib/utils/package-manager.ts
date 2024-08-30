@@ -9,12 +9,12 @@ import {
   readJsonFile,
   writeJsonFile,
 } from './file/fileutils';
-import { appRoot } from './file/app-root';
+import { appRootPath } from './file/app-root-path';
 import { PackageManagerType } from '../vo/package-manager';
-import { readSkJson } from './sk-json';
 import { Tree } from '../service/tree';
 import { PackageJson } from '../vo/package-json';
 import { PACKAGE_JSON_FILE_NAME } from '../vo/constants';
+import { readRootPackageJson } from './package';
 
 export type PackageManager = 'yarn' | 'pnpm' | 'npm' | 'bun';
 
@@ -38,10 +38,10 @@ export interface PackageManagerCommands {
  * Detects which package manager is used in the app based on the lock file.
  */
 export function detectPackageManager(tree: Tree): PackageManagerType {
-  const skJson = readSkJson(tree);
+  const rootPackageJson = readRootPackageJson();
 
-  if (skJson?.packageManager) {
-    return skJson.packageManager;
+  if (rootPackageJson?.packageManager) {
+    return rootPackageJson.packageManager as PackageManagerType;
   } else if (tree.exists('bun.lockb')) {
     return 'bun';
   } else if (tree.exists('yarn.lock')) {
@@ -69,7 +69,7 @@ export function detectPackageManager(tree: Tree): PackageManagerType {
  */
 export function getPackageManagerCommand(
   packageManager: PackageManager,
-  root: string = appRoot,
+  root: string,
 ): PackageManagerCommands {
   const commands: { [pm in PackageManager]: () => PackageManagerCommands } = {
     yarn: () => {
@@ -336,7 +336,7 @@ export function createTempNpmDirectory() {
 
   // A package.json is needed for pnpm pack and for .npmrc to resolve
   writeJsonFile(`${dir}/package.json`, {});
-  copyPackageManagerConfigurationFiles(appRoot, dir);
+  copyPackageManagerConfigurationFiles(appRootPath(), dir);
 
   const cleanup = async () => {
     try {

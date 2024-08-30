@@ -19,3 +19,7 @@ export function isCI() {
     !!process.env['TEAMCITY_VERSION']
   );
 }
+
+export function isTTY(): boolean {
+  return process.stdout.isTTY && !isCI();
+}

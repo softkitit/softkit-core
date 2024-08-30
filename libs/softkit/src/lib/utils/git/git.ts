@@ -6,8 +6,8 @@ export function checkGitVersion(): string | null | undefined {
   try {
     const gitVersionOutput = execSync('git --version').toString().trim();
     return gitVersionOutput.match(/\d+\.\d+\.+\d+/)?.[0];
-  } catch (error) {
-    logger.verbose('Could not determine git version.', error);
+  } catch {
+    logger.verbose('Could not determine git version.');
     // eslint-disable-next-line unicorn/no-null
     return null;
   }
@@ -67,7 +67,7 @@ export async function initializeGitRepo(
   );
   if (insideRepo) {
     logger.log(
-      'SK Directory is already under version control. Skipping initialization of git.',
+      'Directory is already under version control. Skipping initialization of git.',
     );
     return;
   }

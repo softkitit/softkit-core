@@ -42,12 +42,14 @@ export class VersionCommand implements yargs.CommandModule {
       .trim();
 
     if (localNpmVersion) {
-      logger.log('Local installed version:', localNpmVersion);
+      logger.log(`Local installed version: ${localNpmVersion}`);
     } else {
       logger.log('No local installed was found.');
     }
     if (globalNpmVersion) {
-      logger.log('Global installed softkit module version:', globalNpmVersion);
+      logger.log(
+        `Global installed softkit module version: ${globalNpmVersion}`,
+      );
     } else {
       logger.log('No global installed was found.');
     }

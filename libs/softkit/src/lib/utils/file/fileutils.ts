@@ -36,7 +36,11 @@ export interface JsonWriteOptions extends JsonSerializeOptions {
 export function readJsonFile<T extends object = object>(
   path: string,
   options?: JsonReadOptions,
-): T {
+): T | undefined {
+  if (!existsSync(path)) {
+    return undefined;
+  }
+
   const content = readFileSync(path, 'utf8');
   if (options) {
     options.endsWithNewline = content.codePointAt(content.length - 1) === 10;

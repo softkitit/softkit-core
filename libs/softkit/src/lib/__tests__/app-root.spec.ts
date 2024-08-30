@@ -1,7 +1,7 @@
 import * as fileUtils from '../utils/file/fileutils';
-import { appRootInner } from '../utils/file/app-root';
+import { findAppRootInner } from '../utils/file/app-root-path';
 
-const rootMarkers = ['sk.json', 'sk'];
+const rootMarkers = ['sk.json'];
 
 describe('workspaceRootInner', () => {
   it.each(rootMarkers)('should find workspace root from %s', (marker) => {
@@ -16,7 +16,7 @@ describe('workspaceRootInner', () => {
         ].includes(p.toString()),
       );
 
-    expect(appRootInner('/home/workspace', null)).toEqual('/home/workspace');
+    expect(findAppRootInner('/home/workspace')).toEqual('/home/workspace');
   });
 
   it.each(rootMarkers)(
@@ -33,7 +33,7 @@ describe('workspaceRootInner', () => {
           ].includes(p.toString()),
         );
 
-      expect(appRootInner('/home/workspace/packages/a', null)).toEqual(
+      expect(findAppRootInner('/home/workspace/packages/a')).toEqual(
         '/home/workspace',
       );
     },
@@ -54,44 +54,9 @@ describe('workspaceRootInner', () => {
           ].includes(p.toString()),
         );
 
-      expect(appRootInner('/home/workspace/packages/a', null)).toEqual(
+      expect(findAppRootInner('/home/workspace/packages/a')).toEqual(
         '/home/workspace',
       );
     },
   );
-
-  it('should find workspace root from installation when marker not present', () => {
-    jest
-      .spyOn(fileUtils, 'fileExists')
-      .mockImplementation((p) =>
-        [
-          `/home/workspace/node_modules/sk/package.json`,
-          '/home/workspace/packages/a/package.json',
-          '/home/workspace/packages/b/package.json',
-          '/home/workspace/packages/c/package.json',
-        ].includes(p.toString()),
-      );
-
-    expect(appRootInner('/home/workspace/packages/a', null)).toEqual(
-      '/home/workspace',
-    );
-  });
-
-  it('should prefer outer workspace root from installation when marker not present and nested', () => {
-    jest
-      .spyOn(fileUtils, 'fileExists')
-      .mockImplementation((p) =>
-        [
-          `/home/workspace/node_modules/sk/package.json`,
-          '/home/workspace/packages/a/node_modules/sk/package.json',
-          '/home/workspace/packages/a/package.json',
-          '/home/workspace/packages/b/package.json',
-          '/home/workspace/packages/c/package.json',
-        ].includes(p.toString()),
-      );
-
-    expect(appRootInner('/home/workspace/packages/a', null)).toEqual(
-      '/home/workspace',
-    );
-  });
 });
