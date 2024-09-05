@@ -5,7 +5,7 @@ const nanoidNoSpecialCharacters = customAlphabet(
   '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ',
 );
 
-const nanoidOnlyNumbers = customAlphabet('1234567890');
+const nanoidOnlyNumbers = customAlphabet('123456789');
 
 export async function generateRandomIdAsync() {
   return nanoid();
