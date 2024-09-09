@@ -8,6 +8,8 @@ import {
 } from '../../../lib/decorators/permission.decorator';
 import { ClsService } from 'nestjs-cls';
 import { TenantClsStore } from '@softkit/persistence-api';
+import { RoleCheckMode, Roles } from '../../../lib/decorators/role.decorator';
+import { RoleType } from './vo/role-type';
 
 @Controller('auth')
 export class AuthController {
@@ -64,5 +66,23 @@ export class AuthController {
   @Get('/cls-store')
   async getClsStore() {
     return this.clsService.get();
+  }
+
+  @Get('admin-role-default-check-mode')
+  @Roles([RoleType.ADMIN])
+  async anyAdminRole() {
+    return 'hello';
+  }
+
+  @Get('admin-role-each-check-mode')
+  @Roles([RoleType.ADMIN], RoleCheckMode.EACH)
+  async eachAdminRole() {
+    return 'hello';
+  }
+
+  @Get('admin-role-any-check-mode')
+  @Roles([RoleType.ADMIN], RoleCheckMode.ANY)
+  async anyCheckModeAdminRole() {
+    return 'hello';
   }
 }
