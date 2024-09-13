@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [1.2.1](https://github.com/softkitit/softkit-core/compare/auth-1.2.0...auth-1.2.1) (2024-09-13)
+
+
+### Bug Fixes
+
+* **auth:** remove unnecessary log message from verifyToken method ([d2e10ad](https://github.com/softkitit/softkit-core/commit/d2e10adbdfee81785b37d80538c12cdba03d0296))
+
 ## [1.2.0](https://github.com/softkitit/softkit-core/compare/auth-1.1.0...auth-1.2.0) (2024-09-09)
 
 
