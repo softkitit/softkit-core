@@ -15,6 +15,8 @@ import {
 } from '../vo/payload';
 import { UserClsStore } from '../vo/user-cls-store';
 import { ClsService } from 'nestjs-cls';
+import { RoleCheckMode } from '../decorators/role.decorator';
+import { AbstractRoleAccessCheckService } from '../services/role-access-check.service';
 
 @Injectable()
 export class AccessGuard implements CanActivate {
@@ -27,6 +29,8 @@ export class AccessGuard implements CanActivate {
     >,
     @Optional()
     private accessCheckService?: AbstractAccessCheckService<IAccessTokenPayload>,
+    @Optional()
+    private roleAccessCheckService?: AbstractRoleAccessCheckService<IAccessTokenPayload>,
   ) {}
 
   /**
@@ -36,7 +40,7 @@ export class AccessGuard implements CanActivate {
    */
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const [permissions, checkMode] = this.getPermissionsMetadata(context);
-    const [roles] = this.getRolesMetadata(context);
+    const [roles, roleCheckMode] = this.getRolesMetadata(context);
 
     /**
      * it just secured endpoint without permissions
@@ -58,12 +62,14 @@ export class AccessGuard implements CanActivate {
     }
 
     // check roles must be first because it's coming from the jwt check and no need for db calls
-    const rolesMatch = await this.checkRoles(
-      user,
-      roles as unknown as string[],
-    );
+    const rolesMatch = await this.checkRoles(user, roles);
     return (
       rolesMatch ||
+      (await this.roleAccessCheckService?.checkRoles(
+        roleCheckMode,
+        user,
+        roles,
+      )) ||
       (await this.accessCheckService?.checkPermissions(
         checkMode as PermissionCheckMode,
         user,
@@ -73,8 +79,15 @@ export class AccessGuard implements CanActivate {
     );
   }
 
-  private getRolesMetadata(context: ExecutionContext) {
-    return this.reflector.get<string[]>('roles', context.getHandler()) || [[]];
+  private getRolesMetadata(
+    context: ExecutionContext,
+  ): [string[], RoleCheckMode] {
+    return (
+      this.reflector.get<[string[], RoleCheckMode]>(
+        'roles',
+        context.getHandler(),
+      ) || [[], RoleCheckMode.ANY]
+    );
   }
 
   private getPermissionsMetadata(context: ExecutionContext) {
@@ -93,7 +106,7 @@ export class AccessGuard implements CanActivate {
 
     const currentTenant = this.clsService.get().tenantId;
 
-    const tenantInfo = user.tenants.find(
+    const tenantInfo = user?.tenants?.find(
       (tenant) => tenant.tenantId === currentTenant,
     );
 

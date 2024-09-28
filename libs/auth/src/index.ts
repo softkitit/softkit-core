@@ -9,6 +9,7 @@ export * from './lib/guards/refresh-jwt-auth.guard';
 export * from './lib/multi-tenancy';
 export * from './lib/services/abstract-token-builder.service';
 export * from './lib/services/access-check.service';
+export * from './lib/services/role-access-check.service';
 export * from './lib/services/token.service';
 export * from './lib/services/vo/jwt-tokens-payload';
 export * from './lib/strategies/jwt.strategy';

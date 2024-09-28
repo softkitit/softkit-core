@@ -75,8 +75,6 @@ export class TokenService<
         secret,
       });
     } catch (error) {
-      this.logger.error({ err: error }, `Error while trying to verify a token`);
-
       throw new GeneralUnauthorizedException(undefined, error);
     }
   }
