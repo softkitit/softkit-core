@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.2.16](https://github.com/softkitit/softkit-core/compare/bootstrap-0.2.15...bootstrap-0.2.16) (2025-02-17)
+
+
+### Bug Fixes
+
+* **bootstrap:** enabled rawbody by default ([a390942](https://github.com/softkitit/softkit-core/commit/a390942e1daa233bf9f849cb98bb7c74b4f4faa2))
+
 ## [0.2.15](https://github.com/softkitit/softkit-core/compare/bootstrap-0.2.14...bootstrap-0.2.15) (2024-07-29)
 
 ## [0.2.14](https://github.com/softkitit/softkit-core/compare/bootstrap-0.2.13...bootstrap-0.2.14) (2024-07-16)
