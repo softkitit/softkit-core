@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [1.2.2](https://github.com/softkitit/softkit-core/compare/auth-1.2.1...auth-1.2.2) (2025-02-17)
+
+
+### Bug Fixes
+
+* **auth:** fixed error log to info ([b30ba6a](https://github.com/softkitit/softkit-core/commit/b30ba6ae1a31bb29b4b077b6e9f2531447b449cb))
+
 ## [1.2.1](https://github.com/softkitit/softkit-core/compare/auth-1.2.0...auth-1.2.1) (2024-09-13)
 
 
