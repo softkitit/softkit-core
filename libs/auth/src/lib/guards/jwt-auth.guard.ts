@@ -9,7 +9,7 @@ import { TokenService } from '../services/token.service';
 import { UserClsStore } from '../vo/user-cls-store';
 import { GeneralUnauthorizedException } from '@softkit/exceptions';
 import { IAccessTokenPayload } from '../vo/payload';
-import { AbstractTenantResolutionService } from '../multi-tenancy/abstract-tenant-resolution.service';
+import { AbstractTenantResolutionService } from '../multi-tenancy';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
@@ -50,7 +50,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     if (!accessToken) {
       // guards are called before interceptors, that's why general loggers are not available here
       // in normal situation outside of guards such logs are redundant
-      this.logger.log(`No access token found for the request,
+      this.logger.error(`No access token found for the request,
       it will be rejected by guard and return 401.`);
       throw new GeneralUnauthorizedException();
     }
