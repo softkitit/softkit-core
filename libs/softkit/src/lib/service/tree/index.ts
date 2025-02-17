@@ -135,10 +135,7 @@ export class FsTree implements Tree {
    */
   private locked = false;
 
-  constructor(
-    readonly root: string,
-    private readonly logOperationId?: string,
-  ) {}
+  constructor(readonly root: string) {}
 
   read(filePath: string): Buffer | undefined;
   read(filePath: string, encoding: BufferEncoding): string | undefined;

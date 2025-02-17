@@ -1,10 +1,11 @@
 import * as path from 'node:path';
 import { fileExists } from './fileutils';
-import { PACKAGE_JSON_FILE_NAME, SK_JSON_FILE_NAME } from '../../vo/constants';
+import { SK_JSON_FILE_NAME } from '../../vo/constants';
 import * as process from 'node:process';
 import { getAppRootPathEnv } from '../env';
 import chalk from 'chalk';
 import memoize from 'memoizee';
+import { logger } from '../logger';
 
 /**
  * The root of the app
@@ -18,13 +19,14 @@ export function findAppRootInner(dir: string, candidate?: string): string {
   const skJsonFile = path.join(dir, SK_JSON_FILE_NAME);
 
   if (dir === candidate) {
-    throw new Error(
-      `Cannot find ${SK_JSON_FILE_NAME} in the parent directories of ${process.cwd()}.
+    logger.error(
+      `Cannot find "${SK_JSON_FILE_NAME}" in the parent directories of ${process.cwd()}
        Seems like it's not initialized as a Softkit app.
-       You most likely need to call ${chalk.bold(
+       You need to call ${chalk.bold(
          '"sk init"',
-       )} in the directory that contains ${PACKAGE_JSON_FILE_NAME}.`,
+       )} in the root directory of the project `,
     );
+    process.exit(1);
   }
 
   return fileExists(skJsonFile)

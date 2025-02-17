@@ -1,11 +1,15 @@
-import { FieldType } from './generator-option';
+import { FieldType } from './vo/generator-option';
+import { ValidationError } from '../../error/validation.error';
 
-export interface ValidationParams {
-  /**
-   * default true
-   * */
-  required?: boolean;
+export type ValidationOptions<T extends FieldType> = T extends 'string'
+  ? StringValidationOptions
+  : T extends 'number'
+  ? NumberValidationOptions
+  : T extends 'boolean'
+  ? BooleanValidationOptions
+  : ValidationParams<unknown>;
 
+export interface ValidationParams<R> {
   /*
    * @return converted value or throw error
    * */
@@ -13,64 +17,61 @@ export interface ValidationParams {
     fieldName: string,
     value: string | string[],
     validationParams: unknown,
-  ): unknown;
+  ): R | R[];
 }
 
-export interface NumberValidationParams extends ValidationParams {
-  type: 'number';
+export interface NumberValidationOptions extends ValidationParams<number> {
   integer?: boolean;
   min?: number;
   max?: number;
 }
 
-export interface StringValidationParams extends ValidationParams {
-  type: 'string';
+export interface StringValidationOptions extends ValidationParams<string> {
   minLength?: number;
   maxLength?: number;
-  regex?: number;
+  regex?: string;
 }
 
-export interface BooleanValidationParams extends ValidationParams {
-  type: 'boolean';
-}
+export interface BooleanValidationOptions extends ValidationParams<boolean> {}
 
-export function validateAndConvert(
+export function validateAndConvert<T extends FieldType>(
   fieldName: string,
   v: string | string[],
-  fieldType?: FieldType,
-  validationParams?: ValidationParams,
-): unknown {
-  if (validationParams?.validateAndConvert) {
-    return validationParams.validateAndConvert(fieldName, v, validationParams);
+  fieldType: T,
+  params?: ValidationOptions<T>,
+): unknown | unknown[] {
+  if (params?.validateAndConvert) {
+    return params.validateAndConvert(fieldName, v, params);
   }
 
-  if (fieldType === 'number') {
-    return validateAndConvertNumber(
-      fieldName,
-      v,
-      validationParams as NumberValidationParams,
-    );
+  switch (fieldType) {
+    case 'number': {
+      return validateAndConvertNumber(
+        fieldName,
+        v,
+        params as NumberValidationOptions,
+      );
+    }
+    case 'boolean': {
+      return validateAndConvertBoolean(fieldName, v);
+    }
+    case 'string': {
+      return validateAndConvertString(
+        fieldName,
+        v,
+        params as StringValidationOptions,
+      );
+    }
+    default: {
+      return v;
+    }
   }
-
-  if (fieldType === 'boolean') {
-    return validateAndConvertBoolean(fieldName, v);
-  }
-
-  if (fieldType === 'string') {
-    return validateAndConvertString(
-      fieldName,
-      v,
-      validationParams as StringValidationParams,
-    );
-  }
-
-  return v;
 }
 
 function validateAndConvertNumber(
   fieldName: string,
   v: string | string[],
-  validationParams?: NumberValidationParams,
+  validationParams?: NumberValidationOptions,
 ): number | number[] {
   const values = Array.isArray(v) ? v : [v];
 
@@ -124,7 +125,7 @@ function validateAndConvertBoolean(
   );
 
   if (notConvertibleIdx !== -1) {
-    throw new Error(
+    throw new ValidationError(
       `Value ${values[notConvertibleIdx]} for field '${fieldName}' is not a boolean`,
     );
   }
@@ -136,7 +137,7 @@ function validateAndConvertBoolean(
 function validateAndConvertString(
   fieldName: string,
   v: string | string[],
-  validationParams?: StringValidationParams,
+  validationParams?: StringValidationOptions,
 ): string | string[] {
   const values = Array.isArray(v) ? v : [v];
 
@@ -145,7 +146,7 @@ function validateAndConvertString(
       validationParams?.minLength !== undefined &&
       value.length < validationParams.minLength
     ) {
-      throw new Error(
+      throw new ValidationError(
         `Value for field '${fieldName}' is smaller then minimal allowed length ${validationParams.minLength}`,
       );
     }
@@ -154,7 +155,7 @@ function validateAndConvertString(
       validationParams?.maxLength !== undefined &&
       value.length > validationParams.maxLength
     ) {
-      throw new Error(
+      throw new ValidationError(
         `Value for field '${fieldName}' is bigger then maximum allowed length ${validationParams.maxLength}`,
       );
     }

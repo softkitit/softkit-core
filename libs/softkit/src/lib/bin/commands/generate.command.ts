@@ -2,22 +2,25 @@
 import yargs from 'yargs';
 import { appRootPath } from '../../utils/file/app-root-path';
 import { setVerbose } from '../../utils/env';
-import { FsTree } from '../../service/tree';
-import { findPlugins, getImplementationFactory } from '../../utils/plugins';
+import { flushChanges, FsTree, printChanges, Tree } from '../../service/tree';
 import { detectPackageManager } from '../../utils/package-manager';
 import { WorkspaceContext } from '../../utils/app-context/vo/app-environment.context';
 import { detectMonorepoManager, getListOfApps } from '../../utils/monorepo';
 import { AppContext } from '../../utils/app-context/vo/app-context';
-import { PluginInfo } from '../../utils/plugins/vo/plugin-info';
-import enquirer = require('enquirer');
 import process from 'node:process';
 import { logger } from '../../utils/logger';
-import { Generator } from '../../utils/generator/vo/generator';
-import { validateAndConvert } from '../../utils/generator/vo/validation';
-import { GeneratorOption } from '../../utils/generator/vo/generator-option';
+import {
+  getAllPlugins,
+  getGeneratorImplementation,
+  parseGeneratorString,
+  promptForGeneratorIfNeeded,
+  validateGeneratorInputs,
+} from '../../utils/generator/utils';
+import { PACKAGE_JSON_FILE_NAME } from '../../vo/constants';
 
 export interface GenerateCommandOptions {
   generator?: string;
+  app?: string;
   dryRun: boolean;
   verbose: boolean;
 }
@@ -28,7 +31,7 @@ export interface GenerateCommandOptions {
 export class GenerateCommand
   implements yargs.CommandModule<object, GenerateCommandOptions>
 {
-  command = 'generate <generator> [_..]';
+  command = 'generate <generator> <app> [_..]';
   aliases = ['g', 'gen'];
   describe = 'Execute SK generator';
 
@@ -42,6 +45,11 @@ export class GenerateCommand
         describe: 'Name of the generator (e.g., @softkit/nestjs:library)',
         type: 'string',
         required: true,
+      })
+      .positional('app', {
+        describe: 'Name of the application folder if you use a monorepo',
+        type: 'string',
+        required: false,
       })
       .option('dryRun', {
         describe: 'Preview the changes without updating files',
@@ -66,7 +74,7 @@ export class GenerateCommand
     }
 
     const generatorOptions = parseGeneratorString(args.generator!);
-    const fsTree = new FsTree(appRootPath());
+    const fsTree: Tree = new FsTree(appRootPath());
 
     const packageManager = detectPackageManager(fsTree);
     const monorepoManager = detectMonorepoManager(fsTree, packageManager);
@@ -93,12 +101,9 @@ export class GenerateCommand
 
     const generatorsDefinition = plugin.packageJson.sk.generators;
 
-    if (
-      !generatorsDefinition ||
-      Object.keys(generatorsDefinition).length === 0
-    ) {
+    if (Object.keys(generatorsDefinition).length === 0) {
       logger.error(
-        `Generators definition not found in ${plugin.packageJson.name} package.json file`,
+        `Generators definition not found in ${plugin.packageJson.name} ${PACKAGE_JSON_FILE_NAME} file`,
       );
       return process.exit(1);
     }
@@ -114,118 +119,22 @@ export class GenerateCommand
       plugin,
     );
 
-    const generatorField = generator.getInputs();
-    const generatorInputs = validateGeneratorInputs(generatorField, args);
-
-    await generator.generate(fsTree, workspaceConfig, generatorInputs);
-
-    const fileChanges = fsTree.listChanges();
-    logger.info(`Files to be created/updated: ${fileChanges}`);
-  }
-}
-
-function getAllPlugins(apps: AppContext[]) {
-  return [
-    ...findPlugins(),
-    ...apps.map((app) =>
-      app.hasBuiltInPlugin
-        ? {
-            path: app.path,
-            packageJson: app.packageJson,
-            local: true,
-          }
-        : undefined,
-    ),
-  ]
-    .filter((plugin): plugin is PluginInfo => !!plugin)
-    .sort((a, b) => a.packageJson.name.localeCompare(b.packageJson.name));
-}
-
-async function promptForGeneratorIfNeeded(
-  generator: {
-    module: string;
-    generator?: string;
-  },
-  generatorsDefinition: Record<string, string> & string,
-  plugin: PluginInfo,
-): Promise<string> {
-  if (
-    generator.generator === undefined ||
-    !generatorsDefinition[generator.generator]
-  ) {
-    const generatorPrompt = await enquirer.prompt<{ generator: string }>([
-      {
-        name: 'generator',
-        message: `Select a generator from ${plugin.packageJson.name} plugin:`,
-        type: 'autocomplete',
-        choices: Object.keys(generatorsDefinition).map((generator) => ({
-          name: generator,
-        })),
-        initial: 0,
-      },
-    ]);
-    return generatorPrompt.generator;
-  } else {
-    return generator.generator;
-  }
-}
-
-function parseGeneratorString(value: string): {
-  module: string;
-  generator?: string;
-} {
-  const separatorIndex = value.lastIndexOf(':');
-
-  return separatorIndex > 0
-    ? {
-        module: value.slice(0, separatorIndex),
-        generator: value.slice(separatorIndex + 1),
-      }
-    : {
-        module: value,
-      };
-}
-
-function validateGeneratorInputs(
-  generatorField: GeneratorOption[],
-  args: {
-    generator?: string;
-    dryRun: boolean;
-    verbose: boolean;
-  } & { _: Array<string | number>; $0: string; [p: string]: unknown },
-) {
-  const generatorInputs: Record<string, unknown> = {};
-
-  for (const field of generatorField) {
-    let value = args[field.name] as string | string[];
-
-    const requiredField = field.validation?.required ?? true;
-
-    if (requiredField && !value) {
-      //   todo prompt for value here
-      value = 'smth';
-    }
-
-    const convertedValue = validateAndConvert(
-      field.name,
-      value,
-      field.type,
-      field.validation,
+    const generatorInputs = validateGeneratorInputs(
+      generator.getInputs(),
+      args,
     );
 
-    generatorInputs[field.name] = convertedValue;
+    const generatorCallback = await generator.generate(
+      fsTree,
+      workspaceConfig,
+      generatorInputs,
+    );
+
+    flushChanges(fsTree.root, fsTree.listChanges());
+    printChanges(fsTree.listChanges());
+
+    if (generatorCallback) {
+      await generatorCallback();
+    }
   }
-  return generatorInputs;
-}
-
-function getGeneratorImplementation(
-  generatorImplementation: string,
-  plugin: PluginInfo,
-) {
-  const implementationFactory = getImplementationFactory<{
-    new (...args: unknown[]): Generator<unknown>;
-  }>(generatorImplementation, plugin.path);
-
-  const GeneratorFactory = implementationFactory();
-  return new GeneratorFactory();
 }

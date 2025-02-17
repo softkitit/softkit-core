@@ -1,20 +1,20 @@
-import { FsTree } from '../../../service/tree';
+import { Tree } from '../../../service/tree';
 import { WorkspaceContext } from '../../app-context/vo/app-environment.context';
-import { GeneratorOption } from './generator-option';
-import { AppContext } from '../../app-context/vo/app-context';
+import { FieldType, GeneratorOption } from './generator-option';
 
 /**
  * A callback function that is executed after changes are made to the file system
  */
 export type GeneratorCallback = () => void | Promise<void>;
 
-export interface Generator<T, PC extends AppContext = AppContext> {
+export interface Generator<T> {
   generate(
-    fs: FsTree,
+    fs: Tree,
     workspaceContext: WorkspaceContext,
     options?: T,
-    pc?: PC,
   ): void | GeneratorCallback | Promise<void | GeneratorCallback>;
 
-  getInputs(): GeneratorOption[];
+  getInputs(): GeneratorOption<FieldType, unknown>[];
+
+  getGeneratorDescription?(): string;
 }

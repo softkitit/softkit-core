@@ -4,8 +4,6 @@ import { setAppRootPathEnv } from '../../utils/env';
 import SpyInstance = jest.SpyInstance;
 import * as path from 'node:path';
 
-setAppRootPathEnv(path.join(__dirname, 'apps', 'nest-app-base'));
-
 describe(`generator`, () => {
   const generateCommand = new GenerateCommand();
 
@@ -19,6 +17,7 @@ describe(`generator`, () => {
     });
 
     it('should have a command', async () => {
+      setAppRootPathEnv(path.join(__dirname, 'apps', 'nest-app-base'));
       await generateCommand.handler({
         $0: '',
         _: [],
