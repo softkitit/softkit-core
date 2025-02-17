@@ -92,7 +92,9 @@ export async function createNestWebApp(
     : await NestFactory.create<NestFastifyApplication>(
         module,
         buildFastifyAdapter(),
-        {},
+        {
+          rawBody: true,
+        },
       );
 }
 
