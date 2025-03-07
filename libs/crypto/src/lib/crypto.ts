@@ -19,12 +19,13 @@ export function generateRandomIdWithoutSpecialCharacters(length = 11) {
   return nanoidNoSpecialCharacters(length);
 }
 
+// todo a problem with numbers starting with 0
 export function generateRandomNumber(length = 6): number {
   return Number.parseInt(nanoidOnlyNumbers(length));
 }
 
 /**
- * todo add salt
+ * todo add salt?
  * */
 export function hashPassword(password: string) {
   return argon2.hash(password);

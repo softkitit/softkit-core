@@ -55,7 +55,7 @@ export function readModulePackageJson(moduleSpecifier: string): {
   packageJson: PackageJson;
   path: string;
 } {
-  const result = readModuleJson<PackageJson>(
+  const result = readJsonFileInsideModule<PackageJson>(
     moduleSpecifier,
     PACKAGE_JSON_FILE_NAME,
   );
@@ -72,7 +72,7 @@ export function readModulePackageJson(moduleSpecifier: string): {
   };
 }
 
-export function readModuleJson<T extends object>(
+export function readJsonFileInsideModule<T extends object>(
   moduleSpecifier: string,
   filePath: string,
 ): {
@@ -80,8 +80,9 @@ export function readModuleJson<T extends object>(
   path: string;
 } {
   let jsonPath: string;
+  const appPath = appRootPath();
   const entryPoint = require.resolve(moduleSpecifier, {
-    paths: [appRootPath()],
+    paths: [appPath],
   });
 
   let moduleRootPath = dirname(entryPoint);

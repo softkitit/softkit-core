@@ -130,8 +130,16 @@ export class GenerateCommand
       generatorInputs,
     );
 
-    flushChanges(fsTree.root, fsTree.listChanges());
-    printChanges(fsTree.listChanges());
+    const changes = fsTree.listChanges();
+    flushChanges(fsTree.root, changes);
+
+    if (changes && changes.length > 0) {
+      printChanges(changes);
+    } else {
+      logger.warn(
+        `No files were created or updated, in general it maybe ok, if you already ran a generator before or made exactly the same changes manually`,
+      );
+    }
 
     if (generatorCallback) {
       await generatorCallback();
