@@ -1,0 +1,11 @@
+{
+  "name": "@softkit/generators",
+  "version": "0.1.0",
+  "main": "./index.ts",
+  "private": true,
+  "sk": {
+    "generators": {
+      "name": "@sample/nest-generator"
+    }
+  }
+}

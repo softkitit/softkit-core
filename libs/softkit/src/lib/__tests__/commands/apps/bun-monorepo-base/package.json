@@ -1,0 +1,7 @@
+{
+  "name": "@softkit/nest-app",
+  "version": "0.1.0",
+  "dependencies": {
+    "@sample/nest-generator": "^0.1.0"
+  }
+}

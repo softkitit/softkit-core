@@ -5,7 +5,7 @@ const nanoidNoSpecialCharacters = customAlphabet(
   '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ',
 );
 
-const nanoidOnlyNumbers = customAlphabet('1234567890');
+const nanoidOnlyNumbers = customAlphabet('123456789');
 
 export async function generateRandomIdAsync() {
   return nanoid();
@@ -19,12 +19,13 @@ export function generateRandomIdWithoutSpecialCharacters(length = 11) {
   return nanoidNoSpecialCharacters(length);
 }
 
+// todo a problem with numbers starting with 0
 export function generateRandomNumber(length = 6): number {
   return Number.parseInt(nanoidOnlyNumbers(length));
 }
 
 /**
- * todo add salt
+ * todo add salt?
  * */
 export function hashPassword(password: string) {
   return argon2.hash(password);

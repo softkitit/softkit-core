@@ -33,14 +33,15 @@
       "@softkit/mail": ["libs/mail/src/index.ts"],
       "@softkit/persistence-api": ["libs/persistence-api/src/index.ts"],
       "@softkit/platform-client": ["libs/clients/platform-client/src/index.ts"],
+      "@softkit/softkit": ["libs/softkit/src/index.ts"],
       "@softkit/redis": ["libs/redis/src/index.ts"],
       "@softkit/resource-plugin": ["libs/resource-plugin/src/index.ts"],
       "@softkit/server-http-client": ["libs/server-http-client/src/index.ts"],
+      "@softkit/service-api": ["libs/service-api/src/index.ts"],
       "@softkit/string-utils": ["libs/string-utils/src/index.ts"],
       "@softkit/swagger-utils": ["libs/swagger-utils/src/index.ts"],
       "@softkit/test-utils": ["libs/test-utils/src/index.ts"],
       "@softkit/typeorm": ["libs/typeorm/src/index.ts"],
-      "@softkit/service-api": ["libs/service-api/src/index.ts"],
       "@softkit/validation": ["libs/validation/src/index.ts"]
     }
   },
