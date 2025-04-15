@@ -8,6 +8,7 @@ export function detectAppTypeAndFramework(
   const allDeps = {
     ...packageJson?.dependencies,
     ...packageJson?.peerDependencies,
+    ...packageJson?.optionalDependencies,
   };
 
   const frameworks: Framework[] = [];

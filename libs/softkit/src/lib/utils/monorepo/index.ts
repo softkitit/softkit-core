@@ -10,6 +10,9 @@ import { AppContext } from '../app-context/vo/app-context';
 import { detectAppTypeAndFramework } from '../app-context';
 import { readRootPackageJson } from '../package';
 import { hasBuiltInPlugin } from '../plugins';
+import { getPackageManagerCommands } from '../package-manager';
+import { execSync } from 'node:child_process';
+import { parseJson } from '../json';
 
 export function detectMonorepoManager(
   tree: Tree,
@@ -17,9 +20,10 @@ export function detectMonorepoManager(
 ): MonorepoManagerType | undefined {
   if (tree.exists('nx.json')) {
     return 'nx';
+  } else if (tree.exists('pnpm-workspace.yaml')) {
+    return 'pnpm';
   } else {
     const packageJson = readRootPackageJson();
-
     return packageJson?.workspaces ? packageManager : undefined;
   }
 }
@@ -44,7 +48,7 @@ export async function getListOfApps(
     ];
   }
 
-  const packages = getPackagesPaths(monorepoManager);
+  const packages = getWorkspacePackagesPaths(monorepoManager);
 
   if (packages.length === 0) {
     logger.warn('No packages found in the monorepo');
@@ -66,15 +70,28 @@ export async function getListOfApps(
   });
 }
 
-function getPackagesPaths(monorepoManager: MonorepoManagerType) {
+function getWorkspacePackagesPaths(monorepoManager: MonorepoManagerType) {
   switch (monorepoManager) {
     case 'nx': {
+      // todo wtf?
       return ['apps/*', 'libs/*'];
+    }
+    case 'pnpm': {
+      const packageManagerCommands = getPackageManagerCommands('pnpm');
+      const result = execSync(`${packageManagerCommands.listWorkspaces}`, {
+        encoding: 'utf8',
+      });
+
+      const resultJson = parseJson<
+        {
+          path: string;
+        }[]
+      >(result);
+      return resultJson.map((x) => x.path);
     }
     case 'bun':
     case 'yarn':
-    case 'npm':
-    case 'pnpm': {
+    case 'npm': {
       const workspaces = readRootPackageJson().workspaces;
 
       const packages = Array.isArray(workspaces)
@@ -90,32 +107,31 @@ function getPackagesPaths(monorepoManager: MonorepoManagerType) {
 }
 
 const findAllMonorepoApps = async (packageSpecs: string[]) => {
-  return globby(packageSpecs).then((paths) => {
-    return paths
-      .map((path) => {
-        const packageJson = readJsonFile<PackageJson>(path);
-        if (packageJson) {
-          return {
-            packageJson,
-            name: packageJson.name,
-            path,
-          };
-        } else {
-          logger.verbose(
-            `Could not read package.json at ${path}, for monorepo project, looks like a package is not an app`,
-          );
-          // eslint-disable-next-line sonarjs/no-redundant-jump
-          return;
-        }
-      })
-      .filter(
-        (
-          x,
-        ): x is {
-          packageJson: PackageJson;
-          name: string;
-          path: string;
-        } => x !== undefined,
-      );
-  });
+  const packages = await globby(packageSpecs);
+  return packages
+    .map((path) => {
+      const packageJson = readJsonFile<PackageJson>(path);
+      if (packageJson) {
+        return {
+          packageJson,
+          name: packageJson.name,
+          path,
+        };
+      } else {
+        logger.verbose(
+          `Could not read package.json at ${path}, for monorepo project, looks like a package is not an app`,
+        );
+        // eslint-disable-next-line sonarjs/no-redundant-jump
+        return;
+      }
+    })
+    .filter(
+      (
+        x,
+      ): x is {
+        packageJson: PackageJson;
+        name: string;
+        path: string;
+      } => x !== undefined,
+    );
 };

@@ -16,24 +16,45 @@ describe(`generator`, () => {
   let mockExit: SpyInstance;
 
   describe(`nest app base`, () => {
-    beforeAll(() => {
-      const nodefs = jest.requireActual('node:fs');
+    beforeEach(() => {
+      const nodeFS = jest.requireActual('node:fs');
 
       const copyFolder = path.join(__dirname, 'apps');
-      copyRealFsToMemfs(nodefs, fs, copyFolder, copyFolder);
+      copyRealFsToMemfs(nodeFS, fs, copyFolder, copyFolder);
 
       mockExit = jest.spyOn(process, 'exit').mockImplementation(() => {
         return undefined as never;
       });
     });
 
-    it('should have a command', async () => {
+    it('should execute an installed generator', async () => {
       const rootPath = path.join(__dirname, 'apps', 'nest-app-base');
       setAppRootPathEnv(rootPath);
       await generateCommand.handler({
         $0: '',
         _: [],
         generator: '@sample/nest-generator:app',
+        dryRun: true,
+        applicationName: 'some-app-name',
+        verbose: true,
+      });
+
+      expect(
+        fs.readFileSync(path.join(rootPath, 'src', 'app.module.ts')).toString(),
+      ).toBe("import { Module } from '@nestjs/common'");
+    });
+
+    it('should execute a local generator with pnpm', async () => {
+      const rootPath = path.join(
+        __dirname,
+        'apps',
+        'nest-app-pnpm-base-local-generator',
+      );
+      setAppRootPathEnv(rootPath);
+      await generateCommand.handler({
+        $0: '',
+        _: [],
+        generator: 'test',
         dryRun: true,
         applicationName: 'some-app-name',
         verbose: true,

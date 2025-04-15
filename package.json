@@ -126,6 +126,7 @@
     "openapi-typescript-codegen": "0.25.0",
     "pg": "8.11.3",
     "plugin-image-zoom": "1.2.0",
+    "pnpm": "^10.6.1",
     "prettier": "3.0.3",
     "prism-react-renderer": "2.3.0",
     "pug": "3.0.2",

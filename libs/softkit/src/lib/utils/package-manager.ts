@@ -29,6 +29,7 @@ export interface PackageManagerCommands {
   exec: string;
   dlx: string;
   list: string;
+  listWorkspaces?: string;
   run: (script: string, args?: string) => string;
   // Make this required once bun adds programmatically support for reading config https://github.com/oven-sh/bun/issues/7140
   getRegistryUrl?: string;
@@ -67,9 +68,9 @@ export function detectPackageManager(tree: Tree): PackageManagerType {
  * @param packageManager The package manager to use. If not provided, it will be detected based on the lock file.
  * @param root The directory the commands will be ran inside of. Defaults to the current workspace's root.
  */
-export function getPackageManagerCommand(
+export function getPackageManagerCommands(
   packageManager: PackageManager,
-  root: string,
+  root: string = appRootPath(),
 ): PackageManagerCommands {
   const commands: { [pm in PackageManager]: () => PackageManagerCommands } = {
     yarn: () => {
@@ -117,6 +118,7 @@ export function getPackageManagerCommand(
       }
 
       const isPnpmWorkspace = existsSync(join(root, 'pnpm-workspace.yaml'));
+
       return {
         install: 'pnpm install --no-frozen-lockfile', // explicitly disable in case of CI
         ciInstall: 'pnpm install --frozen-lockfile',
@@ -136,6 +138,7 @@ export function getPackageManagerCommand(
               : ''
           }`,
         list: 'pnpm ls --depth 100',
+        listWorkspaces: `pnpm -C ${root} m ls --json --depth=-1`,
         getRegistryUrl: 'pnpm config get registry',
       };
     },
@@ -148,6 +151,7 @@ export function getPackageManagerCommand(
         addDev: 'npm install -D',
         rm: 'npm rm',
         exec: 'npx',
+        // download and execute a package
         dlx: 'npx',
         run: (script: string, args?: string) =>
           `npm run ${script}${args ? ' -- ' + args : ''}`,

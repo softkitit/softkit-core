@@ -1,0 +1,10 @@
+{
+  "name": "@softkit/nest-app",
+  "version": "0.1.0",
+  "dependencies": {
+    "@nestjs/core": "^10.4.4"
+  },
+  "workspaces": [
+    "packages/*"
+  ]
+}

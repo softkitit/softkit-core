@@ -11,6 +11,7 @@ export interface Generator<T> {
   generate(
     fs: Tree,
     workspaceContext: WorkspaceContext,
+    // options should be required
     options?: T,
   ): void | GeneratorCallback | Promise<void | GeneratorCallback>;
 

@@ -2,7 +2,7 @@
   "name": "@softkit/nest-app",
   "version": "0.1.0",
   "dependencies": {
-    "@nestjs/core": "^10.4.4",
-    "@sample/nest-generator": "^0.1.0"
+    "@nestjs/core": "^10.2.4",
+    "@sample/nest-generator": "0.0.1"
   }
 }

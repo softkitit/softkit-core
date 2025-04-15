@@ -7205,6 +7205,7 @@ __metadata:
     pino-http: 8.6.1
     pino-pretty: 10.3.1
     plugin-image-zoom: 1.2.0
+    pnpm: ^10.6.1
     prettier: 3.0.3
     prism-react-renderer: 2.3.0
     pug: 3.0.2
@@ -21617,6 +21618,18 @@ __metadata:
   version: 8.0.0
   resolution: "pluralize@npm:8.0.0"
   checksum: 08931d4a6a4a5561a7f94f67a31c17e6632cb21e459ab3ff4f6f629d9a822984cf8afef2311d2005fbea5d7ef26016ebb090db008e2d8bce39d0a9a9d218736e
+  languageName: node
+  linkType: hard
+
+"pnpm@npm:^10.6.1":
+  version: 10.6.1
+  resolution: "pnpm@npm:10.6.1"
+  dependencies:
+    node-gyp: latest
+  bin:
+    pnpm: bin/pnpm.cjs
+    pnpx: bin/pnpx.cjs
+  checksum: 1f2a114250cc655cab29ca1db61fd04a885aea466a6ac9f2858b70df59c978e8afe2084a49adb40febff6e5cd48e701427660288b4752663de5d0983246c61ed
   languageName: node
   linkType: hard
 

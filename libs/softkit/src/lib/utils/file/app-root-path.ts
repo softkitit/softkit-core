@@ -26,6 +26,7 @@ export function findAppRootInner(dir: string, candidate?: string): string {
          '"sk init"',
        )} in the root directory of the project `,
     );
+    // eslint-disable-next-line unicorn/no-process-exit
     process.exit(1);
   }
 
