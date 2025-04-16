@@ -1,4 +1,13 @@
 Softkit Core Libraries Changelog
+## [0.6.1](https://github.com/softkitit/softkit-core/compare/typeorm-0.6.0...typeorm-0.6.1) (2025-04-16)
+
+
+### Bug Fixes
+
+* **test-utils:** sonar fixes ([4fe02d8](https://github.com/softkitit/softkit-core/commit/4fe02d8857ec0055e500e1e4db1575548211198b))
+* **typeorm:** decreased the version of nestjs-paginate dependency to support more versions ([ece2072](https://github.com/softkitit/softkit-core/commit/ece20725ab1551279f587c5cbf05c3ad9e516503))
+* **typeorm:** fixed type definition for docs generation ([f7b49c4](https://github.com/softkitit/softkit-core/commit/f7b49c4324255da58d1591af32e7ce23d533b7ba))
+
 ## [0.6.0](https://github.com/softkitit/softkit-core/compare/typeorm-0.5.5...typeorm-0.6.0) (2024-07-29)
 
 
