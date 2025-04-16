@@ -40,6 +40,33 @@
       "options": {
         "jestConfig": "libs/ftp-client/jest.config.ts"
       }
+    },
+    "version": {
+      "executor": "@jscutlery/semver:version",
+      "dependsOn": [
+        "build"
+      ],
+      "options": {
+        "postTargets": [
+          "ftp-client:npm",
+          "ftp-client:github"
+        ],
+        "preset": "conventional"
+      }
+    },
+    "github": {
+      "executor": "@jscutlery/semver:github",
+      "options": {
+        "tag": "${tag}",
+        "notes": "${notes}"
+      }
+    },
+    "npm": {
+      "executor": "ngx-deploy-npm:deploy",
+      "options": {
+        "access": "public",
+        "dryRun": false
+      }
     }
   },
   "tags": []
