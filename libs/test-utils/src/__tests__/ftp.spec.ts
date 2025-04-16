@@ -4,6 +4,24 @@ import { faker } from '@faker-js/faker';
 import { Readable, Writable } from 'node:stream';
 
 describe('start ftp server and create configs', () => {
+  it('do not allow maximum port to be less then minimum', async () => {
+    await expect(
+      startFTPServer({
+        maximumPortForPassiveConnections: 19_999,
+        minimumPortForPassiveConnections: 20_000,
+      }),
+    ).rejects.toBeDefined();
+  });
+
+  it('do not allow for port range to be too big', async () => {
+    await expect(
+      startFTPServer({
+        maximumPortForPassiveConnections: 20_500,
+        minimumPortForPassiveConnections: 20_000,
+      }),
+    ).rejects.toBeDefined();
+  });
+
   it('check ftp starting, available and stopping', async () => {
     const { startOptions, serverStartedConfig, container } =
       await startFTPServer();
