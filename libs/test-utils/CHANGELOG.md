@@ -1,4 +1,18 @@
 Softkit Core Libraries Changelog
+## [0.3.0](https://github.com/softkitit/softkit-core/compare/test-utils-0.2.6...test-utils-0.3.0) (2025-04-16)
+
+
+### Features
+
+* **test-utils:** small refactoring and added ftp client test container ([1eadb16](https://github.com/softkitit/softkit-core/commit/1eadb16ec780b3fb2d0d16a7d69f38a8a6a95213))
+
+
+### Bug Fixes
+
+* **test-utils:** added more tests to increase coverage ([b178099](https://github.com/softkitit/softkit-core/commit/b17809928c71457588d29514fb0815450b3d1b96))
+* **test-utils:** fixed types for response ([b9a47bf](https://github.com/softkitit/softkit-core/commit/b9a47bf2022ca4f36afcf871c7be32f60a40b08b))
+* **test-utils:** more tests to cover multiple users ([e79ba87](https://github.com/softkitit/softkit-core/commit/e79ba877ee744c5c6335ab54f7e0a6eb6ffa3530))
+
 ## [0.2.6](https://github.com/softkitit/softkit-core/compare/test-utils-0.2.5...test-utils-0.2.6) (2024-07-29)
 
 ## [0.2.5](https://github.com/softkitit/softkit-core/compare/test-utils-0.2.4...test-utils-0.2.5) (2024-07-08)
