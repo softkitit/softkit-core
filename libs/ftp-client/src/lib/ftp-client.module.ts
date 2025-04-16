@@ -24,10 +24,7 @@ export class FtpClientModule {
     const defaultProvidersAndExports =
       this.createDefaultProvidersAndExports(customInjectToken);
 
-    if (!defaultProvidersAndExports.providers) {
-      defaultProvidersAndExports.providers = [];
-    }
-
+    defaultProvidersAndExports.providers ??= [];
     defaultProvidersAndExports.providers.push(ftpClientsConfigProvider);
 
     return {
@@ -47,15 +44,15 @@ export class FtpClientModule {
 
     const providers = [
       asyncConfigProvider,
-      ...(defaultProvidersAndExports.providers || []),
+      ...(defaultProvidersAndExports.providers ?? []),
     ];
 
     return {
       global,
       module: FtpClientModule,
-      imports: options.imports || [],
+      imports: options.imports ?? [],
       providers,
-      exports: [...(defaultProvidersAndExports.exports || [])],
+      exports: [...(defaultProvidersAndExports.exports ?? [])],
     };
   }
 
@@ -108,7 +105,7 @@ export class FtpClientModule {
     };
   }
 
-  private static createAsyncProvider = (
+  private static readonly createAsyncProvider = (
     options: FTPModuleAsyncOptions,
   ): Provider => {
     return {

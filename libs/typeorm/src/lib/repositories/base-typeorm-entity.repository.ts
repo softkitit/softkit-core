@@ -126,7 +126,7 @@ export abstract class BaseTypeormEntityRepository<
     },
   ): Promise<ENTITY[]> {
     return this.typeormRepository.find({
-      where: this.presetWhereOptions(query || {}),
+      where: this.presetWhereOptions(query ?? {}),
       take: limitOptions.limit,
       skip: limitOptions.offset,
     });
