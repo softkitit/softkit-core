@@ -1,0 +1,13 @@
+{
+  "name": "@softkit/ftp-client",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@nestjs/common": "^10.0.0",
+    "basic-ftp": "^5.0.0",
+    "class-validator": "^0.14.0",
+    "@softkit/validation": "*"
+  },
+  "type": "commonjs",
+  "main": "./src/index.js",
+  "typings": "./src/index.d.ts"
+}

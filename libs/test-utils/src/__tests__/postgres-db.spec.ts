@@ -1,5 +1,5 @@
-import { startPostgres } from '../lib/start-postgres';
-import { StartDbOptions, StartedDb } from '../lib/vo';
+import { StartDbOptions, StartedDb } from '../lib/containers';
+import { startPostgres } from '../lib/containers/postgres/start-postgres';
 
 describe('start postgres db and create configs', () => {
   it.each([

@@ -13,6 +13,5 @@
     "src/**/*.test.ts",
     "src/**/*.spec.ts",
     "src/**/*.d.ts",
-    "/Users/vsamofal/projects/collaboration-framework/saas-buildkit/global.d.ts"
   ]
 }
