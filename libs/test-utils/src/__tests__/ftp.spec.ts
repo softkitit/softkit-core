@@ -2,6 +2,7 @@ import { startFTPServer } from '../lib/containers/ftp/start-ftp-server';
 import { Client } from 'basic-ftp';
 import { faker } from '@faker-js/faker';
 import { Readable, Writable } from 'node:stream';
+import { StartedFTPOptions } from '../lib/containers/ftp/started-ftp.options';
 
 describe('start ftp server and create configs', () => {
   it('do not allow maximum port to be less then minimum', async () => {
@@ -20,6 +21,28 @@ describe('start ftp server and create configs', () => {
         minimumPortForPassiveConnections: 20_000,
       }),
     ).rejects.toBeDefined();
+  });
+
+  it('start ftp server with multiple users', async () => {
+    let startedFTPOptions: StartedFTPOptions | undefined;
+    try {
+      startedFTPOptions = await startFTPServer({
+        users: [
+          {
+            name: 'testusername',
+            password: 'testuserpaswword',
+          },
+          {
+            name: 'testusername1',
+            password: 'testuserpaswword2',
+          },
+        ],
+      });
+
+      expect(startedFTPOptions.startOptions.users.length).toBe(2);
+    } finally {
+      await startedFTPOptions?.container.stop();
+    }
   });
 
   it('check ftp starting, available and stopping', async () => {
