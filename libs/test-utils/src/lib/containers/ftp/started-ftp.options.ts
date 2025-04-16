@@ -5,5 +5,5 @@ import { StartFTPServerOptions } from './start-ftp-server.options';
 export interface StartedFTPOptions {
   container: StartedTestContainer;
   serverStartedConfig: FTPServerStartedOptions;
-  startOptions: StartFTPServerOptions;
+  startOptions: Required<StartFTPServerOptions>;
 }
