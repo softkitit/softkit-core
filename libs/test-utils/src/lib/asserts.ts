@@ -1,5 +1,6 @@
 import { expect } from '@jest/globals';
 
+// todo move to a separate lib one day
 export function expectNotNullAndGet<T>(v?: T | null): T {
   expect(v).toBeDefined();
 

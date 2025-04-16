@@ -26,6 +26,7 @@
       "@softkit/eslint-backend": ["libs/eslint-backend/src/index.js"],
       "@softkit/exceptions": ["libs/exceptions/src/index.ts"],
       "@softkit/file-storage": ["libs/file-storage/src/index.ts"],
+      "@softkit/ftp-client": ["libs/ftp-client/src/index.ts"],
       "@softkit/healthcheck": ["libs/health-check/src/index.ts"],
       "@softkit/i18n": ["libs/i18n/src/index.ts"],
       "@softkit/jobs": ["libs/jobs/src/index.ts"],
@@ -36,11 +37,11 @@
       "@softkit/redis": ["libs/redis/src/index.ts"],
       "@softkit/resource-plugin": ["libs/resource-plugin/src/index.ts"],
       "@softkit/server-http-client": ["libs/server-http-client/src/index.ts"],
+      "@softkit/service-api": ["libs/service-api/src/index.ts"],
       "@softkit/string-utils": ["libs/string-utils/src/index.ts"],
       "@softkit/swagger-utils": ["libs/swagger-utils/src/index.ts"],
       "@softkit/test-utils": ["libs/test-utils/src/index.ts"],
       "@softkit/typeorm": ["libs/typeorm/src/index.ts"],
-      "@softkit/service-api": ["libs/service-api/src/index.ts"],
       "@softkit/validation": ["libs/validation/src/index.ts"]
     }
   },

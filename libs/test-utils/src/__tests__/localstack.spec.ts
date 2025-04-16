@@ -1,5 +1,5 @@
-import { startLocalstack } from '../lib/start-localstack';
 import { S3 } from '@aws-sdk/client-s3';
+import { startLocalstack } from '../lib/containers/localstack/start-localstack';
 
 describe('start localstack and create config', () => {
   it('should start and stop localstack', async () => {

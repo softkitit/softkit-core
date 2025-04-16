@@ -1,5 +1,5 @@
-import { startRedis } from '../lib/start-redis';
 import Redis from 'ioredis';
+import { startRedis } from '../lib/containers/redis/start-redis';
 
 describe('start redis and create configs', () => {
   it('check redis starting, available and stopping', async () => {
