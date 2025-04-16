@@ -1,0 +1,46 @@
+{
+  "name": "ftp-client",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/ftp-client/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/libs/ftp-client",
+        "tsConfig": "libs/ftp-client/tsconfig.lib.json",
+        "packageJson": "libs/ftp-client/package.json",
+        "main": "libs/ftp-client/src/index.ts",
+        "assets": [
+          "libs/ftp-client/*.md"
+        ]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "libs/ftp-client/**/*.ts",
+          "libs/ftp-client/package.json",
+          "libs/ftp-client/project.json"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
+      "options": {
+        "jestConfig": "libs/ftp-client/jest.config.ts"
+      }
+    }
+  },
+  "tags": []
+}
