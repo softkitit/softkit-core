@@ -138,7 +138,7 @@ export abstract class BaseTypeormEntityRepository<
   ): Promise<number> {
     const result = await this.typeormRepository.update(
       this.presetWhereOptions(query) as FindOptionsWhere<ENTITY>,
-      fields as QueryDeepPartialEntity<ENTITY>,
+      fields as unknown as QueryDeepPartialEntity<ENTITY>,
     );
 
     // can't reproduce the behaviour where affected is not present in the result because in postgres it always returned
