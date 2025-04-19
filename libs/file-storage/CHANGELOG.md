@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.5.0](https://github.com/softkitit/softkit-core/compare/file-storage-0.4.4...file-storage-0.5.0) (2025-04-19)
+
+
+### Features
+
+* **file-storage:** added download file as stream function, and custom file not found exception ([44c4e50](https://github.com/softkitit/softkit-core/commit/44c4e50855389fa3f92941969175416c025a20dc))
+
 ## [0.4.4](https://github.com/softkitit/softkit-core/compare/file-storage-0.4.3...file-storage-0.4.4) (2024-07-29)
 
 ## [0.4.3](https://github.com/softkitit/softkit-core/compare/file-storage-0.4.2...file-storage-0.4.3) (2024-07-05)
