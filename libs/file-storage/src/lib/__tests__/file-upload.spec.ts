@@ -2,10 +2,12 @@ import { Test } from '@nestjs/testing';
 import { S3_CLIENT_TOKEN } from '../constants';
 import { AbstractFileService, S3FileService } from '../services';
 import { faker } from '@faker-js/faker';
-import { NoSuchKey, S3 } from '@aws-sdk/client-s3';
+import { S3 } from '@aws-sdk/client-s3';
 import axios from 'axios';
 import { CompletedPartDTO } from '../controller/vo';
 import { StartedLocalstack, startLocalstack } from '@softkit/test-utils';
+import consumers from 'node:stream/consumers';
+import { FileNotFoundException } from '../exceptions/file-not-found.exception';
 
 function splitToNChunks(str: string, chunkSize: number) {
   const result = [];
@@ -65,6 +67,29 @@ describe('file upload e2e test', () => {
     );
 
     expect(fileContent).toBe(downloadedFile);
+  });
+
+  it('should upload and download file as stream successfully', async () => {
+    const fileContent = faker.string.alpha(1000);
+
+    const uploadResult = await fileService.uploadFile(
+      bucketName,
+      {
+        originalFileName: 'test.txt',
+      },
+      fileContent,
+    );
+
+    const downloadedFile = await fileService.downloadStream(
+      bucketName,
+      uploadResult.key,
+    );
+
+    const downloadedFileAsText = await consumers
+      .blob(downloadedFile)
+      .then((v) => v.text());
+
+    expect(fileContent).toBe(downloadedFileAsText);
   });
 
   it('should upload and download file successfully with the options', async () => {
@@ -275,6 +300,57 @@ describe('file upload e2e test', () => {
 
     await expect(
       fileService.downloadFile(bucketName, startMultipart.key),
-    ).rejects.toThrow(NoSuchKey);
+    ).rejects.toThrow(FileNotFoundException);
   }, 60_000);
+
+  it('should upload binary data, download as stream and compare binaries', async () => {
+    // Generate random binary data
+    const binaryData = Buffer.from(
+      Array.from({ length: 1024 }, () => {
+        return faker.number.int({
+          min: 0,
+          max: 255,
+        });
+      }),
+    );
+
+    // Upload binary data
+    const uploadResult = await fileService.uploadFile(
+      bucketName,
+      {
+        originalFileName: 'binary-test.bin',
+      },
+      binaryData,
+    );
+
+    // Download as stream
+    const downloadedStream = await fileService.downloadStream(
+      bucketName,
+      uploadResult.key,
+    );
+
+    // Convert downloaded stream to buffer for comparison
+    const downloadedBlob = await consumers.blob(downloadedStream);
+    const downloadedArrayBuffer = await downloadedBlob.arrayBuffer();
+    const downloadedBuffer = Buffer.from(downloadedArrayBuffer);
+
+    // Compare original and downloaded binary data
+    expect(Buffer.compare(binaryData, downloadedBuffer)).toBe(0);
+  });
+
+  it('should throw FileNotFoundException when downloading a non-existent file using downloadFile', async () => {
+    const nonExistentKey = 'non-existent-file-' + faker.string.uuid();
+
+    await expect(
+      fileService.downloadFile(bucketName, nonExistentKey),
+    ).rejects.toThrow(FileNotFoundException);
+  });
+
+  it('should throw FileNotFoundException when downloading a non-existent file using downloadStream', async () => {
+    const nonExistentKey = 'non-existent-file-' + faker.string.uuid();
+
+    await expect(
+      fileService.downloadStream(bucketName, nonExistentKey),
+    ).rejects.toThrow(FileNotFoundException);
+  });
 });

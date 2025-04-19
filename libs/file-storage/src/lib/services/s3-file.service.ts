@@ -6,6 +6,7 @@ import {
   PutObjectCommand,
   PutObjectCommandInput,
   UploadPartCommand,
+  NoSuchKey,
 } from '@aws-sdk/client-s3';
 import { AbstractFileService } from './abstract-file.service';
 import {
@@ -16,7 +17,6 @@ import {
   UploadedFileInfo,
 } from './vo/file-definition';
 import { CompletedPartDTO } from '../controller/vo';
-import consumers from 'node:stream/consumers';
 import { CreateMultipartUploadCommandInput } from '@aws-sdk/client-s3/dist-types/commands/CreateMultipartUploadCommand';
 import { generateRandomId } from '@softkit/crypto';
 import { AbortMultipartUploadCommandInput } from '@aws-sdk/client-s3/dist-types/commands/AbortMultipartUploadCommand';
@@ -24,7 +24,10 @@ import { CompleteMultipartUploadCommandInput } from '@aws-sdk/client-s3/dist-typ
 import { createPresignedPost } from '@aws-sdk/s3-presigned-post';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import type { NodeJsRuntimeStreamingBlobPayloadInputTypes } from '@smithy/types/dist-types/streaming-payload/streaming-blob-payload-input-types';
-import type { NodeJsClient } from '@smithy/types';
+import { NodeJsClient } from '@smithy/types';
+import { Readable } from 'node:stream';
+import { FileNotFoundException } from '../exceptions/file-not-found.exception';
+import consumers from 'node:stream/consumers';
 
 @Injectable()
 export class S3FileService extends AbstractFileService {
@@ -208,7 +211,7 @@ export class S3FileService extends AbstractFileService {
     file: FileDefinition,
     body: NodeJsRuntimeStreamingBlobPayloadInputTypes,
     folder?: string,
-    options?: Omit<PutObjectCommandInput, 'Bucket' | 'Key'>,
+    options?: Partial<Omit<PutObjectCommandInput, 'Bucket' | 'Key' | 'Body'>>,
   ): Promise<UploadedFileInfo> {
     const randomId = generateRandomId();
     const fullFilePath = this.generateFileKey(randomId, file, folder);
@@ -226,12 +229,58 @@ export class S3FileService extends AbstractFileService {
     };
   }
 
+  /**
+   * Downloads a file as a text, might be useful for pure text files and templates,
+   * for other times use downloadStream function
+   * @param bucket The bucket name of the file to download
+   * @param key The full path to the file inside a bucket, can include directories
+   * @returns A readable stream of the file content
+   * @throws {FileNotFoundException} If the file is not found
+   */
   override async downloadFile(bucket: string, key: string): Promise<string> {
-    const object = await this.s3.getObject({
-      Bucket: bucket,
-      Key: key,
-    });
+    const body = await this.downloadFileAndTransform(bucket, key);
+    return consumers.text(body);
+  }
 
-    return consumers.text(object.Body!);
+  /**
+   * Downloads a file as a stream
+   * @param bucket The bucket name of the file to download
+   * @param key The full path to the file inside a bucket, can include directories
+   * @returns A readable stream of the file content
+   * @throws {FileNotFoundException} If the file is not found
+   */
+  override async downloadStream(
+    bucket: string,
+    key: string,
+  ): Promise<Readable> {
+    return await this.downloadFileAndTransform(bucket, key);
+  }
+
+  private async downloadFileAndTransform(
+    bucket: string,
+    key: string,
+  ): Promise<Readable> {
+    try {
+      const object = await this.s3.getObject({
+        Bucket: bucket,
+        Key: key,
+      });
+
+      if (object.Body === undefined || object.Body === null) {
+        throw new FileNotFoundException(
+          `The returned file body is undefined or null, file might be not found or it's some other other, for bucket: ${bucket}, key: ${key}.`,
+        );
+      }
+
+      return object.Body;
+    } catch (error) {
+      if (error instanceof NoSuchKey) {
+        throw new FileNotFoundException(
+          `File not found for bucket: ${bucket}, key: ${key}.`,
+          error,
+        );
+      }
+      throw error;
+    }
   }
 }
