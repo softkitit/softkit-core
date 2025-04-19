@@ -64,9 +64,7 @@ export abstract class AbstractFileService {
 
   abstract downloadFile(bucket: string, key: string): Promise<string>;
 
-  // todo implement
-  // abstract streamFile(bucket: string, file: FileDefinition): Promise<string>;
-  // abstract downloadStream(bucket: string, file: FileDefinition): Promise<string>;
+  abstract downloadStream(bucket: string, key: string): Promise<Readable>;
 
   protected generateFileKey(
     uniqueFileNameWithoutExtension: string,
