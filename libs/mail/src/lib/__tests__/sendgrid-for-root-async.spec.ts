@@ -9,6 +9,7 @@ class Config {
   defaultFromEmail = 'noreply@example.com';
   defaultBccList = ['first@gmail.com', 'second@gmail.com'];
   apiKey = 'SG.test';
+  dataResidency = 'eu';
 }
 
 @Module({

@@ -13,4 +13,8 @@ export class SendgridConfig extends GeneralConfig {
   @IsStringLocalized()
   @IsOptional()
   defaultFromName?: string;
+
+  @IsStringLocalized()
+  @IsOptional()
+  dataResidency?: string;
 }

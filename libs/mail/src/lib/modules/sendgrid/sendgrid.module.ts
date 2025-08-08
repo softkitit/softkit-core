@@ -1,10 +1,9 @@
 import { DynamicModule, Module } from '@nestjs/common';
-import { AbstractMailService } from '../../services';
+import { AbstractMailService, SendgridService } from '../../services';
 import { Provider } from '@nestjs/common/interfaces/modules/provider.interface';
 import { SENDGRID_CLIENT_TOKEN, SENDGRID_CONFIG_TOKEN } from '../../constants';
-import { SendgridService } from '../../services';
-import { SendgridAsyncOptions } from '../../config';
-import { SendgridConfig } from '../../config';
+import { SendgridAsyncOptions, SendgridConfig } from '../../config';
+import type { Client } from '@sendgrid/client';
 
 @Module({})
 export class SendgridMailModule {
@@ -28,6 +27,7 @@ export class SendgridMailModule {
       ...defaultProvidersAndExports,
     };
   }
+
   static forRootAsync(
     options: SendgridAsyncOptions,
     global: boolean = true,
@@ -48,6 +48,7 @@ export class SendgridMailModule {
       exports: [...(defaultProvidersAndExports.exports || [])],
     };
   }
+
   private static createDefaultProvidersAndExports(): DynamicModule {
     return {
       module: SendgridMailModule,
@@ -64,10 +65,16 @@ export class SendgridMailModule {
 
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            const client = new MailService.MailService();
-            client.setApiKey(authCredentials.apiKey);
+            const mailService = new MailService.MailService();
+            const client = mailService['client'] as Client;
 
-            return client;
+            mailService.setApiKey(authCredentials.apiKey);
+
+            if (authCredentials.dataResidency) {
+              client.setDataResidency(authCredentials.dataResidency);
+            }
+
+            return mailService;
           },
           inject: [SENDGRID_CONFIG_TOKEN],
         },
