@@ -8,6 +8,7 @@ import { MailService } from '../custom-mail.service';
       apiKey: '',
       defaultFromEmail: 'noreply@example.com',
       defaultBccList: ['first@gmail.com', 'second@gmail.com'],
+      dataResidency: 'global',
     }),
   ],
   providers: [MailService],
