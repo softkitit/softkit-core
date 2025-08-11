@@ -47,7 +47,7 @@ jobs:
       affected-projects: ${{ steps.get-affected-projects.outputs.affected-projects }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: ${{ env.BRANCH_NAME }}
           fetch-depth: 0
