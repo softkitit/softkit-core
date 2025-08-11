@@ -1,4 +1,11 @@
 Softkit Core Libraries Changelog
+## [0.4.0](https://github.com/softkitit/softkit-core/compare/mail-0.3.5...mail-0.4.0) (2025-08-11)
+
+
+### Features
+
+* **mail:** removed automatic conversion to base64 ([7f78363](https://github.com/softkitit/softkit-core/commit/7f78363981bb7b3af8749d25f6a81c59e240fb90))
+
 ## [0.3.5](https://github.com/softkitit/softkit-core/compare/mail-0.3.4...mail-0.3.5) (2025-08-08)
 
 
