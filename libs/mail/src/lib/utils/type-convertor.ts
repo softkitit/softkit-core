@@ -4,7 +4,8 @@ export async function toBase64(
   input: string | Buffer | Readable | Uint8Array,
 ): Promise<string> {
   if (typeof input === 'string') {
-    return Buffer.from(input, 'utf8').toString('base64');
+    // if type is string we assume it's already base64 encoded
+    return input;
   } else if (Buffer.isBuffer(input)) {
     return input.toString('base64');
   } else if (input instanceof Uint8Array) {

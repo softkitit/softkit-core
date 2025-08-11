@@ -114,7 +114,8 @@ describe('mail e2e test', () => {
           ],
           attachments: [
             {
-              content: 'VGVzdCB3YXMgc3VjY2Vzc2Z1bA==',
+              content: attachment.data,
+              disposition: 'attachment',
               filename: attachment.filename,
             },
           ],
@@ -174,7 +175,8 @@ describe('mail e2e test', () => {
         ],
         attachments: [
           {
-            content: 'VGVzdCB3YXMgc3VjY2Vzc2Z1bA==',
+            content: attachment.data,
+            disposition: 'attachment',
             filename: attachment.filename,
           },
         ],
@@ -184,10 +186,10 @@ describe('mail e2e test', () => {
     expect(result.status).toBe(202);
   });
 
-  it('should convert string to base64', async () => {
+  it('should not convert string to base64', async () => {
     const result = await toBase64(stringForConversion);
 
-    expect(result).toBe(resultStringAfterConversion);
+    expect(result).toBe(stringForConversion);
   });
 
   it('should convert buffer to base64', async () => {

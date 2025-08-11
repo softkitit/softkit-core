@@ -134,6 +134,9 @@ export class SendgridService extends AbstractMailService<string> {
       const content = await toBase64(item.data);
       attachments.push({
         content,
+        contentId: item.contentId,
+        type: item.type,
+        disposition: 'attachment',
         filename: item.filename,
       });
     }
