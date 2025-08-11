@@ -20,6 +20,7 @@
     "@sendgrid/helpers": "8.0.0"
   },
   "peerDependencies": {
+    "@sendgrid/client": "^8.0.0",
     "@sendgrid/mail": "^8.0.0",
     "mailgun.js": "^9.0.0",
     "@nestjs/common": "^10.0.0",

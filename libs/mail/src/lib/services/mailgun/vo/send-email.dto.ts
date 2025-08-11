@@ -14,6 +14,12 @@ export class AttachmentFile {
   @IsStringLocalized()
   filename!: string;
 
+  type?: string; // eg application/pdf
+
+  contentId?: string;
+
+  disposition?: string = 'attachment';
+
   data!: string | Buffer | Readable | Uint8Array;
 }
 
