@@ -40,6 +40,7 @@ import { fastifyHelmet } from '@fastify/helmet';
 import { DataSource } from 'typeorm';
 import { callOrUndefinedIfException } from './utils/functions';
 import type { TestingModule } from '@nestjs/testing';
+import fastifyCookie from '@fastify/cookie';
 
 export function buildFastifyAdapter() {
   return new FastifyAdapter({
@@ -158,6 +159,7 @@ export async function runDatabaseSeeders(
   }
 }
 
+// eslint-disable-next-line complexity
 export async function bootstrapBaseWebApp(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   module: any | TestingModule,
@@ -223,6 +225,12 @@ export async function bootstrapBaseWebApp(
     app.get(SwaggerConfig),
   );
   app.enableCors(appConfig.cors);
+
+  if (appConfig.request) {
+    await app.register(fastifyCookie, {
+      secret: appConfig.request.cookieSecret,
+    });
+  }
 
   if (appConfig.prefix) {
     app.setGlobalPrefix(appConfig.prefix);
