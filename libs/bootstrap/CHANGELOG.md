@@ -1,4 +1,13 @@
 Softkit Core Libraries Changelog
+## [0.3.0](https://github.com/softkitit/softkit-core/compare/bootstrap-0.2.16...bootstrap-0.3.0) (2025-08-21)
+
+
+### Features
+
+* **bootstrap:** added the cookie parser ([a283b48](https://github.com/softkitit/softkit-core/commit/a283b48b48fa52cf9151007a1073eac72a2f3541))
+* **bootstrap:** added the cookie parser ([fd546ea](https://github.com/softkitit/softkit-core/commit/fd546ead9321bebb7ec24f9c7fe248fcb2ca6fbf))
+* **bootstrap:** updated the cookie version ([54e0223](https://github.com/softkitit/softkit-core/commit/54e02233bc7fe955c340aae6c0d9664b66dac890))
+
 ## [0.2.16](https://github.com/softkitit/softkit-core/compare/bootstrap-0.2.15...bootstrap-0.2.16) (2025-02-17)
 
 
