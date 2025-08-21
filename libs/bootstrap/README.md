@@ -42,3 +42,16 @@ describe('auth e2e test', () => {
   });
 });
 ```
+## Usage cookie
+
+1. add the /// <reference types="@fastify/cookie" /> line in the global.d.ts file
+2. update the tsconfig.app.json. Add the "../../global.d.ts" in the include array
+3. add the cookie secret in the config file.
+```json
+{
+  "include": [
+    "../../global.d.ts"
+  ]
+}
+```
+

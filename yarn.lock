@@ -4263,6 +4263,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fastify/cookie@npm:9.4.0":
+  version: 9.4.0
+  resolution: "@fastify/cookie@npm:9.4.0"
+  dependencies:
+    cookie-signature: ^1.1.0
+    fastify-plugin: ^4.0.0
+  checksum: cea22a03cc005468fc217da9d8e22b239e11ef7fea5f51189fa21ad0781baa430d9798eb72d51b74781be512b6b9e60bb2fc174c3e451e91584714cfb44fdfbf
+  languageName: node
+  linkType: hard
+
 "@fastify/cors@npm:8.3.0":
   version: 8.3.0
   resolution: "@fastify/cors@npm:8.3.0"
@@ -6920,6 +6930,7 @@ __metadata:
     "@docusaurus/preset-classic": 3.0.1
     "@docusaurus/theme-search-algolia": 3.0.1
     "@faker-js/faker": 8.0.2
+    "@fastify/cookie": 9.4.0
     "@fastify/helmet": 11.1.1
     "@fastify/static": 6.12.0
     "@grpc/grpc-js": 1.6.7
@@ -11895,6 +11906,13 @@ __metadata:
   version: 1.0.6
   resolution: "cookie-signature@npm:1.0.6"
   checksum: f4e1b0a98a27a0e6e66fd7ea4e4e9d8e038f624058371bf4499cfcd8f3980be9a121486995202ba3fca74fbed93a407d6d54d43a43f96fd28d0bd7a06761591a
+  languageName: node
+  linkType: hard
+
+"cookie-signature@npm:^1.1.0":
+  version: 1.2.2
+  resolution: "cookie-signature@npm:1.2.2"
+  checksum: 1ad4f9b3907c9f3673a0f0a07c0a23da7909ac6c9204c5d80a0ec102fe50ccc45f27fdf496361840d6c132c5bb0037122c0a381f856d070183d1ebe3e5e041ff
   languageName: node
   linkType: hard
 

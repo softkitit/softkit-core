@@ -26,6 +26,7 @@
     "@softkit/i18n": "^0.1.1",
     "nestjs-pino": "^3.0.0",
     "fastify": "^4.0.0",
+    "@fastify/cookie": "^9.0.0",
     "class-validator": "*",
     "@nestjs/common": "^10.0.0",
     "@nestjs/core": "^10.0.0",
