@@ -44,7 +44,7 @@
     "@nestjs/passport": "10.0.1",
     "@nestjs/platform-express": "^10.0.2",
     "@nestjs/platform-fastify": "10.2.4",
-    "@nestjs/schematics": "10.0.2",
+    "@nestjs/schematics": "11.0.7",
     "@nestjs/swagger": "7.1.10",
     "@nestjs/terminus": "10.0.1",
     "@nestjs/testing": "10.2.4",
