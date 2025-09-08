@@ -59,7 +59,7 @@ jobs:
            echo show-apps="npx nx show projects --json --type app --affected --base last-release" >> $GITHUB_OUTPUT
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version-file: .nvmrc
 
