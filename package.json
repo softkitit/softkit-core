@@ -143,7 +143,7 @@
     "typedoc": "0.25.4",
     "typedoc-plugin-coverage": "2.2.0",
     "typedoc-plugin-markdown": "4.0.0-next.28",
-    "typeorm": "0.3.17",
+    "typeorm": "0.3.26",
     "typeorm-extension": "3.1.0",
     "typeorm-transactional": "0.4.1",
     "typescript": "5.2.2",
