@@ -163,7 +163,7 @@
     "chalk": "4.1.2",
     "chokidar": "3.5.3",
     "cookie": "0.5.0",
-    "form-data": "4.0.0",
+    "form-data": "4.0.4",
     "fs-extra": "11.1.1",
     "graphql": "16.8.1",
     "iterare": "1.2.1",
