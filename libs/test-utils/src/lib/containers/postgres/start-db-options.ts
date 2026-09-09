@@ -4,6 +4,7 @@ export type StartDbOptions = {
   runMigrations: boolean;
   dbName: string;
   password: string;
+  imageName: string;
   imageTag: string;
   username: string;
   setupTransactionsManagement: boolean;

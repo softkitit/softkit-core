@@ -46,6 +46,7 @@ ORM
 perf
 postgres
 postgresql
+pgvector
 TypeORM
 Prisma
 promisable
