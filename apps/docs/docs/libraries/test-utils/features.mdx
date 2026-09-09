@@ -17,7 +17,7 @@ The `startPostgres` function launches a Postgres database within a Docker contai
 - **runMigrations**: Determines if migrations should run during setup. Default is `false`.
 - **dbName**: Sets the database name, which is `'nest'` by default.
 - **username & password**: Establishes the database credentials. Defaults are `'test-user'` and `'secret-test'`.
-- **imageTag**: Selects the Postgres version. The default is `'15.4-alpine'`, providing a lightweight container.
+- **imageName & imageTag**: Selects the Postgres Docker image. By default, it uses `'postgres:15.4-alpine'`; override both values to use a compatible image such as pgvector.
 - **setupTransactionsManagement**: Enables transactional context, set to `true` by default for robust data handling.
 - **additionalTypeOrmModuleOptions**: Allows additional TypeORM configurations, which are empty by default for maximum compatibility.
 

@@ -23,7 +23,9 @@ export async function startPostgres(
   // eslint-disable-next-line no-console
   console.time(`start postgres db`);
 
-  const pg = await new PostgreSqlContainer(`postgres:${options.imageTag}`)
+  const pg = await new PostgreSqlContainer(
+    `${options.imageName}:${options.imageTag}`,
+  )
     .withExposedPorts(5432)
     .withDatabase(options.dbName)
     .withUsername(options.username)
